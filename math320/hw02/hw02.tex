@@ -1,0 +1,641 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{legalpaper, margin=1.7cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 2}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it  The Fibonacci sequence is defined recursively by saying $F(0) = 1, F(1) = 1$, and
+\[F(n) = F(n-1) + F(n-2) \text{ for each }n=2,3,\dots\]
+Prove that if $\phi=\frac{1+\sqrt{5}}{2}$ denotes the ``Golden Ratio"
+(observe $\phi^2 = \phi + 1$), we have
+\[F(n) = \frac{\phi^{n+1}-(-\phi)^{-n-1}}{\sqrt{5}}, \; n=1,2,3,\dots\]}
+
+\begin{proof}[Solution]\let\qed\relax
+	(Apologies for the gross formatting of the algebra,
+	we were told to keep the solution contained to a page;
+	read equations left to right, then down.)
+	We prove using induction on $n$.
+	We start with the base cases, $n = 1,2$.
+	First, we look to prove our expression is equivalent to $F(1) = 1$.
+	\begin{align*}
+		\frac{\phi^2-(-\phi)^{-2}}{\sqrt{5}}
+		&= \frac{\phi + 1 - 1/(\phi+1)}{\sqrt{5}}
+		= \frac{((\phi+1)^2-1)/(\phi+1)}{\sqrt{5}}\\
+		&= \frac{\phi(\phi+2)}{\sqrt{5}(\phi+1)}
+		= \frac{\phi+1 + 2\phi}{\sqrt{5}(\phi+1)}\\
+		&= \frac{\phi + 2 + \sqrt{5}}{(\sqrt{5}+5+2\sqrt{5})/2}
+		= \frac{\sqrt{5} + 5 + 2\sqrt{5}}{\sqrt{5} + 5 + 2\sqrt{5}}\\
+		&= 1\\ &= F(1)
+	\end{align*}
+	And now we want to show our expression is equivalent to $F(2) = 2$.
+	We have
+\begin{align*}
+	\frac{\phi^3 - (-\phi)^{-3}}{\sqrt{5}}
+	&= \frac{\phi(\phi+1) + 1/(\phi(\phi+1))}{\sqrt{5}}\\
+	&= \frac{(\phi^2(\phi+1)^2 + 1)/(\phi(\phi+1))}{\sqrt{5}}
+	= \frac{(\phi+1)^3 + 1}{\sqrt{5}\phi(\phi+1)}\\
+	&= \frac{\phi^3 + 3\phi^2 + 3\phi + 1 + 1}{\sqrt{5}\phi(\phi+1)}
+	= \frac{\phi(\phi+1) + 6\phi + 5}{\sqrt{5}\phi(\phi+1)}\\
+	&= \frac{2\phi + 1 + 6\phi + 5}{\sqrt{5}(2\phi + 1)}
+	= \frac{8\phi + 6}{\sqrt{5}(2\phi + 1)}\\
+	&= 2\frac{4\phi + 3}{\sqrt{5}(2\phi+1)}
+	= 2\frac{2 + 2\sqrt{5} + 3}{\sqrt{5}(1+\sqrt{5}+1)}\\
+	&= 2\frac{5 + 2\sqrt{5}}{5 + 2\sqrt{5}}\\
+	&= 2\\ &= F(2)
+\end{align*}
+thus the base cases are true.
+
+Before we prove the inductive step, note that
+\[
+	1 - \phi^{-1} = \phi^{-2}
+\]
+We can use our given identity,
+specifically
+\[
+	\phi^{-2} = (\phi + 1)^{-1} = 1/\left(\frac{1+\sqrt{5}}{2}+1\right)
+	= \frac{2}{3+\sqrt{5}} = \frac{2(3 - \sqrt{5})}{4}
+	= \frac{5 - 2\sqrt{5} + 1}{5 - 1} = \frac{\sqrt{5} - 1}{\sqrt{5} + 1}
+	= 1 - \frac{2}{1 + \sqrt{5}} = 1 - \phi^{-1}
+\]
+We will use this in the steps below,
+specifically invoking $(-\phi)^{-2} = 1 - \phi^{-1}$, since $(-\phi)^{-2} = \phi^{-2}$.
+Now, let us assume that $F(j) = \frac{\phi^{j+1} - (-\phi)^{-j-1}}{\sqrt{5}}$
+and $F(j-1) = \frac{\phi^{j} - (-\phi)^{-j}}{\sqrt{5}}$
+for an arbitrary $2 \leq j \in \N$. Then for proving $F(j+1)$, see that
+\begin{align*}
+	\frac{\phi^{j+2} - (-\phi)^{-j-2}}{\sqrt{5}}
+	&= \frac{\phi^{j}\phi^2 - (-\phi)^{-j}(-\phi)^{-2}}{\sqrt{5}}
+	= \frac{\phi^{j}(\phi+1) - (-\phi)^{-j}(1 - \phi^{-1})}{\sqrt{5}}\\
+	&= \frac{\phi^{j+1} + \phi^j - (-\phi)^{-j} - (-\phi)^{-j-1}}{\sqrt{5}}\\
+	&=  \frac{\phi^j - (-\phi)^{-j}}{\sqrt{5}} +
+	\frac{\phi^{j+1} - (-\phi)^{-j-1}}{\sqrt{5}}\\
+	&= F(j-1) + F(j)\\ &= F(j+1)
+\end{align*}
+Thus the induction is closed, and so our formula for $F(n)$ is valid
+for all $n = 1,2,3\dots$.
+\end{proof}
+\clearpage
+
+\subsection*{Problem 2}
+{\it Construct a countable family of increasing sequences with entries from $\N$:
+\[s^{(1)} = \left(s_1^{(1)}, s_2^{(1)}, s_3^{(1)}, \dots \right),
+s^{(2)} = \left(s_1^{(2)}, s_2^{(2)}, s_3^{(2)}, \dots \right),
+s^{(3)} = \left(s_1^{(3)}, s_2^{(3)}, s_3^{(3)}, \dots \right), \dots\]
+Arrange your construction so that every positive integer appears
+in one and only one of the sequences,
+and the inequality $s_n^{(i)} < s_{n+1}^{(i)}$ holds for all $i,n\in\N$.
+Illustrate your construction by writing down explicitly
+the first four entries of sequences $s^{(1)}$, $s^{(2)}$, $s^{(3)}$ and $s^{(4)}$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	First, note that the prime numbers are countable.
+	This is because they are both infinite (see many of the standard proofs of this fact),
+	but they are a subset of the naturals,
+	and so they are at most countable (as we proved in class, week 2).
+	Then, we can enumerate the prime numbers, $p_1,p_2,\dots$
+	(say from least to greatest, since the naturals are well-ordered).
+
+	Let $1$ reside in $s^{(1)}$.
+	Now recall that every $1 < s \in \N$ has a unique prime factorization
+	by the Fundamental Theorem of Arithmetic.
+	This means every $s$ is determined uniquely by a product
+	of primes raised to some powers,
+	$s = p_1^{\alpha_1}p_2^{\alpha_2}\cdots$ with $0 \geq \alpha_i \in \N$.
+	Let $s$ be in the sequence $s^{(i)}$ if and only if
+	$p_i$ is smallest prime such that $p_i\mid s$
+	(and we know we can always find a smallest prime,
+	since the primes are subsets of the naturals and the naturals are well-ordered).
+	Now we let these $s \in s^{(i)}$ be ordered by the ordering from $\N$,
+	namely $s_n^{(i)} < s_{n+1}^{(i)}$ so our sequences are always increasing.
+	
+	Note that by construction, every $s \in \N$ will only appear in a sequence,
+	and furthermore, $s$ will appear only once in all the sequences,
+	since $s \neq 1$ has a unique representation of primes,
+	and so will only have one prime $p_i$ that can be considered its smallest prime,
+	and so $s$ will only be in $s^{(i)}$,
+	(and $1$ is only in $s^{(1)}$).
+
+	Explicitly:
+	\begin{align*}
+		s^{(1)} &= (1, 2, 4, 6, \dots)\\
+		s^{(2)} &= (3, 9, 15, 21, \dots)\\
+		s^{(3)} &= (5, 25, 35, 55, \dots)\\
+		s^{(4)} &= (7, 49, 77, 91, \dots)
+	\end{align*}
+\end{proof}
+\clearpage
+
+\subsection*{Problem 3}
+{\it Let $\mathcal{S}$ denote the collection (set) of $\N$-valued
+sequences that are increasing.
+That is, each object $s$ in $\mathcal{S}$ has the form
+\[s = (s_1, s_2, s_3, \dots), \text{ where } \forall k \in \N, s_k < s_{k+1}.\]
+Denote if the set $\mathcal{S}$ is countable or uncountable.
+Prove your answer.
+}
+\begin{proof}[Solution]\let\qed\relax
+	We claim that the set is uncountable.
+	For the sake of contradiction, assume it is countable.
+	That is to say, there exists some bijection $\phi \colon \N \to \mathcal{S}$.
+	Then $\phi$ is injective,
+	mapping each $n \to \N$ to a unique $s^{(n)} \in \mathcal{S}$.
+	Note that we can construct a sequence $s'$ whose $i$th-term is given by
+	\[s'_i = \sum_{j = 1}^i s_{j}^{(j)} + 1\]
+	One can easily see that $s'$ is increasing,
+	since each term is always adding a positive number to the previous one,
+	so $s' \in \mathcal{S}$.
+	However, $s'$ differs from every element $s^{(n)}$ in the image of $\phi$,
+	since $s'$ and $s^{(n)}$ will always differ at the $n$th-term.
+	This is because we are adding a positive value to $s_n^{(n)}$,
+	and so $s'_n > s_n^{(n)}$ and so they are not equal.
+	But then $\phi$ is not onto.
+	But then the bijection $\phi$ cannot exist.
+\end{proof}
+\clearpage
+
+\subsection*{Problem 4}
+{\it Prove that the real intervals $I = [0,1]$ and $J=(0,1)$
+have the same cardinal number constructing
+an explicit bijection $\phi \colon I \to J$.}
+\begin{proof}[Solution]\let\qed\relax
+	We provide the bijection $\phi \colon I \to J$ as the following:
+	\[\phi(x) = \begin{cases}
+		\frac{1+x}{3} & x=0,1\\
+		\frac{x}{3} & x\in\{\frac{1}{3^n} \colon n\in\N\}
+		\cup \{\frac{2}{3^n} \colon n \in \N\}\\
+		x & \text{ otherwise}
+	\end{cases}\]
+\end{proof}
+We require to show that $\phi$ is both injective and surjective.
+To show injectivity, let $x_1,x_2 \in [0,1]$ such that $\phi(x_1) = \phi(x_2)$.
+Since the ranges of $\frac{1+x}{3}$, $\frac{x}{3}$, and $x$
+are disjoint for their given domain
+($\{\frac{1}{3},\frac{2}{3}\}$,
+$\{\frac{1}{3^n} \colon 1<n\in\N\}
+\cup \{\frac{1}{3^n} \colon 1<n\in\N\}$,
+and the complement of the union of the other two ranges, respectively)
+we know that $x_1$, $x_2$ must be in the image of the same function inside $\phi$.
+If it had been $\frac{1+x}{3}$, then $\frac{1+x_1}{3} = \frac{1+x_2}{3} \Rightarrow x_1=x_2$.
+If it had been $\frac{x}{3}$, then $\frac{x_1}{3} = \frac{x_2}{3} \Rightarrow x_1 = x_2$.
+And if it had been $x$, then $x_1 = x_2$.
+Thus, $\phi$ is injective.
+
+We now show surjectivity.
+Let $y \in (0,1)$.
+$y$ is either of the form $y = \frac{k}{3^n}, k \in \{1,2\}, n\in\N$ or it is not.
+If it is, then it is in the range of the first two functions,
+and if it is not, it is in the range of the third.
+Thus $\phi$ is onto $(0,1)$,
+therefore $\phi$ is a bijection.
+\clearpage
+
+\subsection*{Problem 5}
+{\it Taking as given an enumeration of the rationals as
+\[\Q = \{q_1, q_2, q_3, \dots \},\]
+construct an explicit bijection $f$ from $\R$ to $\R \setminus \Q$.
+To confirm that your bijection is explicit enough,
+return decimal approximations (correct to $6$ significant digits)
+for these four numbers: $f(\pi)$, $f(\sqrt{3})$, $f(q_2)$, and $f(q_3)$.
+(Hint: It is well known that $\sqrt{2} \in \R\setminus\Q$. You don't need to prove this.)
+}
+\begin{proof}[Solution]\let\qed\relax
+First, note that the prime numbers are countable.
+This is because they are both infinite (see many of the standard proofs of this fact),
+but they are a subset of the naturals,
+and so they are at most countable (as we proved in class, week 2).
+Then, we can enumerate the prime numbers, $p_1,p_2,\dots$
+(say from least to greatest, since the naturals are well-ordered).
+
+We provide the following bijection $\phi \colon \R \to \R\setminus\Q$:
+\[\phi(x) = \begin{cases}
+	p_i + \sqrt{2} & x = q_i \in \Q\\
+	p_i^{\alpha + 1} + \sqrt{2} & x = p_i^{\alpha}+\sqrt{2}, 1 \leq \alpha \in \N\\
+	x & \text{ otherwise}
+\end{cases}
+\]
+First, note that the range of $\phi$ is entirely contained in $\R\setminus \Q$,
+and so satisfies partially what we were seeking to construct.
+One can see this because either an irrational is being mapped to itself
+(it's prime),
+or a number is being mapped to a value of the form $y = n + \sqrt{2}$
+where $n\in\N$ (since primes and their powers are all in $\N$),
+but since $\Q$ is closed under addition, $-n \in \Q$, $\sqrt{2}\not\in\Q$,
+and $y - n = \sqrt{2}$ implies that we must have that $y \not\in \Q$.
+
+Now we seek to prove that $\phi$ is a bijection.
+To see that $\phi$ is injective,
+let $x_1,x_2 \in \R$ such that $\phi(x_1) = \phi(x_2)$.
+Either $\phi(x_1) = \phi(x_2)$ is of the form $p^\alpha + \sqrt{2}$ or it is not
+(where $p$ is a prime and $1\leq\alpha\in\N$).
+If it is not, then it was mapped to by the third function in $\phi$,
+and so $x_1 = x_2$ and we are done.
+If it is, then if $\alpha \neq 1$,
+it was mapped to by the second function,
+and so $x_1 = p^{\alpha-1}+\sqrt{2}$ and $x_2 = p^{\alpha-1}+\sqrt{2}$,
+but then $x_1 = x_2$.
+Finally, if $\alpha = 1$, $x_1$ and $x_2$ were mapped by the first function,
+and so if $p$ was the $i$th smallest prime
+(ie. $\phi(x_1) = \phi(x_2) = p_i + \sqrt{2}$), we have $x_1 = q_i$ and $x_2 = q_i$,
+and so $x_1 = x_2$.
+This exhausts all cases, so $\phi$ is injective.
+
+We now prove that $\phi$ is surjective.
+Let $y \in \R \setminus \Q$.
+Either $y$ is of the form $p^{\alpha} + \sqrt{2}$ or it is not
+($p$ is prime and $1 \leq \alpha \in \N$).
+If it is of the form, then $y = p_i^{\alpha} + \sqrt{2}$ is mapped to from
+$p_i^{\alpha-1} + \sqrt{2}$ if $\alpha \neq 1$,
+and is mapped to from $q_i$ if $\alpha = 1$.
+If it is not of the form, then $y$ was mapped to from itself.
+In either case, we can find some $x \in \R$ such that $\phi(x) = y$,
+and so $\phi$ is surjective.
+Thus, $\phi$ is bijective.
+
+Computing explicitly:
+\begin{align*}
+	f(\pi) &= \pi = 3.14159\\
+	f(\sqrt{3}) &= \sqrt{3} = 1.73205\\
+	f(q_2) &= 3 + \sqrt{2} = 4.41421\\
+	f(q_3) &= 5 + \sqrt{2} = 6.41421\\
+\end{align*}
+\end{proof}
+\clearpage
+
+\subsection*{Problem 6}
+{\it \begin{enumerate}
+	\item Show that the set of polynomials with integer coefficients is countable.
+	\item Show that the set of real numbers $x$ arising
+	as zeros of nonzero polynomials with integer coefficients is countable.
+	(Such a real number is called algebraic.)
+	\item A real number that is not algebraic is called transcendental.
+	Prove that the set of transcendental numbers is not empty.
+	\item Is the set of transcendental numbers finite, countable, or uncountable? Why?
+\end{enumerate}
+}
+\begin{enumerate}
+\item \begin{proof}[Solution]\let\qed\relax
+
+	First, note that the prime numbers are countable.
+	This is because they are both infinite (which we can assume by Piazza @80)
+	but they are a subset of the naturals,
+	and so they are at most countable (as we proved in class, week 2).
+	Then, we can enumerate the prime numbers, $p_0,p_1,\dots$
+	(say from least to greatest, since the naturals are well-ordered).
+
+	We construct a bijection $\phi \colon \N \to$
+	the set of polynomials with integer coefficients.
+	Specifically, if $n\in\N$ and $n = p_0^{\alpha_0} p_1^{\alpha_1} \cdots p_k^{\alpha_k}$
+	with $\alpha_i \in \N \cup \{0\}, \alpha_k > 0$ is the unique prime factorization of $n$
+	(where $p_k$ is the largest prime factor),
+	then we say $\phi(n)$ is the $k$-degree polynomial
+	with coefficients $\alpha_0, \alpha_1, \dots ,\alpha_k$,
+	specifically
+	\[
+		\phi(n) = \alpha_0 + \alpha_1x  + \alpha_2x^2 + \cdots \alpha_kx^k
+	\]
+	We now prove that this is a bijection.
+	Note that since a prime factorization is unique
+	by the Fundamental Theorem of Arithmetic,
+	the $\{\alpha_1,\dots,\alpha_k\}$ are unique,
+	and so $\phi$ maps $n$ to a unique coefficients,
+	and since the coefficients (with order) completely determine a polynomial,
+	$n$ is mapped to a unique polynomial.
+	Thus $\phi$ is injective.
+	To show that $\phi$ is onto the set of polynomials with integer coefficients,
+	let $y$ be a polynomial with integer coefficients, specifically
+	$y = \beta_0 + \beta_1x + \beta_2x^2 + \cdots + \beta_kx^k$
+	where $\beta_i \in \Z$ for all $i\in\N\cup\{0\}$.
+	But then, by construction, $\phi(p_0^{\beta_0}p_1^{\beta_1}\cdots p_k^{\beta_k}) = y$,
+	and $p_0^{\beta_0}p_1^{\beta_1}\cdots p_k^{\beta_k} \in \N$,
+	so $\phi$ is surjective.
+	Thus, $\phi$ is a bijection, so the polynomials with integer coefficients are countable.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	Let $\mathbb{A}$ denote the algebraic numbers.
+	Note that by the factor theorem,
+	the number of roots a polynomial has cannot be larger than
+	the degree of that polynomial.
+	Since a polynomial has finite terms,
+	the associated set of roots of that polynomial is finite then.
+	The union of all the sets of the roots for a polynomial
+	is $\mathbb{A}$ (by definition).
+	So if $a_i$ denotes the set of roots for a polynomial $p_i(x)$
+	with integer coefficients (where $i\in\N$, since the polynomials are countable by 6(a)),
+	then we have
+	\[
+		\mathbb{A} = \bigcup_{i\in\N}a_i
+	\]
+	But note that this is a countable union of finite sets,
+	which from the Corollary to Theorem 2.12 from Rudin,
+	means that $\mathbb{A}$ must be finite or countable as well.
+	In other words, $\mathbb{A} \leq \N$.
+	But $\N \subset \mathbb{A}$ (consider the polynomials $p(x) = x-a$,
+	$a \in \N$),
+	and so there is a simple injection from $\N to \mathbb{A}$ ($\phi(x) = x$)
+	thus $\N \leq \mathbb{A}$.
+	Then, by the Schroeder Bernstein Theorem, $|\mathbb{A}| = |\N|$,
+	which means $\mathbb{A}$ is countable.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	For the sake of contradiction, assume the set of transcendental numbers is empty.
+	Since the transcendental numbers are $\R \setminus \mathbb{A}$,
+	we have $\R = \mathbb{A} \cup \left(\R \setminus \mathbb{A}\right)$.
+	Thus, if $\R \setminus \mathbb{A} = \emptyset$,
+	then we have $\R = \mathbb{A}$.
+	But the real numbers are uncountable and from 6(b),
+	the algebraic numbers are countable, which is a contradiction
+	(equal sets must have the same cardinality).
+	Thus, $\R \setminus \mathbb{A} \neq \emptyset$.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	We claim that the transcendental numbers are uncountable.
+	For the sake of contradiction, assume this is not the case.
+	Then $\R \setminus \mathbb{A}$ is either finite or countable.
+	From 6(b), recall the algebraic numbers are countable,
+	and from lecture, and we know that a union of a countable set
+	with a finite or countable set is also countable,
+	thus $\mathbb{A} \cup (\R \setminus \mathbb{A})$ is countable.
+	But the real numbers are uncountable,
+	and we have $\R = \mathbb{A} \cup \left(\R \setminus \mathbb{A}\right)$,
+	so we have a contradiction (equal sets must have the same cardinality),
+	thus $\R \setminus \mathbb{A}$ must be uncountable
+	(then $\mathbb{A} \cup (\R \setminus \mathbb{A})$ would be uncountable as well).
+\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 7}
+\begin{enumerate}
+\item \begin{proof}[Solution]\let\qed\relax
+	See if $\lvert A \cup B\rvert = \lvert C \cup D \rvert$, then
+	\[
+		\lvert A \rvert + \lvert B \rvert
+		= \lvert A \cup B\rvert
+		= \lvert C \cup D\rvert
+		= \lvert C \rvert + \lvert D \rvert
+	\]
+	So it suffices to prove $\lvert A \cup B\rvert = \lvert C \cup D \rvert$.
+	Since $|A| = |C|$, there exists a bijection $\phi_A \colon A  \to C$,
+	and since $|B| = |D|$, there exists a bijection $\phi_B \colon B \to D$.
+	We can define another bijection $\phi \colon A \cup B \to C \cup D$ as follows
+	\[
+		\phi(x) = \begin{cases} \phi_A(x), & x\in A\\ \phi_B(x), & x\in B\end{cases}
+	\]
+	And since $A$ and $B$ are disjoint, each element $x \in A \cup B$
+	is either in $A$ or $B$ but not both,
+	so is only going to be mapped to a single element in $C \cup D$.
+	Since $\phi_A$ maps $1$-$1$ onto $C$ and $\phi_B$ maps $1$-$1$ onto $D$,
+	$\phi$ maps $1$-$1$ onto $C \cup D$ and so is bijective.
+	Thus, $\lvert A \cup B\rvert = \lvert C \cup D \rvert$.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	We will let our $A_t$'s be a subset of $A \times \R$.
+	Define $A_t = (a, t)$, where $t\in\R$ and $a \in A$.
+	Note that $t$ is fixed for each $A_t$.
+	See that $A_s \cap A_t = \emptyset$ if $s \neq t$,
+	since all elements in $A_s$ have $s$ in the second spot in the tuple,
+	and all elements in $A_t$ have $t$ in the second spot,
+	and $s \neq t \implies (a,s) \neq (a,t)$ for all $a \in A$.
+	Now, we can construct a $1$-$1$ map from $A$ to $A_t$
+	($\phi(a) = (a,t)$, which is clearly injective)
+	so $|A| \leq |A_t|$,
+	and a $1$-$1$ map from $A_t$ to $A$
+	($\psi((a,t) = a$ which is clearly injective)
+	so $|A_t| \leq |A|$.
+	Thus, by Schroeder-Bernstein Theorem, $|A_t| = |A|$.
+	Therefore, our constructed $A_t$'s have the desired properties.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	Let $A,B$ be arbitrary sets such that
+	$|A| = n$ and $B = \aleph_0$.
+	First, note that there exists a $1$-$1$ map from $\N$ to $A \cup B$.
+	There exists a bijection $\phi \colon \N \to B$ since $B$ is countable.
+	Note $\phi$ is also a $1$-$1$ map from $\N$ to $A\cup B$,
+	since it maps all elements in $\N$ to a unique element in $B$,
+	and $B \subset A \cup B$.
+	Thus $|\N| \leq |A\cup B| = |A| + |B|$.
+	
+	Now to show the other direction, we will show there is a $1$-$1$ map, call it $\psi$,
+	from $|A| + |B|$ to $\N$.
+	We can enumerate each element in $A$ with $1,2,\dots,n$, so $A = \{a_1,a_2,\dots,a_n\}$.
+	We give the bijection $\psi \colon A \cup B \to \N$ as follows
+	\[
+		\psi(x) =
+		\begin{cases}
+			n & x = a_n \in A\\
+			\phi^{-1}(x) & x \in B
+		\end{cases}
+	\]
+	Since the range of $n$ is $\{1,2,\dots,n\}$ and the range of $\phi^{-1} + n$ is $\{m \in \N \mid m > n\}$
+	on their respective domains,
+	and all the component functions are $1$-$1$
+	(since $\phi^{-1}$ is an injective map onto $\N$, since $\phi$ is a bijection),
+	no two elements are mapped to the same value in $\N$.
+	Thus, $\psi$ is $1$-$1$, and so $|A| + |B| = |A \cup B| \leq |\N|$.
+	Then by Schroeder-Bernstein Theorem, we have $|A| + |B| = |\N|$,
+	and since $A,B$ were arbitrary given their cardinality,
+	we have in general $n + \aleph_0 = \aleph_0$.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	The corollary of Theorem 2.12 of Rudin states that the union of at most countably many at most countable sets
+	is also at most countable.
+	So if $A,B$ are arbitrary countable sets,
+	$A \cup B$ is at most countable, thus
+	$|A| + |B| = |A \cup B| \leq |\N|$.
+	Now, since $A$ is countable, there exists a bijection from $\N$ to $A$,
+	which is also a $1$-$1$ map from $\N$ to $A \cup B$
+	(since every element in $A$ is also in $A \cup B$).
+	Thus $|\N| \leq |A \cup B| = |A| + |B|$.
+	So by Schroeder-Berstein Theorem,
+	since $A,B$ were arbitrary sets such that $|A|=|B| = \aleph_0$,
+	$\aleph_0 + \aleph_0 = \aleph_0$.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	Let $A,B$ be arbitrary sets such that $|A|=\aleph_0$, $|B|=c$,
+	and $A\cap B = \emptyset$.
+	First note that since $B \sim \R$,
+	there exists a bijection from $B$.
+	Thus, there is a $1$-$1$ map from $\R$ to $B$,
+	and since $B$ is a subset of $A \cup B$,
+	there is a $1$-$1$ from $\R$ to $A \cup B$ (just maps to the elements in $B$).
+	Thus, $|\R| \leq |A\cup B| = |A| + |B|$.
+
+	To show the other direction, let us denote the bijection from $B$ to $\R$
+	by $\phi \colon B \to \R$,
+	and the bijection from $A$ to $\N$ by $\psi \colon A \to \N$.
+	We give a $1-1$ map $\Omega \colon A \cup B \to \R$ by
+	\[
+		\Omega(x) = \begin{cases}
+			\psi(x) & x \in A\\
+			\frac{1}{1+\phi(x)} & x \in B, \; \phi(x) > 0\\
+			\frac{1}{\phi(x)-1} & x \in B, \; \phi(x) < 0\\
+			0.1 & x \in B, \; \phi(x) = 0
+		\end{cases}
+	\]
+	Since the range of $\psi(x)$ is $\N$, the range of $\frac{1}{1+\phi(x)}$ is $(0,1)$,
+	the range of $\frac{1}{\phi(x)-1}$ is $(-1,0)$, and the range of the last function is $\{0,1\}$,
+	on their respective domains,
+	and all the component functions are themselves $1$-$1$ on these domains,
+	no two elements are mapped to the same value in $\R$.
+	Thus $\Omega$ is $1$-$1$,
+	and so $|A| + |B| = |A \cup B| \leq |\R|$.
+	Therefore, by Schroeder-Bernstein theorem, we have $|A| + |B| = |\R|$,
+	and since $A$ and $B$ were arbitrary given their cardinalities,
+	$\aleph_0 + c = c$.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	Let $A,B$ be arbitrary sets such that $|A|=|B|=c$,
+	and $A\cap B = \emptyset$.
+	First note that since $A \sim \R$,
+	there exists a bijection from $A$.
+	Thus, there is a $1$-$1$ map from $\R$ to $A$,
+	and since $A$ is a subset of $A \cup B$,
+	there is a $1$-$1$ from $\R$ to $A \cup B$ (just maps to the elements in $A$).
+	Thus, $|\R| \leq |A\cup B| = |A| + |B|$.
+
+	To show the other direction, let us denote the bijection from $B$ to $\R$
+	by $\phi \colon B \to \R$,
+	and the bijection from $A$ to $\R$ by $\psi \colon A \to \R$.
+	We give a $1-1$ map $\Omega \colon A \cup B \to \R$ by
+	\[
+		\Omega(x) = \begin{cases}
+			\frac{1}{1+\psi(x)} & x \in A, \; \psi(x) \geq 0\\
+			\frac{1}{\psi(x)-1} & x \in A, \; \psi(x) < 0\\
+			\frac{1}{1+\phi(x)} + 1& x \in B, \; \phi(x) \geq 0\\
+			\frac{1}{\phi(x)-1} - 1& x \in B, \; \phi(x) < 0\\
+		\end{cases}
+	\]
+	Since the range of $\frac{1}{1+\psi(x)}$ is $(0,1]$,
+	the range of $\frac{1}{\psi(x)-1}$ is $-1,0)$,
+	the range of $\frac{1}{1+\phi(x)}$ is $(1,2]$,
+	and the range of $\frac{1}{\phi(x) - 1}$ is $(-2,-1)$
+	on their respective domains,
+	and all the component functions are themselves $1$-$1$ on these domains,
+	no two elements are mapped to the same value in $\R$.
+	Thus $\Omega$ is $1$-$1$,
+	and so $|A| + |B| = |A \cup B| \leq |\R|$.
+	Therefore, by Schroeder-Bernstein theorem, we have $|A| + |B| = |\R|$,
+	and since $A$ and $B$ were arbitrary given their cardinalities,
+	$c + c = c$.
+\end{proof}
+
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 8}
+{\it For each family of real intervals $\mathcal{A}$ shown below,
+find $\bigcap \mathcal{A}$ and $\bigcup\mathcal{A}$:
+\begin{enumerate}
+	\item $\mathcal{A} = \left\{\left[\dfrac{1}{n}, 1 - \dfrac{1}{n}\right]
+	\colon n \in \N, n \geq 2\right\}$,
+	\item $\mathcal{A} = \left\{\left(-1-\dfrac{1}{n}, 1 + \dfrac{1}{n}\right)
+	\colon n \in \N,\right\}$.
+\end{enumerate}
+[Presentation: For each subproblem, define a set $S$
+and verify that it equals the given combination by proving two inclusions.
+You may assume the Archimedean Property.]}
+\begin{enumerate}
+\item \begin{proof}[Solution]\let\qed\relax
+	We start with $\bigcap \mathcal{A}$.
+	We claim $\bigcap \mathcal{A} = S$ where $S = \{\frac{1}{2}\}$.
+	First, let $s \in S$.
+	For all $2\leq n \in\N$,
+	we have $\frac{1}{2} \geq \frac{1}{n}$ and $\frac{1}{2} \leq 1-\frac{1}{n}$.
+	Thus $s = \frac{1}{2} \in [\frac{1}{n}, 1-\frac{1}{n}]$.
+	So $s$ is in every set in $\mathcal{A}$, which means $s \in \bigcap\mathcal{A}$.
+	Thus $S \subseteq \bigcap \mathcal{A}$.
+	Let $\alpha \in \bigcap\mathcal{A}$.
+	Then for all $2 \leq n \in \N$, we have $\alpha \in [\frac{1}{n}, 1-\frac{1}{n}]$.
+	In other words, for any $n$, $\frac{1}{n} \leq \frac{1}{2} \leq \alpha$
+	(it is to the right of the left bound of every set),
+	and $1-\frac{1}{n} \geq \frac{1}{2} \geq \alpha$
+	(it is to the left of the right bound of every set).
+	But then $\alpha = \frac{1}{2}$.
+	So $\alpha \in S$.
+	Thus $\bigcap \mathcal{A} \subseteq S0$.
+	Therefore, $S = \bigcap \mathcal{A}$.
+
+	Now we look at $\bigcup \mathcal{A}$.
+	We claim $\bigcup \mathcal{A} = S$ where $S = (0,1)$.
+	We make use of the corollary of the Archimedian property:
+	$\forall \ep > 0$, $\exists n\in\N$ such that $\frac{1}{n} < \ep$
+	(from week 3 notes).
+	Let $s \in S$.
+	Then by the corollary, $\exists n_1\in\N$ such that $s > \frac{1}{n_1}$ (since $s$ is positive).
+	Now note that $s < 1$, so $1-s > 0$.
+	Thus, by the corollary,
+	there exists $n_2$ such that $\frac{1}{n_2} < 1 - s$ or $s < 1 - \frac{1}{n_2}$.
+	Let $n = \max\{n_1,n_2,2\}$.
+	Note that the inequalities still hold,
+	since if $n > n'$, then $s > \frac{1}{n'} \geq \frac{1}{n}$
+	and $s < 1-\frac{1}{n'} \leq 1-\frac{1}{n}$.
+	Thus, since we have some $2 \leq n \in \N$ such that $\frac{1}{n} < s < 1-\frac{1}{n}$.
+	Then $s \in [\frac{1}{n}, 1-\frac{1}{n}]$, thus $s \in \bigcup \mathcal{A}$.
+	Thus $S \subseteq \bigcup \mathcal{A}$.
+	Now let $\alpha \in \bigcup \mathcal{A}$.
+	Then for some $2 \leq n \in \N$, $\alpha \in [\frac{1}{n}, 1-\frac{1}{n}]$.
+	Therefore $\alpha \geq \frac{1}{n} > 0$ and $\alpha \leq 1-\frac{1}{n} < 1$,
+	thus $\alpha \in (0,1) = S$.
+	Finally, this means $\bigcup \mathcal{A} \subseteq S$, so $S = \bigcup \mathcal{A}$.
+\end{proof}
+\item \begin{proof}[Solution]\let\qed\relax
+	We start with $\bigcap \mathcal{A}$.
+	We claim $\bigcap \mathcal{A} = S$ where $S = [-1,1]$.
+	Let $s \in S$.
+	Then for any $n \in \N$, $s \geq -1 > -1-\frac{1}{n}$ and $s \leq 1 <1+\frac{1}{n}$.
+	But then $s$ is in every set in $\mathcal{A}$,
+	so $s \in \bigcap \mathcal{A}$.
+	Thus $S \subseteq \bigcap\mathcal{A}$.
+	Now let $\alpha \in \bigcap \mathcal{A}$.
+	Then for all $n \in \N$, $\alpha \in (-1-\frac{1}{n}, 1+\frac{1}{n})$.
+	For the sake of contradiction, assume $\alpha > 1$.
+	Then $\alpha - 1 > 0$, so by the corollary of Archimedes mentioned earlier,
+	there exists $n \in \N$ such that $\frac{1}{n} < \alpha - 1 \implies
+	1 + \frac{1}{n} < \alpha$,
+	but this contradicts that $\alpha < 1 + \frac{1}{n}$ for all $n\in\N$.
+	So we must have $\alpha \leq 1$.
+	Again, for the sake of contradiction, assume $\alpha < -1$.
+	Then $-\alpha - 1 > 0$, so by the corollary,
+	there exists $n \in \N$ such that $\frac{1}{n} < -\alpha - 1
+	\implies \alpha < -1 -\frac{1}{n}$,
+	but this contradicts that $\alpha > -1-\frac{1}{n}$ for all $n \in \N$.
+	So we must have $\alpha \geq -1$.
+	Together, this gives us that $\alpha \in [-1,1] = S$.
+	So $\bigcap\mathcal{A} \subseteq S$,
+	therefore $\bigcap\mathcal{A} = S$.
+
+	Now we look at $\bigcup \mathcal{A}$.
+	We claim $\bigcup \mathcal{A} = S$ where $S = (-2, 2)$.
+	Let $s \in S$.
+	Any such $s$ is in one of the intervals in $\mathcal{A}$
+	(namely when $n=1$: $(-1-1,1+1)$)
+	and so $s$ is in the union of the intervals $\mathcal{A}$.
+	Thus $S \subseteq \bigcup\mathcal{A}$.
+	Now let $\alpha \in \bigcup \mathcal{A}$.
+	Then for some $n\in\N$, $\alpha \in (-1-\frac{1}{n}, 1+\frac{1}{n})$.
+	Therefore, $\alpha > -1-\frac{1}{n} \geq -2$ and $\alpha < 1 + \frac{1}{n} \leq 2$.
+	Thus $\alpha \in (-2,2) = S$, and so $\bigcup \mathcal{A} \subseteq S$.
+	Therefore, $\bigcup \mathcal{A} = S$.
+\end{proof}
+\end{enumerate}
+\end{document}

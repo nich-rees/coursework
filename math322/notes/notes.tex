@@ -1,0 +1,1021 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 322}
+\chead{Notes}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\section{September 19}
+Recall from last time: $D_n = \{\text{rotations/reflections of n-gon}\}$,
+where the $n$ rotation by $\frac{2\pi a}{n}$, $0\leq a \leq n-1$,
+and the $n$ reflections in axes of symmetry.
+
+Claim: these are all distinct, $2n$ in total.
+Obviously: reflections are distinct and rotations are distinct between each other.
+But can we have rotation $=$ reflection?
+
+The answer is no: linear algebra.
+\begin{itemize}
+	\item The rotation of $\R^2$: matrix
+	$\begin{pmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix}$.
+	Has $\det = 1$.
+	\item Reflection in $\R^2$ has eigenvalues $\pm 1$, and $\det = -1$.
+\end{itemize}
+Then he draws a picture idk ff.
+
+\subsection*{Abstract version of $D_n$}
+Let $\sigma = \text{ rotation through } 2\pi/n$,
+so $\sigma^a = \text{ rotation through } 2\pi/n$.
+Rotations are $\sigma, \sigma^2, \dots, \sigma^n = I$
+and $I = \{1,\sigma,\dots,\sigma^{n-1}\}$.
+
+Now let $\tau  = \text{ reflection in x-axis}$.
+Claim: Reflections $ = \{\tau, \tau\sigma, \tau\sigma^2, \dots, \tau\sigma^{n-1}\}$.
+\begin{proof}
+	$D_n = $group $\Rightarrow \tau\sigma^j =$ either a rotation or a reflection.
+	
+	Case 1: $\tau\sigma^j$ is a reflection
+
+	Case 2: $\tau\sigma^j$ is a rotation, or $\sigma^k$ for some $k$.
+	But then $\tau \sigma^j = \sigma^k \Rightarrow \tau(\sigma^j)(\sigma^j)^{j-1}
+	= \sigma^k(\sigma^j)^{-1} \Rightarrow \tau = \sigma^k\sigma^{n-j}=\sigma^{k+n-j}$.
+	And this is impossible because LHS $=\tau=$ nontrivial reflection,
+	but RHS $=$ rotation, which we know can't beequal.
+	
+	Thus, it has to be case 1, so $\tau\sigma^j = $reflection $\forall j$.
+	But $\tau\sigma^j = \tau\sigma^{j'} \Rightarrow j=j'$, $0\leq j,j' \leq n-1$.
+	Same argument: $\tau\sigma^j = \tau\sigma^{j'} \Rightarrow \tau^{-1}\tau\sigma^j
+	= \tau^{-1}\tau\sigma^{j'} = \sigma^j = \sigma^{j'} \Rightarrow j=j'$.
+	Thus, $\tau,\tau\sigma,\dots,\tau\sigma^{n-1}$ are all different,
+	and all reflections, so we get them all.
+\end{proof}
+Thus, we get some idea of what $D_n$ looks like.
+$D_n = \{1,\sigma,\sigma^2,\dots,\sigma^{n-1}, \tau,\tau\sigma,\dots,\tau\sigma^{n-1}\}$
+where $sigma$ is a rotation through $\frac{2\pi}{n}$
+and $\tau$ is a reflection ff
+
+ff end of page 3 and start of page 4
+by closure, but what are $i,j$?
+What is the algebra rule that does this?
+Answer: $\tau\sigma^j = \sigma^{n-j}\tau = \sigma^{-1}\tau$.
+Supposedly a homework question, nominally due today, but didn't release.
+Anyway, we know how $\tau$ and $\sigma$ interact through linear algebra,
+so $\tau = \begin{pmatrix} -1 & 0 \\ 0 & 1\end{pmatrix}$ when
+it is a reflection in the $y$ axis,
+and the rotation $\sigma =
+\begin{pmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix}$.
+Then
+\begin{align*}
+\tau\sigma &= \begin{pmatrix} -1 & 0 \\ 0 & 1\end{pmatrix}
+\begin{pmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix}\\
+&= \begin{pmatrix} -\cos\theta & -\sin\theta \\ -\sin\theta & \cos\theta \end{pmatrix}\\
+&= \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+\begin{pmatrix} -1 & 0 \\ 0 & 1\end{pmatrix} \\
+&= ff
+\end{align*}
+So to simplify $\sigma^2\tau\sigma^3 = (\sigma^2 \tau) \sigma^3
+= \tau(\sigma^2)^{-1}\sigma^3 = \tau \sigma^{n-2+3} = tau\sigma^{n+1}
+= \tau\sigma \in D_n$.
+
+The third way to write $D_n$ is
+$\{1,\sigma,\dots,\sigma^{n+1},\tau,\tau\sigma,\dots,\tau\sigma^{n-1}\}$
+with the rules $\tau^2=1$ (reflection), $\tau\sigma = \sigma^{-1}\tau$,
+and $\sigma^n = 1$.
+\begin{remark}
+These rules imply all the others
+\end{remark}
+Let's see with $(\tau \sigma^{i})^2 = \tau\sigma^i \tau \sigma^i
+= \sigma^{-i}\tau\tau\sigma^i = 1$
+(where we have used $\tau\sigma^i = \sigma^{-i}\tau$,
+which can be found with induction and the given rules).
+This is an {\it algebraic} way of describing $D_n$.
+
+In a crude form, a group is set of elements with some rules how they interact.
+This wraps up our beginning bit of groups,
+but keep in mind $S_n$ and $D_n$:
+they're the simplest nonabelian groups,
+and we can actually write down all the elements.
+
+\subsection*{Ch. 1.3 Isomorphism, Homomorphism}
+These are going to be our version of linear transformations
+from linear algebra, but for groups.
+\begin{definition}[Homomorphism]
+Let $G_1, G_2$ be groups.
+A {\it homomorphism} from $G_1 \to G_2$
+is a function $\phi \colon G_1 \to G_2$ such that
+$\forall g_1,g_2 \in G_1,
+\underbrace{\phi(g_1 g_2)}_{\text{multiplication in }G_1}
+= \underbrace{\phi(g_1)\phi(g_2)}_{\text{multiplication in }G_2}$.
+\end{definition}
+We must have $\phi(1_{G_1}) = 1_{G_2}$.
+
+{\it Isomorphism} $\phi$ is a bijection,
+so it matches both sets and the multiplication,
+while {\it Homomorphism}only matches multiplication
+(need not be injective or surjective).
+
+Some examples
+\begin{itemize}
+\item $\exp \colon x \mapsto e^x$,
+which matches $(R, +) \to \R^*_+$ (positive reals, with multiplication).
+This is a isomorphism.
+\item $\phi \colon \R \to \C^*$ such that $x \mapsto e^{2\pi ix}$,
+which sends $\R$ to the complex numbers of modulus $1$.
+This is surjective, but it is not innjective, since $e^{2\pi i x} = 1, \forall x \in \Z$.
+So this is only a homomorphism.
+\item Let $G = n\times n$ invertible real matrices,
+and $\phi(g) = \det(G) \in \R^*$.
+This is only a homomorphism,
+since $G \to \R^*$ (multiplication) since $\det(AB) = \det(A)\det(B)$,
+but it is not injective.
+Also have the identity map (maps to itself).
+\item Let $G$ be any group, and $\phi(G) = 1\in G_2, \forall g\in G_1$ and any $G_2$.
+This is a homomorphism from $G_1 \to G_2$,
+called the ``trivial" homomorphism.
+\end{itemize}
+
+\begin{definition}[Subgroups]
+$G = $group, a subset of it is ff (bottom of page 7)
+\end{definition}
+
+\begin{theorem}[Cayley's Theorem]
+Let $G$ be any finnite group.
+Then $G$ is isomorphic to a subgroup of $S_n$ (permutation on $n$ letters)
+for some $n$.
+\end{theorem}
+Concretely, this means $\exists n \geq 1$ and a hommomorphism
+$\phi \colon G \to S_n$ that is injective.
+
+\begin{proof}
+Let $n = \# G =$ number of elements in $G$.
+So the set of $n$ objects $=$ elements of $G$.
+(How do objects in $G$ move around?
+When you multiply two by each other,
+you get another element in $G$.)
+So $forall g \in G$, consider the function $L_g, R_g$,
+where $L_g, R_g \colon G \to G$,
+where $L_g(x) = gx$ (fixed $g$, $\forall x \in G$)
+and $R_g(x) = xg$ (fixed $g$, $\forall x \in G$).
+
+Claim: $L_g, R_g$ are permutations of $G$.
+
+Check: we need to show they are bijections
+(could show that they are injective and surjective,
+or that they have an inverse, the second is easier).
+So $(Lg^{-1})\circ L_g(x) = g^{-1}(gx) = x
+\Rightarrow L_{g^{-1}} = (L_g)^{-1}$ is a function.
+Similarily, $R_{g^{-1}} = (R_g)^{-1}$.
+Thus $g \mapsto L_g$ and $g \mapsto R_g$ so $G \to S_n$ something something.
+
+Check: we need to show that the homomorphism respects the multiplication.
+Let $\phi(g) = L_g$ and $\phi(g) = R_g$.
+We want $\phi(g_1 g_2) = \phi(g_1)\phi(g_2)$
+and $\psi(g_1 g_2) = \psi(g_1)\psi(g_2)$.
+Looking at the first, we have LHS $= L_{g_1g_2} = x \mapsto (g_1g_2)x$
+and RHS $= L_{g_1} \circ L_{g_2}(x) = g_1(g_2 x) = )(g_1 g_2)x$.
+Thus $\phi$ is a homomorphism.
+Now looking at the second, note that $\psi$ is not a homomorphism in general.
+We see LHS $= R_{g_1g_2} = x \mapsto xg_1g_2$
+and RHS $= R_{g_1} \circ R_{g_2}(x) = (xg_2)g_1 = xg_2g_1 \neq xg_1g_2$.
+Just so happens that left multiplication is the homomorphism.
+So we get the homomorphism $\phi \colon G \to S_n$ where $g \mapsto L_g$.
+
+Finally, to show that this is an isomorphism, need to check that $\phi$ is injective.
+
+ff (page 10 and 11)
+
+Conclusion $\phi \colon G \to S_n$ where $g \mapsto L_g$
+is an injective homommorphism $G \to S_n$.
+\end{proof}
+
+Going to sort out homework,
+probably compressed deadline but has given some answers already.
+
+\section{September 21}
+Last time, we started proving (proved?) Cayley's theorem.
+That is, for a finite group $G$, there exists $\phi \colon G \to S_n$
+that is an injective homorphism ($n = \#G$).
+\begin{remark}
+	$\# S_n = n! > n = \#G$.
+	$G$ is a very small subgroup of $S_n$.
+\end{remark}
+Something we we will see again later:
+$\exists m \neq n$ with $G \to S_m$ injectively (usually)
+$m$ could be much smaller.
+
+\subsection{1.4 Commutativity, general associativity}
+The usual associative law is $(ab)c = a(bc)$:
+can put brackets anywhere to simplify (don't rearrange terms).
+Usual law of commutativity is $ab = ba$.
+Not going to to spend much time on this, kinda boring,
+can figure it out for yourself.
+
+\subsection{1.5 ff}
+We'll be looking at cyclic groups, and  subgroupos generated by a subset.
+
+Let $G$ be a group, and $S \subseteq G$ any subset.
+\begin{definition}[Subgroup Generated by $\langle S \rangle$]
+	$\langle S \rangle = $smallest subgroup of $G$ containing $S$.
+	$\langle S \rangle$ is a subgroup containing $S$,
+	and if $H$ is any subgroup which contains $S$.
+	Then $\langle S \rangle \subseteq H$.??? idk
+	We all $\langle S \rangle$ the subgroup generated by $S$.
+\end{definition}
+Existence of $\langle S \rangle$:
+$X = $ set of subgroups of $G$ containing $S$.
+Then $G \in X$, $X \neq \emptyset$.
+$\langle S \rangle$ is a minimal element of $X$.
+Arbitrary intersections of subgroups are subgroups (exercise),
+thus take the intersection of all elemments of $X$ to get $\langle S \rangle$.
+Concretely, $\langle S \rangle$ is the arbitrary finite products
+of elements of $S$ and their inverses.
+\[\langle S \rangle = \{\prod_{i=1}^r S_i^{\ep_i} \mid S_i \in S, \ep_i = \pm 1,
+	r = \text{ any positive integer }\}
+\]
+You can think of this as the ``span" of $S$ (but not commutative).
+\begin{remark}
+	$\langle S \rangle$ is very hard to describe in terms of $S$
+	(expressions as products are usually not unique).
+\end{remark}
+For example, if $G = S_n$ and $S = \{\sigma, \tau\}$
+from $D_n$, so $\sigma = 1\to2, 2 \to 1$ (fixes all others)
+and $\tau = 1\to 2\to \cdots \to n \to 1$.
+Actually, $\langle s \rangle = S_n$.
+This means that we can get any permutation
+
+Special case: $S = \{g\} =$ single element.
+Then $\langle S \rangle = \{g^i \mid i \in \Z \}$.
+We have $1 = g^0$ (conventiion from law of exponents)
+and $g^ig^j = g^{i + j}$.
+Our subgroup generated by $S$ is
+$\langle S \rangle = \text{ group}, g \in S \subseteq \langle S \rangle
+\iff g^i \in \langle S \rangle \forall i$.
+
+There exists a homomorphism $\phi \colon (Z, +) \to
+\langle S \rangle \subseteq G$
+defined by $i \mapsto g^i$.
+2 cases: $\phi$ is inejctive or $\phi$ is not injective.
+
+\begin{remark}
+	$\phi \colon \Z \to \langle S \rangle$ is always onto.
+	If $\phi$ is injective, then $\phi \colon \Z \to \langle S \rangle$
+	is an isomorphism, $\langle S \rangle$ and $\Z$ are the same.
+\end{remark}
+Some notation: we would say $\Z \cong \langle S \rangle$ (isomorphic) (isomorphic)
+
+Some more notation (additive notation): $\Z = \langle 1 \rangle = \langle -1 \rangle$.
+In this case $\langle S \rangle$ is called an {\it infinite} cyclic group
+(cyclic because it is generated by one element).
+We have $n = \underbrace{1+1+\cdots+1}_{n \text{ times}}$,
+$-n = \underbrace{(-1)+(-1)+\cdots+(-1)}_{n \text{ times}}=
+-(\underbrace{1+1+\cdots+1}_{n \text{ times}})$.
+
+Some more notation: if $S = \{g\}$, then $\langle S \rangle = \langle g \rangle =$
+cyclic group generted by $g$.
+Can see that different elements $g$ can generate the same group.
+
+Something with matrices ff (page 5).
+
+$\phi \to \langle g \rangle$ is not injective.
+This means there are repeats $g^i = g^j i\neq j$.
+WLOG $i > j \Rightarrow g^{i-j} = 1$ and $i-j > 0$.
+Define $d$ to be the smallest positive integer with $g^d = 1$.
+We call $d$ the order of $g$.
+Claim: $\langle S \rangle = \{1,g,g^2,\dots,g^{d-1}\}$
+\begin{proof}
+	Fix any $n\in\Z$.
+	ff$n = qd+r$ where $0 \leq r \leq  d-1$.
+	We have
+	\begin{align*}
+		g^n = g^{qd+r} &= (g^{qd})q^r\\
+					   &= (g^d)^q = g^r\\
+					   &= (1)^q g^r\\
+					   &= ff (page 6)
+	\end{align*}
+	If $0 \leq r_1,r_2\leq d-1$,
+	let $r_2 \geq r_1$ (WLOG)
+	and $g^{r_1} \neq g^{r_2}$ since $g^{r_1} = g^{r_2} \iff g^{r_2-r_1} = 1$,
+	if $r_1 \neq r_2$.
+	But $d$ is the smallest positive integer with $g^d = 1$.
+	So $\{1,g,g^2,\dots g^{d-1}\}$ represent
+	all powers of $g$, with no repeats.
+\end{proof}
+Multiplication rule: $g^ig^j = g^{i+j}$.
+Read exponents mod $d$ (replace by remainder).
+Algebra rule $g^d=1, g^{-1} = g^{d-1}$.
+On this case $\langle g \rangle = \{0,1,2,\dots,d-1\}$
+and all additions are taken mod $d$.
+All such groups with the same $d$ are isomorphic.
+
+In summary, if $G$ is a group and $g \in S$,
+the cyclic subgroup generated by $g$ is 
+$\langle g \rangle = \{g^i \mid i \in \Z\} \subseteq G$.
+There are 2 cases: $\langle g \rangle$ is infinite, $\cong \Z$,
+or $\langle g \rangle$ is finite, $\#\langle g \rangle = d$,
+and is equal to $\{1,g,g^2,\dots,g^{d-1}\}$, $\cong$ integers mod $d$.
+This is commutative.
+
+This was the simplest case, when only generated by $1$ element.
+But what about when we generate from more than one element.
+Two generators can make something that is much more complex.
+For example, $\sigma,\tau$ for $D_n$,
+and no longer commutative and no longer can just be
+represented as powers of a single element
+(doesn't have to be cyclic?)
+
+\begin{remark}
+	$\langle S \rangle = \langle g \rangle$ is described above.
+	But if $S = \{g_1,g_2\}$
+	it is not easy to relate to $\langle g_1\rangle$ and $\langle g_2 \rangle$
+	to the subgroup generated by both elements.
+\end{remark}
+
+\subsection{Structure of Cyclic Groups}
+\begin{enumerate}
+	\item Describe all possible generators:
+		when is $\langle g \rangle = \langle h \rangle$?
+	\item Find all possible subgroups of $\langle g \rangle$
+\end{enumerate}
+Consider the infinite cyclic group $\langle g \rangle \cong (\Z,+)$.
+Suppose $t \in \Z$ is a generator.
+Then any positive integer $n$ is of the form
+\[
+	n = t + t + \cdots + t
+\]
+so $t$ is a multiple of $t$.
+This is supposed to hold for all $n \Rightarrow  t = \pm 1$.
+Thus, $\pm 1$ are the only possible generator.
+
+Subgroups: let $H$ be any subgroup of $(\Z, +)$.
+Pick $t \in H$ which is the smallest positive element.
+($t \in H \iff -t \in H$, so positive elements exist.)
+Then $t\Z \subseteq H$ ($t\Z = \{t,t+t,\dots,-t,-t-t,\dots\}$).
+Our claim is that $H = t\Z$.
+\begin{proof}
+	Suppose $s \in H$, then $s = qt+r, 0\leq r \leq t-1$.
+	Then $qt \in H$ (as above).
+	Then $s-qt = r \in H$, which is impossible,
+	since $t$ is the smallest positive element.
+	Then $H = t\Z$.
+\end{proof}
+Thus, subgroups of $\Z$ are the set $t\Z$, $t\in\Z$ (positve $t$).
+
+Now we consider the finite case $\langle g \rangle = \{1,g,g^2,\dots,g^{d-1}\}
+\cong \{0,1,2,\dots,d-1\}$ with addition mod $d$.
+Fix $t$, $0\leq t \leq d-1$ that generates,
+which means $\{0,t,2t,\dots,(d-1)t\} =_{\mathrm{mod}\;d}
+\{0,1,2,\dots,d-1\}$.
+
+For example, $d = 5$.
+Now let $t = 2$.
+We have $\langle 2 \rangle = \{0,2,4,6,8\} = \{0,1,2,3,4\}$
+so $\langle 2 \rangle = \langle 1 \rangle$ in integers mod $5$.
+(The fact that $5$ is prime is what makes this work,
+makes it cyclic;
+can't have a cycle sit within a group.)
+But if $d=6$, $\langle 2 \rangle = \{0,2,4,6\} =$ ff(page 12).
+
+Answer???: $\langle t \rangle$ generates $\iff (t,d) = 1$.
+\begin{proof}
+	Suppose $(t,d) = s > 1$.
+	Then $c = \frac{d}{s}$ is an integer, $0<c<d$.
+	Then $ct = t + t + \cdots + t$ $c$ times.
+	$\frac{d}{s}t = d\frac{t}{s} = d$, integer is divided by $d$.
+	Thus $[ct] = [0]$ ($ct$ is a multiple of $d$.
+	$0,t,2t,\dots,dt$ is not distinct mod $d$, $[ct] = [0]$, $c < d$.
+	Thus, if there's a common factor, can't generate.
+
+	It reamins to show that if $(t,d) = 1$, then $t$ generates.
+	Assume $(t,d) = 1$.
+	Find the smallest integer $s$ such that $[st]=[0]$.
+	This is obviously $s=d$, because $st$ is dividisble by $d$,
+	so $d \mid s$ since $(t,d) = 1$.
+	Thus, $0, t, 2t, \dots, (d-1)t$ are distinct
+	(can't have overlaps, the multiples of $t$ are smaller than $d$,
+	same argument as before).
+
+	Conclusion: possible generators in this case are
+	the integers $t$, $0 \leq t \leq d-1$ with $(t,d) = 1$.
+	Multiplicative rotation $g^t$ is a generator of
+	$\langle g \rangle \iff (t,d) = 1$.
+	Lots of choices for generators.
+\end{proof}
+Something something this is used in a crytography scheme.
+
+Still don't know how many open groups???
+Strongly recommend reading this section before next class.
+
+\section{September 26}
+Last time, we were talking about cyclic groups/subgroups.
+$G$ is a group, $g \in G$,
+then there are two cases for the subgroup generated by $g$
+$\langle g \rangle = \{g^t \mid t \in \Z\}$.
+\begin{enumerate}
+	\item $\langle g \rangle$ is infinite
+	\item $\langle g \rangle$ finite, $\#\langle g \rangle = d$
+\end{enumerate}
+Terminology $\# \langle g \rangle =$ the order of $g$ (can be infinite or $d$).
+This defines the order of $g, g \in G$.
+\begin{remark}
+	$\#G = $ order of G, but $\#\langle g \rangle = $ order of $g$ (as an element).
+	Usually context will distinguish which one we're talking about.
+	These only coincide when $G = \langle g \rangle$ (group generated by $g$).
+\end{remark}
+Observation: $g^m = g^l \iff g^{ml} = g^0 = 1$.
+Any repeat $g^m = g^l$ can be assumed to have $l = 0$. ???
+
+Back to last class:
+we were trying to find all subgroups of $\langle g \rangle$
+when $\# \langle g \rangle = d < \infty$.
+Let $G = \langle g \rangle$ and let $H \subseteq G$ be any subgroup.
+Let $t$ by the samllest positive integer with $g^{t} \in H$.
+We have $0 \leq t \leq d-1$.
+Our claim is that $H = \langle g^{t} \rangle$.
+\begin{proof}
+	The proof is the same as the infinite order case.
+	If $h \in H$ then $h = g^s$ for some $0 \leq s \leq d-1$.
+	We have $s = qt + r$, $0 \leq r < t$.
+	Then $h = g^s = g^{qt + r} = (g^t)^qg^r$.
+	But $h \in H$ and $g^t \in H$, so $g^r \in H$.
+	But this contradicts the minimality of $t$ unless $r = 0$ ($r < t$).
+	Thus $s = qt \implies h = g^s = (g^t)^q \in \langle g^t \rangle$.
+\end{proof}
+\begin{corollary}
+	Any subgroup $H \subseteq G = \langle g \rangle$ is cyclic, $H = \langle g^t \rangle$.
+\end{corollary}
+We might ask what the order of $H = \langle g^t \rangle$ is.
+The answer is
+\[
+	\frac{\#G}{\gcd(\#G,t)} = \frac{d}{(d,t)}
+\]
+Last time, we computed the order of $g^t = \frac{d}{(d,t)}$.
+Recap: the order of $g^t$ is the smallest positive integer $s$
+such that $(g^t)^s = 1 \implies g^{ts} = 1 \implies d \mid ts$
+($d$ is the order of $g$).
+But then $s$ is the smallest number such that $d$ divides $ts$,
+and then $s = \frac{d}{(d,t)}$.
+
+After a while, people just take these kind of operations for granted,
+because it is quite tedious to go through details.
+Need to be able to prove yourself or hold in your head.
+\begin{corollary}
+	$\mathrm{order}(H) = \#H = \frac{d}{(d,t)}$ is a divisor of $d = \#G$.
+	Then $H \subseteq G \implies \#H \mid \#G$.
+\end{corollary}
+This is a nice property of all finite groups (not just cyclic),
+but we will prove this later.
+\begin{corollary}
+	$G$ is cyclic, $s \mid d \implies$ there exists a unique
+	$H \subseteq G$ of order $S$.
+\end{corollary}
+\begin{proof}
+	Existence: take $H = \langle g^t \rangle, t = \frac{d}{s}$.
+	For uniqueness, do similar to what we showed before:
+	given $H \subseteq G, H = \{ 1, g^t, g^{2t}, \dots, g^{(r-1)t}\}$,
+	we have $r$ is the order of $h = g^t$.
+	We can read off elements of $G$ from $t$.
+	The order of $H$ determines $t$,
+	since $rt = d$ ($t = \frac{d}{r}, r = \# H$).
+	Thus $H$ is determined by $\#H$.
+\end{proof}
+\begin{remark}
+	Thsi fails for most groups:
+	$G$ does not have subgroups of order $r$ when $r \mid \# G$.
+	This is a unique property of cyclic groups:
+	when we pick some divisor of the order of $G$,
+	we are going to get a subgroup of order of that divisor.
+\end{remark}
+You have to remmber these basic facts about cyclic groups.
+We'll be using it a lot:
+we often try to understand the behaviour of a larger group
+by understanding cyclic subgroups of it,
+like with the dihedral group $D_n$, where we have a cyclic subgroup of order $2$,
+and of order $n$.
+
+\subsection{Using our cyclic group properties for finite groups}
+
+Some terminology: the {\it exponent} of a group
+is the smallest positive integer $n$ such that $g^n = 1, \forall g \in G$
+(not typically the order).
+\begin{theorem}
+	Suppose $G$ is commutative.
+	Then $G$ is cyclic $\iff \mathrm{exponent}(G) = \mathrm{order}(G)$.
+\end{theorem}
+This is good for a lot of stuff that we won't actually get to in this class,
+but the proof is a good test of understanding.
+Proof requires two lemmas.
+\begin{lemma}
+	Suppose $g,h$ are elements of a commutative group
+	and let $m = \mathrm{order}(G)$ and $n = \mathrm{order}(G)$.
+	Then $(m,n) = 1 \implies \mathrm{order}(gh) = mn$.
+\end{lemma}
+Example of failing with no commutativity:
+take $D_n$, and $\sigma$ is a rotation and $\tau$ is a reflection.
+Then $\sigma \tau$ is also a reflection, but this has order $2$
+(regardless of order of $\sigma$).
+\begin{proof}
+	Suppose $(gh)^r = 1 \implies g^rh^r = 1$ (commutativity).
+	So $g^r = h^{-r} = (h^{-1})^r$.
+	Note that $\mathrm{order}(g^r)$ divides $\mathrm{order}(g) = m$
+	and $\mathrm{order}(h^{-r})$ divides $\mathrm{order}(h) = n$.
+	(Using property of cyclic groups!)
+	But since $m$, $n$ were coprime,
+	$\mathrm{order}(g^r) = \mathrm{order}(h^{-r}) = 1$.
+	And $\frac{m}{(m,r)} = 1$ so $m \mid r$ and $n \mid r$,
+	thus $mn \mid r$ (coprimeness).
+
+	So $(gh)^r = 1 \implies$ $r$ is divided by $mn$.
+	It is clear that $(gh)^{mn} = (g^{mn})(h^{mn}) = 1$.
+	Thus $n = \mathrm{order}(h), m = \mathrm{order}(g)$,
+	therefore $(gh^r) = 1 \iff mn \mid r \implies$
+	$gh$ has order $mn$.
+\end{proof}
+(proof also on page 47)
+
+\begin{lemma}
+	$G$ is commutative and finite.
+	Suppose $g \in G$ has maximal order.
+	Then $\mathrm{exponent}(G) = \mathrm{order}(g)$.
+\end{lemma}
+\begin{remark}
+	Suppose $g_2$ is any element of $G$.
+	Our assumption is that $\mathrm{order}(g_2) \leq \mathrm{order}(g)$.
+	Have to show $g_2^{\mathrm{order}(g)} = 1$.
+	($\mathrm{order}(g)$ is killing off every element.
+	This is not automatic: just because order is smaller,
+	it does not follow that being raised to the power of a larger order
+	means it will go to $1$.
+\end{remark}
+\begin{proof}
+	Let $n = \mathrm{order}(g)$ and $m = \mathrm{order}(g_2)$ (random element).
+	We have $n = \prod p_i^{e_i}$ (prime factorization)
+	and $m = \prod p_i^{f_i}$ (using same $p_i$, $e_i,f_i \geq 0$).
+	It is enough to show that $f_i \leq e_i \;\forall i$ (then $m \mid n$).
+	(Will show this with commutativity.)
+
+	Suppose that it is not that case,
+	by renumbering, $f_1 > e_1$.
+	Now $g$ has order $n = \prod p_i^{e^i} =
+	p_1^{e_1}\left(\prod_{i\geq 2} p_i^{e_i}\right) = p_1^{e_1}r$
+	and $g_2$ has order $m = \prod p_i^{f_i} =
+	p_1^{f_1}\left(\prod_{i\geq 2} p_i^{f_i}\right) = p_1^{f_1}s$.
+	Let $g_3 = g^{p_1^{e_1}}$ and $g_4 = g_2^s$.
+	Note $\mathrm{order}(g_3) = r = \frac{\mathrm{order}(g)}
+	{(\mathrm{g}, p_1^{e_1})} = \frac{n}{p_1^{e_1}}$.
+	and $\mathrm{order}(g_4) = p_1^{f_1}$ (for the same reason).
+	But then by Lemma 1, $\mathrm{order}(g_3g_4) = p_1^{f_1}r > \mathrm{order}(g)$
+	(coprime because primes are different),
+	which is a contradiction.
+\end{proof}
+Clever, but a typical argument in group theory... reread until you get the argument.
+No standard proof technique in group theory,
+but will use a bunch of properties of specific groups,
+and combine the facts to get the theorem that we wanted.
+
+Additional property of finite cyclic groups:
+suppose $g = \langle g \rangle$, $\# G = d$.
+Pick $s \mid d$, $\exists H \subseteq G$, $\# H = s$.
+Fact: $H = \{x \in G \mid x^s = 1\}$.
+\begin{proof}
+	We can easily see that $H$ is a subgroup (as defined).
+	So it suffices (by uniqueness) to show it has order $S$.
+	The elements of $G = \langle g \rangle$ are $1,g,g^2, \dots, g^{d-1}$.
+	The order of $g^t$ is $\frac{d}{(d,t)}$.
+	\[
+		(g^t)^s = 1 \implies d \mid ts
+	\]
+	$t = 0, \frac{d}{s}, \frac{2d}{s}, \dots$ is a list of elements
+	satisfyin $x^s = 1$, we have $S$ of them.
+\end{proof}
+
+\section{September 28}
+ff
+
+\section{October 3}
+"Point-set topology has got to be one of the most boring subjects ever.
+After about two weeks, you get the point."
+
+We are now hittinng the core stuff in the class.
+\subsection{Section 1.7}
+Let $G$ be a group and $X$ be a set.
+$S = S_X = $ group of permutations of $X$
+(saying in this way because if $X$ is not finite, bijections,
+and if it is finite, just $S_X = S_n$).
+
+\begin{definition}[Group Action]
+	Suppose $\exists \phi \colon G \to S_X$ (a homomorphism).
+	Then $\forall g \in G$, $\phi(g) \in S_X$ is a permutation,
+	so $\forall g \in G, \forall x \in X$, $\phi(g)(x) = y \in X$.
+	So we get a function $(g,x) \to y = \phi(g)(x) = g\cdot x$ (short-hand).
+	We say that $G$ \emph{acts} on $X$;
+	the elements of $G$ move the elements of $X$ around,
+	according to the homomorphism $\phi$.
+\end{definition}
+For example, if $X = G$, $\phi(g) = Lg$, $x \mapsto gx$ (Cayley's theorem).
+
+\begin{definition}[Orbit]
+	Fix $x \in X$.
+	Define $\mathrm{orbit}_G(x) = \mathrm{orb}_G(x)
+	= \{ y \in X \colon \exists g\text{ with } \phi(g)(x) = y\}$
+\end{definition}
+In words: $\mathrm{orb}_G(x) \subseteq X$,
+elements we can reach via permutationns from $\phi(G) \subseteq S_X$.
+For example (Cayley's theorem), $\mathrm{orb}_G(1) = G$,
+since $\forall g \in G, Lg(1) = g\cdot 1 = g$.
+
+$X$ is divded up into $G$-orbits,
+these orbits carry lots of information (about G!),
+pretty fundamental for understanding the structure of a group
+(have to choose good maps $\phi$ and sets $X$).
+Will look at a lot later.
+
+Today, we are only interested in one example:
+\[
+	\phi \colon G \to S_G = \text{ permutations of }X: \quad
+	g \to Lg
+\]
+and 
+\[
+	\psi \colon G \to S_G = \text{ permutations of }X: \quad
+	g \to Rg^{-1}
+\]
+(where we've put the inverse to make it a homormorphism).
+$\phi,\psi$ give injective maps $G \hookrightarrow S$ (hook is injection).
+\begin{definition}[Left Coset]
+	$H \subseteq G$ be any subgroup, can restrict $\phi,\psi$ to $H$
+	and get $H \hookrightarrow S = S_G$ (permutations of $G$).
+	Consider $g \in G$, $\mathrm{orb}_H(g)$ under $\phi$.
+	Define $Hg = \{L_h(g), h \in H\} = \{hg \mid h \in H\}$.
+	This is called a coset of $g$ with respect to $H$
+	(or a coset of $H$ with respect to $g$).
+\end{definition}
+(naming depends on $g$ wrt $H$ or the other way ff)
+\begin{definition}[Right Coset]
+	Take $\psi$ instead; $gH = \mathrm{orb}_H(g) =
+	\{gh^{-1} \mid h \in H \} = \{gh \mid h \in H\}$.
+	This is the right coset of $H$.
+\end{definition}
+Warning: sometimes left/right get swapped.
+\begin{remark}
+	$gH \neq Hg$ in general
+\end{remark}
+\begin{lemma}
+	The function $h \mapsto gh$ and $h \mapsto hg$ give bijections
+	$H \to gH$ and $H \to Hg$.
+\end{lemma}
+\begin{proof}
+	$gh = gh' \implies h = h'$ (multiplication by $g^{-1}$ on left).
+	Onto is obvious.
+	(or if $H$ is finite $\# H - \# gH \# Hg$ $\forall g$).
+\end{proof}
+\begin{lemma}
+	$G = \sqcup_{g_i}g_iH = \sqcup_{g'_i} Hg'_i = $ disjoint union of cosets. (what is $g'$ ?fff)
+\end{lemma}
+\begin{proof}
+	$\forall g \in G$, $g \in gH$ and $g \in Hg$.
+	So $G = \bigcup_{g \in G} gH = \bigcup_{g \in G} Hg$.
+
+	Observation: $g_1, g_2 \in G$, either $g_1 H = g_2 H$ or $g_1 H \cap g_2 H = \emptyset$.
+	If we assume this observation, we are done.
+	This is because $G = $ disjoint union of distinct cosets.
+	If we prove this observation, we prove the lemma.
+
+	Suppose $g_1 H \cap g_2 H \neq \emptyset$.
+	$\exists h_1, h_2 \in H$ with $g_1h_1 = g_2 h_2$.
+	Then $g_1 = g_2 h_2 h_1^{-1} \in g_2 H$.
+	Then $\forall h \in H$, $g_1,h \in g_2 H$ ($H$ is closed).
+	But then $g_1 H \subseteq g)2 H$, and by summetry, $g_2 H \subseteq g_1 H$.
+	thus $g_1 H = g_2 H$.
+\end{proof}
+\begin{corollary}
+	$G = \bigsqcup_{g_i}g_iH = \bigsqcup_{g'_i} Hg'_{i}$,
+	and each coset has the same cardinality.
+	This means that if $G$ is finite, $\# G = r\cdot \#H$ (where $r$ is the number of cosets).
+	In particular, $\# H \mid \# G$ and $r$ is the index of $H$ in $G$
+	(number of distinct cosets).
+\end{corollary}
+
+This gives us the following theorem.
+\begin{theorem}[Lagrange's theorem]
+	If $G$ is finite and $H$ is a subgroup $\implies \#H \mid \#G$.
+\end{theorem}
+This means that orders of subgroups can't be random.
+They have to divide the order of the original group.
+(Evan Chen: any element's order must divide the order of $G$).
+\begin{remark}
+	The converse if false: if $d \mid \# G$,
+	there need not be a subgroup of order $d$.
+	Examples are hard to come by, but can find.
+\end{remark}
+
+Notation: $[G \colon H] = $ index of $H$ in $G$ $ = $ the number of distinct cosets of $H$
+(left or right, depending on what we're looking at).
+These values are the same for finite gruops because $[G \colon H] \cdot \# H = \# G$
+($\#H$ is the seize of a coset, which is the same whether it's a left coset or right coset).
+
+Coset representatives: set of elements of $G$,
+one from each distinct coset.
+Example: $G = \Z$, $H = n\Z$, $n>1$.
+Then the coset representatives are just the remainder classes,
+$\{0,1,2,\dots,n-1\}$,
+because the cosets are just $x + kn, k \in \Z = x + H$ (additive notation).
+
+We're taking a group, and we're cutting it up into pieces.
+All these pieces are of the same size, and they're all of size $H$.
+
+Example: $G = (\Q, +)$, $H = \Z$.
+Coset of $x = \{x + k \mid k \in \Z \}$. contains a unique
+$r \in \Q ,0 \leq r < 1$.
+Cosets represented by $\{ r \in \Q, 0 \leq r < 1\}$.
+\[
+	\Q = \bigsqcup_{\substack{0\leq r<1 \\ r\in\Q}} \{r + k \mid k \in \Z\}
+\]
+
+Cosets are a special case of equavalence classes:
+given $G \supseteq H$, define $x \sim y$ to mean
+$(x,y \in G) \iff \exists h \in H$ such that $xh = y$.
+Equivalence class $[x] = xH$.
+Can also define $x \sim y \iff \exists h \in H, hx = y$, $[x] = Hx$.
+
+\begin{definition}[Quotient Map]
+	$G / H =$ set of cosets $gH, g \in H$,
+	and $H \backslash G = $ set of cosets $Hg, g \in G$.
+	There exists unique functions $\pi \colon G \to G / H$ or $G \to H\backslash G$,
+	where $g \mapsto gH$, $g \mapsto Hg$.
+\end{definition}
+
+
+Start with any $G$ finite, $H \subseteq G$ where $H = \langle g \rangle, g \in G$.
+$\# H = \mathrm{order}(g) < \infty$.
+Lagrange's tells us that $\# H \mid \# G \implies \mathrm{order}(g) \mid \# G$ $\forall g \in G$,
+thus $g^{\# G} = 1$ for all $g \in G$.
+Thus the $\mathrm{exp}(G)$ is $\leq \# G$.
+This implies Lagrange's for cyclic groups, but not otherwise. (really?)
+
+\subsection{1.8}
+Is $G / H$ (or $H \backslash G$) a group in a natural way?
+``natural" means $\pi \colon G \to G / H$ should be a homormophism.
+The answer in general is no.
+This only works for special $H$, called a \emph{normal} subgruops of $G$.
+
+Reason: fix $g_1, g_2 \in G$.
+\begin{align*}
+	\pi(g_1 &= g_1 H \in G / H\\
+	\pi(g_2) &= g_2 H \\
+	\pi(g_1 g_2) &= (g_1g_2)H
+\end{align*}
+If it is a homomorphism, we have to have
+\[
+	\pi(g_1g_2) = \pi(g_1)\pi(g_2)
+\]
+but
+\[
+	\pi(g_1g_2) = g_1g_2 H = (g_1 H) \cdot (g_2 H)
+\]
+where this multiplication (if it exists) is in $G / H$.
+Problem: this is not a well-defined multiplication of cosets.
+Explitictly: the rule is given $2$ cosets $X,Y \in G / H$,
+$X \cdot Y = Z$ is defined by choosing representatives $g_1 \in X_1, g_2 \in Y$,
+setting $Z = [g_1g_2]$.
+Point: different choices of $g_1,g_2$ in $X,Y$ will produce different $Z$'s!
+
+Example: pick $X = [g], Y = [g^{-1}]$,
+$Z = [gg^{-1}] = [1] = H$.
+Now we change $g$ with $gh \in gH$ (this is a different representative of the same coset).
+Now we get $z = [ghg^{-1}] \neq H = [1]$.
+In general, $ghg^{-1} \not\in H$ (can't commute $h$ and $g$).
+We need some further conditions on $G$ to make this work out,
+we need $ghg^{-1} \in H$.
+This leads us to the definition of a normal subgroup.
+
+\begin{definition}[Normal Subgroup]
+	$H \subseteq G$ is a \emph{normal} subgroup if
+	$\forall g \in G, \forall h \in H$, $ghg^{-1} \in H$.
+\end{definition}
+\begin{theorem}
+	If $H$ is a normal subgroup, then $G / H = H \backslash G$
+	and the maps $G \to G/H$ and $G \to H \backslash G$ are homomorphisms.
+\end{theorem}
+In this case, write $G / H = H \backslash G$ (normally only use the first),
+called the \emph{quotient} group of $G$ mod $H$.
+Example: if $G$ is commutative, all subgroups are normal
+($\Z \supseteq n\Z, \Z/n\Z =$ integers mod $n$).
+
+Will do the proof of the theorem next time.
+For next time,
+read the relevent section in the text.
+The presentation is a bit more elaborate than needed,
+but really going through the conditions for it to be a homomorphism
+(what we did with the $X,Y,Z$).
+
+
+\section{October 5}
+Changing order a little from textbook.
+ff I completely missed the first page.
+
+Question: can we make $G / H$ or $H \backslash G$ a group
+such that $\pi$ is a homomorphism?
+Answer: no, necessary condition $\forall g \in G, h \in H$, $ghg^{-1} \in H$ ($*$).
+Reason: definition of $\pi$ is $\pi(x_1x_2) = x_1x_2H$, $\pi(x_1)=x_1H$, $\pi(x_2) = x_2H$.
+
+$\pi$ is a homomorphism $iff \pi(x_1,x_2) = \pi(x_1)$ ff
+
+$G/H$ to be defined by
+\[
+	\pi(x_1)\pi(x_2) = (x_1H)(x_2H) = (x_1x_2)H = \pi(x_1x_2)
+\]
+for all $x_1,x_2$ ($**$).
+This is not well defined unless ($*$) holds.
+E.g. $x_1 H = (x_1h)H, \forall h \in H$.
+But $(x_1 H)(x_2 H) = (x_1hH) (x_2H) = (x_1hx_2)H \neq x_1x_2H$
+since $x_1hx_2H = x_1 x_2 H \iff x)1 h x_2$.
+
+Hmm, I might just throw this lecture, I've already behind and doing piazzas.
+
+Some notes about normal groups (end of page 6).
+Every group has normal subgroups, namely the identity and itself.
+A group that does not have any normal subgroups not these two are called simple.
+$D_n$ and even permutations?? And alternating group?
+Galois theory says that there is a formula for the roots of an equation
+iff there is some condition on the normal subgroups.
+
+This is the place where students start getting hopelessly lost,
+so make sure you know what everything is saying.
+The homomorphism theorems are like the IVT and MVT in calculus:
+once you introduce it, just going to use it quickly and without mention at times.
+
+Any homomorphism will obey the picture (page 9).
+So knowing the kernal tells you a lot about the homomorphism.
+If you have a homomorphism, you can make a normal subgroup (the kernel),
+and if you have a normal subgroup, you make a homomorphism,
+kinda tricky because both direction... but saying that these are fundamentally the same thing.
+
+Every point in the coset has exactly one image.
+The cosets are getting crunched into one image in the $\phi$.
+
+Nike: Understanding of group theory isn't linear,
+it goes from being mystical to being obvious.
+It's like a step function.
+Grades normally go up as the term goes on.
+
+
+Today has mostly been 1.8 and 1.9.
+Really suggest reading it.
+
+Herstein is extremely user friendly, and students tend to like it in the beginning.
+Dummit and Foote is good, but it's a word salad.
+They take complicated things... he thinks it's really hard to find anything.
+Jacobson is a little abstract and terse, but you will come to appreciate.
+
+Next section is on fundamental theorem of homomorphisms, 1.10.
+Would suggest pre-reading it.
+There's a lot of notation, really need to see it a little before.
+Make sure you understand 1.8, 1.9, but 1.10 might be a bit rough.
+Midterm will be whatever we cover up to a week before.
+
+\section{October 10}
+Midterm 1: Thursday, next week, up to and including 1.10.
+
+Recall last time: hommomorphisms and quotients.
+\[
+	G_1 \xrightarrow{\phi} G_2
+\]
+$K = \mathrm{kernel}(\phi) = \ker(\phi) = \phi^{-1}(1_{G_2})$.
+$K$ is a normal subgroup, $G_1 / K \cong \phi(G_1) \subseteq G_2$.
+We saw (draw picture ff page 1).
+
+\begin{corollary}
+	If $\phi$ is surjective, $\phi(G_1) \cong G_1/K$.
+\end{corollary}
+Notation (exact sequence): $G$ group $K \subseteq G$ normal.
+$1 \xrightarrow{\subseteq} K \xrightarrow{\subseteq} G \xrightarrow{\pi} G/K \xrightarrow{\text{all to }1}1$
+means the image of each group on the left of the arrow
+is the kernel of the next map (arrows are homomorphisms).
+$1 \to K$ subset (is injective)
+and $K \to G$ subset (injective).
+(Yoo it's like the thing Sebastian drew for the de Rahm cohomology).
+Some clarity: can draw $G_1 \xrightarrow{\phi_1} G_2 \xrightarrow{\phi_2} G_3$,
+means that $\phi_1(G_1) = \ker(\phi_2(G_2))$.
+
+The point is $G$ is ``built" from $K, G/K$.
+Our goal is to study $G$ by analysing the smaller pieces $K, G/K$.
+Answer (partial): fundamental theorems.
+
+The first fundamental theorem relates subgroups of $G/K$ with certain subgroups of $G$.
+Note that this numbering is specific to Jacobson.
+\begin{theorem}[First Fundamental Theorem (Part a)]
+	Construction: $H \subseteq G/K$ a subgroup. $\pi^{-1}(H) = H' \subseteq G$.
+	Then $H \leftrightarrow H'$ is a bijective correspondence between subgroups of
+	$G/K$ and subgroups of $G$ which contain $K$.
+\end{theorem}
+\begin{proof}
+	Note that since $H$ is a subgroup of $G/K$,
+	$\pi^{-1}(H) = H' = $ subgroup of $G$, contains $K$.
+	Want to show bijection, so show $\pi^{-1}$ has an inverse.???
+	If $H'$ is a subgroup of $G$ containing $K$,
+	then $H = \pi(H')$ and is a subgroup of $G/K$.
+	We are going from subgroups of $G$ that contain $K$ to subgroups of $G/K$.
+	Note that this is the inverse of the previous function, $\phi(\phi^{-1} x))
+	= x, \forall x \in G/K$.
+	Thus $H \xrightarrow{\text{preimage}} H' \xrightarrow{\pi} H$ follows.
+	For a bijection, have to check inverse on the other side as well.
+	So start with $H' \supset K$, subgroup of $G$.
+	Send to $H = \pi(H')$, take preimage.
+	Do we get $H'$ back?
+	Recall $\pi \colon G \to G/K$, $x \mapsto xK$.
+	So $\pi^{-1}(\pi(x)) = xK \subseteq G$ (the whole coset).
+	Thus, for any $x \in G$, $\pi(x) = xK$, $\pi^{-1}(\pi(x)) = \pi^{-1}(xK)
+	= xK \subseteq G = \{xk \mid k \in K\}$.
+	Thus $\pi^{-1}(\pi(H')) = \{h'k \mid k \in K, h' \in H\} = \text{ union of cosets coming from } H' = H'$
+	since $K \subseteq H'$ by assumption.
+\end{proof}
+Really important to understand this. This is only part a in theorem 1, and will use alot.
+
+\begin{corollary}
+	Assume that $H' \supseteq K$.
+	\begin{enumerate}
+		\item $H$ is normal in $G/K$ $\iff$ $H'$ is normal in $G$.
+		\item If so, $(G/K)/H \cong G/H'$
+	\end{enumerate}
+\end{corollary}
+Intuitively, $G \supseteq H' \supseteq K$,
+divide by $K$ to get $G/K$, divide again by $H = \pi(H')$,
+this is the same as dividing by $H'$ in one step.
+
+Modding out by $K$ squashes kernel to identity, and we do it twice
+(from $G$ to $G/K$ and then to $(G/K)/H$, or just $G/H'$).
+
+Example (Abelian setting where everything is normal):
+$\Z \supseteq 2\Z \supseteq 6\Z$.
+Here, $G = \Z, H' = 2\Z, K = 6\Z$.
+$G/H' = $ cyclic of order $2$.
+$G/K = $ cyclic of order $6\supseteq$ a subgroup of $H$ of order $3$.
+$\underbrace{(G/K)}_{\text{order }6}/\underbrace{H}_{\text{order }3}$ has order $2 \cong \Z/H'$.
+Explicitly: $G/K = \Z/6\Z$ are the cosets: $\{0+6\Z,1+6\Z,2+6\Z, \dots\}$.
+We have $\pi \colon x \mapsto x + 6\Z$.
+We now have $H = \pi(H') = \{0+\Z, 2+6\Z, 4+6\Z\}$.
+So then $G/H' = \{0+2\Z, 1+2\Z\}$.
+Again, to see this more explicitly,
+we have $H = \{[0], [2], [4]\}$,
+and $[1] \in G/K$, we have $1 + H = [1], [3], [5]$.
+So $G/K = H \sqcup [1] + H$.
+Could have just modded out by $H'$ at the beginning (cutting group up into evens and odds).
+
+\begin{proof}
+	\begin{enumerate}
+		\item Is easy.
+			Suppose $H'$ is normal in $G$.
+			This means that $gH'g^{-1} \subseteq H'
+			\iff gh'g^{-1} \in H' \forall g\in G, h'\in H'$.
+			We have to show $\pi(H') = H$ is normal in $G/K$.
+			But note we have $\pi(x)\pi(h')\pi(x)^{-1} = \pi(xh'x^{-1}) \in H$,
+			and since $xh'x^{-1} \in H'$ and $\pi(H') = H$.
+			Thus $H'$ normal in $G$ $\implies$ $H$ normal in $G/K$.
+
+			Conversely, given $H$ normal in $G/K$ and want $H' = \pi^{-1}(H)$ is normal in $G$.
+			By definition, this means $\forall g \in G$, $h' \in H'$, $gh'g^{-1} \in H'$,
+			which is truee if and only if $\pi(gh'g^{-1}) \in H$.
+			But recall that $\pi(gh'g^{-1}) = \pi(g)\pi(h')\pi(g^{-1})
+			= (gK)(h'K)(gK)^{-1} \in H$
+			(elements of $H$ are cosets).
+			But by assumption, $H$ is normal, so we are done.
+
+		\item (Sketch) Consider $G \supseteq H \supseteq K$
+			($K, H'$ both normal).
+			Then $H' \supseteq K$ means we can write $H' = \sqcup h'_iK$
+.
+			Then each coset $xH' = \sqcup xh'_i K$
+			($h'_iK \in H = \pi(H')$).
+			So cosets of $H'$ break up as cosets of $K$.
+			Dividing by $K$ and then by the image of $H'$ turns out to be the same as
+			first grouping according to cosets of $K$,
+			then some of these cosets together to get cosets of $H'$.
+	\end{enumerate}
+\end{proof}
+\end{document}

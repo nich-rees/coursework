@@ -1,0 +1,646 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Notes}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\section{September 20}
+\subsection{Sequences and Limits}
+A sequence in a given set $X$ is simply a function $x \colon \N \to X$.
+It is often writen $x_n$ instead of $x(n)$, and list just the values
+\[x = (x_1,x_2,x_3,\dots)\]
+Order matters: the sequence is different from the set $\{x_1,x_2,\dots\}$,
+e.g. $x_n = (-1)^{n+1}$ for $n \in \N$,
+but $\{(-1)^{n+1} \colon n\in\N\} = \{-1,1\}$.
+
+\begin{definition}[Converges to $\hat{x}$]
+Given a sequence $(x_n)_{n\in\N}$ and a point $\hat{x}$,
+all in $X = \R$, saying the sequence $(x_n)$ converges to $\hat{x}$ means
+\[\forall \ep>0, \exists N \in \N \colon \forall n > N, \lvert x_n - \hat{x} \rvert < \ep\]
+\end{definition}
+You should very familiar with this definition.
+"Not familiar like yeah I know them,
+but familiar like your mom."
+
+Notation: When this happens, write
+\[\hat{x} = \lim_{n\to\infty} x_n\]
+or $x_n \to \hat{x}$ as $n \to \infty$.
+
+What is this definition saying?
+Somebody walks in the door with some epislon,
+some error tolerance beyond our control,
+and we need to be ready to give an $N$ for anything,
+typically depending on $\ep$.
+$N$ depicts a point on the number line where stuff starts to go right,
+all the other points are $\ep$ close to $\hat{x}$.
+Close, because absolute value is how we measure distance.
+\[\lvert x_n - \hat{x} \rvert < \ep
+\iff -\ep < x_n - \hat{x} < \ep
+\iff x_n \in (\hat{x}-\ep, \hat{x}+\ep)\]
+"When I go to the tailor, I think of this.
+For any ribbon width,
+you have to cover all but finite terms ($N(\ep)$) of $x_n$
+with your fabric."
+
+In the world of computer science, you might care about efficiency of picking $N$,
+but here, we don't, just need to find an $N$.
+So technically, we can always find a prime number where after everything goes right.
+
+\begin{definition}[Converges/Diverges]
+A real-valued sequence $(x_n)_{n\in\N}$ {\it converges} when
+\[\exists \hat{x} \in \R \colon \lim_{n\to\infty} x_n = \hat{x}\]
+It {\it diverges} when it does not converge.
+\end{definition}
+$(x_n)$ diverges $\iff \forall \hat{x} \in \R, \exists \ep>0, \forall N\in\N
+\colon \lvert x_n - \hat{x} \rvert \geq \ep$.
+In other words,
+every candidate for the limit $\hat{x}$,
+comes with some tolerance
+so that no matter how far to the right we start out ("political joke"),
+a point further right will escape tolerance band.
+
+If we want to reimagine this as story of closeness for vectors,
+complex numbers, or something else with a distance,
+the idea of a limit is the same (just have to reinterpret distance).
+If you were wondering why we jumped over metric spaces in chapter 2,
+this gives us some examples to motivate the metrics.
+
+Some simple examples
+\begin{enumerate}
+\item $x_n = \frac{1}{n}$ conberges to $\hat{x} = 0$.
+\begin{proof}
+	Given $\ep > 0$, note $\frac{1}{\ep} \in \R$ and Archimedes
+	says $\exists N \in \N$ such that $N>\frac{1}{\ep}$.
+	Use that one: any $n > N$ will have $\lvert x_n - \hat{x}\rvert
+	= \lvert \frac{1}{n} - 0\rvert = \frac{1}{n} < \frac{1}{N} < \ep$.
+\end{proof}
+\item $x_n = 1$ converges to $\hat{x} = 1$.
+\begin{proof}
+	Given $\ep > 0$, pick $N = 320$.
+	Now every $n > N$ makes $\lvert x_n - \hat{x} \rvert = 0 < \ep$.
+	This works... but many smaller choices for $N$ would be okay too.
+\end{proof}
+\end{enumerate}
+
+Less simple examples:
+\begin{enumerate}
+\item $x_n = \frac{\sin{n}}{1+n+n^2+n^3+n^4+n^5}$ converges to $\hat{x} = 0$.
+Preview: for every $n \in \N$,
+\[\lvert x_n - \hat{x} \rvert = \frac{\lvert\sin{n}\rvert}{1+n+n^2+n^3+n^4+n^5}
+< \frac{1}{0+n+0+0+0+0}\]
+and $\frac{1}{n} < \ep$ whenever $n > \frac{1}{\ep}$.
+So pick any integer $N \geq \frac{1}{\ep}$ and every $n>N$
+will have $\frac{1}{n} < \ep$ and make $\lvert x_n - \hat{x}\rvert < \ep$.
+
+Efficiency note: I chose the worst possible thing to outgrow $\sin{n}$ fast,
+but it does not matter.
+\end{enumerate}
+
+\section{September 22}
+Here is an example of a convergence proof,
+as it would be written in homework / from the book:
+the sequence $x = \frac{n^2 - 320n^{3/2}}{2n^2 - 80}$ converges to $\hat{x} = \frac12$.
+(guessing the value for rationals, just look for dominating power).
+\begin{proof}
+	Given $\ep > 0$, choose integer $N \geq \max\{30,\left(\frac{750}{\ep}\right)^2\}$.
+	This works. Indeed, every $n > N$ obeys $n > 30$ so $n^2 > 900$,
+	giving
+	\begin{equation}
+		2n^2 - 801 = n^2 + (n^2 - 801) > n^2
+	\end{equation}
+	\begin{equation}
+		\sqrt{n} > \frac{750}{\ep}
+	\end{equation}
+	Thus, if $n > N$,
+	\begin{align*}
+		\lvert x_n - \hat{x} \rvert
+		&= \lvert \frac{n^2 - 320n^{3/2}}{2n^2 - 801} - \frac{1}{2} \rvert\\
+		&= \lvert \frac{2(n^2 - 320n^{3/2}) - (2n^2 - 801)}{2(2n^2-801)}\rvert\\
+		& \leq \frac{640n^{3/2} + 801}{2(2n^2 - 801)}\\
+		& \leq \frac{640n^{3/2} + 801n^{3/2}}{2n^2}\\
+		& < \frac{1500n^{3/2}}{2n^2}\\
+		&= \frac{750}{\sqrt{n}} < \frac{750}{750/\ep} = \ep
+	\end{align*}
+\end{proof}
+How do we come up with this?
+We start with coming up with the limit.
+Then, we try to make $\lvert x_n - \hat{x}\rvert$ small,
+or a simpler version small (and then hopefully simpler thing is slightly larger).
+
+Another example: $\lim_{n\to\infty} n^{1/n} = 1$ (from the book itself).
+\begin{proof}
+	Define $x_n = n^{1/n} - 1$; each $x_n > 0$.
+	Recall $(1 + a) = 1 + na + \frac{n(n-1)}{2}a^2 + \cdots + na^{n-1} + a^n$ (fact of algebra).
+	So $(1 + a)^n \geq \frac{n(n-1)}{2}a^2$ for all $a > 0$.
+	Thus $n = (1 + x_n)^2 \geq \frac{n(n-1)}{2}x_n^2$.
+	Insist $n \geq 2$ to get $x_n > 0$.
+	Reorganize $0 < x_n^2 \leq \frac{2}{n(n-1)}n \iff x_n \leq \sqrt{\frac{2}{n-1}}$.
+	Solve $\sqrt{2}{n-1} < \ep$ for $\frac{2}{n-1} < \ep^2 \iff \frac{2}{\ep^2} < n-1$.
+	So choosing $N \geq \max\{2,1+\frac{2}{\ep^2}\}$ does the job.
+\end{proof}
+This kind of is more accurate what he might expect on homework,
+folding the explanation job and the proof.
+
+Let's look at a divergent example now:
+$x_n = (-1)^n$.
+\begin{proof}
+	Fix any $\hat{x} \in \R$.
+	Pick $\ep = 1$.
+	Fix $N \in \N$.
+	Now consider $n_e$ even, $n_o$ odd, with $n_e > N, n_o > N$.
+	Then $x_{n_e} = (-1)^{n_e} = 1$ and $x_{n_e} = (-1)^{n_e}$.
+	So $2 = |x_{n_2} - x_{n_o}| = |(x_{n_e} - \hat{x}) + (\hat{x} - x_{n_o})|
+	\leq |x_{n_e} - \hat{x}| + |x_{n_o} - \hat{x}|$
+	(Typical $\pm$ trick to ``uncancel").
+	One of the terms on the RHS is $\geq 1$.
+	One of $n=n_e$ or $n=n_o$ completes the logical statement above.
+\end{proof}
+\subsection{Theory / Properties}
+(More in the notes)
+\begin{theorem}[Squeeze Theorem]
+	Let $(a_n),(x_n),(b_n$ be real-valued sequences, and $L \in \R$.
+	Assume
+	\begin{enumerate}
+		\item $a_n \to L$
+		\item $b_n \to L$
+		\item $a_n \leq x_n \leq b_n, \exists N \in \N, \forall n>N$
+	\end{enumerate}
+	Then $x_n \to L$ as $n \to \infty$.
+\end{theorem}
+\begin{proof}
+	Given $\ep > 0$, use (a) to get $N_a \in N$ such that
+	\[
+		|a_n - L| < \ep, \forall n > N_a
+	\]
+	So $L - \ep < a_n$.
+	Use (b) to get $N_b \in \N$ such that
+	\[
+		|b_n -L| < \ep, \forall n > N_b
+	\]
+	So $b_n < L+\ep$.
+	Use (c) to get $N_c \in \N$ such that
+	\[
+		a_n \leq x_n \leq b_n, \forall n > N_c
+	\]
+	Now if $N = \max\{N_a, N_b, N_c\}$,
+	every $n > N$ does all three jobs:
+	\[
+		L - \ep < a_n \leq x_n \leq b_n < L + \ep
+	\]
+	Thus $|x_n - L| < \ep$.
+\end{proof}
+
+\section{September 27}
+\subsection{Completeness}
+Completeness is the property that makes $\R$ better than $\Q$.
+There are three ways to look at it
+(three properties $\R$ has $\Q$ doesn't, that kind of capture the same thing):
+\subsubsection{Cauchy Sequences}
+\begin{definition}
+	A sequence $(x_n)$ is call {\it Cauchy} when
+	\begin{enumerate}
+		\item $\forall \ep > 0, \exists N \in \N$ such that
+		$\forall m,n \geq N$, $|x_m - x_n| \leq \ep$
+		(last bit is what makes different than limit),
+		OR EQUIVALENT DEFINITION:
+		\item $\forall \ep > 0$, $\exists N \in \N$ such that
+			$\forall n \geq N$, $\forall p \in \N$, $|x_{n+p}-x_n| < \ep$
+	\end{enumerate}
+\end{definition}
+\begin{proposition}
+	Every convergent sequence is Cauchy.
+\end{proposition}
+\begin{proof}
+	Pick one: let $(x_n)$ converge to $\hat{x}$.
+	Estimate:
+	\[
+		|x_n - x_m| = |(x_n - \hat{x}) + (\hat{x} - x_m)|
+		\leq |x_n - \hat{x}| +|x_m - \hat{x}|
+	\]
+	To get definition (a), let $\ep>0$ be given and use definition
+	of $x_n \to \hat{x}$ with $\ep' = \frac{\ep}{2}$ to get $N \in \N$
+	such that $|x_k - \hat{x}| < \ep'$ whenever $k > N$.
+	This $N$ works in (a), since $m,n\geq\N \implies |x_m - x_n| < \ep'+\ep' = \ep$.
+\end{proof}
+\begin{corollary}
+	Any sequence that is not Cauchy must diverge.
+\end{corollary}
+This is the contrapositive of the statement above.
+This corollary is useful for proving a sequence diverges.
+
+\begin{theorem}[Metric Completeness]
+	Every Cauchy sequence converges (to a real limit) in $\R$.
+\end{theorem}
+
+\subsubsection{Bounded Sets}
+\begin{theorem}[Order Completeness]
+	Given any nonempty $S \subseteq \R$, let
+	\begin{align*}
+		A &= \{a\in\R \colon \forall x \in S, a \leq x\}\\
+		B &= \{b\in\R \colon \forall x \in S, b \geq x\}
+	\end{align*}
+	Then
+	\begin{enumerate}
+		\item Either $A = \emptyset$ or $A = (-\infty, \alpha]$ for some $\alpha \in \R$
+		\item Either $B = \emptyset$ or $B = [\beta,+\infty)$ for some $\beta \in \R$.
+	\end{enumerate}
+\end{theorem}
+Terminology: Say $S$ is {\it bounded above} when $B \neq \emptyset$
+and call each $b \in B$ an {\it upper bound for $S$}.
+$S$ is {\it bounded below} when $A \neq \emptyset$;
+each $a \in A$ is a {\it lower bound for $S$}.
+{\it Bounded} means bounded above and bounded below.
+
+You can see this property breaking with the rationals with $S = \{p \in \Q \colon p^2 < 2\}$.
+
+When $B \neq \emptyset$, call $\beta$ the \emph{supremum} of $S$: $\beta = \sup(S)$.
+Useful characterization:
+\begin{enumerate}
+	\item $\forall x \in S$, $x \leq \beta$ ($\beta$ is an upper bound for $S$)
+	\item $\forall \gamma < \beta$, $\exists x \in S \colon \gamma < x$
+		(nothing less than $\beta$ is an upper bound).
+	\item Some would say $\beta$ is the Least Upper Bound for $S$.
+\end{enumerate}
+
+When $A \neq \emptyset$, $\alpha = \inf(S)$ is the \emph{infininum}
+or the \emph{greatest lower bound} for $S$.
+
+\subsubsection{Monotonic Sequences}
+\begin{theorem}
+	Given any sequence $(x_n)$ with
+	\[
+		x_1 \leq x_2 \leq x_3 \leq \cdots
+	\]
+	either $x_n \to \infty$ or $x_n$ converges to a real limit.
+\end{theorem}
+When we are saying goes to $\infty$, similar to $\ep-N$ (definition in Rudin).
+
+We will see all of these theorem's are logically equivalent,
+and then will prove one.
+
+\subsubsection{Linkages}
+(He's going fast to prove one of these theorems;
+wants to give Zahl informed students in 321,
+but also Zahl is teaching next class because Louwen is out of town)
+
+These 3 viewpoints on completeness contain equivalent information.
+Each one implies the others.
+We will show Metric Completeness implies Order Completeness.
+Zahl can do what he wants, but Louwen wants him to show the other two linkages.
+
+\begin{theorem}
+	Metric completeness (Cauchy sequences must converge)
+	implies order completeness (if $S \neq \emptyset$ bounded above, $\sup(S)$ exists).
+\end{theorem}
+\begin{proof}
+	Let $S \subseteq \R$ be nonempty;
+	define $B = \{ b \in \R \colon \forall s \in S, s \leq b\}$.
+	Assume $B \neq \emptyset$ and define sequence
+	\[
+		b_n = \min\left(B \cap \left\{\frac{k}{2^n} \colon k \in \Z\right\}\right)
+	\]
+	We will see this will be a Cauchy sequence;
+	$\beta = \lim_{n\to\infty} b_n$ will have the properties defining $\sup(S)$.
+	To show this, for each fixed $n$,
+	\begin{enumerate}
+		\item $b_n - \frac{1}{2_n} \not \in B \implies
+			\exists s_n \in S \colon s_n > b_n - \frac{1}{2^n}$
+		\item $b_{n+1} \leq b_n$ ($\min$ over a larger set of points)
+		\item Using $b_{n+1} \in B$, $b_{n+1} \geq s_n$ for $s_n$ above.
+			Using (b), $b_{n+1} \geq s_n > b_n - \frac{1}{2^n}
+			\iff 0 \leq b_n - b_{n+1} < \frac{1}{2^n}$
+	\end{enumerate}
+	Now estimate
+	\begin{align*}
+		|b_{n+p} - b_n|
+		&= b_n - b_{n+p}\\
+		&= (b_n - b_{n+1} + (b_{n+1} - b_{n+2}) + \cdots + (b_{n+p-1} - b_{n+p})\\
+		&< \frac{1}{2^n} + \frac{1}{2^{n+1}} + \cdots +\frac{1}{2^{n+p-1}} < \frac{2}{2^n}
+	\end{align*}
+	This is the key to showing $(b_n)$ is Cauchy,
+	and then we use previous stuff to imply order.
+	Can't finish within class, so check lecture notes.
+\end{proof}
+
+\section{September 29 (Zahl)}
+\subsection{Subsequences}
+We will look at subsequences today,
+since will use it in the heart of a proof today.
+
+Recall the definition of a sequence of real numbers
+(but also works for general sequences).
+A seqeunce of real numbers is a function $f \colon \N \to \R$
+(or also notation $x\colon \N \to \R$),
+so the sequence is $f(1),f(2),\dots$ (or $x(1), x(2),\dots$).
+But we more often write this as $x_1,x_2,x_3,\dots$, ($x_n$).
+
+A subsequence will be created by jumping over elements in a sequence.
+The important thing is that the indices do need to strictly increase.
+
+\begin{definition}[Subsequence]
+	If $x \colon \N \to \R$ is a sequence,
+	then a {\it subsequence} of $x$ is a sequence of the form
+	\[
+		x \circ g\colon \N \to \R
+	\]
+	where $g \colon \N \to \N$ is strictly increasing.
+\end{definition}
+But no one uses this notation in practice.
+We more often write $x_{n_1}, x_{n_2}, \dots$, ($x_{n_k}$),
+where $n_1 < n_2 < n_3 < \cdots$.
+We can continually take subsequences,
+and since naturals are infinte,
+our new subsequences can be infinite in size.
+
+\subsection{Completeness}
+Recall the three slightly related notions of completeness.
+These properties help distinguish the reals from the rationals,
+or higher dimensional Euclidean space,
+where some of these properties do not hold.
+\begin{enumerate}
+	\item Metric completeness property:
+		every Cauchy sequence of real numbers converges.
+		\begin{itemize}
+			\item Recall that we showed that every convergent is Cauchy,
+				and we are showing that the converse is true,
+				but there exists other settings where this does not hold
+		\end{itemize}
+	\item Order completeness (Least Upper Bound property):
+		If $S \subset \R$ is non-empty,
+		we define the set $B$ to be the upper bounds of $S$:
+		$B = \{b\in\R \colon \forall s \in S, s \leq b\}$.
+		Then either $B = \emptyset$
+		or $B = [\beta,\infty)$ for some $\beta \in \R$.
+		\begin{itemize}
+			\item We making use of the canonical ordering of $\R$,
+				we don't have such an obvious ordering for other spaces
+			\item If $S$ is any set that is unbounded above,
+				then $B$ is empty.
+			\item Switch to Greek letters ($\beta$) for historic reasons
+				(same with Dedekind cuts)
+			\item We know order is transitive, but this is
+				entirely consistent with $B = (\beta, \infty)$.
+				It is not hard to imagine a world where we don't get $\beta$:
+				the set of positive numbers whose square is less than $2$.
+				Can describe this entirely with the rationals,
+				but there is no rational $\beta$ for this set,
+				will always be able to find a smaller rational.
+		\end{itemize}
+	\item Monotone converge property:
+		If $(x_n)$ is monotone increasing,
+		either $x_n \to \infty$, or $(x_n)$ converges.
+		(Could also have monotone decreasing and $-\infty$).
+\end{enumerate}
+\begin{theorem}
+	Properties (a),(b),(c) are equivalent.
+\end{theorem}
+(Whenever setting up a result of this type,
+make it $(a) \implies (b)$, $(b) \implies (c)$, $(c) \implies (a)$
+(reorder) otherwise people will be confused).
+We will eventually see that this holds for the reals, but not today.
+
+We will prove that $(b) \implies (c)$ today.
+\begin{proof}
+	Let $(x_n)$ be a monotone increasing sequence.
+	(Note on notation, we mean $x_1 \leq x_2 \leq \cdots$;
+	some people will call this a weakly monotone increasing sequence,
+	and with strict inequalities is strictly increasing).
+	Let $S = \{x_n \colon n \in \N\}$ (the range of values taken by $x$).
+	If $S$ is not bounded above,
+	then we claim that $x_n \to \infty$.
+	(At the level of this course,
+	expect us to fill in the details;
+	a little fill-in: we know monotone increasing and attains
+	the full range above, $B = \emptyset$)
+	Otherwise, the set of upper bounds $B$ is of the form
+	$B = [\beta,\infty)$
+	($B$ is not empty because $S$ is bounded above, the set of upper bounds).
+
+	Want to show $x_n$ converges
+	(the way to show convergence is just to come up with clever guess,
+	and then show it converges to it).
+	Lets show $x_n \to \beta$.
+	We know $x_n \leq \beta$ for every $n$.
+	Let $\ep>0$. Then $\exists x_n \in S$ such that $x_n > \beta - \ep$.
+	(If this were not true, $\beta - \ep$ is an upper bound less than $\beta$.)
+	So for all $n \geq N$, $x_n \geq x_N > \beta - \ep$.
+	i.e. $|x_n - \beta| < \ep$.
+	But then $x_n$ converges to $\beta$.
+\end{proof}
+
+We will now show that (c) $\implies$ (a).
+This is complicated enough to break into three pieces;
+each of these three pieces are useful for other places in the future
+(so will call a Lemma).
+\begin{lemma}
+	Every sequence of real numbers (doesn't have to be real?)
+	has a (weakly) monotone subsequence.
+\end{lemma}
+Won't try to prove, but let's understand.
+Note that monotone here can both be for increasing or decreasing.
+See that for $x_n = (-1)^nn$, we can find uncountably many monotone subsequences;
+think the power set of the natural numbers.
+But we just need the existence of a single monotone subsequence.
+\begin{lemma}
+	Every Cauchy sequence is bounded
+\end{lemma}
+Complete confidence can prove in a line or two.
+Lemma 1 required some cleverness to prove, this is just definitions.
+\begin{lemma}
+	If $(x_n)$ is Cauchy, $(x_{n_k})$ is a subsequence,
+	and $x_{n_k} \to \hat{x}$
+	($\forall \ep > 0, \exists K$ such that $\forall k \geq K$, $|x_n-\hat{x} < \ep$).
+	Then $x_n \to \hat{x}$.
+\end{lemma}
+We do need Cauchy: take the sequence $x_n = (-1)^n$.
+
+Because every Cauchy sequence is bounded,
+and we have a monotone increasing subsequence,
+and we know it converges by monotone convergence property,
+we have that the Cauchy sequence converges.
+
+\section{October 4}
+\subsection{Wrapping up Completeness Structure}
+We will prove one of the theorem's later,
+and will use the properties freely for now.
+
+We will prove the third lemma from last class:
+	If sequence $(x_n)$ is Cauchy, and some subsequence $(x_{n_k})$
+	converges to $L \in \R$,
+	then the full sequence obeys $\lim_{n\to\infty}x_n = L$.
+\begin{proof}
+	Key:
+	\[
+		|x_n - L| \leq |x_n - x_{n_k}| + |x_{n_k} - L|
+	\]
+	Let $\ep>0$ be given. Invent $\ep' = \frac{\ep}{2}$ and use Cauchy:
+	\[
+		\exists N\colon \forall m,n \geq N, |x_m - x_n| < \ep'
+	\]
+	Because the subsequence convergence gives $K \in \N$ so big that
+	$\forall k > K$ makes
+	\[
+		|x_{n_k} - L| < \ep'
+	\]
+	Pick any $k^* > K$ (with $n_{k^*}$) and $n>N$ and use the first inequality from above:
+	\[
+		|x_n - L| < |x_n - x_{n_{k^*}}| + |x_{n_{k^*}} - L| < \ep' + \ep' = \ep
+	\]
+\end{proof}
+The key thing is that we are going far enough down where our second term is under control,
+and our first is under control by Cauchy.
+
+Hunting License (called because each property
+says there exists a real number that does stuff...):
+it is ok to use completeness in any of these three forms to solve HW and exams.
+
+\begin{corollary}[Bolzano-Weierstrass Theorem]
+	Every bounded sequence of real numbers is
+	gauranteed to have a convergent subsequence.
+\end{corollary}
+
+Some students showed him Tao,
+and Tao uses the word $\ep$-steady to replace a sequence being Cauchy...
+just a name that is useful to remember though, like Bolzano-Weierstrass.
+
+"Completeness will let you down if you're a rational person,
+but will ff if you're a real person."
+
+\subsection{Supremum and Infinum}
+Recall that the supremum is the least upper bound,
+and the infinum is the greatest lower bound.
+Giiven any set $S \subseteq \R$, we let
+\[
+	B = \{b \in \R \colon \forall x \in S, x \leq b\}
+\]
+What can happen?
+\begin{itemize}
+	\item $B = \emptyset$, if $S$ has no upper bound (e.g. $S = \Z$)
+	\item $B = [\beta, +\infty)$, if $S$ has an upper bound (hence $\beta = \sup(S)$)
+	\item $B = (-\infty,\infty)$, if $S = \emptyset$
+\end{itemize}
+We can extend the definition of ``sup" to cover all $3$ cases:
+$\sup(S) = +\infty$ if $S$ has no upper bound and $\sup(S) = -\infty$ if $S = \emptyset$.
+
+There is also a symmetric extension for inf:
+$\inf(S) = -\infty$ if $S$ has no lower bound
+and $\inf(S) = +\infty$ if $S = \emptyset$.
+
+This also allows $\sup$ and $\inf$ to operate on sets that
+includes $+\infty,-\infty$.
+
+\subsubsection{Upper and Lower Limits}
+\begin{definition}[Limit Superior]
+	Given a real sequence $(x_n)$, define
+	\[
+		\limsup_{n\to\infty} x_n = \inf_{n\in\N}\left(\sup_{k\geq n} x_k\right)
+	\]
+\end{definition}
+\begin{definition}[Limit Inferior]
+	Given a real sequence $(x_n)$, define
+	\[
+		\liminf_{n\to\infty} x_n = \sup_{n\in\N}\left(\inf_{k\geq n} x_k\right)
+	\]
+\end{definition}
+Halloween joke: ``limb soup" is pronounciation of the first.
+"I'm not playing the age card, but I got dad jokes plus!"
+\begin{itemize}
+	\item $x_n = \frac{1}{n}$, then
+		\[
+			\limsup_{n\to\infty} \frac{1}{n} =
+			\inf_{n\in\N}\left(\sup\{\frac{1}{k} \colon k \geq n\}\right)
+			= \inf_{n\in\N} \{\frac{1}{n}\} = 0
+		\]
+		If you have a convergent sequence to start with,
+		limsup is going to match your idea what the limit is.
+	\item $x_n = (-1)^n + \frac{1}{n}$, then
+		\begin{align*}
+			\limsup_{k\to\infty} (x_n)
+			&= \inf_n \sup\{(-1)^k + \frac{1}{k} \colon k \geq n\}\\
+			&= \inf_n \{1+2j \text{ if }k=2j \text{ even, OR}
+			-1+\frac{1}{2j} \text{ if }k=2j-1 \text{ odd}\}\\
+			&= \inf_n\{1+\frac{1}{\lceil n/2 \rceil}\}\\
+			&= 1
+		\end{align*}
+		or something like that... fix at home.
+		\begin{align*}
+			\liminf_{n\to\infty}(x_n)
+			&= \sup_n[\inf_{k\geq n} (-1)^k + \frac{1}{k}]\\
+			&= \sup_n\{-1\}\\
+			&= -1
+		\end{align*}
+		This thing is bouncing around $1$ and $-1$ with a negligiblle pertrubation.
+		We can also tell that it has two subsequences that do converge
+		($n$ even will converge to $1$ and $n$ odd will converge to $-1$).
+		This is what is being captured with $\limsup$ and $\liminf$.
+\end{itemize}
+
+\section{October 6}
+\subsection{Upper and Lower Limits (continued)}
+Recall, for any real sequeunce, $x = (x_n)$,
+\[
+	\overline{\lim_{n\to\infty}} = \limsup_{n \to \infty} x_n = \inf_{n\in\N}\left(\sup_{k\geq n}\right)
+\]
+\[
+	\underline{\lim_{n\to\infty}} = \liminf_{n \to \infty} x_n = \sup_{n\in\N}\left(\inf_{k\geq n}\right)
+\]
+gives values in $\R \cup \{\pm\infty\}$
+ff missing proposition.
+
+\begin{proof}
+	For each $n \in \N$, consider ``tail",
+	\[
+		T_n = \{x_n,x_{n+1},x_{n+2}, \dots \}
+	\]
+	and let $i_n = \inf(T_n), s_n = \sup(T_n)$.
+	Clearly $i_n \leq s_n$, and $i_n \leq i_{n+1}$, $s_n \geq s_{n+1}$.
+	For any $m,n\in\N$, pick any $N> \max\{\}$.
+	ehh... I showed up late, now I'm lost
+\end{proof}
+``Don't look at a Cauchy sequence after 9pm... I lost sleep."
+
+
+\begin{proposition}
+	Let $x = (x_n)$ be a real sequence.
+	Define $\mu = \liminf_{n\to\infty} x_n$, $M = \limsup_{n\to\infty} x_n$.
+	\begin{enumerate}
+		\item If $l = \lim_{k\to\infty}x_{n_k}$ for some subsequence $(x_{n_k})$ of $x$,
+			then $\mu \leq l \leq M$.
+		\item There exist subsequences $(x_{n_j})$ and $(x_{n_k})$
+			of $x$ along which $\mu = \lim_{j\to\infty} x_{n_j}$ and $M = \lim_{k\to\infty} x_{n_k}$.
+	\end{enumerate}
+\end{proposition}
+This is actually how Rudin defines the $\limsup$ and $\liminf$.
+But we will show the two defintions are equivalent.
+
+Read notes for proof.
+
+Next time: we are doing half the job of constructing the reals. The other half is on HW5.
+\end{document}

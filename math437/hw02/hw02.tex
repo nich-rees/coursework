@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 437}
+\chead{Homework 2}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+	$d(mn) = d(m)d(n), \phi(mn)=\phi(m)\phi(n)$ when $m,n$ coprime.
+	We can see that $d(n!) = d(p_1^{e_1})d(\prod_{i=2}^kp_i^{e_i})
+	= \prod (e_i + 1)$.
+	And can also check $\phi(n!) = \prod (p_j^{e_j} - p_{j-1}^{e_{j-1}}$
+	or something from $\phi(p_1\cdots p_k) = \prod\phi(p_i) = \prod(p_i-1)$.
+	Simpler case: $\d(p_1\cdots p_k) = \prod_i^k d(p_i) = \prod_i^k 2 = 2^k$
+	and $\phi(p_1\cdots p_k) = ff$.
+\end{document}

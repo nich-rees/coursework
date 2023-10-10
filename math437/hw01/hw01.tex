@@ -1,0 +1,396 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=1.7cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 437}
+\chead{Homework 1}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it For each real number $x$, we let $[x]$ be the integer part of $x$,
+i.e., the largest integer less than or equal to $x$;
+for example, $[2.3] = 2$, $[5] = 5$, and $[-3.6] = 4$.
+
+For each $m \in \N$, prove that there exists $n \in \N$ such that
+\[m = \left[\frac{n}{\sqrt{n+1}}\right].\]}
+
+\begin{proof}
+	For all $n \in \N$, we have that
+	\[
+		\frac{(n+1)}{\sqrt{(n+1)+1}} - \frac{n}{\sqrt{n+1}}
+		= \frac{n+1-n}{\sqrt{(n+1)(n+2)}}
+		= \frac{1}{\sqrt{(n+1)(n+2)}}
+	\]
+	But note that
+	\begin{equation}
+		0 < \frac{1}{\sqrt{(n+1)(n+2)}} < 1
+	\end{equation}
+	since $(n+1)(n+2) > 1$ for all $n \in \N$, then $\sqrt{(n+1)(n+2)} > 1$,
+	and so its reciprocal is less than $1$;
+	and all values are positive so it is greater than $0$.
+	This inequality means that each consecutive term in $\left(\frac{n}{\sqrt{n+1}}\right)_{n\in\N}$
+	has a positive difference less than $1$.
+	Thus, at most, the difference between $\left[\frac{(n+1)}{\sqrt{(n+1)+1}}\right]$
+	and $\left[\frac{n}{\sqrt{n+1}}\right]$ is at most $1$,
+	since consecutive terms of $\left(\frac{n}{\sqrt{n+1}}\right)_{n\in\N}$
+	can never jump more than $1$ (the distance between consecutive integers),
+	thus the floor of consecutive integers will never ``skip" an integer.
+	So we have
+	\begin{equation}
+		 \left[\frac{(n+1)}{\sqrt{(n+1)+1}}\right] \leq \left[\frac{n}{\sqrt{n+1}}\right] + 1
+	\end{equation}
+
+	Also, for all $m \in \N$, there exists $n' \in \N$, such that
+	\[
+		m \leq \left[ \frac{n'}{\sqrt{n'+1}} \right]
+	\]
+	(and since the sequence is nondecreasing,
+	this means all $n\in \N$ where $n\geq n'$ also satisfies this inequality).
+	We simply choose $n' = m^2 + 2m$, and one can see that
+	\begin{align*}
+		\frac{m^2 + 2m}{\sqrt{m^2+2m+1}}
+		&= \frac{(m+1) - 1}{m+1}\\
+		&= m + 1 - \frac{1}{m+1}\\
+		&> m \qquad(\text{since } \forall m\in\N, 1 > \frac{1}{m+1})\\
+		\implies \left[\frac{m^2 + 2m}{\sqrt{m^2+2m+1}}\right] &\geq m
+	\end{align*}
+	where the implication at the end is because $m$ is an integer,
+	and $[x]$ will map to the integer directly below it.
+
+	Now, consider the subset of the integers
+	$\{n \mid n\in\N, m \leq \left[ \frac{n}{\sqrt{n+1}} \right]\}$.
+	By the well-ordering of the naturals, this set has a least element;
+	we will denote this $n_2$,
+	and let $n_1 = n_2 - 1$.
+	Since $n_2$ was the smallest element such that
+	$\left[\frac{n_1}{\sqrt{n_1 + 1}}\right] \leq m$,
+	we have $\left[\frac{n_1}{\sqrt{n_1 + 1}}\right] \leq m$.
+	Apply (2), we have
+	\[
+		\left[\frac{n_1}{\sqrt{n_1+1}}\right] \leq m
+		\leq \left[\frac{n_2}{\sqrt{n_2+1}}\right] \leq \left[\frac{n_1}{\sqrt{n_1+1}}\right] + 1
+	\]
+	But since $\left[\frac{n_2}{\sqrt{n_2+1}}\right]$ is an integer,
+	it cannot be between two consecutive integers,
+	thus either $\left[\frac{n_2}{\sqrt{n_2+1}}\right] = \left[\frac{n_1}{\sqrt{n_1+1}}\right]$,
+	or $\left[\frac{n_2}{\sqrt{n_2+1}}\right] = \left[\frac{n_1}{\sqrt{n_1+1}}\right] + 1$.
+	In the first case, we then have $m = \left[\frac{n_2}{\sqrt{n_2+1}}\right]$ and we are done.
+	In the second case,
+	since $m$ is also an integer, it cannot be between two consecutive integers,
+	thus either $m = \left[\frac{n_1}{\sqrt{n_1+1}}\right]$,
+	or $m = \left[\frac{n_2}{\sqrt{n_2+1}}\right]$,
+	in either case, we are done.
+\end{proof}
+\clearpage
+
+\subsection*{Problem 2}
+{\it An (infinite) arithmetic progression in $\N$ is a set
+of the form $\{an+b\}_{n\geq0}$ for some given $a,b\in\N$.
+
+If a set $S$ is the complement in $\N$ of a union of finitely many arithmetic progressions,
+then prove that $S$ is a union of finitely many arithmetic progressions along with a finite set.}
+
+\begin{proof}
+	We will use the notation $a\N_0 + b$ to represent $\{an+b\}_{n\geq 0}$.
+	Let us have $l$ many arithmetic progressions (finitely many).
+	By De Morgan's laws, we have
+	\[
+		S = \left(\bigcup_{i=1}^l(a_i\N_0 + b_i)\right)^C =
+		\bigcap_{i=1}^l\left(a_i\N_0 + b_i\right)^C
+	\]
+
+	Consider the complement of an arbitrary arithmetic progression
+	$(a_i \N_0 + b_i)^C$.
+	We claim that this is just the union of a finite set
+	and $a_i-1$ many arithmetic progressions (finitely many).
+	Specifically
+	\[
+		(a_i \N_0 + b_i)^C = \{1,2,\dots,b_i-1\} \cup
+		\bigcup_{j=1}^{a_i-1}(a_i\N_0 + b_i + j)
+	\]
+	To prove this, we prove set inclusion in both directions.
+	Let $k \in (a_i\N_0 + b_i)^C$.
+	Then $k \neq a_in + b_i$ or $k - b_i \neq a_in$ for all $n \in \N_0$.
+	If $k < b_i$, then $k \in \{1,2,\dots,b_i-1\}$ and we are done.
+	Now assume $k \geq b_i$.
+	By the division algorithm, there exists unique integers $q,r$
+	where and $0 \leq r \leq a_i - 1$ such that
+	$k - b_i = a_iq + r \implies k = a_iq + b_i + r$.
+	But note that $q \geq 0$ since $k - b_i \geq 0$ and all the other values are nonnegative,
+	and $0 < r$ otherwise $k$ would be able to be represented as $a_in + b_i$.
+	But then, this is precisely to say that
+	$k \in a_i\N_0 + b_i + j$ (as above) since
+	$0 \leq j \leq a_i-1$ like $r$, and $q \in \N_0$.
+	And so $k \in \bigcup_{j=1}^{a_i - 1}(a_i\N_0 + b_i + j)$.
+	This is sufficient to show that
+	\[
+		(a_i \N_0 + b_i)^C \subseteq \{1,2,\dots,b_i-1\} \cup
+		\bigcup_{j=1}^{a_i-1}(a_i\N_0 + b_i + j)
+	\]
+	Now let $k \in \{1,2,\dots,b_i-1\} \cup \bigcup_{j=1}^{a_i-1}(a_i\N_0 + b_i + j)$.
+	If $k \in \{1,2,\dots,b_i-1\}$,
+	then $k$ is smaller than the smallest element in $a_i\N_0 + b_i$,
+	specifically $b_i$,
+	thus $k \in (a_i\N_0 + b_i)^C$.
+	If $k \not\in\{1,2,\dots,b_i-1\}$,
+	then $k = a_in + b_i + j$ for $n\in\N_0$ and $1 \leq j \leq a_i-1$.
+	For the sake of contradiction, assume that there exists $n'\in\N_0$
+	such that $k = a_in' + b_i$.
+	So $a_in + b_i + j = a_in' + b_i \implies a_in + j = a_in' \implies j= a_i(n' - n)$.
+	But then, since the right side of the equality is divisible by $a_i$,
+	we must have that $a_i \mid j$.
+	So $a_i < |j|$ or $j = 0$.
+	But recall $j$ is positive, so this is saying
+	$a_i < j$.
+	But recall that $j \leq a_i - 1 < a_i$,
+	and so we arrive at a contradiction.
+	Thus, there does not exist $n' \in \N_0$ such that $k = a_in' + b_i$,
+	thus $k \in (a_i\N_0 + b_i)^C$.
+	This is sufficient to show
+	\[
+		(a_i \N_0 + b_i)^C \supseteq \{1,2,\dots,b_i-1\}
+		\cup \bigcup_{j=1}^{a_i-1}(a_i\N_0 + b_i + j)
+	\]
+	therefore we have shown equality of the two sets.
+	
+	Thus, we can rewrite $S$ as
+	\[
+		S = \bigcap_{i=1}^{l}\left(\{1,2,\dots,b_i-1\}\cup
+		\bigcup_{j=1}^{a_i-1}(a_i\N_0 + b_i + j)\right)
+	\]
+
+	We now induct on $l$ to show $S$ is the union of a finite set
+	and finitely many arithmetic progressions.
+	When $l = 1$, it is obvious to see that this is true
+	($\{1,\dots,b_1 - 1\}$ is finite and $\bigcup_{j=1}^{a_1-1}(a_1\N_0 + (b_i + j))$
+	is a union of $a_1 - 1$ many arithmetic prograssions).
+	Now, let our property be true for $l = m \in \N$,
+	we want to show that this implies for $l = m + 1$,
+	$S$ is a union of a finite set and finitly many arithmetic progressions.
+	We have
+	\begin{align*}
+		S &= \bigcap_{i=1}^{m+1}\left(\{1,2,\dots,b_i-1\}\cup
+		\bigcup_{j=1}^{a_i-1}(a_i\N_0 + b_i + j)\right)\\
+		  &= \bigcap_{i=1}^m\left(\{1,2,\dots,b_i-1\} \cup
+		\bigcup_{j=1}^{a_i-1}(a_i\N_0+b_i+j)\right)
+		\cap \left( \{1,2,\dots,b_{m+1}-1\} \cup
+		\bigcup_{j=1}^{a_{m+1}-1}(a_{m+1}\N_0+b_{m+1}+j)\right)
+	\end{align*}
+	But by assumption, our set on the left of the intersection is a union
+	of a finite set and finitely many arithmetic progressions.
+	Let us denote that finite set by $F$,
+	and each finitely many arithmetic progressions as $A_1,A_2,\dots,A_k$ where $k\in\N$.
+	Then we have
+	\[
+		S = \left(F \cup \bigcup_{i=1}^k A_i\right)
+		\cap \left( \{1,2,\dots,b_{m+1}-1\} \cup
+		\bigcup_{j=1}^{a_{m+1}-1}(a_{m+1}\N_0+b_{m+1}+j)\right)
+	\]
+	Now, using the distributive property of unions and intersections, we have
+	\begin{align*}
+		S =& \left( F \cap \{1,2,\dots,b_{m+1}-1\}\right)
+		\cup \left(F \cap \bigcup_{j=1}^{a_{m+1}-1}(a_{m+1}\N_0+b_{m+1}+j)\right)\\
+		  &\cup \left(\bigcup_{i=1}^kA_i \cap \{1,2,\dots,b_{m+1}-1\}\right)
+		\cup \left(\bigcup_{i=1}^k A_i \cap \bigcup_{j=1}^{a_{m+1}-1}(a_{m+1}\N_0+b_{m+1}+j)\right)
+	\end{align*}
+	But note that the first three terms in the union are all some set
+	intersected with a finite set,
+	and since the largest an intersection between two sets can be
+	is the size of the smaller set,
+	we must have that the first three terms are finite sets.
+	Unioning them all together would yield another finite set,
+	since the largest a union can be is the sum of the sizes of the component sets,
+	and so we can denote this as another finite set $F'$, giving us
+	\[
+		S = F' \cup
+		\left(\bigcup_{i=1}^k A_i \cap \bigcup_{j=1}^{a_{m+1}-1}(a_{m+1}\N_0+b_{m+1}+j)\right)
+	\]
+	We can now look at the intersection of unions of arithmetic progressions.
+	By the distributive property of unions and intersections,
+	we get the union of the pairwise intersections between them, specifically
+	\begin{align*}
+		S = F'
+		&\cup (A_1 \cap (a_{m+1}\N_0 + b_{m+1} + 1))
+		\cup (A_1 \cap (a_{m+1}\N_0 + b_{m+1} + 2)) \cup \cdots \cup
+		(A_1 \cap (a_{m+1}\N_0 + b_{m+1} + a_{m+1}-1 - 1))\\
+		&\cup (A_2 \cap (a_{m+1}\N_0 + b_{m+1} + 1))
+		\cup (A_1 \cap (a_{m+1}\N_0 + b_{m+1} + 2))
+		\cup \cdots \cup (A_2 \cap (a_{m+1}\N_0 + b_{m+1} + a_{m+1}-1 - 1))\\
+		&\cup \cdots \cup (A_k \cap (a_{m+1}\N_0 + b_{m+1} + 1))\cup \cdots
+		\cup (A_k \cap (a_{m+1}\N_0 + b_{m+1} + a_{m+1}-1 - 1))
+	\end{align*}
+	Note that each term (not $F'$) is the intersection of two arithmetic progressions.
+	We claim that any intersection of two arithmetic progressions will either be
+	an empty set, or will be another arithmetic progression.
+	To show this, consider two arbitrary arithmetic progressions,
+	$a'\N_0 + b'$ and $a^*\N_0 + b^*$ where $a',a^*,b',b^* \in \N$.
+	If there does not exist $m,n \in \N$ such that $a'm + b' = a^*n+b^*$,
+	then their intersection is the empty set, as desired.
+	Now, let their intersection be nonempty.
+	Since this is a subset of the naturals,
+	by the well-ordering property, there is a least element of the intersection, $\eta$.
+	We claim that the intersection is then the set $\mathrm{lcm}[a',a^*]\N_0 + \eta$,
+	which is an arithemetic progression.
+	To show this claim, $\alpha \in \N$
+	is in the intersection if and only if
+	there exists $m,n\in\N$ such that $\alpha = a'm + \eta = a^*n + \eta$,
+	since $\alpha$ is $\eta$ plus some multiple of $a'$ and $a^*$
+	in order to be within both arithmetic progressions
+	(since every point in an arithmetic progression is seperated
+	by some multiple of the gap length $a$).
+	Then we have $a'm = a^*n$, which, by definition,
+	is a common multiple of $a'$ and $a^*$.
+	Thus, $\alpha$ is in the intersection
+	if and only if $\alpha = \gamma + \eta$
+	where $\gamma$ is a common multiple of $a'$ and $a^*$.
+	But recall from Proposition 3.10 from the course notes
+	(lcm divides all common multiples),
+	we have $\mathrm{lcm}[a',a^*] \mid \gamma$,
+	thus $\gamma = n\mathrm{lcm}[a',a^*]$ for some $n \in \N$.
+	Thus, $\alpha \in (a'\N_0 + b') \cup (a^*\N_0 + b^*)$
+	if and only if $\alpha \in \mathrm{lcm}[a',a^*]\N_0 + \eta$.
+	But then the intersect is also a arithmetic progression.
+
+	Since we were working for arbitrary intersections of arithmetic progressions,
+	all of our intersections in the equation for $S$
+	must either be empty or an arithmetic progression.
+	Thus, since there are finitely many intersections of arithmetic progressions,
+	we have that $S$ is the union of a finite set and finitely many arithmetic progressions.
+\end{proof}
+\clearpage
+
+\subsection*{Problem 3}
+{\it Find all odd positive integers $m$ and $n$ with the property that
+\[n \mid (3m+1) \text{ and } m \mid (n^2 + 3).\]}
+
+\begin{proof}
+	First, we can rewrite our divisibility statements into equalities.
+	Namely, there exists $k,l \in \N$ such that
+	\begin{equation}\label{n=}
+		kn = 3m + 1
+	\end{equation}
+	\begin{equation}\label{m=}
+		lm = n^2 + 3
+	\end{equation}
+	If we multiply (\ref{n=}) by $l$, we have $lkn = 3lm + l$
+	and by substituting in (\ref{m=}), we get
+	$lkn = 3n^2 + 9 + l \implies lkn - 3n^2 = l + 9$.
+	It is easy to see the left hand side of the equality is divisible by $n$,
+	thus $n \mid l + 9$ as well.
+	But since divisors are always less than or equal to a value they divide,
+	we get
+	\begin{equation}\label{n<l}
+		n \leq l + 9
+	\end{equation}
+	
+	We now consider multiplying (\ref{n=}) by $n$,
+	which gives us $n^2k = 3mn + n \implies n^2k+3k = 3mn + n + 3k$.
+	Now subbing in (\ref{m=}) on the left, we get $mlk = 3mn + n + 3k$.
+	Multiplying everything by $k$, we get
+	$mlk^2 = 3mnk + nk + 3k^2 \implies mlk^2 = 3mnk + 3m + 1 + 3k^2$ (again by (\ref{n=})).
+	But then this equality can become $mlk^2 - 3m - 3mnk = 3k^2 + 1$,
+	and the left hand side of the equality is divisible by $m$,
+	thus $m \mid 3k^2 + 1$, which gives
+	\begin{equation}\label{m<k}
+		m \leq 3k^2 + 1
+	\end{equation}
+	
+	Note that we have $n \leq 3m + 1$ and $k \leq 3m + 1$
+	(which is true by the fact $n \mid (3m+1)$ and $k \mid (3m+1)$ from (\ref{n=})).
+	Now, plugging in (\ref{m<k}) into the first inequality, we have
+	\begin{equation}\label{n<k}
+		n \leq 9k^2 + 4
+	\end{equation}
+	And multiplying the second inequality by $l$ we have $kl \leq 3ml + l$,
+	and subbing in (\ref{m=}) we have $kl \leq 3n^2 + 9 + l$.
+	But using (\ref{n<l}), we get that $kl \leq 3(l+9)^2 + 9 + l
+	\implies kl \leq 3l^2 + 54l + l + 243 + 9
+	\implies k \leq 3l + 55 + \frac{252}{l}$.
+	Note that $l$ is always positive, so dividing by it always decreases the value.
+	Thus, using our last inequality,
+	\begin{equation}\label{k<l}
+		k \leq 3l + 55 + 252 = 3l + 307
+	\end{equation}
+	
+	Finally, consider subbing in (\ref{n=}) into (\ref{m=}),
+	which gives us
+	\begin{align*}
+		ml &= \left(\frac{3m+1}{k}\right)^2 + 3\\
+		   &= \frac{9m^2}{k^2} + \frac{6m}{k^2} + \frac{1}{k^2} + 3\\
+		l &= \frac{9m}{k^2} + \frac{6}{k^2} + \frac{1}{mk^2} + \frac{3}{m}\\
+		3l + 307 &= \frac{27m}{k^2} + \frac{18}{k^2} + \frac{3}{mk^2} + \frac{9}{m} + 307
+	\end{align*}
+	But we can substitute in (\ref{k<l}) to get
+	\begin{align*}
+		k &\leq \frac{27m}{k^2} + \frac{18}{k^2} + \frac{3}{mk^2} + \frac{9}{m} + 307\\
+		k^3 &\leq 27m + 18 + \frac{3}{m} + \frac{9k^2}{m} + 307k^2
+	\end{align*}
+	\begin{equation*}
+		k^3 - \left(\frac{9}{m} + 307\right)k^2 - \left(\frac{3}{m} + 18 + 27m\right) \leq 0
+	\end{equation*}
+	We can simplify this further, by noting the largest value $\frac{9}{m}, \frac{3}{m}$
+	can obtain is when $m = 1$,
+	and also using (\ref{m<k}), we get
+	$k^3 - \left(\frac{9}{m} + 307\right)k^2 - \left(\frac{3}{m} + 18 + 27m\right)
+	\geq k^3 - 316k^2 - \left(21 + 27(3k^2 + 1)\right)
+	= k^3 - 397k^2 - 48$.
+	So we have
+	\begin{equation}
+		k^3 - 397k^2 - 48 \leq 0
+	\end{equation}
+	Recall from Calc 1 that a cubic function of $k$ with a positive leading coefficient
+	will always be positive when $k$ is larger than the largest root,
+	and it can be nonpositive when $k$ is smaller,
+	thus we can put a bound on $k$ in order for
+	the polynomial in the inequality to be nonnegative,
+	namely the largest root of the polynomial.
+	One can verify that the last root happens between $k = 397$ and $398$.
+	We can verify that this polynomial is positive for all $k \geq 398$
+	with the first derivative test:
+	$3k^2 - 794k = k(3k - 794)$ which is positive when $k > \frac{794}{3} \approx 265$;
+	we can see that this polynomial is convex up for all $k \geq 398$
+	with the second derivative test:
+	$6k - 794$ which is positive when $k > \frac{794}{6} \approx 132$.
+	Thus, $k \leq 398$ whenever our polynomial is nonpositive
+	(and it definitely attains a nonpositive value, see $k = 0$).
+	Thus we get the bound
+	\begin{equation}\label{k<}
+		k < 398
+	\end{equation}
+
+	We can use this bound to get a bound on $n$ and $m$,
+	and then test a finite number of inputs to see which $n,m$ satisfy our conditions.
+	Substituting (\ref{k<}) into (\ref{m<k}) and (\ref{n<k}), we get
+	\begin{equation}
+		m < 475213
+	\end{equation}
+	\begin{equation}
+		n < 1425640
+	\end{equation}
+	
+	We can verify using a computer system in a reasonable time
+	the just over $338$ billion possibilities for $(n,m)$
+	(for reference, my program took less than $4$ minutes).
+	We get the following pairs for $(n,m)$:
+	\[
+		(n,m) = (1,1), (13,43), (37,49)
+	\]
+\end{proof}
+\end{document}

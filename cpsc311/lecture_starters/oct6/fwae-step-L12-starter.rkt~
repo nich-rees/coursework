@@ -1,0 +1,58 @@
+#lang plai
+
+;; Stepping FWAE programs, with lexical scope and dynamic scope
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Program 1
+'{with {double {fun {x} {+ x x}}}
+       {with {x 5} {double x}}}
+
+       
+;; NOW WITH DYNAMIC SCOPE!
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Program 2 
+'{with {k {fun {x} {fun {y} x}}}
+      {{k 7} 9}}
+
+;; NOW WITH DYNAMIC SCOPE!
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Program 3 - Room Warmer, Revisited
+'{{fun {y} {y y}} {fun {x} {x x}}}
+
+
+;; NOW WITH DYNAMIC SCOPE!
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Program 4 - scope tester
+'{with {y 9}
+       {{with {y 7}
+              {fun {x} y}} 8}}
+
+
+;; NOW WITH DYNAMIC SCOPE!
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Program 5 : Yes this is a legal program 
+'{+ {fun {x} x} 9}
+
+
+;; NOW WITH DYNAMIC SCOPE! 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Program 6 : Another legal program
+'{if0 {fun {x} x}
+      8
+      0}
+'0
+
+;; NOW WITH DYNAMIC SCOPE! 
+
+
+

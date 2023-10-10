@@ -1,0 +1,529 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 3}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it A set $S \subseteq \R$ is called {\bf dense in} $\R$ whenever this property holds:
+\begin{center}
+	for each nonempty real interval $(a,b)$, one has $S \cap (a,b) \neq \emptyset$.
+\end{center}
+\begin{enumerate}
+	\item Define $f \colon \Z \times \Z \to \R$ by $f(m,n) = m + n\sqrt{2}$.
+	Prove that $f$ is one-to-one.
+	\item Let $S = \left\{m + n\sqrt{2} \colon m,n\in\Z \right\}$.
+	Prove that $S \cap (0,1)$ is infinite.
+	\item Prove that for each $\ep > 0, S \cap (0,\ep) \neq \emptyset$.
+	\item Prove that $S$ is dense in $\R$.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $f(m_1,n_1) = f(m_2,n_2)$.
+		Then $m_1 + n_1 \sqrt{2} = m_2 + n_2\sqrt{2} \implies m_1 - m_2 = (n_2 - n_1)\sqrt{2}
+		\implies \frac{m_1 - m_2} = {n_2 - n_1}\sqrt{2}$.
+		For the sake of contradiction,
+		assume that $m_1 \neq m_2$ or $n_1 \neq n_2$.
+		If $n_1 \neq n_2$, then we have $\frac{m_1 - m_2}{n_2 - n_1} = \sqrt{2}$.
+		But the value on the left of the inequality is a rational number,
+		and we know $\sqrt{2} \not\in \Q$,
+		thus we get a contradiction.
+		We must have then $n_1 = n_2$.
+		If $m_1 \neq m_2$, we have $m_1 - m_2 \neq 0$,
+		however $(n_2 - n_1)\sqrt{2} = 0$,
+		thus our equality is broken, another contradiction.
+		Thus we must have that $m_1 = m_2$ as well.
+		But then the original values we mapped from $\Z\times\Z$
+		are the same,
+		$(m_1,n_1) = (m_2,n_2)$,
+		showing that $f$ is one-to-one.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $n\in \Z$ be arbitrary.
+		Then we claim that there exists $m \in \Z$
+		such that $0 < m - n\sqrt{2} < 1$.
+		This implies $(m - n\sqrt{2}) \in S \cap (0,1)$
+		($n$ is negative here, but this is fine because if $n\in\Z$, so is $-n$).
+		Given our inequality, we can rerrange it to get
+		\[
+			n\sqrt{2} < m <1 + n\sqrt{2}
+		\]
+		We claim that this inequality is preserved
+		when we choose $m$ to be the smallest integer
+		greater than $n\sqrt{2}$.
+		By definition, $m > n\sqrt{2}$.
+		Furthermore, we know that $n\sqrt{2} \not\in \Z$
+		(since $\sqrt{2}$ is irrational)
+		thus, $m - n\sqrt{2} < m - (m - 1)$
+		(ie. $n\sqrt{2}$ is closer to $m$ than $m - 1$);
+		if this were not true, $m - 1$ would be closer to $m$
+		than $n\sqrt{2}$,
+		in otherwords $m - 1 > n\sqrt{2}$,
+		but this contradicts that $m$ is the smallest integer greater than $n\sqrt{2}$.
+		But this inequality gives $m < 1 + n\sqrt{2}$.
+		Thus, our chosen $m$ satisfies our bounds,
+		and so $m - n\sqrt{2} \in S \cap (0,1)$.
+		But since this works for arbitrary $n$,
+		and there are infinitely many integers,
+		there are infinitely many $n,m$ such that $m - n\sqrt{2} \in S \cap (0,1)$.
+		Each $m,n$ corresponds to a unique element in $S$ (by part (a)),
+		thus $S \cap (0,1)$ contains infintly many elements.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $\ep > 0$.
+		Corollary (a) of the Archimedes property from the lecture notes
+		states that there exists some $j \in \N$ such that
+		$\frac{1}{j} < \ep$.
+		Furthermore, since $0 < j < 2^j$ for all $j$,
+		we have that $0 < 2^{-j} < j^{-1}$,
+		thus $0 < 2^{-j} < \ep$.
+
+		Now, see that $0 < \sqrt{2} - 1 < 2^{-1}$, since $1.5^2 > 2$.
+		Furthermore, since these are both positive values,
+		exponentiating them to some natural number will preserve the inequality.
+		Thus if we exponentiate them by $j$,
+		we see $0 < (\sqrt{2} - 1)^j < 2^{-j} < \ep$.
+		By binomial theorem, we have
+		\[
+			0 < \sum_{k=0}^{j}\binom{j}{k}(\sqrt{2})^{k}(-1)^{j-k} < \ep
+		\]
+		Note that if $k$ is even, $(\sqrt{2})^k = 2^{k/2}$ which is an integer,
+		and if $j$ is odd, $(\sqrt{2})^k = 2^{(k-1)/2}\sqrt{2}$ which is a multiple of $\sqrt{2}$.
+		Regardless then,
+		since $\binom{j}{k}$ is always an integer,
+		we have that our summation is just the sum of an integer and a multiple of $\sqrt{2}$.
+		Specifically, if
+		\[
+			m = \sum_{\substack{k=0 \\ k\text{ even}}}^j\binom{j}{k}2^{k/2}(-1)^{j-k}, \quad
+			n = \sum_{\substack{k=0 \\ k\text{ odd}}}^j\binom{j}{k}2^{(k-1)/2}(-1)^{j-k}
+		\]
+	\end{proof} 
+	Then $m,n\in\Z$,
+	and $0 < m + n\sqrt{2} < \ep$.
+	Thus $m + n\sqrt{2} \in S \cap (0,\ep)$
+	and so the set is not empty.
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $a,b$ be given, such that $a,b \in \R$, $a < b$ (WLOG).
+		We know that there exists $m,n \in \Z$
+		such that $0 < m + n\sqrt{2} < (b-a)/2$ since $(b-a)/2 > 0$
+		(by part (c)).
+		Let $k = \lceil a/(m + n\sqrt{2}) \rceil$.
+		Then $k(m + n\sqrt{2})$ is of size ff and at least,
+		of size ff.
+		But since $k$ is an integer, $km,kn$ are integers,
+		and ff inequalities,
+		thus $km + kn\sqrt{2} \in S \cap (a,b)$,
+		so the intersection is nonempty.
+		This confirms that $S$ is dnese in $\R$.
+
+
+		Let $a,b \in \R$ be given and $b>a$ (WLOG).
+		We let $x,y \in \R$ be arbitrary such that $x<y$.
+		Note that by the density of the rationals (proven in class),
+		we have that $m\in\Z$ and $k \in \N$ such that
+		\begin{align*}
+			x < \frac{m}{k} < y
+			&\implies kx < m < yx\\
+			&\implies \sqrt{2}kx < m < \sqrt{2}ky\\
+			&\implies \sqrt{2}kx + m < m + n\sqrt{2} < \sqrt{2}ky + n
+		\end{align*}
+
+		Let $a,b$ be given, such that $a,b \in \R$, $0 < a < b$ (WLOG).
+		Let $\ep = \frac{b-a}{3}$,
+		then by part (c), there exists $s \in S$ such that $0 < s < \ep$.
+		By the Archimedian property, there exists a natural number k
+		such that $ks > a$.
+		By the well-ordering property, we can choose $k$ that is the smallest element
+		that satisfies the inequality.
+		If $ks < a + \frac{b-a}{3}$, then we are done.
+		Otherwise, $ks > a + \frac{b-a}{3}$.
+		We can subtract a smaller value on the left side of the inequality
+		than the right and preserve the inequality,
+		so we get $ks - s = (k-1)s > a$,
+		but this contradicts that $k$ is the smallest such integer,
+		thus we cannot have $ks > a + \frac{b-a}{3}$.
+		Thus we have shown that when $a,b$ positive,
+		we have that $S \cap (a,b) \neq \emptyset$.
+
+		We consider now the cases when $a,b$ are not both positive.
+		If $a \leq 0$ and $b \geq 0$ (where $b \neq a$),
+		then we let $\ep = b$, and then by part (c),
+		we have $S \cap (a,b) \neq \emptyset$.
+		Now let $a,b$ be both negative.
+		From the first part of this proof, we know that there is an $s \in S$
+		such that $s \in (-a,-b)$ (since both values are now positive),
+		thus $-s \in (a,b)$, and obviously $-s \in S$ for any $s \in S$.
+		Thus, $S \cap (a,b) \neq \emptyset$ for all cases.
+
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 2}
+{\it For each $x \in \R$, evaluate
+\[
+	f(x) := \lim_{n\to\infty}\frac{1}{1+nx}
+\]
+Use the $\ep,N$ definition of a limit to prove your answer.}
+
+\begin{proof}[Solution]\let\qed\relax
+	Let $a_n = \frac{1}{1+nx}$ where $x$ is given
+	(so $f(x) = \lim_{n\to\infty} a_n$).
+	Either $x > 0$, $x < 0$ or $x = 0$.
+	We deal with these cases in turn.
+	We claim that
+	\[
+		f(x) = \begin{cases}
+			0 & x\neq0\\
+			1 & x = 0
+		\end{cases}
+	\]
+
+	Let $x > 0$. Let $\ep > 0$.
+	We let $N = \max\{\lfloor\frac{1-\ep}{\ep x}\rfloor,1\}$.
+	Then for $n > N$, we have
+	$n > \frac{1-\ep}{\ep x} \implies nx > \frac{1}{\ep}-1$.
+	Then $\frac{1}{1+nx} < \ep$.
+	But all of the terms on the left are positive anyway,
+	we can just take their absolute value to get $|\frac{1}{1+nx}| < \ep$,
+	thus $\lim_{n\to\infty}\frac{1}{1+nx} = 0$ when $x>0$.
+
+	Now let $x < 0$. Let $\ep > 0$.
+	We let $N = \max\{\lfloor\frac{1-\ep}{-\ep x}\rfloor, 1, \lceil \frac{1}{x}\rceil\}$.
+	Then for $n > N$, we have $n > \frac{1-\ep}{-\ep x} \implies  nx < 1 - \frac{1}{\ep}$.
+	Then $\ep > \frac{1}{1-nx}$.
+	But since $1 - nx > 0$, we have that the numerator and denominator are positive,
+	and thus $\ep > \left|\frac{1}{1+nx}\right|$.
+
+	Finally, let $x = 0$. Let $\ep > 0$.
+	We let $N = 1$.
+	Then for $n > N$, we have $|a_n - 1| = |1 - 1| = 0 < \ep$.
+	Thus $\lim_{n\to\infty}\frac{1}{1+nx} = 1$ when $x = 0$.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 3}
+{\it Given a real sequence $(a_n)_n$ with $a_n \to A$ as $n \to \infty$,
+present direct $\ep,N$-proofs that $a_n^3\to A^3$
+and $a_n^{1/3} \to A^{1/3}$ as $n \to \infty$.
+(Assume $A \in \R$.)}
+
+\begin{proof}[Solution]\let\qed\relax
+	We know that $a_n \to A$ as $n \to \infty$,
+	thus for all $\ep > 0$, there exists $N \in \N$ such that for all $n > N$
+	we have $|a_n - A| \leq \frac{\ep}{|(|A|+1)^2 - |A|A+A^2|}$.
+	
+	We first seek to prove that $a^3_n \to A^3$ as $n \to \infty$.
+	Recall that if $x_n \to x$ as $n \to \infty$, then $|x_n| \leq |x| + 1$
+	(by the course notes), we have
+	\begin{align*}
+		|a_n^3 - A^3|
+		&= |a_n - A||a_n^2 - a_nA + A^2|\\
+		&\leq |a_n - A||(|A|+1)^2 - |A|A + A^2|\\
+		&< |(|A| + 1)^2 - |A|A + A^2|\left(\frac{\ep}{|(|A|+1)^2-|A|A+A^2|}\right)\\
+		&= \ep
+	\end{align*}
+	But this is sufficient to show that $a_n^3 \to A^3$ as $n \to \infty$.
+
+	We now seek to prove that $a_n^{1/3} \to A^{1/3}$ as $n \to \infty$.
+	Let $\ep > 0$.
+	Consider first when $A \neq 0$.
+	Since $a_n \to A$ as $n \to \infty$,
+	for all $\ep>0$, we have $N \in \N$ such that for all $n > N$,
+	\[
+		|a_n - A| < \min\left\{\frac{A}{2},\left(\left(\frac{A}{2}\right)^{2/3} + \left(\frac{A}{2}\right)^{1/3}A^{1/3} + A^{2/3}\right)\ep\right\}
+	\]
+	But when $|a_n - A| < \frac{A}{2}$,
+	we have $\frac{A}{2} < a_n$. Thus
+	\[
+		(a_n)^{2/3} + (a_n)^{1/3}A^{1/3}+A^{2/3} > \left(\frac{A}{2}\right)^{2/3} + \left(\frac{A}{2}\right)^{1/3}A^{1/3}+A^{2/3}
+	\]
+	This gives us the useful inequality
+	\begin{equation}\label{a1/3}
+		\frac{|a_n - A|}{(a_n)^{2/3} + (a_n)^{1/3}A^{1/3} + A^{2/3}}
+		< \frac{|a_n - A|}{\left(\frac{A}{2}\right)^{2/3} + \left(\frac{A}{2}\right)^{1/3}A^{1/3} + A^{2/3}}
+	\end{equation}
+	Now see that, using the difference of cubes formula, we have
+	\[
+		|a_n - A| = |(a_n)^{1/3} - A^{1/3}||(a_n)^{2/3} + (a_n)^{1/3}A^{1/3} + A^{2/3}|
+	\]
+	which, when combined with (\ref{a1/3}), gives
+	\begin{align*}
+		|a_n^{1/3} - A^{1/3}|
+		& = \frac{|a_n - A|}{(a_n)^{2/3} + (a_n)^{1/3}A^{1/3} + A^{2/3}}\\
+		&< \frac{|a_n - A|}{\left(\frac{A}{2}\right)^{2/3} + \left(\frac{A}{2}\right)^{1/3}A^{1/3} + A^{2/3}}\\
+		&< \frac{\left(\frac{A}{2}\right)^{2/3} + \left(\frac{A}{2}\right)^{1/3}A^{1/3} + A^{2/3}}{\left(\frac{A}{2}\right)^{2/3} + \left(\frac{A}{2}\right)^{1/3}A^{1/3} + A^{2/3}}\ep\\
+		= \ep
+	\end{align*}
+	which shows the convergence as desired.
+
+	When $A = 0$, we simply pick $N$ such that for all $n>N$, $|a_n|<\ep^3$.
+	But then $|a_n^{1/3}| = |a_n|^{1/3} < \ep$.
+	Thus, $a_n^{1/3} \to A^{1/3}$ as $n \to \infty$.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 4}
+{\it \begin{enumerate}
+	\item Prove: For any real $M,m$ and $b$ obeying $M > m$,
+		there is some real $R$ for which
+		\[
+			Mx > mx + b \qquad \forall x>R
+		\]
+		(That is easy, but it sets the conceptual stage for the next part.)
+	\item Suppose $(y_n)_{n\in\N}$ is a real sequence with the property that
+		$(y_n/n)$ converges to some number $M$.
+		Prove that for every real $m \in (-\infty, M)$ and $b \in \R$,
+		there exists $N \in \N$ such that
+		\[
+			y_n > mn + b \qquad \forall n>N
+		\]
+	\item True or False (with proof or counterexample):
+		\begin{center}
+			If $\frac{y_n}{n} \to M$ as $n \to \infty$,
+			then $|y_n - Mn| \to 0$.
+		\end{center}
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We give $R = \frac{b}{M - m}$.
+		Let $x > R$.
+		Then $(M-m)x > b \implies Mx > mx + b$ as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have that for all $\ep > 0$,
+		there exists $N_1 \in \N$ such that for all $n > N_1$,
+		$|y_n/n - M| < M - m$.
+		From part (a), we can choose a natural $N_2 > \frac{b}{M-m}$
+		where $m \in (-\infty,M)$ such that for all $n > N_2$,
+		we have that for all $b \in \R$, $Mn > mn + b$.
+
+		Now let $N = \max\{N_1,N_2\}$,
+		then we have that for $n > N$,
+		$|y_n/n| < M - m$, so
+		\[
+			\frac{y_n}{n} > 2M - m > M + \frac{b}{n} > m + \frac{b}{n}
+		\]
+		but multiplying by $n$ gives us
+		\[
+			y_n > mn + b
+		\]
+		for all $n > N$, as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		False, we provide a counterexample.
+		Let $y_n = 1$.
+		Then $y_n/n = 1/n \to 0$, however $|y_n - 0n| = 1$,
+		which obviously does not go to $0$.
+	\end{proof} 
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 5}
+{\it Let $\alpha$ and $\beta$ be positive real numbers.
+Prove that $\lim_{n\to\infty}(\alpha^n + \beta^n)^{1/n} = \max\{\alpha,\beta\}$.}
+
+\begin{proof}[Solution]\let\qed\relax
+	Let $\beta < \alpha$ (WLOG) be positive real numbers.
+	Then, $\alpha = \max\{\alpha,\beta\}$.
+	It is true that $\alpha^n < \alpha^n + \beta^n < 2\alpha^n$,
+	so $\alpha < (\alpha^n + \beta^n)^{1/n} < 2^{1/n}\alpha$.
+	Clearly, $\alpha \to \alpha$ as $n \to \infty$ since there is no dependence on $n$.
+	By theorem 3.3(c) of Rudin,
+	we have $\lim_{n\to\infty} 2^{1/n}\alpha = (\lim_{n\to\infty} 2^{1/n})(\lim_{n\to\infty} \alpha)$.
+	The left limit goes to $1$ by theorem 3.20(b) of Rudin,
+	and the right limit is again just $\alpha$.
+	Thus $\lim_{n\to\infty} = \alpha$.
+	Thus, by squeeze theorem, we have that
+	$\lim_{n\to\infty}(\alpha^n+\beta^n)^{1/n} = \alpha$,
+	which is the max,
+	so we are done.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 6}
+{\it \begin{enumerate}
+	\item Let $(x_n)$ be a sequence of positive real numbers obeying
+		\[
+			\lim_{n\to\infty} \frac{x_{n+1}}{x_n} < 1
+		\]
+		Show that there exist $r \in (0,1)$ and $C>0$ for which
+		$0<x_n<Cr^n$ holds for all $n$ sufficiently large.
+		Use this to prove that $\lim_{n\to\infty}x_n = 0$.
+	\item Prove that if $x_n \to 0$, then the sequence $y_n = 1/x_n$ cannot converge.
+	\item Use (a) and (b) to test for converge:
+		$\left(\frac{10^n}{n!}\right)$, $\left(\frac{2^n}{n}\right)$,
+		and $\left(\frac{2^{3n}}{3^{2n}}\right)$.
+\end{enumerate}
+[Detailed $\ep-N$ arguments are expected in (a)-(b), but not in (c).]}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		:(
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We are going to assume that $x_n \neq 0$ for all $n$
+		so that $y_n$ is always well-defined,
+		but we will make some comments about this at the end.
+
+		For all $\ep \in \N$,
+		by the convergence of $x_n$ to $0$,
+		there exists $N \in \N$ such that $\forall n \geq N$,
+		we have $|x_n| < \ep$.
+		Then we choose $N$ such that for all $n>N$, $|x_n| < \frac{1}{k}$ where $0 < k \in \R$.
+		But then taking the reciprocal, we have
+		\[
+			\frac{1}{|x_n|} = |y_n| > k
+		\]
+		This is true for all for any $n>N$, thus $y_n$ does not converge to $k$.
+		Furthermore, since $k$ was arbitrary, $y_n$ does not converge to any value.
+
+		If we consider when $x_n = 0$ finitely many times,
+		we can apply a similar proof for the elements that are not $0$
+		(if $N$ is the greatest $n$ such that $x_N = 0$,
+		then we restrict our focus to $n>N$).
+		However, if we will always have a next $n$ such that $x_n = 0$
+		(there are infinitely many zeros),
+		then our sequence will always have problems with well-definedness,
+		and so we cannot make a well-formed statement about it.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		:(
+	\end{proof} 
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 7}
+{\it Let $(x_n)$ and $(y_n)$ be real sequences.
+Prove: If $(x_ny_n)$ converges, and $y_n \to +\infty$ as $n \to \infty$,
+then $x_n \to 0$ as $n\to\infty$.
+\begin{center}
+	[For ``$y_n \to +\infty$," see Rudin, Definition 3.15, p. 55;
+	note also the following paragraph.]
+\end{center}}
+
+\begin{proof}[Solution]\let\qed\relax
+	By the hypothesis of the question,
+	we require that for all $\ep > 0$,
+	there exists some $N_1 \in \N$ such that for all $n_1 \geq N_1$,
+	$|y_{n_1}x_{n_1} - L| < \ep$.
+	Now, since $y_n \to +\infty$, we have that for all $M \in \N$,
+	there exists some $N_2 \in \N$ such that for all $n_2 \geq N_2$,
+	we have that $y_n \geq M$.
+	Now let $N = \max\{N_1, N_2\}$,
+	then for all $n \geq N$, we have both of our conditions from above,
+	thus $|Mx_n| \leq |y_nx_n - L| < \ep$.
+	Rearranging, this means we must have $|M||x_n| < \ep$ 
+	In order to preserve this inequality, we must have that $|x_n| < \frac{\ep}{|M|}$.
+	But since $\ep$ and $M$ were both arbitrary,
+	and $\frac{\ep}{|M|} > 0$ since the numerator and denominator are positive,
+	this means $\ep' = \frac{\ep}{|M|} > 0$ is arbitrary as well.
+	And so for all $n > N$, $|x_n - 0| < \ep'$, so $x_n \to 0$ as $n \to \infty$.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 8}
+{\it Given a real-valued sequence $a_1,a_2,\dots,$ consider
+the corresponding sequence of averages.
+\[
+	s_n = \frac{a_1 + a_2 + \cdots + a_n}{n}, \qquad n=1,2,3,\dots
+\]
+\begin{enumerate}
+	\item Prove: If $a_n \to a$ as $n \to \infty$ (with $a \in \R$),
+	then also $s_n \to a$ as $n \to \infty$.
+	\item Proof or Counterexample: If $s_n \to a$ as $n \to \infty$
+	(with $a \in \R$), then also $a_n \to a$ as $n \to \infty$.
+	\item Repeat parts (a)-(b), after changing ``(with $a \in \R$)"
+	to ``(with $a = +\infty$)" in both parts.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $\ep > 0$ be arbitrary.
+		Let $N_1$ be the integer such that for all $n_1 \geq N$,
+		we have that $|a_n - a| < \frac{\ep}{3}$.
+		Now choose $N = \max\{N_1, \left\lceil\frac{3A}{\ep}\right\rceil\}$
+		where $A = |a_1 + \cdots + a_{N_1} - aN_1|$.
+		If we let $n \geq N$, we have that
+		\begin{align}
+			|s_n - a|
+			&= \left\lvert \frac{a_1 + \cdots + a_n - an}{n}\right\rvert\\
+			&= \left\lvert \frac{a_1 - a + a_2 - a + \cdots + a_n - a}{n}\right\rvert\\
+			&\leq \left\lvert \frac{a_1 + \cdots + a_{N_1} - aN_1}{n}\right\rvert
+			+ \left\lvert\frac{a_{N_1+1} - a + \cdots + a_n - a}{n}\right\rvert\\
+			&\leq \frac{A}{n} + \frac{|a_{N_1+1} - a| + \cdots + |a_n - a|}{n}\\
+			&\leq \frac{A}{n} + \frac{(n-N_1)\frac{\ep}{3}}{n}\\
+		\end{align}
+		Note that $\frac{A}{n} \leq A/\left\lceil\frac{3A}{\ep}\right\rceil \leq
+		A/(3A/\ep) = \frac{\ep}{3}$.
+		Also see that $\frac{(n-N_1)\frac{\ep}{3}}{n} \leq \frac{\ep}{3}$
+		(since $0\leq\frac{n-N_1}{n}<1$ because $n \geq N_1$ (always nonnegative)
+		and $0 \leq n-N_1 < n$).
+		Thus
+		\[
+			|s_n - a| \leq \frac{2\ep}{3} < \ep
+		\]
+		as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		This is not true, we provide the counterexample:
+		$a_n = (-1)^n$.
+		Note that $s_n \to 0$ as $n\to\infty$,
+		since if $n$ is even, $s_n = 0$,
+		and if $n$ is odd, $s_n = \frac{-1}{n}$.
+		Both of these converge to $0$ as $n \to \infty$,
+		and they encompass all the $s_n$,
+		so $s_n \to \infty$ as $n \to \infty$.
+		Now note $a_n$ does not go to $a$ as $n \to \infty$,
+		since we can provide $\ep = \frac{1}{2}$,
+		and regardless of $a$,
+		there are always terms two terms, say $a_n, a_{n+1}$,
+		which are at least a distance of $1$ apart.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Proof of (a) :(
+
+		We provide a counterexample for (b):
+		\[
+			a_n = \begin{cases} n/2, & n\text{ even} \\ 0, & n\text{ odd}\end{cases}
+		\]
+		Note that $s_n \to +\infty$ as $n \to \infty$,
+		since $s_n = \frac{1+2+\cdots+n}{2n} = \frac{n+1}{4}$,
+		which obviously goes to $+\infty$ as $n \to \infty$
+		(we can always find $N$ given $M$, namely $N = 3M$).
+		However, $a_n$ does not go to $+\infty$ as $n \to \infty$,
+		since it is not true for all $M$ that we can find $N$ such that for all $n>N$, $a_n>M$: take $M = 1$.
+		We will always have $a_n = 0$ when $n$ is odd,
+		so $a_n < M$.
+	\end{proof} 
+\end{enumerate}
+
+
+\end{document}

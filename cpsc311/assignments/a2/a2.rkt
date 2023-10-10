@@ -1,0 +1,327 @@
+#lang plai
+(print-only-errors)
+(define (... . args) (cons '... args)) ;; enables us to use ... in templates
+
+(require "parsing.rkt")
+;; CPSC311 2023 Winter Term 1
+;; Assignment 2: GosLang
+
+;; Released: Sunday, September 24, 2023
+;; Due: Sunday, October 1, 2023 at 11:59pm
+
+;; This assignment is to be completed individually 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Name: Nicholas Rees
+;; Student Number: 11848363
+;; CWL: nrees
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 2htdp/image) 
+
+
+;;
+;; Render^H^H^H^H^HRyan Trees as a Programming Language
+;; (NOTE: no text in this assignment uses the Papyrus font
+;; https://www.youtube.com/watch?v=jVhlJNJopOQ)
+;;
+
+;; For this homework, we treat render trees as a programming language,
+;; since every API is a little language, and all data must be interpreted.
+;; 
+;; As an added twist we add support for identifiers like WAE.  Many custom
+;; "configuration languages" or domain-specific languages (DSLs) would
+;; benefit from clean, principled support for identifiers.  So in addition
+;; to providing a textual language for render trees, we support identifiers
+;; as helpful glue.
+
+;; For simplicity (and lols) the render trees in this assignment are restricted.
+
+;; Just like Assignment 1, your work will be judged with respect to its
+;; adherence to the systematic program design methodology.  Functions should be
+;; fully designed in accordance with an appropriate template.  Data definitions
+;; should have type specifications (type comments where appropriate),
+;; interpretations, examples, and templates.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; GoslingIDX is Natural
+;; INVARIANT: 0 <= g <= 11 for all GoslingIDX g
+;; interp. a Ryan Gosling portrait index, one for each month of the year!
+
+;; X -> Boolean
+;; produce true if x is a valid Ryan Gosling portrait index, otherwise false.
+(define (gosling-index? x)
+  (and (natural? x)
+       (<= 0 x 11)))
+
+
+
+;; IDS is Symbol
+;; INVARIANT: cannot be the same as any GL keyword
+;; interp.  s-expression representation of a GL identifier
+(define (ids? x)
+  (and (symbol? x)
+       (not (member x '(ryan vertical horizontal with)))))
+
+(define IDS1 'x)
+(define IDS2 'y)
+
+;; No template: atomic data
+
+
+
+(define-type GL
+  [img (i image?)]
+  [ryan (i gosling-index?)]
+  [vertical (gl* (listof GL?))]
+  [horizontal (gl1 GL?) (gl2 GL?)]
+  [with (x ids?) (glx GL?) (gl GL?)]
+  [id (x ids?)])
+;; interp.
+;; data type for GosLang programs corresponding to the following BNF:
+;;   <GL> ::= {ryan <num>}
+;;          | {vertical <GL>* }
+;;          | {horizontal <GL> <GL> }
+;;          | {with {<id> <GL>} <GL>}
+;;          | <id>
+;; [ed: img omitted intentionally] 
+;; programs denote layout instructions for a collection of images:
+;; - (img i) represents the image i
+;; - (ryan i) represents the ith image of Ryan Gosling
+;; - (vertical gl*) renders the list of GL expressions, vertically,
+;;   with the first image in the list above the last.  An empty list
+;;   renders as the empty-image.
+;; - (horizontal gl1 gl2) renders gl1 to the left of gl2.
+;; - (with x glx gl) binds the result of rendering glx to x in gl.
+;; - (id x) denotes an identifier that ought be bound to an image
+
+(define GL0 (img (bitmap/url "https://tinyurl.com/2s46pdp5")))
+(define GL1 (ryan 6))
+(define GL2 (ryan 9))
+(define GL3 (horizontal GL1 GL2))
+(define GL4 (vertical (list GL1 GL2 GL3)))
+(define GL5 (horizontal GL2
+                        (vertical (list GL3 GL1))))
+(define GL6 (vertical (list)))
+
+(define GL7 (id 'Ken))
+(define GL8 (with 'Ken (ryan 4)
+                  (with 'lil-ryan (ryan 11)
+                        (vertical
+                         (list (id 'lil-ryan)
+                               (horizontal (id 'Ken) (id 'lil-ryan))
+                               (horizontal (id 'lil-ryan)
+                                           (horizontal (id 'Ken)
+                                                       (id 'lil-ryan))))))))
+
+
+(define LOGL1 empty)
+(define LOGL2 (list GL3 GL5))
+
+;; PROBLEM 1: Complete the design of the fn-for-gl template.  Replace
+;; (FIXME) with whatever additions are needed (simply delete it if nothing is
+;; needed)
+#;
+(define (fn-for-gl gl)
+  (type-case GL gl
+    [img (i) (... i)]
+    [ryan (i) (... i)]
+    [vertical (gl*) (... (fn-for-logl gl*))]
+    [horizontal (gl1 gl2) (... (fn-for-gl gl1)
+                               (fn-for-gl gl2))]
+    [with (id gl1 gl2) (... id
+                            (fn-for-gl gl1)
+                            (fn-for-gl gl2))]
+    [id (x) (... x)]))
+
+#;
+(define (fn-for-logl logl)
+  (cond [(empty? logl) (...)]
+        [else ; (cons? logl)]
+         (... (fn-for-gl (first logl))
+              (fn-for-logl (rest logl)))]))
+
+
+
+;; Value is Image
+;; interp. the result of evaluating a GL expression
+(define V1 (bitmap "images/ryan1.jpg"))
+(define V2 (bitmap "images/ryan9.jpg"))
+(define V3 (beside V1 V2))
+
+#;
+(define (fn-for-value v)
+  (... v))
+
+
+
+;; GoslingIDX -> Value
+;; produce the ith image of Ryan Gosling
+(define (ryan/gl i)
+  (bitmap/file (format "images/ryan~a.jpg" i)))
+  
+(test (ryan/gl 3) (bitmap/file "images/ryan3.jpg"))
+(test (ryan/gl 9) (bitmap/file "images/ryan9.jpg"))
+      
+
+
+;; (listof Value) -> Value
+;; produce a vertical rendering of the given list of render trees
+(define (vertical/gl v*)
+  (foldr above empty-image v*))
+
+(test (vertical/gl empty) empty-image)
+(test (vertical/gl (list V1)) (above V1 empty-image))
+(test (vertical/gl (list V1 V2)) (above V1 (above V2 empty-image)))
+
+
+
+;; PROBLEM 2: Complete the design of interp/gl.  You will need to design
+;; some helper functions to complete this task: place their designs between
+;; interp/gl and this problem statement. Replace [else (...)] with whatever
+;; is needed for the body of the function.  Add more examples below the
+;; relevant comment.
+;; WARNING: PLAI does not always get image equality correct, e.g.:
+;; > (equal? (beside R1 (above R2 R1) empty-image) (beside R1 (above R2 R1)))
+;; #f
+;; Sometimes you may need to add an empty-image, e.g.:
+;; > (equal? (beside R1 (above R2 R1) empty-image)
+;;           (beside R1 (above R2 R1) empty-image))
+;;#t
+;; A bug report has been filed.
+
+
+;; GL Symbol ImGL -> GL
+;; substitute igl0 for free instances of x0 in gl0
+;(define (subst gl x igl) (img empty-image)) ; stub
+
+(define (subst gl0 x0 igl0)
+  (local [(define (fn-for-gl gl)
+            (type-case GL gl
+              [img (i) (img i)]
+              [ryan (i) i]
+              [vertical (gl*) (vertical (map fn-for-gl gl*))]
+              [horizontal (gl1 gl2) (horizontal (fn-for-gl gl1)
+                                                (fn-for-gl gl2))]
+              [with (x named body)
+                    (with x
+                          (fn-for-gl named)
+                          (if (symbol=? x x0)
+                              body
+                              (fn-for-gl body)))]
+              [id (x) (if (symbol=? x x0)
+                          igl0
+                          (id x))]))]
+    (fn-for-gl gl0)))
+
+;; GL -> Image
+;; produce the proper interpretation of the given GL expression
+
+(define (interp/gl gl)
+  (type-case GL gl
+    [img (i) i]
+    [ryan (i) (ryan/gl i)]
+    [vertical (gl*) (vertical/gl (map interp/gl gl*))]
+    [horizontal (gl1 gl2) (beside (interp/gl gl1)
+                                  (interp/gl gl2))]
+    [with (x gl-named gl-body)
+          (interp/gl (subst gl-body x (img (interp/gl gl-named))))]
+    [id (x) (error 'interp/gl "Unbound identifier: ~a" x)]))
+
+
+(test (interp/gl GL0) (img-i GL0))
+(test (interp/gl GL1) (bitmap/file "images/ryan6.jpg"))
+(test (interp/gl GL2) (ryan/gl 9))
+(test (interp/gl GL3) (beside (interp/gl GL1) (interp/gl GL2)))
+(test (interp/gl GL4) (above (interp/gl GL1)
+                             (above (interp/gl GL2)
+                                    (above (interp/gl GL3) empty-image))))
+(test (interp/gl GL6) empty-image)
+
+;; ADD EXAMPLES THAT COVER MISSING CASES
+
+(test (interp/gl GL7) "Unbound identifier: Ken")
+(test (interp/gl GL8) (above (ryan/gl 4)
+                             (above (beside (ryan/gl 4) (ryan/gl 11))
+                                    (beside (ryan/gl 11)
+                                            (beside (ryan/gl 4)
+                                                    (ryan/gl 11))))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; PARSE-TASTIC!
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Let's make a surface syntax and "parser" for GosLang.
+;; NOTICE THAT GLFS does not have a case corresponding to GL's "img".
+;; This is intentional!  Part of your task is to figure out why.
+
+
+;; Problem 3: Complete the design of the GLFS and LOGLFS data definitions.
+
+;; GosLang-Focused S-Expression (GLFS)
+;; GLFS is one of:
+;; - `{ryan ,GoslingIDX}
+;; - `{vertical ,@LOGLFS}
+;; - `{horizontal ,GLFS ,GLFS}
+;; - `{with {,IDS ,GLFS} ,GLFS}
+;; - `,IDS
+;; - <any other s-expression>
+;; interp. any s-expression, focusing on those representing GosLang expressions
+
+(define GLFS1 '{ryan ,6})
+(define GLFS2 '{ryan ,9})
+(define GLFS3 '{horizontal ,GLFS1 ,GLFS2})
+(define GLFS4 '{vertical ,(cons GLFS1 (cons GLFS2 (cons GLFS3 empty)))})
+(define GLFS5 '{horizontal ,GLFS2
+                        ,{vertical (cons GLFS3 (cons GLFS1 empty))}})
+(define GLFS6 '{vertical ,empty})
+
+(define GLFS7 'Ken)
+(define GLFS8 '{with ,Ken ,{ryan 4}
+                  ,{with ,lil-ryan ,{ryan ,11}
+                        ,{vertical
+                         ,(cons lil-ryan
+                               {horizontal ,Ken ,'lil-ryan}
+                               (cons {horizontal ,lil-ryan
+                                           ,{horizontal ,Ken
+                                                       ,lil-ryan}} empty))}}})
+
+;; LOGLFS is one of:
+;; - empty
+;; - (cons GLFS LOGLFS)
+;; interp. a list of GLFSs
+
+(define LOGLFS1 '{empty})
+(define LOGLFS2 '{(cons GLFS3 (cons GLFS5 empty))})
+
+
+;; PROBLEM 4:  Design a function called parse/gl that converts an s-expression
+;; representation of a GL program into a GL data type, or signals an error if
+;; the input is ill-formed.
+
+
+;; GLFS -> GL
+;; produce a GL value corresponding to the given GL s-expression 
+;; Effect: signals an error if the given s-expression does not represent a GL
+(define (parse sexp) GL0) ;stub
+
+
+;; PROBLEM 5:  Now do the reverse...mostly: design a function called print/gl
+;; produces an s-expression representation of a given GL expression.
+;; If the GL expression has any embedded images, the function should signal
+;; an (error "Embedded Image")
+
+;; GosLang S-Expression (GLS)
+;; GLS is one of:
+;; - `{ryan ,GoslingIDX}
+;; - `{vertical ,@(listof GLS)}
+;; - `{horizontal ,GLS ,GLS}
+;; - `{with {,IDS ,GLS} ,GLS}
+;; - `,IDS
+;; interp. An s-expression representation of a GosLang Expression
+
+;; PROBLEM 5a: provide ample examples for GLS
+
+
+;; <template omitted intentionally>
