@@ -33,9 +33,27 @@
 \end{enumerate}}
 
 \begin{proof}[Solution]\let\qed\relax
-	Trivial, basically just set $\ep = \ep'/20$ or something.
-	Will probably be easier to prove the two directions seperately.
-	ff
+	Assume (a).
+	For any $\ep > 0$,
+	since $x_n$ converges to $\hat{x}$ (and $20\ep>0$),
+	we have that there exists some $N \in \N$
+	such that for all $n > N$,
+	$|x_n - \hat{x}| < 20 \ep$.
+	But since if $n \geq 23N$, it is certainly true that $n > N$,
+	thus $|x_n - \hat{x}| < 20\ep$ for all $n \geq 23N$,
+	which is (b).
+
+	Now assume (b).
+	For any $\ep > 0$,
+	let $\ep' = \frac{\ep}{20}$.
+	We know that there exists $N' \in \N$
+	such that for all $n \geq 23N'$,
+	we have that $|x_n - \hat{x}| < 20\ep' = \ep$.
+	But since $24N' \in \N$,
+	let us fix $N = 24N'$,
+	then for all $n \geq N > 23N'$, we have
+	$|x_n - \hat{x}| < \ep$ again,
+	which, by definition, means $x_n \to \hat{x}$.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -71,6 +89,22 @@ we would write $[0,+\infty)$, not $[0,+\infty]$.)}
 	Either $a_n,b_n$ converge to the same number,
 	then nonempty,
 	or some distance apart, so also nonempty.
+
+	Now assume (b).
+	Consider the sequence of nonempty closed real intervals $I_n$ from the problem statement.
+	Note that $a_n$ and $b_n$ form monotonic sequences.
+	Since in order for $I_n \supseteq I_{n+1}$ to be true,
+	we must have that $a_{n} \geq a_{n+1}$ and $b_{n} \leq b_{n+1}$.
+	Thus, $a_n$ is monotonically decreasing and $b_n$ is monotonically decreasing.
+	Note that the sequence $(a_n)$ must be bounded.
+	We know that any $a_n \leq a_1$ since its monotone decreasing,
+	so its bounded above,
+	and $a_n \geq b_1$,
+	otherwise $b_1 > a_n \geq b_n$,
+	which contradicts our assumption that $b_n$ monotonically increases,
+	so $(a_n)$ is bounded below.
+	Likewise, $(b_n)$ is bounded above and below with the same argument,
+	swapping the $a$'s and $b$'s.
 	ff
 \end{proof}
 \clearpage

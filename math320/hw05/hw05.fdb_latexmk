@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1697013300 "hw05.tex" "hw05.pdf" "hw05" 1697013300 0
+["pdflatex"] 1697067625 "hw05.tex" "hw05.pdf" "hw05" 1697067625 0
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1689853683 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1689853683 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1689853683 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -42,8 +42,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1689853683 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1694484303 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1694500201 6768047 77540929f7d62f2020e85a5c0029da8c ""
-  "hw05.aux" 1697013300 33 e6d77a6cc1977d88a849501f83258f9d "pdflatex"
-  "hw05.tex" 1697013299 7842 326113eb264dd5242e5b4006785b33d1 ""
+  "hw05.aux" 1697067625 33 e6d77a6cc1977d88a849501f83258f9d "pdflatex"
+  "hw05.tex" 1697067625 9147 4a02e1b838798bbfdb366d293c9684a5 ""
   (generated)
   "hw05.aux"
   "hw05.log"
