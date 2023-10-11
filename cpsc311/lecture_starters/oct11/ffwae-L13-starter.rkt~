@@ -1,0 +1,768 @@
+#lang plai
+(require "../util/parsing.rkt")
+(require "../util/test-diverge.rkt")
+(require "../util/env.rkt")
+
+(print-only-errors)
+(define (... . args) (cons '... args)) ;; enables us to use ... in templates
+
+;; FFWAE - FWAE with Fix (self-referential expressions)
+
+
+(define-type FFWAE    
+  [num (n number?)] 
+  [add (lhs FFWAE?) (rhs FFWAE?)]
+  [sub (lhs FFWAE?) (rhs FFWAE?)]
+  [id (name symbol?)]
+  [fun (param symbol?) (body FFWAE?)]
+  [app (rator FFWAE?) (arg FFWAE?)]
+  [if0 (predicate FFWAE?) (consequent FFWAE?) (alternative FFWAE?)]
+  [fix (self symbol?) (body FFWAE?)]
+  [fixFun (self symbol?) (param symbol?) (body FFWAE?)])
+;; interp. expressions in a language that supports applying first-class
+;; functions. Its syntax is defined by the following BNF:
+;; <FFWAE> ::= <num>
+;;           | {+ <FFWAE> <FFWAE>}
+;;           | {- <FFWAE> <FFWAE>}
+;;           | {with {<id> <FFWAE>} <FFWAE>}
+;;           | <id>
+;;           | {if0 <FFWAE> <FFWAE> <FFWAE>}
+;;           | {fun {<id>} <FFWAE>}
+;;           | {<FFWAE> <FFWAE>}
+;;           | {fix <id> <FFWAE>}
+;;           | {fixFun <id> {<id>} <FWAE>}
+;;           | {rec {<id> <FFWAE>} <FFWAE>}
+;; where
+;; {with {x e1} e2} ≡ {{fun {x} e2} e1}
+;; {rec {x e1} e2} ≡ {with {x {fix x e1}} e2}
+;; {fixFun <id> {<id>} <FFWAE>} is equivalent to {fix <id> {fun {<id>} <FFWAE>}}
+
+;; Desugarings: not *really* part of the data definition,
+;; but we use them in some examples.  This demonstrates
+;; that we can encode some language features in terms of a small core
+
+;; produce a FFWAE expression equivalent to a FWAE with expression
+(define (with name named-expr body)
+  (app (fun name body) named-expr))
+
+;; produce a FFWAE expression equivalent to a textbook rec expression
+(define (rec name named-expr body)
+  (with name (fix name named-expr) body))
+
+
+;; Every AE program is a FFWAE program
+(define AE1 (num 4))
+(define AE2 (add AE1 (num 5)))
+(define AE3 (sub (num 6) (num 3)))
+
+;; Every WAE program is an FFWAE program
+(define WAES4 '{with {x {+ 5 5}} {with {y {- x 3}} {+ y y}}})
+(define WAE4 (with 'x (add (num 5) (num 5))
+                   (with 'y (sub (id 'x) (num 3))
+                         (add (id 'y) (id 'y)))))
+
+(define WAES5 '{with {x 5} {+ x {with {x 3} 10}}})
+(define WAE5 (with 'x (num 5) (add (id 'x) (with 'x (num 3) (num 10)))))
+
+(define WAES6 '{with {x 5} {+ x {with {x 3} x}}})
+(define WAE6 (with 'x (num 5) (add (id 'x) (with 'x (num 3) (id 'x)))))
+
+(define WAES7 '{with {x 5} {+ x {with {y 3} x}}})
+(define WAE7 (with 'x (num 5) (add (id 'x) (with 'y (num 3) (id 'x)))))
+
+
+;; Every FWAE program is an FFWAE program
+(define FWAES1 '{fun {x} {+ x x}})
+(define FWAE1 (fun 'x (add (id 'x) (id 'x))))
+
+(define FWAES2 '{fun {x} {+ x 1}})
+(define FWAE2 (fun 'x (add (id 'x) (num 1))))
+
+(define FWAES3 '{fun {x} {+ x y}})
+(define FWAE3 (fun 'x (add (id 'x) (id 'y))))
+
+(define FFWAES1 '{fix f 4})
+(define FFWAE1 (fix 'f (num 4)))
+(define FFWAES2 '{fix f f})
+(define FFWAE2 (fix 'f (id 'f)))
+(define FFWAES3 '{fix a {fix b a}})
+(define FFWAE3 (fix 'a (fix 'b (id 'a))))
+(define FFWAES4
+  '{with {down {fix f {fun {x} {if0 x 9 {f {- x 1}}}}}}
+         {down 1}})
+(define FFWAE4
+  (app (fun 'down (app (id 'down) (num 1)))
+       (fix 'f (fun 'x (if0 (id 'x)
+                            (num 9)
+                            (app (id 'f) (sub (id 'x) (num 1))))))))
+
+(define FFWAES5
+  '{rec {down {fun {x} {if0 x
+                            9
+                            {down {- x 1}}}}}
+     {down 1}})
+(define FFWAE5
+  (app (fun 'down (app (id 'down) (num 1)))
+       (fix 'down (fun 'x (if0 (id 'x)
+                               (num 9)
+                               (app (id 'down) (sub (id 'x) (num 1))))))))
+
+(define FFWAES6
+  '{with {down {fixFun f {x} {if0 x 9 {f {- x 1}}}}}
+         {down 1}})
+
+(define FFWAE6
+  (app (fun 'down (app (id 'down) (num 1)))
+       (fixFun 'f 'x (if0 (id 'x)
+                          (num 9)
+                          (app (id 'f) (sub (id 'x) (num 1)))))))
+
+#;
+(define (fn-for-ffwae f)
+  (type-case FFWAE f
+    [num (n) (... n)]
+    [add (l r) (... (fn-for-ffwae l)
+                    (fn-for-ffwae r))]
+    [sub (l r) (... (fn-for-ffwae l)
+                    (fn-for-ffwae r))]
+    [id (x) (... x)]
+    [fun (x body) (... x
+                       (fn-for-ffwae body))]
+    [app (rator rand) (... (fn-for-ffwae rator)
+                           (fn-for-ffwae rand))]
+    [if0 (p c a)
+         (... (fn-for-ffwae p)
+              (fn-for-ffwae c)
+              (fn-for-ffwae a))]
+    [fix (self body) (... self (fn-for-ffwae body))]
+    [fixFun (self param body)  (... self param (fn-for-ffwae body))]))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Interpretation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;
+;; Substitution-based version
+;;
+
+
+;; FFWAE identifier FFWAE -> FFWAE
+;; naively substitute ffwae2 for free instances of 'x in ffwae1
+(define (subst/ffwae  ffwae1 x ffwae2)
+  (type-case FFWAE ffwae1
+    [num (n) (num n)]
+    [add (l r) (add (subst/ffwae l x ffwae2)
+                    (subst/ffwae r x ffwae2))]
+    [sub (l r) (sub (subst/ffwae l x ffwae2)
+                    (subst/ffwae r x ffwae2))]
+    [id (x0) (if (symbol=? x0 x)
+                 ffwae2
+                 (id x0))]
+    [fun (x0 body)
+         (if (symbol=? x0 x)
+             (fun x0 body)
+             (fun x0 (subst/ffwae body x ffwae2)))]
+    [app (rator rand) (app (subst/ffwae rator x ffwae2)
+                           (subst/ffwae rand x ffwae2))]
+    [if0 (p c a)
+         (if0 (subst/ffwae p x ffwae2)
+              (subst/ffwae c x ffwae2)
+              (subst/ffwae a x ffwae2))]
+    [fix (self body)
+         (if (symbol=? self x)
+             (fix self body)
+             (fix self (subst/ffwae body x ffwae2)))]
+    [fixFun (self param body)
+            (if (or (symbol=? self x)
+                    (symbol=? param x))
+                (fixFun self param body)
+                (fixFun self param (subst/ffwae body x ffwae2)))]))
+
+(test (subst/ffwae (id 'x) 'x (num 1)) (num 1))
+(test (subst/ffwae (id 'x) 'x (num 2)) (num 2))
+
+(test (subst/ffwae (id 'y) 'x (num 1)) (id 'y))
+(test (subst/ffwae (num 10) 'x (num 1)) (num 10))
+(test (subst/ffwae (add (id 'x) (num 10)) 'x (num 2)) (add (num 2) (num 10)))
+
+(test (subst/ffwae (with 'x (num 2) (num 3)) 'x (num 1))
+      (with 'x (num 2) (num 3)))
+(test (subst/ffwae (with 'y (num 2) (num 3)) 'x (num 1))
+      (with 'y (num 2) (num 3)))
+
+(test (subst/ffwae (with 'x (num 2) (id 'x)) 'x (num 1))
+      (with 'x (num 2) (id 'x)))
+
+(test (subst/ffwae (with 'y (num 2) (id 'x)) 'x (num 1))
+      (with 'y (num 2) (num 1)))
+
+(test (subst/ffwae (with 'y (id 'x) (id 'x)) 'x (num 1))
+      (with 'y (num 1) (num 1)))
+
+(test (subst/ffwae (with 'x (id 'x) (id 'x)) 'x (num 1))
+      (with 'x (num 1) (id 'x)))
+
+(test (subst/ffwae (fun 'y (id 'x)) 'x (num 1))
+      (fun 'y (num 1)))
+
+(test (subst/ffwae (app (fun 'y (id 'x)) (id 'x)) 'x (num 1))
+      (app (fun 'y (num 1)) (num 1)))
+
+(test (subst/ffwae (fix 'x (id 'x)) 'x (num 1)) (fix 'x (id 'x)))
+(test (subst/ffwae (fix 'y (id 'x)) 'x (num 1)) (fix 'y (num 1)))
+
+(test (subst/ffwae (fixFun 'f 'x (id 'x)) 'x (num 1)) (fixFun 'f 'x (id 'x)))
+(test (subst/ffwae (fixFun 'f 'x (id 'x)) 'f (num 1)) (fixFun 'f 'x (id 'x)))
+(test (subst/ffwae (fixFun 'f 'x (id 'y)) 'y (num 1)) (fixFun 'f 'x (num 1)))
+
+;;
+;; Type Refinements - We can define new types that are subtypes of
+;;   existing types (similar to what is done in object-oriented languages)
+;;
+
+;; fun is (fun Symbol FFWAE)
+;; interp. a FFWAE function expression
+(define F1 (fun 'x (id 'x)))
+(define (fn-for-fun f)
+  (... (fun-param f)
+       (fun-body f)))
+
+;; num is (num Number)
+;; interp. a FFWAE number expression
+(define N1 (num 9))
+(define (fn-for-num n) (num-n n))
+
+;; NOTE: In the future, we will assume the existence of a same-named
+;;       single-variant type like fun or num.  So every variant introduces
+;;       a same-named type refinement.
+
+
+;; SubstValue is one of
+;; - (num Number)
+;; - (fun Symbol FFWAE)
+;; interp.  possible results of evaluating an FFWAE expression.
+(define SV1 (num 7))
+(define SV2 (fun 'x (add (num 9) (id 'x))))
+
+;; TEMPLATE
+
+(define (fn-for-sv sv)
+  (match sv
+    [(num n) (... n)]
+    [(fun x body) (... x body)]))
+
+;; NOTE: Every SubstValue is-a FFWAE 
+
+;;
+;; SubstValue Operators
+;;
+
+
+;; SubstValue -> Num 
+;; coerce the given value to a number
+;; Effect: signals an error if the value does not represent a number
+(define (svalue->num sv)
+  (match sv
+    [(num n) sv]
+    [(fun x body) (error 'svalue->num "Not a number: ~s" sv)]))
+
+(test (svalue->num (num 9)) (num 9))
+(test/exn (svalue->num (fun 'x (num 9))) "Not a number")
+
+
+;; SubstValue -> fun
+;; coerce the given value to a function
+;; Effect: signals an error if the value does not represent a function
+(define (svalue->fun sv)
+  (match sv
+    [(num n) (error 'svalue->fun "Not a function: ~s" sv)]
+    [(fun x body) sv]))
+
+(test (svalue->fun (fun 'x (num 9))) (fun 'x (num 9)))
+(test/exn (svalue->fun (num 9)) "Not a function")
+
+
+;; SubstValue -> Boolean
+;; produce true if the given value represents 0, else false
+(define (zero-svalue? sv)
+  (match sv
+    [(num n) (zero? n)]
+    [(fun x body) #f]))
+
+(test (zero-svalue? (num 0)) #t)
+(test (zero-svalue? (num 9)) #f)
+(test (zero-svalue? (fun 'x (num 9))) #f)
+
+
+;; SubstValue SubstValue -> SubstValue
+;; apply the first (function) value to the second
+;; Effect: Signals an error if the first value is not a function or if
+;;         subsequent interpretation signals an error
+;(define (apply-svalue svrator svrand) 0)
+(define (apply-svalue svrator svrand)
+  (let ([rator (svalue->fun svrator)]
+        [rand svrand])
+    (interp/ffwae-subst 
+     (subst/ffwae (fun-body rator)
+                  (fun-param rator)
+                  rand))))
+
+;; SubstValue SubstValue -> SubstValue
+;; produce the sum of the given values
+;; Effect: signals an error if either does not represent a number
+(define (add-svalue sv1 sv2)
+  (num (+ (num-n (svalue->num sv1))
+          (num-n (svalue->num sv2)))))
+
+;; SubstValue SubstValue -> SubstValue
+;; produce the difference of the given values
+;; Effect: signals an error if either does not represent a number
+(define (sub-svalue sv1 sv2)
+  (num (- (num-n (svalue->num sv1))
+          (num-n (svalue->num sv2)))))
+
+
+;; FFWAE -> SubstValue
+;; interpret the expression ffwae to a value
+;; Effect: Signals an error on runtime type mismatch
+(define (interp/ffwae-subst ffwae)
+  (type-case FFWAE ffwae
+    [num (n) (num n)]
+    [add (l r) (add-svalue (interp/ffwae-subst l)
+                           (interp/ffwae-subst r))]
+    [sub (l r) (sub-svalue (interp/ffwae-subst l)
+                           (interp/ffwae-subst r))]
+    [id (x) (error 'interp/ffwae-subst "Unbound identifier: ~a" x)]
+    [fun (x0 ffwae1) (fun x0 ffwae1)]
+    [app (rator rand)
+         (let ([vrator (interp/ffwae-subst rator)]
+               [vrand (interp/ffwae-subst rand)])
+           (apply-svalue vrator vrand))]
+    [if0 (p c a)
+         (if (zero-svalue? (interp/ffwae-subst p))
+             (interp/ffwae-subst c)
+             (interp/ffwae-subst a))]
+    [fix (self body)
+         (interp/ffwae-subst (subst/ffwae body self (fix self body)))]
+    [fixFun (self param body)
+            (interp/ffwae-subst (fix self (fun param body)))]))
+
+
+(test/exn (apply-svalue (num 9) (num 10)) "Not a function")
+(test (apply-svalue (fun 'x (id 'x)) (num 12)) (num 12))
+(test (apply-svalue (fun 'x (add (id 'x) (id 'x))) (num 12)) (num 24))
+
+
+(test (interp/ffwae-subst FWAE1) FWAE1)
+
+(test (interp/ffwae-subst (app FWAE1 (num 7)))
+      (num 14))
+(test (interp/ffwae-subst (app FWAE2 (num 7)))
+      (num 8))
+(test/exn (interp/ffwae-subst (app FWAE3 (num 7)))
+          "Unbound")
+
+(test (interp/ffwae-subst FFWAE1) (num 4))
+(test/diverge (interp/ffwae-subst FFWAE2) 5)
+(test/diverge (interp/ffwae-subst FFWAE3) 5)
+(test (interp/ffwae-subst FFWAE4) (num 9))
+(test (interp/ffwae-subst FFWAE5) (num 9))
+
+;; RECURSION, WAT?!?
+;; perplexing even-odd implementation
+(define EVEN-PART (fun 'even-part
+                       (fun 'odd-part
+                            (fun 'x
+                                 (if0 (id 'x)
+                                      (num 1)
+                                      (with 'odd
+                                            (app (app (id 'odd-part)
+                                                      (id 'even-part))
+                                                 (id 'odd-part))
+                                            (app (id 'odd)
+                                                 (sub (id 'x) (num 1)))))))))
+
+(define ODD-PART (fun 'even-part
+                      (fun 'odd-part
+                           (fun 'x
+                                (if0 (id 'x)
+                                     (num 0)
+                                     (with 'even
+                                           (app (app (id 'even-part)
+                                                     (id 'even-part))
+                                                (id 'odd-part))
+                                           (app (id 'even)
+                                                (sub (id 'x) (num 1)))))))))
+
+(define (make-even n)
+  (with 'even-part EVEN-PART
+        (with 'even
+              (app (app (id 'even-part) (id 'even-part)) ODD-PART)
+              (app (id 'even) (num n)))))
+
+
+(test (interp/ffwae-subst (make-even 6)) (num 1))
+(test (interp/ffwae-subst (make-even 9)) (num 0))
+
+;;
+;; Environment-based version
+;;
+
+
+(define-type EnvValue
+  [numV (n number?)]
+  [funV (param symbol?) (body FFWAE?) (env procedure?)])
+;; interp.  Represents a potential value of FFWAE language.
+(define EV1 (numV 7))
+(define EV2 (funV 'x (id 'x) empty-env))
+
+#;
+(define (fn-for-ev ev)
+  (type-case EnvValue ev
+    [numV (n) (... n)]
+    [funV (x body env) (... x
+                            (fn-for-ffwae body)
+                            env)]))
+
+
+(define-type BlackHole
+  [blackHole])
+;; interp. pending recursive value that is not ready for viewing
+
+;; EnvBinding is one of:
+;; - (boxof EnvValue)
+;; - (boxof BlackHole)
+;; - EnvValue
+;; interp. possibly mutable environment binding (to support fix)
+(define EB1 (numV 3))
+(define EB2 (box (numV 3)))
+(define EB3 (box (blackHole)))
+
+#;
+(define (fn-for-eb eb)
+  (match eb
+    [(box ev) #:when (EnvValue? ev) (fn-for-ev ev)]
+    [(box bh) #:when (BlackHole? bh) (...)]
+    [ev (fn-for-ev ev)]))
+
+
+;; EnvBinding -> EnvValue
+;; produce the value underlying the environment binding eb
+;; Effect: signal an error in case of a black hole
+(define (eb->ev eb)
+  (match eb
+    [(box ev) #:when (EnvValue? ev) ev]
+    [(box bh) #:when (BlackHole? bh) (error 'eb->ev "Nooooooooo....")]
+    [ev ev]))
+
+(test (eb->ev (numV 3)) (numV 3))
+(test (eb->ev (box (numV 3))) (numV 3))
+
+
+;; EnvValue -> Number
+;; produce the number represented by the given value
+;; Effect: signal an error if the value does not represent a number
+(define (evalue->number ev)
+  (type-case EnvValue ev
+    [numV (n) n]
+    [funV (x body env) (error 'evalue->num "Bad number: ~a" ev)]))
+
+(test (evalue->number (numV 6)) 6)
+(test (evalue->number (numV 9)) 9)
+(test/exn (evalue->number (funV 'x (id 'x) empty-env)) "Bad number")
+
+;; EnvValue -> funV
+;; produce the closure represented by the given value
+;; Effect: signal an error if the value does not represent a closure
+(define (evalue->funV ev)
+  (type-case EnvValue ev
+    [numV (n) (error 'evalue->num "Bad function: ~a" ev)]
+    [funV (x body env) ev]))
+
+(test/exn (evalue->funV (numV 6)) "Bad function")
+(test (evalue->funV (funV 'x (id 'x) empty-env))
+      (funV 'x (id 'x) empty-env))
+
+  
+;; (Number Number -> Number) EnvValue EnvValue  -> EnvValue
+;; apply num-op to the numbers represented by ev1 and ev2
+;; Effect: signal an error if either argument does not represent a number
+(define (op-evalue num-op ev1 ev2)
+  (let ([n1 (evalue->number ev1)]
+        [n2 (evalue->number ev2)])
+    (numV (num-op n1 n2))))
+
+(test (op-evalue * (numV 5) (numV 6)) (numV 30))
+(test/exn (op-evalue * (numV 5) (funV 'x (id 'x) empty-env)) "Bad number")
+(test/exn (op-evalue * (funV 'x (id 'x) empty-env) (numV 6)) "Bad number")
+(test/exn (op-evalue * (funV 'x (id 'x) empty-env)
+                     (funV 'x (id 'x) empty-env)) "Bad number")
+
+  
+;; EnvValue EnvValue -> EnvValue
+;; produce the sum of two numbers
+;; Effect: signal an error if either argument does not represent a number
+(define (add-evalue ev1 ev2)
+  (op-evalue + ev1 ev2))
+
+(test (add-evalue (numV 5) (numV 6)) (numV 11))
+(test/exn (add-evalue (numV 5) (funV 'x (id 'x) empty-env)) "Bad number")
+(test/exn (add-evalue (funV 'x (id 'x) empty-env) (numV 6)) "Bad number")
+(test/exn (add-evalue (funV 'x (id 'x) empty-env)
+                      (funV 'x (id 'x) empty-env)) "Bad number")
+
+
+;; EnvValue EnvValue -> EnvValue
+;; produce the difference of two numbers
+;; Effect: signal an error if either argument does not represent a number
+(define (sub-evalue ev1 ev2)
+  (op-evalue - ev1 ev2))
+
+(test (sub-evalue (numV 5) (numV 6)) (numV -1))
+(test/exn (sub-evalue (numV 5) (funV 'x (id 'x) empty-env)) "Bad number")
+(test/exn (sub-evalue (funV 'x (id 'x) empty-env) (numV 6)) "Bad number")
+(test/exn (sub-evalue (funV 'x (id 'x) empty-env)
+                      (funV 'x (id 'x) empty-env)) "Bad number")
+
+
+;; EnvValue -> boolean
+;; produce true if ev1 represents the number zero, else false
+(define (zero-evalue? ev)
+  (type-case EnvValue ev
+    [numV (n) (zero? n)]
+    [funV (x body env) #f]))
+
+(test (zero-evalue? (numV 7)) #f)
+(test (zero-evalue? (numV 0)) #t)
+(test (zero-evalue? (funV 'x (id 'x) empty-env)) #f)
+
+;; Symbol (envof EnvBinding) -> EnvValue
+;; produce the value corresponding to x in env
+;; Effect: signal an error if x is unbound in env
+(define (interp-id x env)
+  (with-handlers ([exn:fail?
+                   (λ (e)
+                     (error 'interp/ffwae-env "Unbound identifier: ~a" x))])
+    (eb->ev (lookup-env env x))))
+
+;; Symbol Symbol FFWAE (envof EnvValue) -> EnvValue
+;; produce a recursive function resulting from (fixFun f x body) in env
+(define (interp-fixFun f x body env)
+  (error 'interp-fixFun "IMPLEMENT ME!"))
+
+;; FFWAE -> EnvValue
+;; interpret the given ffwae expression
+;; Effect: signals an error in case of runtime error.
+(define (interp/ffwae-env ffwae0)
+  ;; Accumulator: env is (envof EnvBinding)
+  ;; Invariant: env represents the bindings (in inside-out order)
+  ;;            of identifiers to values due to deferred substitutions
+  (local [;; EnvValue EnvValue -> EnvValue
+          ;; produce the result of applying ev-rator to ev-rand
+          ;; Effect: signals an error in case of runtime error.
+          (define (apply-evalue ev-rator ev-rand)
+            (match (evalue->funV ev-rator)
+              [(funV x ev-body env) 
+               (interp-env ev-body (extend-env env x ev-rand))]))
+
+          ;; Symbol FFWAE (envof EnvBinding) -> EnvValue
+          ;; produce the result of (fix self body) in env
+          ;; Effect: signals an error in case of runtime error.
+          (define (interp-fix self body env)
+            (error 'interp-fix "IMPLEMENT ME!"))
+          
+          (define (interp-env f env)
+            (type-case FFWAE f
+              [num (n) (numV n)]
+              [add (l r) (add-evalue (interp-env l env)
+                                     (interp-env r env))]
+              [sub (l r) (sub-evalue (interp-env l env)
+                                     (interp-env r env))]
+              [id (x) (interp-id x env)]
+              [fun (x body)
+                   (funV x body env)]
+              [app (rator rand)
+                   (apply-evalue (interp-env rator env)
+                                 (interp-env rand env))]
+              [if0 (p c a)
+                   (if (zero-evalue? (interp-env p env))
+                       (interp-env c env)
+                       (interp-env a env))]
+              [fix (self body) (interp-fix self body env)]
+              [fixFun (self param body)
+                      (interp-fixFun self param body env)]))]
+    (interp-env ffwae0 empty-env)))
+
+(test (interp/ffwae-env FFWAE1) (numV 4))
+(test/exn (interp/ffwae-env FFWAE2) "Unbound") ;; doesn't diverge!!
+(test/exn (interp/ffwae-env FFWAE3) "Unbound") ;; doesn't diverge!!
+(test (interp/ffwae-env FFWAE4) (numV 9))
+(test (interp/ffwae-env FFWAE5) (numV 9))
+(test (interp/ffwae-env FFWAE6) (numV 9))
+
+;; A little home-grown recursion
+(test (interp/ffwae-env (make-even 6)) (numV 1))
+(test (interp/ffwae-env (make-even 9)) (numV 0))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Parsing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ffwaefs is one of:
+;; - number
+;; - `{+ ,ffwaefs ,ffwaefs}
+;; - `{- ,ffwaefs ,ffwaefs}
+;; - `{with {,identifier ,ffwaefs} ,ffwaefs}
+;; -  identifier
+;; - `{if0 ,ffwaefs ,ffwaefs ,ffwaefs}
+;; -  {fun ,identifier ,ffwaefs}
+;; - `{,ffwaefs ,ffwaefs}
+;; - `{fix ,identifier ,ffwaefs}
+;; - `{fixFun ,identifier {,identifier} ,ffwaefs}
+;; - `{rec {,identifer ,ffwaefs} ,ffwaefs}
+;; - <any other s-expression>
+;; where identifier is any symbol except '+, '-, 'with, 'if0, 'fun,
+;; 'fixFun, or 'rec
+;; interp.  any s-expression, but with a focus on those that represent
+;; FFWAE expressions.
+
+(define (identifier? x)
+  (and (symbol? x)
+       (not (member x '(+ - with if0 fun fixFun rec)))))
+
+#;
+(define (fn-for-ffwaefs ffwaefs)
+  (match ffwaefs
+    [`,n
+     #:when (number? n)
+     (... n)]
+    [`{+ ,ffwaefs1 ,ffwaefs2}
+     (... (fn-for-ffwaefs ffwaefs1)
+          (fn-for-ffwaefs ffwaefs2))]
+    [`{- ,ffwaefs1 ,ffwaefs2}
+     (... (fn-for-ffwaefs ffwaefs1)
+          (fn-for-ffwaefs ffwaefs2))]
+    [`{with {,x ,ffwaefs1} ,ffwaefs2}
+     #:when (identifier? x)
+     (... x
+          (fn-for-ffwaefs ffwaefs1)
+          (fn-for-ffwaefs ffwaefs2))]
+    [`,x
+     #:when (identifier? x)
+     (... x)]
+
+    [`{if0 ,ffwaefs1 ,ffwaefs2 ,ffwaefs3}
+     (... (fn-for-ffwaefs ffwaefs1)
+          (fn-for-ffwaefs ffwaefs2)
+          (fn-for-ffwaefs ffwaefs3))]
+    [`{fun {,x} ,ffwaefs1}
+     #:when (identifier? x)
+     (... x
+          (fn-for-ffwaefs ffwaefs1))]
+    [`{,ffwaefs1 ,ffwaefs2}
+     (... (fn-for-ffwaefs ffwaefs1)
+          (fn-for-ffwaefs ffwaefs1))]
+    [`{fix ,x ,ffwaefs}
+     #:when (identifier? x)
+     (... x
+          (fn-for-ffwaefs ffwaefs))]
+    [`{fixFun ,f {,x} ,ffwaefs}
+     #:when (and (identifier? f) (identifier? x))
+     (... f
+          x
+          (fn-for-ffwaefs ffwaefs))]
+    [`{rec {,x ,ffwaefs1} ,ffwaefs2}
+     #:when (identifier? x)
+     (... x
+          (fn-for-ffwaefs ffwaefs1)
+          (fn-for-ffwaefs ffwaefs2))]
+    [else (... ffwaefs)] ))
+
+
+
+;; S-expression -> FFWAE
+;; parse the given s-expression into a FFWAE expression
+;; EFFECT: signals an error on failure
+(define (parse/ffwae ffwaefs)
+  (match ffwaefs
+    [`,n #:when (number? n) (num n)]
+    [`{+ ,lhs ,rhs} (add (parse/ffwae lhs) (parse/ffwae rhs))]
+    [`{- ,lhs ,rhs} (sub (parse/ffwae lhs) (parse/ffwae rhs))]
+    [`{with {,id ,named-exp} ,body}
+     #:when (identifier? id)
+     (with id (parse/ffwae named-exp)
+           (parse/ffwae body))]
+    [`,x #:when (identifier? x) (id x)]
+    [`{if0 ,pred ,conseq ,altern}
+     (if0 (parse/ffwae pred) (parse/ffwae conseq) (parse/ffwae altern))]
+    [`{fun {,x} ,body}
+     #:when (identifier? x)
+     (fun x
+          (parse/ffwae body))]
+    [`{,rator-exp ,arg-exp} 
+     (app (parse/ffwae rator-exp) (parse/ffwae arg-exp))]
+    [`{fix ,x ,body}
+     #:when (identifier? x)
+     (fix x (parse/ffwae body))]
+    [`{fixFun ,f {,x} ,body}
+     #:when (and (identifier? f) (identifier? x))
+     (fixFun f x (parse/ffwae body))]
+    [`{rec {,x ,named} ,body}
+     #:when (identifier? x)
+     (with x (fix x (parse/ffwae named))
+           (parse/ffwae body))]
+    [_ (error 'parse "Bad expression ~a" ffwaefs)]))
+
+
+(test (parse/ffwae WAES4) WAE4)
+(test (parse/ffwae WAES5) WAE5)
+
+(test (parse/ffwae FWAES1) FWAE1)
+(test (parse/ffwae FWAES2) FWAE2)
+(test (parse/ffwae FWAES3) FWAE3)
+
+(test (parse/ffwae FFWAES1) FFWAE1)
+(test (parse/ffwae FFWAES2) FFWAE2)
+(test (parse/ffwae FFWAES3) FFWAE3)
+(test (parse/ffwae FFWAES4) FFWAE4)
+(test (parse/ffwae FFWAES5) FFWAE5)
+(test (parse/ffwae FFWAES6) FFWAE6)
+
+;;
+;; PUTTING IT ALL TOGETHER  - an interpreter of files on disk
+;;
+
+;; String -> Number
+;; produce the result of interpreting the FFWAE stored in the file fname
+;; EFFECT: signals an error if no file fname contains an AE representation
+;;         or if the program does not evaluate to a number
+;;         or if interpretation signals a runtime error.
+(define (interp-file fname)
+  (evalue->number
+   (interp/ffwae-env
+    (parse/ffwae
+     (read-from-file fname)))))
+
+(test (with-temporary-data-file "{+ 3 7}\n"
+        (λ (fname) (interp-file fname)))
+      10)
+
+(test (with-temporary-data-file "{+ {- 3 4} 7}\n"
+        (λ (fname) (interp-file fname)))
+      6)
+
+(test (with-temporary-data-file "{with {x 5} {+ x {with {y 3} x}}}"
+        (λ (fname) (interp-file fname)))
+      10)
+
+(test (with-temporary-data-file
+          "{with {double {fun {x} {+ x x}}} {with {x 5} {double x}}}"
+        (λ (fname) (interp-file fname)))
+      10)
+
+
+
+
+

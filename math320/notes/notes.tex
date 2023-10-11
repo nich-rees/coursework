@@ -643,4 +643,112 @@ But we will show the two defintions are equivalent.
 Read notes for proof.
 
 Next time: we are doing half the job of constructing the reals. The other half is on HW5.
+
+\section{October 11}
+\subsection{Homework Tips}
+Make $\liminf_{n\to\infty}x_n$ and $\liminf_{n\to\infty}x_n$ your main tools.
+Just writing $\lim_{n\to\infty} x_n$ requires prior work to show it exists.
+But $\limsup$ $\liminf$ always take on a value in $\R \cup\{\pm \infty\}$.
+And exactly when $\limsup_{n\to\infty}x_n = \liminf_{n\to\infty} x_n$
+(then they are equal).
+
+\begin{lemma}
+	If real sequences $(x_n),(y_n)$ obey
+	$\forall N \in \N \colon x_n \leq y_n, \forall n \geq N,$
+	then
+	\[
+		\liminf_{n\to\infty}x_n \leq \liminf_{n\to\infty}y_n
+	\]
+	\[
+		\limsup_{n\to\infty}x_n \leq \limsup_{n\to\infty}y_n
+	\]
+\end{lemma}
+Proof in Canvas notes.
+[But note: knowing $x_n < y_n$ is NOT ENOUGH to get ``$<$" in results above,
+e.g. $x_n = -\frac{1}{n}$, $y_n = 0$.]
+We can use this to supercharge Squeeze Theorem ideas.
+Imagine trying to show $\lim_{n\to\infty} x_n = L$
+for a given sequence $x_n$, some $L \in \R$.
+It would suffice to show
+\[
+	L \leq \liminf_{n\to\infty} x_n \leq \limsup_{n\to\infty}x_n \leq L
+\]
+(the middle inequality is by definition).
+This is equivalent to
+\[
+	\forall \ep > 0, L-\ep \leq \liminf_{n\to\infty} x_n \leq \limsup_{n\to\infty}x_n \leq L + \ep\quad (**)
+\]
+
+With squeeze idea,
+can cook up your own sequences $a_n \to L$ and $b_n \to L$ and show
+\[
+	\forall \ep > 0, \exists N \in \N \colon a_n -\ep \leq x_n \leq b_n + \ep, \forall n \geq N
+\]
+If you can arrange this inequality,
+say ``fix $\ep > 0$,
+take $\limsup$,$\liminf$ on $n$ to get $(**)$.
+Works for each $\ep > 0$, so done."
+Loewen was making homework problems,
+and when he was doing solves to make sure it was possible,
+this trick came up again and again to show something about the $\lim_{n\to\infty}x_n$.
+
+\subsection{Constructing $\R$}
+Before next class, make sure to have read the homework problems.
+
+We want some mathematical structure that does what we want the real numbers to do.
+We propose sets of Cauchy sequeunces.
+We will tell when they're equal, how to do arithmetic on them,
+when one is bigger than the other,
+and they get us the least upper bound property.
+Will probably take us all of today and tomorrow.
+
+\subsubsection{Notation}
+$CS(\Q)\colon$ the set of all Cauchy sequences with entries in $\Q$\newline
+$x,y,z\colon$ typical sequence names, e.g., $x = (x_1,x_2,\dots)$.\newline
+$R[x] = \left\{x' \in CS(\Q) \colon
+\lim_{n\to\infty}\lvert x'_n - x_n \rvert = 0\right\}$.\newline
+$\mathcal{R} = \{R[x] \colon x \in CS(\Q)\}$, our model for $\R$\newline
+$\Phi \colon \Q \to \mathcal{R}$, defined by $\Phi(q) = R[(q,q,\dots)]$
+
+\subsubsection{Equality}
+For $x,x' \in CS(\Q)$ define a relation ``$\sim$" by
+$x' \sim x \iff \lim_{n\to\infty}|x'_n - x_n| = 0$.
+This is an ``equivalence relation" (RST)
+and the sets $R[x]$ are its the equivalence classes.
+
+\subsubsection{Addition}
+We already did a homework that we handed in last weekend,
+where we could extend the idea of adding two Cauchy sequences.
+For $x,y \in CS(\Q)$, we defined
+\[
+	x + y = (x_1 + y_1, x_2 + y_2, \dots)
+\]
+The result is in $CS(\Q)$ by HW04, Question 6(a).
+
+Now boost the definition to $\mathcal{R}$, hoping for
+\[
+	R[x] + R[y] = R[x+y], \quad x,y\in CS(\Q)
+\]
+\begin{proposition}
+	This ``$+$" is well-defined (between Cauchy sequences??).
+	That is, if $x,x',y,y' \in CS(\Q)$ obey $R[x]=R[x'], R[y]=R[y']$,
+	then
+	\[
+		R[x+y] = R[x'+y']
+	\]
+\end{proposition}
+\begin{proof}
+	With $x,x',y,y'$ a above,
+	pick any $z' \in R[x'+y']$.
+	To show $z' \in R[x+y]$, use the properties
+	\begin{align*}
+		z' \in R[x'+y'] &\iff z'_n-(x'_n+y'_n) \to 0\\
+		x' \in R[x'] = R[x] &\iff x'_n - x_n \to 0\\
+		y' \in R[y'] = R[y] &\iff y'_n - y_n \to 0\\
+	\end{align*}
+	thus $z'_n - (x_n + y_n) = z'_n - (x'_n+y'_n) + (x'_n-x_n) + (y'_n-y_n)$,
+	So (sum rule for limites) $z'_n - (x_n + y_n) \to 0$,
+	i.e. $z' \in R[x+y]$.
+	But $z'$ ff photo
+\end{proof}
 \end{document}
