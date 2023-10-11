@@ -1,0 +1,248 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 5}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it Consider a real-valued sequence $(x_n)$ and a real number $\hat{x}$.
+	Prove that the following are equivalent:
+\begin{enumerate}
+	\item $x_n \to \hat{x}$,
+	\item $\forall \ep > 0, \exists N \in \N \colon
+		\forall n \geq 23N, |x_n - \hat{x}| < 20\ep$.
+\end{enumerate}}
+
+\begin{proof}[Solution]\let\qed\relax
+	Trivial, basically just set $\ep = \ep'/20$ or something.
+	Will probably be easier to prove the two directions seperately.
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it Extend our collection of equivalent formulations of
+the completeness property for $\R$ by proving
+that the following are equivalent (TFAE).
+Proceed directly, without relying on the completeness property in one of its other forms.
+(So, for example, do not assume existence of suprema and infima.)
+\begin{enumerate}
+	\item For any sequence of nonempty closed real intervals
+		$I_1 [a_1,b_1], I_2=[a_2,b_2], \dots$,
+		such that $I_1 \supseteq I_2 \supseteq I_3 \supseteq \cdots$
+		(such intervals are called ``nested"), one has
+		\[
+			\bigcap_{n\in\N} I_n \neq \emptyset
+		\]
+	\item Every bounded monotonic sequence in $\R$ converges.
+		(Recall Rudin's Definition 3.13.)
+\end{enumerate}
+(\emph{Note}: The inverval notation $[a,b] = \{t \in \R\colon a \leq t \leq b\}$
+is reserved for the case where both $a$ and $b$ are real numbers.
+To encode $\{t \in \R \colon t \geq 0\}$, for example,
+we would write $[0,+\infty)$, not $[0,+\infty]$.)}
+
+\begin{proof}[Solution]\let\qed\relax
+	Backwards direction:
+	$a_n$ and $b_n$ are bounded monotone sequences
+	($a_n$ and $b_n$ are reals,
+	so bounded above/below,
+	and bounded below/above by each other).
+	Either $a_n,b_n$ converge to the same number,
+	then nonempty,
+	or some distance apart, so also nonempty.
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\noindent{\it Note: Questions 3-6 contribute to the major project of constructing $\R$ from $\Q$.
+Therefore they must be completed entirely in the context of the ratoinal numbers.
+Present solutions that make no reference at all to the completeness property of $\R$,
+in any of its equivalent forms.}
+
+\subsection*{Problem 3}
+{\it Introduce the following notation:\newline
+$CS(\Q)\colon$ the set of all Cauchy sequences with rational elements.\newline
+$x,y,z\colon$ typical symbols for elements of $CS(\Q)$.
+Thus, e.g., $x = (x_1,x_2,\dots)$.\newline
+$R[x]\colon$ the subset of $CS(\Q)$ associated with a given $x \in CS(\Q)$ as follows:
+\[
+	R[x] = \left\{x' \in CS(\Q) \colon \lim_{n\to\infty}\lvert x'_n - x_n \rvert = 0\right\}.
+\]
+$\Phi \colon$ the function that takes each rational number $q$ into
+the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
+\[
+	\Phi(q) = R[(q,q,\dots)] \quad \forall q \in \Q
+\]
+\begin{enumerate}
+	\item Prove: $R[x] \neq \emptyset$ for every $x \in CS(\Q)$.
+	\item Prove: For any $x,y \in CS(\Q)$, $R[x] = R[y] \iff R[x]\cap R[y] \neq \emptyset$
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Define $x'$ where $x'_n = \begin{cases}
+			x_n+1 &\text{if }n=1\\
+			x_n &\text{if }n>1
+		\end{cases}$.
+		Then for any $n > 1$, $|x'_n - x_n| = 0$,
+		so $\lim_{n\to\infty}|x'_n - x_n| = 0$,
+		thus $x' \in R[x]$.
+		And so $R[x] \neq \emptyset$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Something about converging to the same value.ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 4}
+{\it Continue with the notation from Question 3.
+	We would like to define a relatoin denoted ``$<$" on $\Q^*$ as follows:
+	\[
+		R[x] < R[y] \iff \exists r > 0 (r \in \Q), \exists N \in \N
+		\colon \forall n > N, y_n - x_n > r
+	\]
+	This relation looks like one that is familiar for rational numbers,
+	but here it compares two \emph{sets}.
+	Each of the properties we take for granted when manipulating inequalities
+	relating numbeers requires careful thinking in this new context.
+	Prove the following.
+\begin{enumerate}
+	\item Whenever $R[x'] = R[x]$ and $R[y'] = R[y]$
+		for some given $x,x',y,y' \in CS(\Q)$,
+		the definition proposed above gaurantees that
+		\[
+			R[x'] < R[y'] \iff R[x] < R[y].
+		\]
+		(that is, the proposed definition is unambiguous.
+		Or, more conventionally,
+		``the relation $<$ is well-defined".)
+	\item If $x,y,z \in CS(\Q)$ obey $R[x] < R[y]$ and $R[y] < R[z]$,
+		then $R[x] < R[z]$.
+	\item The inequality $R[x] < R[x]$ never happens, for any $x \in CS(\Q)$.
+	\item For any $p,q \in \Q$, we have $p<q \iff \Phi(p) < \Phi(q)$.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 5}
+{\it Continue with the notation from Questions 3 and 4. Prove the following:
+\begin{enumerate}
+	\item For any $x \in CS(\Q)$, exactly one of the following holds:
+		\[
+			R[x] < \Phi(0), \qquad R[x] = \Phi(0), \qquad \Phi(0) < R[x]
+		\]
+	\item For each $x$ in $CS(\Q)$, there exist $q,r\in\Q$
+		such that $\Phi(q) < R[x] < \Phi(r)$.
+	\item For any $x,y \in CS(\Q)$ with $R[x] < R[y]$,
+		there exists $q \in \Q$ such that $R[x] < \Phi(q) < R[y]$.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof} 
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 6}
+{\it Continue with the notation from Questions 3 and 4. Prove the following:
+\begin{center}
+	If $x \in CS(\Q)$ has $R[x] \neq \Phi(0)$,
+	then there exists $z \in CS(\Q)$ for which $R[x\cdot z] = \Phi(1)$.
+\end{center}
+Here $x \cdot z$ denotes the sequence whose $n$th term is $x_nz_n$.
+(Recall from Assignment 4, Question 6,
+that $x\cdot z \in CS(\Q)$ whenever $x,z \in CS(\Q)$.)}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 7}
+{\it [Rudin problem 3.5]
+For any two real sequences $(a_n)$ and $(b_n)$, prove that the inequality
+\[
+	\limsup_{n\to\infty}(a_n + b_n) \leq \limsup_{n\to\infty}a_n + \limsup_{n\to\infty}b_n
+\]
+holds whenever the right side is not of the form $(+\infty) + (+\infty)$.
+Give a specific example to show that inequality may hold.}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 8}
+{\it Let $X$ denote the collection of all functions $f \colon [0,1] \to \R$
+for which the set of real numbers $f([0,1]) = \{f(x) \colon x \in [0,1]\}$ is bounded.
+For each $f \in X$, define
+\[
+	\lVert f \rVert = \sup\{|f(x)| \colon x \in [0,1]\}
+\]
+Prove that for all rael $c$ and all $f,g,h \in X$,
+\begin{enumerate}
+	\item $\lVert cf \rVert = |c|\lVert f \rVert$,
+	\item $\lVert f + g \rVert \leq \lVert f \rVert + \lVert g \rVert$,
+	\item $\lVert f - h \rVert - \lVert g - h\rVert \leq \lVert f - g\rVert$.
+\end{enumerate}
+Give an example where (b) holds as a strict inequality (``$<$").}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof} 
+\end{enumerate}
+
+\end{document}
