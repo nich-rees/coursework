@@ -58,9 +58,23 @@
 	Thus $E_n \subseteq A_n$.
 	
 	Now let $\alpha \in A_n$.
-	Note that for any $\alpha$,
-	we can write it as $(i \; \alpha(i))(\alpha(i) \; \alpha^2(i)) \cdots$.
-	And then pair up... comeback after question 5.
+	Note that by the first part of question 5 of this homework,
+	we can decompose $\alpha$ into a product of transpositions of the form $(1\;m)$
+	where $1 \leq m \leq n$
+	(it is fine to cite this solution;
+	my solution to 5 does not rely on this problem,
+	and if I really wanted to,
+	I could write the proof of 5 above this).
+	Note that this will always be an even number of transpositions,
+	by the definition of $\alpha$ being even.
+	Now, consider pairing up neighbouring elements $(1 \; m_1)(1 \; m_2)$
+	from the decomposition of $\alpha$
+	(and each will have a pair by evenness of number of transpositions).
+	Then we can rewrite this as $(1 \; m_1)(1 \; m_2) = (1\; m_2 \; m_1)$ (one can easily verify this is true).
+	But then $\alpha$ can just be written as a product of $3$-cycles,
+	so $\alpha \in E_n$.
+	Thus $A_n \subseteq E_n$ since $\alpha$ was arbitrary.
+	This shows that $A_n = E_n$.
 \end{proof}
 
 \subsection*{Problem 3 (Ch. 1.6)}
@@ -158,8 +172,11 @@
 $(12), (13), \cdots, (1n)$ and also by the $n-1$ transpositions
 $(12),(23),\cdots,(n-1n)$.}
 \begin{proof}[Solution]\let\qed\relax
-	Let $\alpha \in S_n$ be an arbitrary permutation.
+	First note that $\langle(12),\dots,(1n)\rangle \subseteq S_n$.
+	This follows from the definition of $S_n$.
 
+	Now, let $\alpha \in S_n$ be an arbitrary permutation.
+\iffalse
 	We can decompose $\alpha$ into a unique composition of disjoint cycles,
 	explicitly, if there are $m$ many cycles:
 	\[
@@ -178,10 +195,99 @@ $(12),(23),\cdots,(n-1n)$.}
 	thus they the same if there is no such $i$).
 	If $i \not\in \{i_1^{j},i_2^{j},\dots,i_{r_j}^j\} \cup \{1\}$,
 	then the permutation on either side maps this to itself.
-	Now if $i = 1$, we have that $1$ first gets transposed to $i^j_{r_j}$,
-	and then gets transposed back to $1$ 
+	Now if $i = 1$,
+	the permutation on the left maps $1$ to itself,
+	and the permutation on the right first transposes $1$ to $i^j_{r_j}$,
+	and then it gets transposed back to $1$,
+	since no other transposition maps $i^j_{r_j}$ anywhere;
+	thus the permutations affect $1$ the same.
+	Finally, if $i \in \{i_1^{j},i_2^{j},\dots,i_{r_j}^j\}$,
+	we can write this $i = i_k^j$.
+	The permutation on the left will map this to $i_{k+1}^j$ (or $i_1^j$ if $k=r$).
+	To consider the permutation on the right,
+	note that only $(1i^j_{k+1})(1i^j_k)$ alters the position of $i^j_k$
+	(after this, $i^j_k$ is in the $i^j_{k+1}$th position,
+	which never gets transposed again,
+	since $1$ is not in the cycle).
+	This maps $i^j_k$ to $i^j_{k+1}$
+	(again treating $i^j_{r+1} = i^j_1$).
+	But then the two permutations affect $i_k$ the same,
+	thus the two permutations are equal.
 
-	ff Don't forget two way set inclusion.
+	Now, if the $j$th cycle has $1$ in it, namely $1 \in \{i_1^j,i_2^j\dots,i_{r_j}^j\}$,
+	then the $j$th cycle is
+	\[
+		(i_1^j i_2^j \cdots i_{r_j}^j) = (1 i_1^j)(1 i_{r_j}^j) (1 i_{r_j-1}^j) \cdots(1 i_2^j)
+	\]
+	As before, if $i \not\in \{i_1^j,\dots,i_{r_j}^j\}$,
+	then the permutations on either side will map $i$ to itself.
+	Now let $i \in \{i_1^j,\dots,i_{r_j}^j\}$.
+	We can denote this as $i = i_k^j$.
+	The permutation on the left will map this to $i_{k+1}^j$ (or $i_1^j$ if $k=r$).
+	To consider the permutation on the right,
+	note that only $(1i^j_{k+1})(1i^j_k)$ alters the position of $i^j_k$
+	(after this, $i^j_k$ is in the $i^j_{k+1}$th position,
+	which never gets transposed again).
+	This maps $i^j_k$ to $i^j_{k+1}$
+	(again treating $i^j_{r+1} = i^j_1$).
+	But then the two permutations affect $i_k$ the same,
+	thus the two permutations are equal.
+
+	Regardless, in either case, any arbitrary cycle can be decomposed
+	as products of $(12),\dots,(1n)$,
+	thus $\alpha \in \langle (12),\dots,(1n)\rangle$,
+	so $S_n \subseteq \langle (12),\dots,(1n)\rangle$.
+	Therefore,
+	we have shown $S_n = \langle (12),\dots,(1n)\rangle$.
+\fi
+	It was shown in Jacobson that we can decompose any $\alpha$
+	into a product of transpositions.
+	But for any transposition $(a \; b)$, $a,b \in \{1,\dots,n\}$,
+	we can easily see that $(a\; b) = (1\; a)(1 \; b)(1 \; a)$
+	(one can easily verify this is true).
+	But this applies to every transposition in the decomposition of $\alpha$,
+	thus $\alpha$ can be decomposed in terms of a product of elements
+	of the form $(1\; a)(1 \; b)(1 \; a)$.
+	But then $\alpha \in \langle (12),\dots,(1n)\rangle$,
+	so $S_n \subseteq \langle (12),\dots,(1n)\rangle$.
+	Therefore,
+	we have shown $S_n = \langle (12),\dots,(1n)\rangle$.
+
+	We now seek to prove $S_n = \langle (12),(23),\dots,(n-1 n)\rangle$.
+	Note that $\langle(12),(23),\dots,(n-1n)\rangle \subseteq S_n$,
+	by definition of $S_n$.
+	So it sufficies to prove that $S_n \subseteq \langle (12),(23),\dots,(n-1 n)\rangle$.
+	But since we have just shown $S_n = \langle (12),\dots,(1n)\rangle$,
+	it suffices to prove that $\langle (12),\dots,(1n)\rangle
+	\subseteq \langle (12),(23),\dots,(n-1 n)\rangle$.
+	Consider $(1m)$ where $1 \leq m \leq n$.
+	Then
+	\[
+		(1m) = (m-1 \;m)(m-2\; m-1)\cdots (23)(12)(23)\cdots (m-2\; m-1)(m-1\; m)
+	\]
+	One can check this by manually checking that both sides of the equality map each element $i \in \{1,2,\dots,n\}$
+	to the same element
+	(since for any two distinct elements in $S_n$,
+	there exists $i\in \{1,2,\dots,n\}$ where they
+	map $i$ to a different element in $\{1,2,\dots,n\}$,
+	thus they are the same if there is no such $i$).
+	First, note that if $i \neq 1,m$,
+	then $i$ is mapped to itself with the permutation on both sides of the equality.
+	If $i = 1,m$, the permutation on the left transposes them.
+	The permutation on the right maps $m$ to $1$,
+	since $m$ gets mapped to the integer directly below it with each transposition
+	until $(12)$,
+	and then $1$ is never permuted again, so $m$ stays at $1$;
+	and it maps $1$ to $m$,
+	since it is not transposed before $(12)$,
+	and then after,
+	each transposition maps it to the integer directly above it until it reaches $m$.
+	Thus the permutations on either side of the equality are equal.
+	But since $m$ was arbitrary,
+	any element in $\langle (12),\dots,(1n)\rangle$ can be written as a product of
+	transpositions from $\{(12),(23),\dots,(n-1\;n)\}$,
+	thus $\langle (12),\dots,(1n)\rangle \subseteq \langle(12),(23),\dots,(n-1\;n)\rangle$.
+	And so we have $S_n \subseteq \langle(12),(23),\dots,(n-1\;n)\rangle$,
+	therefore $S_n = \langle(12),(23),\dots,(n-1\;n)\rangle$.
 \end{proof}
-
 \end{document}
