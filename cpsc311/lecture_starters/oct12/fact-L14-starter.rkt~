@@ -1,0 +1,11 @@
+#lang plai
+(define (... . args) (cons '... args)) ;; enables us to use ... in templates
+
+;; Natural -> Natural
+;; produce the factorial of x
+(define (fact x)
+  (if (zero? x)
+      1
+      (* x (fact (sub1 x)))))
+
+(fact 5)

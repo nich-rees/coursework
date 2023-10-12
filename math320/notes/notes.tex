@@ -751,4 +751,134 @@ Now boost the definition to $\mathcal{R}$, hoping for
 	i.e. $z' \in R[x+y]$.
 	But $z'$ ff photo
 \end{proof}
+
+\section{October 12}
+\subsection{Constructing Reals (cont.)}
+\subsubsection{Addition (cont.)}
+\begin{proposition}
+	$(\mathcal{R},+)$ is an Abelian group, i.e. $\forall x,y,z \in CS(\Q)$
+	\begin{enumerate}
+		\item $\mathcal{R}[x] + \mathcal{R}[y]$ is a well-defineed element of $\mathcal{R}$
+		\item $\mathcal{R}[x] + \mathcal{R}[y] = \mathcal{R}[y] + \mathcal{R}[x]$
+		\item $(\mathcal{R}[x] + \mathcal{R}[y]) + \mathcal{R}[z]
+			= \mathcal{R}[x] + (\mathcal{R}[y]) + \mathcal{R}[z])$
+		\item $\mathcal{R}[x] + \Phi(0) = \mathcal{R}[x]$
+		\item $\mathcal{R}$ contains an element ``$-\mathcal{R}[x]$"
+			satisfying $\mathcal{R}[x] + (-\mathcal{R}[x]) = \Phi(0)$
+	\end{enumerate}
+\end{proposition}
+\begin{proof}
+	\begin{enumerate}
+		\item Did yesterday
+		\item Follows from commutativity of rationals
+		\item Follows from associativity of rationals
+		\item Adding $0$ to each term does not change the sequence.
+			(Uniqueness of identity... homework
+			$\mathcal{R}[(1,\frac{1}{2},\frac{1}{3},\dots)] = \Phi(0)$)
+		\item Given $x = (x_1,x_2,\dots)$.
+			Define $-x = (-x_1,-x_2,\dots) \in CS(\Q)$
+			and note $\mathcal{R}[x] + \mathcal{R}[-x] =
+			\mathcal{R}[x+(-x)] = \mathcal{R}[(0,0,\dots)] = \Phi(0)$.
+	\end{enumerate}
+\end{proof}
+
+\subsubsection{Multiplication}
+Extend ``$\cdot$" to $\mathcal{R}$ by lifting ``$\cdot$" defined in $CS(\Q)$.
+\[
+	\mathcal{R}\cdot\mathcal{R}[y] := \mathcal{R}[x\cdot y] =
+	\mathcal{R}[(x_1y_1, x_2y_2, \dots)]
+\]
+Recall HW04: $x\cdot y$ truly belongs to $CS(\Q)$.
+\begin{proposition}
+	This $\cdot$ is well-defined.
+	I.e., if $x,x',y,y' \in CS(\Q)$ with $\mathcal{R}[x] = \mathcal{R}[x']$
+	and $\mathcal{R}[y] = \mathcal{R}[y']$ then
+	$R[x] \cdot \mathcal{R}[y] = R[x'] \cdot \mathcal{R}[y']$.
+\end{proposition}
+Will actually do a better proof than we did with addition...
+Loewen is going to update Canvas notes to make addition look like this too.
+\begin{proof}
+	Given $x,x',y,y'$ as in setup,
+	$x' \in \mathcal{R}[x]$ and $y' \in \mathcal{R}[y]$,
+	give $x'_n - x_n \to 0$ and $y'_n - y_n \to 0$.
+	Now rearrange (add and subtract trick)
+	\[
+		x'_ny'_n - x_ny_n = [(x'_n-x_n) + x_n]y'_n - x_ny_n
+		= (x'_n - x_n)y'_n + x_n(y'_n - y_n)
+	\]
+	Every Cauchy sequence is bounded, so $\exists M_0,M$ such that
+	\[
+		|x'_ny'_n - x_ny_n| \leq M_0|x'_n - x_n| + M_1|y'_n - y_n|
+	\]
+	Squeeze theorem $\implies$ LHS $\to 0$, i.e., $x'\cdot y' \in \mathcal{R}[x\cdot y]$.
+	But $x'\cdot y' \in \mathcal{R}[x' \cdot y']$.
+	A non-empty intersection implies equality (HW05, Q3...).
+\end{proof}
+(Make sure to know add and subtract trick,
+multiply and divide trick,
+head and tail trick... and something else?)
+
+\begin{proposition}
+	$(\mathcal{R}\setminus \Phi(0), \cdot)$ is an Abelian group
+	(same as with addition, but identity is $\Phi(1)$,
+	and denote inverse as ``$1/\mathcal{R}[x]$").
+\end{proposition}
+\begin{proof}
+	First four axioms done easy same as before.
+	Inverse axiom is done in HW05, Q6.
+\end{proof}
+
+\subsubsection{Distribution}
+\begin{proposition}
+	Given any $a,b,c \in CS(\Q)$
+	\[
+		\mathcal{R}[a]\cdot(\mathcal{R}[b]+\mathcal{R}[c])
+		=(\mathcal{R}[a] \cdot \mathcal{R}[b]) +
+		(\mathcal{R}[a] \cdot \mathcal{R}[c])
+	\]
+\end{proposition}
+\begin{proof}
+	Expand definitions on both sides:
+	\[
+		LHS = \mathcal{R}[a]\cdot\mathcal{R}[b+c] = \mathcal{R}[a\cdot(b+c)]
+	\]
+	\[
+		RHS = \mathcal{R}[a\cdot b] + \mathcal{R}[a\cdot c]
+		= \mathcal{R}[a\cdot b + a\cdot c]
+	\]
+	Inside Cauchy sequences have $n$th terms.
+	\begin{align*}
+		[a\cdot(b+c)]_n &= a_n(b_n+c_n)\\
+		[a\cdot b + a\cdot c]_n &= a_nb_n + a_nc_n
+	\end{align*}
+	Each term is the same, so both the LHS and RHS share
+	this representative sequence, thus they must be equal.
+\end{proof}
+
+This fulfills the axioms for the mathematical object we call a field.
+We now want to show $\mathcal{R}$ is an ordered field.
+
+\subsubsection{Order}
+\begin{definition}
+	Given $x,y \in CS(\Q)$, define $\mathcal{R}[x] < \mathcal{R}[y]$
+	when $\exists r > 0 (r \in \Q), \exists N \in \N$ such that
+	\[
+		x_n + r < y_n, \forall n \geq N
+	\]
+\end{definition}
+\begin{proposition}
+	This definition for ``$<$" is unambiguous.
+	(i.e., independent of representatives selected from $\mathcal{R}[x], \mathcal{R}[y]$).
+	and
+	\begin{enumerate}
+		\item Every $x \in CS(\Q)$ obeys exactly one of:
+			$\mathcal{R}[x] < \Phi(0)$ or $\mathcal{R}[x] > \Phi(0)$
+			$\mathcal{R}[x] = \Phi(0)$
+		\item Transitivity of order ff
+	\end{enumerate}
+\end{proposition}
+\begin{proof}
+	HW05
+\end{proof}
+
 \end{document}

@@ -104,7 +104,7 @@ we would write $[0,+\infty)$, not $[0,+\infty]$.)}
 	which contradicts our assumption that $b_n$ monotonically increases,
 	so $(a_n)$ is bounded below.
 	Likewise, $(b_n)$ is bounded above and below with the same argument,
-	swapping the $a$'s and $b$'s.
+	(just swap the $a$'s and $b$'s).
 	ff
 \end{proof}
 \clearpage
@@ -136,10 +136,7 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Define $x'$ where $x'_n = \begin{cases}
-			x_n+1 &\text{if }n=1\\
-			x_n &\text{if }n>1
-		\end{cases}$.
+		Define $x'$ where $x'_n = x_n$.
 		Then for any $n > 1$, $|x'_n - x_n| = 0$,
 		so $\lim_{n\to\infty}|x'_n - x_n| = 0$,
 		thus $x' \in R[x]$.
