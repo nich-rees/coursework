@@ -19,6 +19,7 @@
 \newcommand{\R}{{\mathbb R}}
 \newcommand{\C}{{\mathbb C}}
 \newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
 
 \renewcommand{\theenumi}{(\alph{enumi})}
 
@@ -105,7 +106,39 @@ we would write $[0,+\infty)$, not $[0,+\infty]$.)}
 	so $(a_n)$ is bounded below.
 	Likewise, $(b_n)$ is bounded above and below with the same argument,
 	(just swap the $a$'s and $b$'s).
-	ff
+
+	By (b), we then know that $a_n$ and $b_n$ both converge to some value,
+	call them $\hat{a}$ and $\hat{b}$.
+	Note that $\hat{a} \leq a_n$ for all $n \in \N$,
+	since $(a_n)$ is monotonically decreasing:
+	if there existed some $N$ where $\hat{a} > a_N$,
+	then for all $n \geq N$, $\hat{a} > a_N \geq a_n$
+	since the sequence is monotonically decreasing,
+	which violates convergence to $\hat{a}$
+	(let $\ep = |\hat{a} - a_N|$).
+	Furthermore, $\hat{a} \geq b_n$.
+	Otherwise, if $b_{N_1} > \hat{a}$,
+	using the definition of convergence, setting $\ep = b_{N_1} - \hat{a} > 0$
+	gaurantees that there exists $a_{N_2}$ such that $|\hat{a} - a_{N_2}| < b_{N_1}$.
+	Then since $(b_n)$ is monotonically increasing and $(a_n)$ is monotonically decreasing,
+	we have $N = \max\{N_1,N_2\}$ so
+	\[
+		\hat{a} - a_N \leq \hat{a} - a_{N_2} < b_{N_1} \leq b_N - \hat{a}
+	\]
+	(we can get rid of the absolute value bars,
+	since $a_n < \hat{a}$ for all $n$).
+
+
+	I'm gonna come back to this. I don't know what my goal is right now.
+	Something to do with existence of $\hat{a}, \hat{b}$,
+	because $\Q$ fails because these sequences could converge
+	on something that is not $\Q$ (ie. $\sqrt{2}$).
+	Right now, I don't know what it means to converge...
+	like what I'm going for now seems like it should still work for $\Q$.
+
+	Wait if I just get $a_n \geq \hat{a} \geq b_n$, I'm done,
+	because $\hat{a}$ is in every set,
+	so intersection is nonempty.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -137,16 +170,73 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
 		Define $x'$ where $x'_n = x_n$.
-		Then for any $n > 1$, $|x'_n - x_n| = 0$,
+		Then for any $n \in \N$, $|x'_n - x_n| = 0$,
 		so $\lim_{n\to\infty}|x'_n - x_n| = 0$,
 		thus $x' \in R[x]$.
 		And so $R[x] \neq \emptyset$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Something about converging to the same value.ff
+		Assume $\SR[x] = \SR[y]$.
+		By part (a) of this problem, these are nonempty sets.
+		Thus, there exists an element in $\SR[x]$ which must also be in
+		$\SR[y]$ by equality.
+		But then $\SR[x] \cap \SR[y] \neq \emptyset$.
+
+		Now assume $\SR[x] \cap \SR[y] \neq \emptyset$.
+		Thus, there exists $z \in CS(\Q)$ such that
+		$z \in \SR[x]$ and $z \in \SR[y]$.
+		Since both $\SR[x]$ and $\SR[y]$ are nonempty by part (a),
+		let $x' \in \SR[x]$ and $y'\in\SR[y]$ be arbitrary elements in
+		their respective sets.
+		We first prove that $\SR[x] \subseteq \SR[y]$
+		by showing $x' \in \SR[y]$ since it is arbitrary.
+		We will show first that for all $\ep > 0$,
+		there exists $N \in \N$ such that for all $n \geq N$, $|z_n - x'_n| < \ep$.
+		Let $\ep > 0$ be arbitrary.
+		By definition of $z,x' \in \SR[x]$,
+		we have for $\ep_1 = \frac{\ep}{2}$,
+		there exists $N_1 \in \N$ such that for all
+		$n \geq N_1$, $|x'_n - x_n| < \ep_1$,
+		and for $\ep_2 = \frac{\ep}{2}$,
+		there exists $N_2$ such that for all
+		$n \geq N_2$, $|z_n - x_n| < \ep_2$.
+		Let $N = \max\{N_1,N_2\} \in \N$.
+		Then we know for all $n \geq N$
+		\[
+			|x_n' - z_n| \leq |x'_n - x_n| + |x_n - z_n| \leq \ep_1 + \ep_2 = \ep
+		\]
+		(where we have used the triangle inequality).
+		Now, we will show first that for all $\ep > 0$,
+		there exists $N \in \N$ such that for all $n \geq N$, $|x'_n - y_n| < \ep$,
+		thus $x'_n \in \SR[y] \implies \SR[x] \subseteq \SR[y]$
+		(since $x'_n$ was an arbitrary element of $\SR[x]$).
+		Let $\ep > 0$ be arbitrary.
+		By definition of $z \in \SR[y]$,
+		we have for $\ep_1 = \frac{\ep}{2}$,
+		there exists $N_1 \in \N$ such that for all
+		$n \geq N_1$, $|z_n - y_n| < \ep_1$,
+		and using the fact we just proved,
+		for $\ep_2 = \frac{\ep}{2}$,
+		there exists $N_2$ such that for all
+		$n \geq N_2$, $|z_n - x'_n| < \ep_2$.
+		Let $N = \max\{N_1,N_2\} \in \N$.
+		Then we know for all $n \geq N$
+		\[
+			|x_n' - y_n| \leq |x'_n - z_n| + |z_n - y_n| \leq \ep_1 + \ep_2 = \ep
+		\]
+		Thus $\SR[x] \subseteq \SR[y]$.
+
+		Finally, note that the argument to show that
+		$y'_n \in \SR[x]$ is identical,
+		and we one would just need to swap the $x$'s and $y$'s,
+		thus $\SR[y] \subseteq \SR[x]$ as well
+		(since $y'_n$ was an arbitrary element of $\SR[y]$).
+		Therefore, $\SR[x] = \SR[y]$.
+		This shows both directions of the implication.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 4}
 {\it Continue with the notation from Question 3.
@@ -158,7 +248,7 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 	This relation looks like one that is familiar for rational numbers,
 	but here it compares two \emph{sets}.
 	Each of the properties we take for granted when manipulating inequalities
-	relating numbeers requires careful thinking in this new context.
+	relating numbers requires careful thinking in this new context.
 	Prove the following.
 \begin{enumerate}
 	\item Whenever $R[x'] = R[x]$ and $R[y'] = R[y]$
@@ -178,19 +268,83 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Assume $\SR[x'] < \SR[y']$.
+		Let $r$ be given such there exists $N_1 \in \N$ where for
+		all $n \geq N_1$, $y'_n - x'_n > r$.
+		Since $\SR[x'] = \SR[x]$,
+		if we let $\ep = \frac{r}{2}$, we know there exists $N_2 \in \N$
+		such that for all $n \geq N_2$, $-\frac{r}{2} < x'_n - x_n < \frac{r}{2}
+		\implies x_n - \frac{r}{2} < x'_n$.
+		Thus, if $N' = \max\{N_1,N_2\}\in\N$, for all $n \geq N'$,
+		\[
+			y'_n - x_n + \frac{r}{2} > y'_n - x'_n > r \implies
+			y'_n - x_n > \frac{r}{2}
+		\]
+		.
+		Since $\SR[y'] = \SR[y]$,
+		if we let $\ep = \frac{r}{4}$, we know there exists $N_3 \in \N$
+		such that for all $n \geq N_3$, $-\frac{r}{4} < y'_n - y_n < \frac{r}{4}
+		\implies y'_n < y_n + \frac{r}{4}$.
+		Thus, if $N = \max\{N_3,N'\}\in\N$, for all $n \geq N$,
+		\[
+			y_n + \frac{r}{4} - x_n > y'_n - x_n > \frac{r}{2} \implies
+		y_n - x_n > \frac{r}{4}
+		\]
+		But if $0 < r \in \Q$, certainly $0 < \frac{r}{4} \in \Q$,
+		thus $\SR[x] < \SR[y]$.
+
+		Now assume $\SR[x] < \SR[y]$.
+		Note that we can do an identical proof as before,
+		just swapping the $x$'s and $x'$'s and the $y$'s with $y'$'s,
+		to show that this implies $\SR[x'] < \SR[y']$.
+		Thus, we have shown both directions of the implication.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Since $\SR[x] < \SR[y]$,
+		there exists $0 < r_1 \in \Q$ where there exists $N_1 \in \N$
+		such that for all $n\geq N_1$,
+		$y_n - x_n > r_1$.
+		Secondly, since $\SR[y] < \SR[z]$,
+		there exists $0 < r_2 \in \Q$ where there exists $N_2 \in \N$
+		such that for all $n\geq N_2$,
+		$z_n - y_n > r_2 \implies z_n - r_2 > y_n$.
+		Now let $N = \max\{N_1,N_2\}$,
+		then for all $n \geq N$,
+		\[
+			r_1 < y_n - x_n < z_n - r_2 - x_n \implies
+			r_1 + r_2 < z_n - x_n
+		\]
+		But if $0 < r_1,r_2 \in \Q$, certainly $0 < r_1 + r_2 \in \Q$,
+		thus $\SR[x] < \SR[z]$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Note that for all $N \in \N$,
+		we have that if $n \geq N$,
+		$x_n - x_n = 0$.
+		Thus, for any $r > 0$, $x_n - x_n < r$.
+		Thus, we cannot have $\SR[x] < \SR[x]$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Define $p_n = p$ and $q_n = q$ for all $n \in \N$.
+		Thus $\Phi(p) = \SR[(p_n)]$, $\Phi(q) = \SR[(q_n)]$ with this notation.
+		Let $p < q$.
+		This is true if and only if $0 < q - p = 2r$
+		(and note $2r \in \Q$ since the rationals are closed under addition).
+		And this is true if and only if
+		$q_n - p_n = 2r > 0$ for all $n \in \N$ (when the sequences are as defined above).
+		Since $0 < 2r \in \Q \implies 0< r \in \Q$,
+		our inequality is true if and only if
+		$q_n - p_n > r$ for all $n \in \N$.
+		But then, this is our definition of $\SR[(p_n)] < \SR[(q_n)]$
+		(where $N = 1$),
+		or equivalently,
+		$\Phi(p) < \Phi(q)$.
+		All of our statements imply both directions,
+		so we have proven both directions of the implication.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 5}
 {\it Continue with the notation from Questions 3 and 4. Prove the following:
@@ -207,12 +361,25 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We first show that at most,
+		one of the three statements can be true.
+		First, if $\SR[x] = \Phi(0)$,
+		then by part (a) and part (c) of Problem 4,
+		we have that $\SR[x] < \Phi(0)$ and $\Phi(0) < \SR[x]$
+		do not occur.
+		Thus, we can only have $\SR[x] = \Phi(0)$.
+		Now let $ff$.
+
+		Now we show that they cannot all be false. ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		ff something to do with all Cauchy sequences are bounded
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
+		From the definition of $\SR[x] < \SR[y]$,
+		there exists $0 < r \in \Q$ and $N \in \N$
+		such that for all $n \geq N$,
+		$y_n - x_n > r$.
 		ff
 	\end{proof} 
 \end{enumerate}
@@ -229,7 +396,29 @@ Here $x \cdot z$ denotes the sequence whose $n$th term is $x_nz_n$.
 that $x\cdot z \in CS(\Q)$ whenever $x,z \in CS(\Q)$.)}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	If $\SR[x] \neq \Phi(0)$,
+	then part (b) of Problem 3 says that $\SR[x] \cap \Phi(0) = \emptyset$.
+	Then $(0,0,\dots) \in \Phi(0)$ so $(0,0,\dots) \not\in \SR[x]$.
+	Then there exists some $\ep' > 0$ such that for all
+	$N \in \N$, if $n \geq N$ then $|x_n| > \ep'$.
+	That is to say that, for all $n\geq N$, $x_n \neq 0$.
+	Now define $z_n = x_n^{-1}$ for $n \geq N$ and $z_n = 2023$
+	when $1 \leq n < N$.
+
+	We claim that $z_n$ is Cauchy. ff
+	yeah yeah and then $x \cdot z$ is Cauchy from Assignment 4, Question 6 (b).
+
+	We now claim that $(1,1,\dots) \in \SR[x\cdot z]$.
+	Let $0 < \ep \in \Q$ be given.
+	Then if $n \geq N$,
+	we have that
+	\[
+		|1 - x_n\cdot z_n| = |1 - x_n\cdot x_n^{-1}| = |1-1| = 0 < \ep
+	\]
+	which satisifies the definition that $(1,1,\dots) \in \SR[x\cdot z]$.
+	But since $(1,1,\dots) \in \Phi(1)$,
+	$\Phi(1) \cap \SR[x \cdot z] \neq \emptyset$,
+	and from part (b) of Problem 3, we have that $\SR[x\cdot z] = \Phi(1)$.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -244,7 +433,9 @@ holds whenever the right side is not of the form $(+\infty) + (+\infty)$.
 Give a specific example to show that inequality may hold.}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	See pic
+
+	Example: $a_n$ alternates $1,-1$, and $b_n$ is the other way (use inf sup definition)
 \end{proof}
 \clearpage
 ~\clearpage
@@ -256,7 +447,7 @@ For each $f \in X$, define
 \[
 	\lVert f \rVert = \sup\{|f(x)| \colon x \in [0,1]\}
 \]
-Prove that for all rael $c$ and all $f,g,h \in X$,
+Prove that for all real $c$ and all $f,g,h \in X$,
 \begin{enumerate}
 	\item $\lVert cf \rVert = |c|\lVert f \rVert$,
 	\item $\lVert f + g \rVert \leq \lVert f \rVert + \lVert g \rVert$,
@@ -266,10 +457,35 @@ Give an example where (b) holds as a strict inequality (``$<$").}
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We first deal with the case when $c = 0$.
+		Then
+		\begin{align*}
+			\lVert cf \rVert
+			&= \sup\{|cf(x)| \colon x \in [0,1]\}\\
+			&= \sup\{0 \colon x \in [0,1]\}\\
+			&= 0\\
+		\end{align*}
+		And note that since $f([0,1])$ is bounded,
+		there is an upper bound, so $f([0,1])$ has a supremum $\beta \in \R$.
+		But since $0\cdot \beta = 0$,
+		we have shown $\lVert cf \rVert = |c|\lVert f\rVert$ when $c=0$.
+
+		Now let $c \neq 0$.
+		We have
+		\begin{align*}
+			\lVert cf \rVert
+			&= \sup\{|cf(x)| \colon x \in [0,1]\}\\
+			&= \sup\{|c||f(x)| \colon x \in [0,1]\}\\
+		\end{align*}
+		We now prove that $|c|\sup\{|f(x)| \colon x \in [0,1]\}$
+		is also a supremum for $|c||f(x)|$.
+		Note that since ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Recall that since $|f(x') + g(x')| \leq |f(x')| + |g(x')|$
+		for every $x' \in [0,1]$,
+
+		Don't forget example for strict inequality!!
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff
