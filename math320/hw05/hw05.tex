@@ -362,15 +362,54 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
 		We first show that at most,
-		one of the three statements can be true.
+		only one of the three statements can be true.
 		First, if $\SR[x] = \Phi(0)$,
 		then by part (a) and part (c) of Problem 4,
 		we have that $\SR[x] < \Phi(0)$ and $\Phi(0) < \SR[x]$
 		do not occur.
 		Thus, we can only have $\SR[x] = \Phi(0)$.
-		Now let $ff$.
+		Now let $\SR[x] < \Phi(0)$.
+		This means there exists some $r_1>0$ such that for some $N_1 \in \N$,
+		$-x_n > r_1$ for all $n \geq N_1$.
+		For the sake of contradiction, assume we have $\SR[x] > \Phi(0)$
+		as well.
+		Then there exists some $r_2>0$ such that for some $N_2 \in \N$,
+		$x_n > r_2$ for all $n \geq N_2$.
+		Taking $r = \min\{r_1,r_2\}$ and $N = \max\{N_1,N_2\}$,
+		we have $-x_n > r$ and $x_n > r$ for all $n \geq N$,
+		but these imply $x_n > r > -r > x_n$ which is a contradiction,
+		by the trichotomy of order for rational numbers.
+		Thus at most one of these is true.
 
-		Now we show that they cannot all be false. ff
+		Now we show that they cannot all be false, i.e. at least one is true.
+		First, assume $\SR[x] \not< \Phi(0)$ and $\SR[x] \not> \Phi(0)$.
+		Let $\ep > 0$ be arbitrary.
+		Then, for all $r > 0 (r \in \Q)$ and for all $N \in \N$,
+		there exists $N_1 \geq N$ such that $x_{N_1} \leq r + \frac{\ep}{3}$,
+		and $N_2 \geq N$ such that $-x_{N_2} \leq r + \frac{\ep}{3}$.
+		Let $r = \frac{\ep}{3}$ and $N = 1$ then.
+		Recall that $x$ is Cauchy,
+		so for all $m,n \geq N_1$, $|x_m-x_n| < r$.
+		So $x_m < r + x_{N_1} \leq 2r + \frac{\ep}{3} = \ep$.
+		Furthermore, for all $m,n \geq N_2$, $|x_n - x_m| < r \implies
+		-x_m < r - x_n \leq 2r + \frac{\ep}{3} = \ep \implies x_m > -\ep$.
+		Thus if $M = \max\{N_1,N_2\}$, then for all $m \geq M$,
+		$-\ep < x_m < \ep \implies |x_m| < \ep$,
+		which is sufficent to show that $\lim_{m\to\infty}|x_m - 0| = 0$,
+		thus $\SR[x] = \Phi(0)$.
+
+		Now assume that $\SR[x] \not< \Phi(0)$ and $\SR[x] \neq \Phi(0)$.
+		Then there exists $\ep' > 0$ such that for all $N \in \N$,
+		there exists $n \geq N$ where $|x_n| > \ep$.
+		Furthermore, for all $r \geq 0$ and all $N \in \N$,
+		there exists $n \geq N$ such that $x_n \leq r$.
+		
+		Note that we could repeat an identical argument to show $\SR[x] < \Phi(0)$
+		must be true, assuming $\SR[x] \neq \Phi(0)$ and $\SR[x] \not> \Phi(0)$
+		by simply swapping all the signs on our $x_n$'s.
+		Therefore, we have proven that at least one of our statements
+		must be true, and at most one is true,
+		thus exactly one of them hold.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff something to do with all Cauchy sequences are bounded
@@ -381,6 +420,11 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 		such that for all $n \geq N$,
 		$y_n - x_n > r$.
 		ff
+
+
+		Tao said to prove for any $\SR[x] > 0$, there exists $N \in \N$ where
+		$\SR[x] > \frac{1}{N} > 0$,
+		then argue by contradiction.
 	\end{proof} 
 \end{enumerate}
 \clearpage
@@ -400,13 +444,29 @@ that $x\cdot z \in CS(\Q)$ whenever $x,z \in CS(\Q)$.)}
 	then part (b) of Problem 3 says that $\SR[x] \cap \Phi(0) = \emptyset$.
 	Then $(0,0,\dots) \in \Phi(0)$ so $(0,0,\dots) \not\in \SR[x]$.
 	Then there exists some $\ep' > 0$ such that for all
-	$N \in \N$, if $n \geq N$ then $|x_n| > \ep'$.
-	That is to say that, for all $n\geq N$, $x_n \neq 0$.
-	Now define $z_n = x_n^{-1}$ for $n \geq N$ and $z_n = 2023$
-	when $1 \leq n < N$.
+	$N_1 \in \N$, if $n \geq N_1$ then $|x_n| > \ep'$.
+	That is to say that, for all $n\geq N_1$, $x_n \neq 0$.
+	Now define $z_n = x_n^{-1}$ for $n \geq N_1$ and $z_n = 2023$
+	when $1 \leq n < N_1$.
 
-	We claim that $z_n$ is Cauchy. ff
-	yeah yeah and then $x \cdot z$ is Cauchy from Assignment 4, Question 6 (b).
+	We claim that $z$ is Cauchy.
+	Let $\ep > 0$.
+	Since $x$ is Cauchy,
+	we know that there exists $N_2$ such that for all $m,n \geq N_2$,
+	$|x_m - x_n| \leq \ep\ep'^2$.
+	Let $N = \max\{N_1,N_2\}$.
+	Then for all $m,n > N$:
+	\begin{align*}
+		|z_m - z_n|
+		&= \left\lvert\frac{1}{x_m} - \frac{1}{x_n}\right\rvert\\
+		&= \left\lvert \frac{x_n - x_m}{x_nx_m} \right\rvert\\
+		&= \frac{|x_n-x_m|}{|x_n||x_m|}\\
+		&< \frac{\ep\ep'^2}{|x_n||x_m|}\\
+		&< \frac{\ep\ep'^2}{\ep'^2}\\
+		&= \ep
+	\end{align*}
+	thus $z$ is Cauchy as well.
+	Therefore, we have that $x \cdot z$ is Cauchy from Assignment 4, Question 6 (b).
 
 	We now claim that $(1,1,\dots) \in \SR[x\cdot z]$.
 	Let $0 < \ep \in \Q$ be given.
@@ -429,11 +489,20 @@ For any two real sequences $(a_n)$ and $(b_n)$, prove that the inequality
 \[
 	\limsup_{n\to\infty}(a_n + b_n) \leq \limsup_{n\to\infty}a_n + \limsup_{n\to\infty}b_n
 \]
-holds whenever the right side is not of the form $(+\infty) + (+\infty)$.
+holds whenever the right side is not of the form $(+\infty) + (-\infty)$.
 Give a specific example to show that inequality may hold.}
 
 \begin{proof}[Solution]\let\qed\relax
-	See pic
+	I'm going to use the Rudin definition of $\limsup$
+	(which we proved was equivalent to ours in class),
+	which says that
+	\[
+		\limsup_{n \to \infty} s_n = 
+	\]
+	
+	Rudin Theorem 3.6 (b): Every bounded sequence in $\R^k$ contains a convergent subsequence.
+
+	Case work to get rid of divergent examples.
 
 	Example: $a_n$ alternates $1,-1$, and $b_n$ is the other way (use inf sup definition)
 \end{proof}
@@ -478,14 +547,52 @@ Give an example where (b) holds as a strict inequality (``$<$").}
 			&= \sup\{|c||f(x)| \colon x \in [0,1]\}\\
 		\end{align*}
 		We now prove that $|c|\sup\{|f(x)| \colon x \in [0,1]\}$
-		is also a supremum for $|c||f(x)|$.
-		Note that since ff
+		is also a supremum for $|c||f([0,1])|$.
+		Note that since $|f(x')| \leq \sup\{|f(x)| \colon x \in [0,1]\}$
+		for all $x' \in [0,1]$ (by definition of a supremum),
+		we have $|c||f(x')| \leq \sup\{|f(x)| \colon x \in [0,1]\}$
+		for all $x' \in [0,1]$ (since $|c| > 0$).
+		Thus, $|c|\sup\{|f(x)| \colon x \in [0,1]\}$ is an upper bound for $|c||f([0,1])|$.
+		Let $\ep > 0$.
+		By the definition of supremum, we know that there exists $x'\in [0,1]$ such that
+		$\sup\{|f(x)| \colon x \in [0,1]\} - \frac{\ep}{|c|} < |f(x')|$
+		since $|c| > 0$.
+		But then $|c|\sup\{|f(x)| \colon x \in [0,1]\} - \ep < |c||f(x')|$.
+		Thus, $|c|\sup\{|f(x)| \colon x \in [0,1]\}$
+		satisifies both our conditions to be the supremum of $|c||f([0,1])|$.
+		But note that a supremum is unique (both are upper bounds and
+		the only way for them to be simultaneously less than or equal to each other
+		is if they are equal).
+		Thus
+		\[
+			|c|\sup\{|f(x)| \colon x \in [0,1]\} = \sup\{|c||f(x)|\colon x \in [0,1]\}
+		\]
+		\[
+			\implies |c|\lVert f \rVert = \lVert cf\rVert
+		\]
+		Thus we have shown this is true for all real $c$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		Recall that since $|f(x') + g(x')| \leq |f(x')| + |g(x')|$
-		for every $x' \in [0,1]$,
+		for every $x' \in [0,1]$ (triangle inequality),
+		we have $|f(x') + g(x')| \leq \sup_{x\in[0,1]}\{|f(x)|\} + |g(x')|
+		\leq \sup_{x\in[0,1]}\{|f(x)|\} + \sup_{x\in[0,1]}\{|g(x)|\}$,
+		thus
+		\[
+			\sup_{x \in [0,1]}\{|f(x) + g(x)|\}
+			\leq \sup_{x\in[0,1]}\{|f(x)|\} + \sup_{x\in[0,1]}\{|g(x)|\}
+		\]
+		\[
+			\implies \lVert f + g \rVert \leq \lVert f \rVert + \lVert g \rVert
+		\]
 
-		Don't forget example for strict inequality!!
+		We now give an example when this is a strict inequality:
+		Let $f = 1$ and $g = -1$ for all $x \in [0,1]$.
+		Then
+		\[
+			\lVert f + g \rVert = \lVert 0 \rVert = 0 <
+			2 = 1 + 1 = \lVert f \rVert + \lVert g \rVert
+		\]
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff
