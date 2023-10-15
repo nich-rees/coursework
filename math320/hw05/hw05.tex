@@ -82,63 +82,87 @@ To encode $\{t \in \R \colon t \geq 0\}$, for example,
 we would write $[0,+\infty)$, not $[0,+\infty]$.)}
 
 \begin{proof}[Solution]\let\qed\relax
-	Backwards direction:
-	$a_n$ and $b_n$ are bounded monotone sequences
-	($a_n$ and $b_n$ are reals,
-	so bounded above/below,
-	and bounded below/above by each other).
-	Either $a_n,b_n$ converge to the same number,
-	then nonempty,
-	or some distance apart, so also nonempty.
+	We first prove (a) $\implies$ (b).
+	Let be a bounded monotonic sequence in $\R$ be given, $(x_n)$.
+	WLOG, let this be a monotonic increasing sequence
+	(a similar argument will exist for decreasing,
+	just flipping some inequalities).
+	Let the upper bound be $M$.
+	Define the interval $I_1 = [x_1, M]$.
+	We can bisect $I_1$ into two subintervals.
+	If there exists $N$ such that $x_N \geq (M-x_1)/2$
+	let $I_2$ be $[(M-x_1)/2, M]$,
+	otherwise $I_2 = [x_1,(M-x_1)/2]$,
+	(thus $(M-x_1)/2$ is an upper bound for all $x_n$ where $n\geq N$).
+	In either case, $I_2$ contains the infinitely many points
+	in the sequence of the form $x_n$ where $n \geq N$
+	(since $x_n$ is monotonically increasing and so is bounded below in the interval,
+	and it is also bounded above in the interval).
+	Define an arbitrary interval in this sequence $I_k$
+	by bisecting $I_{k-1}$ and choosing the interval $I_k$
+	as the lower interval if the $x_n$ are bounded by the midpoint,
+	otherwise take the upper interval.
+	Note that by construction, $I_1 \supseteq I_2 \supseteq \cdots \supseteq I_k \supseteq \cdots$.
+	Thus, by (a), there exists some $\hat{x}$ that is in every interval $I_k$.
 
-	Now assume (b).
-	Consider the sequence of nonempty closed real intervals $I_n$ from the problem statement.
+	We now show $x_n$ converges to $\hat{x}$.
+	Let $\ep > 0$.
+	Note the length of the interval $I_k$ is $(M-x_1)2^{-(k-1)}$. 
+	If $M - x_1 = 0$, then we are done,
+	since for any $n \geq 1$, $x_n = \hat{x}$
+	(since $x_n \geq x_{n-1}$ but $x_n \leq M$ and $M = x_1$,
+	thus $x_n = x_1 = \hat{x}$ because $\hat{x} \in [x_1,x_1] \implies \hat{x} = x_1$)
+	and $|x_n - \hat{x}| = 0 < \ep$.
+	Now assume $M - x_1 \neq 0$.
+	By the Archimedean property, there exists some $n \in \N$ such that $\frac{1}{n} < \frac{\ep}{(M - x_1)}$.
+	Note that $2^n > n$ for all $n \in \N$
+	(induction: when $n=1$, $2^n = 2 > 1 = n$.
+	Further, assume that $2^n > n$, then $2^{n+1} > 2^n2 > 2n \geq n + 1$).
+	Thus, $0 < \frac{1}{2^n} < \frac{1}{n} < \frac{\ep}{M-x_1}$
+	which implies there is some $n \in \N$ such that $0 < \frac{M-x_1}{2^n} < \ep$.
+	But note that the in the interval $I_{N+1}$, the largest distance between
+	two points is the length of the interval, that is $(M-x_1)2^{-N}$.
+	Thus there exists $N\in \N$ such that for all $n \geq N+1$,
+	\[
+		|x_n - \hat{x}| \leq (M-x_1)2^{-N} < \ep
+	\]
+	Thus $(x_n)$ converges.
+
+	We now prove that (b) $\implies$ (a).
+	Consider the sequence of nonempty closed real intervals $I_n$ from the problem statement
+	(ie. $I_n = [a_n,b_n]$, $a_n \leq b_n$).
 	Note that $a_n$ and $b_n$ form monotonic sequences.
 	Since in order for $I_n \supseteq I_{n+1}$ to be true,
-	we must have that $a_{n} \geq a_{n+1}$ and $b_{n} \leq b_{n+1}$.
-	Thus, $a_n$ is monotonically decreasing and $b_n$ is monotonically decreasing.
+	we must have that $a_{n} \leq a_{n+1}$ and $b_{n} \geq b_{n+1}$.
+	Thus, $a_n$ is monotonically increasing and $b_n$ is monotonically decreasing.
 	Note that the sequence $(a_n)$ must be bounded.
-	We know that any $a_n \leq a_1$ since its monotone decreasing,
-	so its bounded above,
-	and $a_n \geq b_1$,
-	otherwise $b_1 > a_n \geq b_n$,
-	which contradicts our assumption that $b_n$ monotonically increases,
-	so $(a_n)$ is bounded below.
-	Likewise, $(b_n)$ is bounded above and below with the same argument,
-	(just swap the $a$'s and $b$'s).
+	We know that any $a_n \geq a_1$ since its monotone increasing,
+	so its bounded below,
+	and $a_n \leq b_1$,
+	otherwise $b_1 < a_n \leq b_n$,
+	which contradicts our assumption that $b_n$ monotonically decreases,
+	so $(a_n)$ is bounded above.
 
-	By (b), we then know that $a_n$ and $b_n$ both converge to some value,
-	call them $\hat{a}$ and $\hat{b}$.
-	Note that $\hat{a} \leq a_n$ for all $n \in \N$,
-	since $(a_n)$ is monotonically decreasing:
-	if there existed some $N$ where $\hat{a} > a_N$,
-	then for all $n \geq N$, $\hat{a} > a_N \geq a_n$
+	By (b), we then know that $a_n$ converges to some value,
+	call it $\hat{a}$.
+	Note that $\hat{a} \geq a_n$ for all $n \in \N$,
+	since $(a_n)$ is monotonically increasing:
+	if there existed some $N$ where $\hat{a} < a_N$,
+	then for all $n \geq N$, $\hat{a} < a_N \leq a_n$
 	since the sequence is monotonically decreasing,
 	which violates convergence to $\hat{a}$
-	(let $\ep = |\hat{a} - a_N|$).
-	Furthermore, $\hat{a} \geq b_n$.
-	Otherwise, if $b_{N_1} > \hat{a}$,
-	using the definition of convergence, setting $\ep = b_{N_1} - \hat{a} > 0$
-	gaurantees that there exists $a_{N_2}$ such that $|\hat{a} - a_{N_2}| < b_{N_1}$.
-	Then since $(b_n)$ is monotonically increasing and $(a_n)$ is monotonically decreasing,
-	we have $N = \max\{N_1,N_2\}$ so
-	\[
-		\hat{a} - a_N \leq \hat{a} - a_{N_2} < b_{N_1} \leq b_N - \hat{a}
-	\]
-	(we can get rid of the absolute value bars,
-	since $a_n < \hat{a}$ for all $n$).
+	(if $\ep = |\hat{a} - a_N|$, then $\ep < |\hat{a} - a_n|$
+	for all $n \geq N$).
+	Furthermore, $\hat{a} \leq b_n$.
+	Otherwise, if $b_N > \hat{a}$,
+	then $a_N \geq b_N$ and so $a_n > \hat{a}$ for all $n \geq N$,
+	which then fails the assumption that $a_n$ converges to $\hat{a}$
+	in the same way as before.
 
-
-	I'm gonna come back to this. I don't know what my goal is right now.
-	Something to do with existence of $\hat{a}, \hat{b}$,
-	because $\Q$ fails because these sequences could converge
-	on something that is not $\Q$ (ie. $\sqrt{2}$).
-	Right now, I don't know what it means to converge...
-	like what I'm going for now seems like it should still work for $\Q$.
-
-	Wait if I just get $a_n \geq \hat{a} \geq b_n$, I'm done,
-	because $\hat{a}$ is in every set,
-	so intersection is nonempty.
+	Thus for any interval $I_n$, we have $a_n \leq \hat{a} \leq b_n$,
+	thus $\hat{a} \in I_n$.
+	But then $\hat{a}$ is in the intersections of all the intervals,
+	thus $\bigcap_{n\in\N} I_n \neq \emptyset$.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -398,36 +422,43 @@ the subset of $CS(\Q)$ containing the corresponding constant sequence, i.e.,
 		which is sufficent to show that $\lim_{m\to\infty}|x_m - 0| = 0$,
 		thus $\SR[x] = \Phi(0)$.
 
-		Now assume that $\SR[x] \not< \Phi(0)$ and $\SR[x] \neq \Phi(0)$.
-		Then there exists $\ep' > 0$ such that for all $N \in \N$,
-		there exists $n \geq N$ where $|x_n| > \ep$.
-		Furthermore, for all $r \geq 0$ and all $N \in \N$,
-		there exists $n \geq N$ such that $x_n \leq r$.
-		
-		Note that we could repeat an identical argument to show $\SR[x] < \Phi(0)$
-		must be true, assuming $\SR[x] \neq \Phi(0)$ and $\SR[x] \not> \Phi(0)$
-		by simply swapping all the signs on our $x_n$'s.
 		Therefore, we have proven that at least one of our statements
 		must be true, and at most one is true,
 		thus exactly one of them hold.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff something to do with all Cauchy sequences are bounded
+			Recall from the trichotomy that $\SR[x] = \Phi(0)$
+			or $\SR[x] > \Phi(0)$ or $\SR[x] < \Phi(0)$.
+			If it is the first,
+			since $\Phi(0) < \Phi(1)$ (by part (d) of question 4),
+			and $\Phi(0) > \Phi(-1)$,
+			we must have $\Phi(-1) < \SR[x] < \Phi(1)$
+			(by part (a) of question 4).
+			
+			Now assume that $\SR[x] > \Phi(0)$
+			(the case when $\SR[x] < \Phi(0)$ won't be explicitly shown here,
+			since the logic is identical and one must only change some signs and inequalities).
+			We need now only to find $q \in \Q$ such that $\SR[x] < \Phi(q)$.
+			We need that there exists some $0 < r \in \Q$ such that
+			there is some $N \in \N$ where for all $n \geq N$,
+			$q - x_n > r$
+			or that $q - r > x_n$.
+			But since $x_n$ is Cauchy, we have shown before it is bounded,
+			thus  we can find some $q$ and $r$ such that $q-r > x_n$,
+			so we are done.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		From the definition of $\SR[x] < \SR[y]$,
 		there exists $0 < r \in \Q$ and $N \in \N$
 		such that for all $n \geq N$,
 		$y_n - x_n > r$.
-		ff
-
-
-		Tao said to prove for any $\SR[x] > 0$, there exists $N \in \N$ where
-		$\SR[x] > \frac{1}{N} > 0$,
-		then argue by contradiction.
+		But then $y_n > r + x_n > x_n$.
+		Since each of these elements are rational, we have $\Phi(r + x_N)$
+		will work as our $q \in \Q$.
 	\end{proof} 
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 6}
 {\it Continue with the notation from Questions 3 and 4. Prove the following:
@@ -493,18 +524,61 @@ holds whenever the right side is not of the form $(+\infty) + (-\infty)$.
 Give a specific example to show that inequality may hold.}
 
 \begin{proof}[Solution]\let\qed\relax
+	First consider when $\limsup_{n\to\infty}a_n = +\infty$.
+	Since we need not consider when $\limsup_{n \to \infty}b_n = -\infty$,
+	and we know that $+\infty$ plus any other value is $+\infty$,
+	our right hand side is $+\infty$,
+	which bounds everything above in the extended reals,
+	thus
+	\[
+		\limsup_{n\to\infty}(a_n + b_n) \leq +\infty =
+		\limsup_{n\to\infty}a_n + \limsup_{n\to\infty}b_n
+	\]
+	A similar argument will also hold true if $a_n = -\infty$.
+
+	Now consider when $\limsup_{n\to\infty} a_n \neq +\infty, -\infty$,
+	i.e. $a_n$ is bounded above and below.
 	I'm going to use the Rudin definition of $\limsup$
 	(which we proved was equivalent to ours in class),
 	which says that
 	\[
-		\limsup_{n \to \infty} s_n = 
+		\limsup_{n\to\infty} a_n = \sup\{\hat{a} \colon
+		\hat{a} = \lim_{k \to \infty} a_{n_k}\}
 	\]
-	
-	Rudin Theorem 3.6 (b): Every bounded sequence in $\R^k$ contains a convergent subsequence.
+	By Theorem 3.7 in Rudin, which states that the subsequential limits in $\R$ form a closed set,
+	we know that $\sup\{\widehat{a+b} \colon \widehat{a+b} = \lim_{k \to \infty} a_{n_k} + b_{n_k}\} \in 
+	\{\widehat{a+b} \colon \widehat{a+b} = \lim_{k \to \infty} a_{n_k} + b_{n_k}\}$.
+	Thus there exists a subsequence $\{n_k\}$ such that
+	$\limsup_{n\to\infty} a_n + b_n = \lim_{k\to\infty} a_{n_k} + b_{n_k}$.
+	We can choose a subsequence $\{n_{k_j}\}$ of $\{n_k\}$,
+	such that $\lim_{j\to\infty}a_{n_{k_j}}$ converges,
+	since $a_{n_k}$ is bounded so there is a convergent subsequence.
+	Since any subsequence of a convergent sequence also converges
+	to the same value,
+	\[
+		\limsup_{n\to\infty} (a_n + b_n) = \lim_{k \to \infty} (a_{n_k} + b_{n_k}) =
+		\lim_{j\to\infty} (a_{n_{k_j}} + b_{n_{k_j}})
+	\]
+	Since $a_n$ is bounded above by assumption,
+	so $\lim_{j\to\infty}a_{n_{k_j}}$ is not $\infty$ (and we're not subtracting by $\infty$),
+	we must have that $b_{n_{k_j}}$ converges to
+	\[
+		\lim_{j\to\infty}b_{n_{k_j}} = \lim_{j\to\infty} (a_{n_{k_j}} + b_{n_{k_j}}) - \lim_{j\to\infty}a_{n_{k_j}}
+	\]
+	But note that, by the definition of $\limsup$ being the supremum of subsequences,
+	$\limsup_{n\to\infty}a_n \geq \lim_{j\to\infty}a_{n_{k_j}}$
+	and $\limsup_{n\to\infty}b_n \geq \lim_{j\to\infty}b_{n_{k_j}}$,
+	thus
+	\[
+		\limsup_{n\to\infty} \leq \limsup{n\to\infty} a_n + \limsup_{n\to\infty}
+	\]
+	as desired.
 
-	Case work to get rid of divergent examples.
-
-	Example: $a_n$ alternates $1,-1$, and $b_n$ is the other way (use inf sup definition)
+	Example for inequality: $a_n = (-1)^n$ and $b_n = (-1)^{n+1}$.
+	Note that $\limsup_{n\to\infty} (a_n + b_n) = \limsup_{n\to\infty} 0 = 0$.
+	On the other hand, $\limsup_{n\to\infty} a_n = 1$ and $\limsup_{n\to\infty} b_n = 1$
+	(just consider the subsequence $n$ is even for $a_n$, and odd for $b_n$).
+	Thus we get a strict inequality.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -595,8 +669,18 @@ Give an example where (b) holds as a strict inequality (``$<$").}
 		\]
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We let $f - g$ be ``$f$" and $g - h$ be ``$g$" from part (b).
+		Then,
+		\[
+			\lVert f - g + g - h\rVert \leq \lVert f - g\rVert + \lVert g - h\rVert
+		\]
+		This implies
+		\[
+			\lVert f - h\rVert - \lVert g - h\rVert \leq \lVert f - g \rVert
+		\]
 	\end{proof} 
 \end{enumerate}
+\clearpage
+~\clearpage
 
 \end{document}
