@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 322}
+\chead{Homework 6}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 2 (Ch. 1.7)}
+{\it Show that if $G$ is finite and $H$ and $K$ are subgroups
+such that $H \supset K$
+then $[G:K] = [G:H] [H:K]$.}
+\begin{proof}[Solution]\let\qed\relax
+	Using Langrange's theorem (Theorem 1.5) since $G$ is finite:
+	\begin{align*}
+		|G|
+		&= |H|[G:H]\\
+		&= |K|[H:K][G:H]
+	\end{align*}
+	But Lagrange's theorem also says $\frac{|G|}{|K|} = [G:K]$,
+	thus
+	\[
+		[G:K] = [G:H][H:K]
+	\]
+	as desired.
+\end{proof}
+
+\subsection*{Problem 3 (Ch. 1.7)}
+{\it Let $H_1$ and $H_2$ be subgroups of $G$.
+Show that any right coset relative to $H_1 \cap H_2$
+is the intersection of a right coset of $H_1$ with a right coset of $H_2$.
+Use this to prove \emph{Poincar\'{e}'s Theorem}
+that if $H_1$ and $H_2$ have finite index in $G$ then so has $H_1 \cap H_2$.}
+\begin{proof}[Solution]\let\qed\relax
+	Let $x \in H_1\cap H_2g$ for an arbitrary $g \in G$.
+	Then $x = h_{12}g$ for some $h_{12} \in H_1 \cap H_2$.
+	But then $x \in H_1g$ since $h_{12} \in H_1$
+	and $x \in H_2g$ since $h_{12} \in H_2$.
+	Thus $x \in H_1g \cap H_2g$.
+	Thus $H_1\cap H_2g \subset \in H_1g \cap H_2g$.
+	Since $g$ was arbitrary, we proved this for an arbitrary right coset
+	relative to $H_1 \cap H_2$, so this is true for all of them.
+
+	Now let $x \in H_1g_1 \cap H_2g_2$ for arbitrary $g_1,g_2\in G$.
+	Then $x = h_1g_1 = h_2g_2$ for some $h_1 \in H_1$, $h_2 \in H_2$.
+	Want to show that $h_1,h_2 \in H_1 \cap H_2$.
+	Note that $h_1 = (h_2g_2)g_1^{-1} = h_2(g_2g_1^{-1})$.
+	But then $h_1$ is in a right coset relative to $H_2$.
+	Like wise, $h_2 = h_1(g_1g_2^{-1})$, so $h_2$ is in a right coset relative to $H_1$.
+\end{proof}
+
+\subsection*{Problem 4 (Ch. 1.7)}
+{\it Let $G$ be a finitely generated group,
+$H$ a subgroup of finite index.
+Show that $H$ is finitely generated.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+	Not as simple as saying $G$ is finitely generated so every subgroup is.
+	Could have a finite set of generators be too big for $H$?
+\end{proof}
+
+
+\subsection*{Problem 5 (Ch. 1.7)}
+{\it Let $H$ and $K$ be two subgroups of a group $G$.
+Show that the set of maps $x \to hxk$, $h \in H$, $k \in K$
+is a group of transformatoins of the set $G$.
+Show that the orbit of $x$ relative to this group
+is the set $HxK = \{hxk \mid h\in H, k\in K\}$.
+This is called the \emph{double coset of $x$ relative to the pair $(H,K)$}.
+Show that if $G$ is finite then $|HxK| = |H|[K \colon x^{-1}Hx\cap K]
+= |K|[H\colon xKx^{-1} \cap H]$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 3 (Ch. 1.8)}
+{\it Let $G$ be the group of pairs of real numbers $(a,b)$ $a\neq0$,
+with the product $(a,b)(c,d) = (ac,ad+b)$ (exercise 4, p.36).
+Verify that $K = \{(1,b)\mid b\in\R\}$ is a normal subgroup of $G$.
+Show that $G/K \cong (\R^*,\cdot,1)$ the multiplicative group of non-zero reals.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 4 (Ch. 1.8)}
+{\it Show that any subgroup of index two is normal.
+Hence prove that $A_n$ is normal in $S_n$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 5 (Ch. 1.8)}
+{\it Verify that the intersection of any set of normal subgroups
+of a group is a normal subgroup.
+Show if $H$ and $K$ are normal subgroups,
+then $HK$ is a normal subgroup.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\end{document}
