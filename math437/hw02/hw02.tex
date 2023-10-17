@@ -23,11 +23,91 @@
 \renewcommand{\theenumi}{(\alph{enumi})}
 
 \begin{document}
+\section{Problem 1}
+{\it Find all integers $n>1$ with the property that for each positive
+divisor $d$ of $n$, we also have that
+\[
+	(d+2)\mid(n+2)
+\]
+}
+\begin{proof}[Solution]
+	ff
+\end{proof}
+\clearpage
+
+\section{Problem 2}
+{\it Find all positive integers $m$ and $n$ such that
+\[
+	2^m - 3^n = 7
+\]
+}
+\begin{proof}[Solution]
+	We can rearrange our equation to get
+	\begin{equation}\label{237}
+		2^m = 7 + 3^n
+	\end{equation}
+	Obviously, any $m$ that satisfies the above equation
+	will also satisfy $2^m = 2\cdot2^{m-1} \equiv 7 \; (\mathrm{mod} \; 3)$
+	(since $3 \mid 3^n$ for any $n$).
+	That is to say, the set of solutions $M_1$ to equation (\ref{237})
+	(elements in $M_1$ are of the form $2^m$)
+	is a subset of the set of solutions $M_2$ to our subsequent relation,
+	$M_1 \subset M_2$.
+	If $X$ is the set of solutions $x\in\Z$ to $2x \equiv 7 \; (\mathrm{mod} \; 3)$,
+	then clearly $M_2 \subset X$.
+
+	Recall proposition 7.2 (B) from the course notes: if $a,b,m \in \Z$ with $m\neq0$
+	and $d = gcd(a,m)$,
+	then if $d \mid b$, the congruence equation $ax \equiv b \; (\mathrm{mod} \; m)$
+	has exactly $d$ solutions.
+	Since $2$ and $3$ are coprime, we have that $d = 1$,
+	so $d \mid 7$,
+	thus $2x \equiv 7 \; (\mathrm{mod} \; 3)$
+	has exactly one solution.
+	Thus, $X$ has exactly one element.
+	Therefore, since $M_1 \subset X$,
+	equation (\ref{237}) has at most one solution.
+
+	We can verify that there does exist such a solution,
+	namely when $m = 4$ and $n = 2$,
+	then we have $2^4 - 3^2 = 16 - 9 = 7$.
+\end{proof}
+\clearpage
+
+\section{Problem 3}
+{\it Let $k \in \N$. Show that there exists $k$ consecutive positive integers
+with the property that no integer from this set is of the form
+$a^2 + b^2$ for some $a,b \in \Z$.}
+\begin{proof}[Solution]
+	ff
+\end{proof}
+\clearpage
+
+\section{Problem 4}
+{\it As always, for each positive integer $m$,
+we have that $d(m)$ is the number of the positive divisors of $m$;
+also, we let $\phi(m)$ be the corresponding value of
+the Euler $\phi$-function.
+Then compute the following limits:
+\[
+	\lim_{n\to\infty}\frac{n!}{d(n!)\phi(n!)}
+\]
+\[
+	\lim_{n\to\infty} \frac{n!}{2^{d(n!)}}
+\]}
+
+\begin{proof}[Solution]
+	\hfill\break
+	\textbf{Limit 1:}
 	$d(mn) = d(m)d(n), \phi(mn)=\phi(m)\phi(n)$ when $m,n$ coprime.
 	We can see that $d(n!) = d(p_1^{e_1})d(\prod_{i=2}^kp_i^{e_i})
 	= \prod (e_i + 1)$.
 	And can also check $\phi(n!) = \prod (p_j^{e_j} - p_{j-1}^{e_{j-1}}$
 	or something from $\phi(p_1\cdots p_k) = \prod\phi(p_i) = \prod(p_i-1)$.
-	Simpler case: $\d(p_1\cdots p_k) = \prod_i^k d(p_i) = \prod_i^k 2 = 2^k$
+	Simpler case: $d(p_1\cdots p_k) = \prod_i^k d(p_i) = \prod_i^k 2 = 2^k$
 	and $\phi(p_1\cdots p_k) = ff$.
+
+	\hfill \break
+	\noindent\textbf{Limit 2:} ff
+\end{proof}
 \end{document}
