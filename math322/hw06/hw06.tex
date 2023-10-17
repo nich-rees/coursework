@@ -57,6 +57,9 @@ that if $H_1$ and $H_2$ have finite index in $G$ then so has $H_1 \cap H_2$.}
 	relative to $H_1 \cap H_2$, so this is true for all of them.
 
 	Now let $x \in H_1g_1 \cap H_2g_2$ for arbitrary $g_1,g_2\in G$.
+	If there does not exist such $x$ for the given $g_1,g_2$,
+	then our statement is vacuously true.
+	So now, assume that our $x$ exists.
 	Then $x = h_1g_1 = h_2g_2$ for some $h_1 \in H_1$, $h_2 \in H_2$.
 	Want to show that $h_1,h_2 \in H_1 \cap H_2$.
 	Note that $h_1 = (h_2g_2)g_1^{-1} = h_2(g_2g_1^{-1})$.
@@ -69,9 +72,15 @@ that if $H_1$ and $H_2$ have finite index in $G$ then so has $H_1 \cap H_2$.}
 $H$ a subgroup of finite index.
 Show that $H$ is finitely generated.}
 \begin{proof}[Solution]\let\qed\relax
+	Let $[G : H] = r$.
+	Then $G = H \cup Hg_1 \cup \cdots \cup Hg_{r-1}$.
+	Note that if $S = \{s_1,s_2,\dots,s_n\}$ is the finite set that generates $G$,
+	so $G = \langle S \rangle$,
+	then $G = H $...
+	something about $H$ being a group so its closed does something?
+	Every element in $G$ can be written as a product of $S$,
+	but also as $H$ times some other element in $g$ (are we making use of finite index though?).
 	ff
-	Not as simple as saying $G$ is finitely generated so every subgroup is.
-	Could have a finite set of generators be too big for $H$?
 \end{proof}
 
 
@@ -101,7 +110,9 @@ Show that $G/K \cong (\R^*,\cdot,1)$ the multiplicative group of non-zero reals.
 {\it Show that any subgroup of index two is normal.
 Hence prove that $A_n$ is normal in $S_n$.}
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	If a subgroup $H$ of $G$ has index two,
+	then there exists $g \in G$, $g \not\in H$
+	such that $G = H \cup Hg$.
 \end{proof}
 
 \subsection*{Problem 5 (Ch. 1.8)}
@@ -110,6 +121,12 @@ of a group is a normal subgroup.
 Show if $H$ and $K$ are normal subgroups,
 then $HK$ is a normal subgroup.}
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	Let $H$ and $K$ be normal subgroups of $G$.
+	If $x \in H \cap K$,
+	then $gxg^{-1} \in H$ since $x \in H$ and $H$ is normal,
+	and $gxg^{-1} \in K$ since $x \in K$ and $K$ is normal.
+	Thus $gxg^{-1} \in H \cap K$, thus $H \cap K$ is normal.
+
+	ff something to do with that silly paragraph at the end of 1.8
 \end{proof}
 \end{document}

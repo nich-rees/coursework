@@ -1018,4 +1018,157 @@ Could have just modded out by $H'$ at the beginning (cutting group up into evens
 			then some of these cosets together to get cosets of $H'$.
 	\end{enumerate}
 \end{proof}
+
+\section{October 17}
+Recall from last time:
+Fundamental Theorem (part 1):
+$G$ is a group, $K$ is normal, and $\phi \colon G \to G/K$ is surjective.
+\begin{theorem}
+	\begin{enumerate}
+		\item $H \leftrightarrow \phi^{-1}(H) = H'$ is bijection between
+			\newline
+		$\{\text{subgroups of }G/K\} \leftrightarrow
+		\{\text{subgroups of }G\text{ containing }K\}$.
+		\item $H$ normal in $G/K$ $\iff$ $H'$ normal in $G$.
+			In this case $(G/K)/H \cong G/H'$.
+	\end{enumerate}
+\end{theorem}
+Last time, proved (i), but it still remains to show (ii).
+\begin{proof}
+$H'$ normal in $G$ $\iff$ $gH'g^{-1} \subseteq H' \forall g \in G$.
+Apply $\phi$: get $\phi(g)\phi(H')\phi(g)^{-1} \subseteq \phi(H') = H$ for all $g \in G$.
+Since $\phi$ is surjective, $G \to G/K$.
+$\phi(g)$ covers all of $G/K$ as $g$ varies, thus get that $H$ is normal in $G/K$.
+
+Other direction: if $H$ is normal in $G/K$ want $\phi^{-1}(H) = H'$ is normal in $G$.
+By definition of normal, we have that for all cosets $gK \in G/K$,
+$(gK)H(gK)^{-1} \subseteq H$.
+We do the algebra:
+\begin{align*}
+	(gK)(H)(gK)^{-1} \subseteq H
+	&\implies \phi(g) H \phi(g^{-1}) \subseteq H\\
+	&\implies \phi(g) \phi(H') \phi(g^{-1}) \subseteq \phi(H')
+	& \forall  g \in G\\
+	&\implies \phi(g)\phi(h')\phi(g^{-1}) = \phi(h'')
+	& \forall h'\in H', \text{ some }h'' \in H'\\
+	&\implies \phi(gh'g^{-1}) = \phi(h'') \in H
+\end{align*}
+This is true for all $g \in G, h' \in H'$, and for some $h'' \in H'$,
+thus $gh'g^{-1} \in \phi^{-1}(\phi(h'')) \subseteq H'$.
+\end{proof}
+Get used to this.
+We are going to be doing a lot of symbol pushing.
+This is why the book is called basic algebra;
+stuff like this should become doing arithmetic.
+
+Now how do we get the second bit, $(G/K)/H \cong G / H'$.
+\begin{proof}
+	Start by getting a map from one to the other.
+	Need to remember that $\phi^{-1}(H) = H' \supseteq K$.
+	Start with $(G/K)/H$.
+	The element of this are of the form $xH$ for $x \in G/K$.
+	But $x = yK$ for some $y \in G$.
+	Want to get form this an element on the right: $zH', z \in G$.
+	Then we use the obvious map, $x = yK \to yH'$ (it maps to itself).
+	There is ambiguity: different representative $y' = yk, k \in K$.
+	Our function gives $ykH'$ but
+	this is equal to $yH'$ since $K \subseteq H' \implies kH' = H'$.
+	So we get a well defined function from $G/K \to G/H'$.
+	
+	Standard: we are defining a function on cosets, not on elements,
+	so need to show well-defined;
+	regardless of choice of element in the set, map to the same set.
+
+	Example (aside): $G = \Z$ and $K = 4\Z$.
+	Then $G/K$ are the remainders modulo $4$: $\{[0,[1],[2],[3]\}$.
+	And if $H = \{[0],[2]\}$.
+	What is pre-image of this ($\phi$ is a map from $G$ to $G/K$???
+	so $H$ is a subset of $G/K$?...
+	wait yeah, obviously, otherwise how would we mod out by $H$)?
+	$\phi^{-1}(H) =$ even numbers (remainders are $0$ and $2$)
+	$= H' = 2\Z \supseteq 4\Z = K$.
+	What is a map $G/H' \to (G/K)/H$.
+	We have $\{[0],[2]\} = H$ and $\{[1] + [3]\} = [1] + H$
+	in $(G/K)/H$.
+	Chinese Remainder Theorem!!!
+	(I think... he was doing $\Z/6\Z$ example with $\Z/2\Z$ and $\Z/3\Z$)
+
+	Back to the theorem: $G \supseteq H' \supseteq K$.
+	Map is $G/K \to G/H'$, $xK \mapsto xH'$
+	(well-defined by what we said before since $K \subseteq H'$).
+	Our claimm is this is a homomorphism when $H', K$ is normal.
+	We know that by the construction of quotients that
+	$(xK)(yK) = xyK$ thus $(xH')(yH') = xyH'$ so homomorphism
+	(multiplication is inerited from $G$).
+	Now what is our theorem on homomorphisms say?
+	It says that if $\psi$ is onto,
+	then $\mathrm{image}(\psi) \cong \text{ domain of }\psi / \ker(\psi)$.
+	$\psi$ is obviously onto (because all the coset representatives are in $G$;
+	all a surjective images of $G$).
+	What is our kernel?
+	Well, it's $H$! Because these are the elements $xK$ such that $xH' = H$
+	which are just the ones in $H'$.
+	Thus the kernel are the cosets $xK, x \in H' = H'$ (by definition $H = \phi(H')$).
+	[I answered and solved this, my (equivalent) explanation:
+	the identity of the cosets in $G/H'$ is $H'$,
+	and $\phi(H) = H'$]
+\end{proof}
+
+\subsection{Isomorphism Theorem 2}
+This works for any subgroup of $G$ which contains $K$.
+What about other subgroups?
+Start with $G \supseteq K$ normal,
+$H'$ is any subgroup of $G$ (not necessaryily $H' \supseteq K$),
+$\phi \colon G \to G/K$,
+and define $H = \phi(H')$ as before.
+This is a subgroup of $G/K$.
+Our bijective correspondance isn't going to work anymore,
+because we don't have $H' \not \supseteq K$.
+
+Fact: $\phi \colon H' \to H$ is onto by definition, thus $H \cong H'$.
+$\ker(H' \to G/K) = K' = K \cap H'$
+(since these are the elements $x \in H'$ where $\phi(x) \in K = 1_{G/K}$).
+So
+\[
+	H \cong H'/K', \; K' = H'\cap K
+\]
+(consistent with previous case $H' \supseteq K \implies K' = K$).
+Now $\phi^{-1}(H) = $ all the cosets $h'K$, where $h' \in H'$
+$= \{h'k \mid h' \in H', k' \in K\}$.
+Nike growled because he kept getting the primes wrong lol.
+"When the notation is harder to keep track of than the ideas,
+you're in a good spot."
+
+Point: $\phi^{-1}(\phi(H')) = H'K = \{h'k \mid h' \in H, k \in K\}$
+is a group since the preimage of a group is a group
+(homomorphism theorems).
+Direct check (need to use $K$ is normal):
+$(h'k)(h''k'') = h'(h'')h''^{-1}kh''k''$ and $h''^{-1}k'' \in K$
+so this is $h'''k'''$ (something in $H'$ times something in $K'$).
+Used the algebra trick:
+\begin{align*}
+	x_1y_1 x_2 y_2
+	&= x_1x_2 x_2^{-1} y_1 x_2 y_2 &\text{multiplying by }x_2x_2^{-1}\\
+	&= [x_1(x_2)](x_1^{-1}y_1x_2)y_2\\
+	&= (x_1x_2)(y_3y_2) &\text{if normal}
+\end{align*}
+So normal is very useful, because $xy \neq yx$ typically in groups.
+but to compare $xyx^{-1}x = y'x, \; y' =xyx^{-1}$,
+$xy = y'x$ always if $y' = xyx^{-1}$.
+
+Strongly recommend doing the 10 million problems in Herstein.
+Do the problems in Herstein in the early sections.
+You just need to get familiar with the algebra.
+Do all these in the beginning of chapter 2 in Herstein
+(his print out is page 48).
+Don't panic about this, just do a lot of problems.
+
+Properties of homomorphisms are quite important.
+It will allows us to find out that there are only two groups of order $55$,
+one commutative and one non commutative, etc.
+
+Note if $G$ finite, $\#(G/K) =$ the number of distinct cosets $=$
+the number of elements in $G$ divided by the number of elements of $K$,
+since each coset has $K$ elements.
+Thus $\#K \mid \#G$ (Lagrange), so $\#G/K \mid \#G$.
 \end{document}
