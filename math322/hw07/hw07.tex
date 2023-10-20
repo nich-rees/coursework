@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 322}
+\chead{Homework 7}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 10 (Ch. 1.8)}
+{\it Let $G$ be a finite group, $A$ and $B$ non-vacuous subsets of $G$.
+Show that $G = AB$ if $|A| + |B| > |G|$.}
+\begin{proof}[Solution]\let\qed\relax
+	We prove the contrapostive.
+	That is, assume that there exists some $g \in G$ such that
+	$g \neq ab$ for any $a \in A, b \in B$.
+	$A \neq gB$
+
+	If $|A| + |B| > |G|$, we must have $A \cap B \neq \emptyset$,
+	since $A$ and $B$ are nonempty subgroups of $G$
+	(and so their respective sets are subsets of $G$'s).
+	Thus, there exists some $g \in A$ and $g \in B$.
+	Also, we must have some $g' \not\in A$ and $g' \not\in B$.
+
+	Note that $A$ must have finite index,
+	since $G$ is a finite group and $A$ has positive order,
+	so let $[G : A] = r$.
+	Lagrange's theorem gives specifically $|G|/|A| = r$.
+	We have $G = A \sqcup Ag_1 \sqcup Ag_2 \sqcup \dots \sqcup Ag_r$.
+	Similarly, let $l = |G|/|B|$ be the index of $B$ in $G$.
+	We have $2|A| + 2|B| > |A|r + |B|l \implies (2-r)|A| + (2-l)|B| > 0$.
+
+	Prove that $|AB| = |G|$?
+\end{proof}
+
+\subsection*{Problem 11 (Ch. 1.8)}
+{\it Let $G$ be a group of order $2k$ where $k$ is odd.
+Show that $G$ contains a subgroup of index $2$.
+(\emph{Hint:} Consider the permutation group $G_L$ of
+left translations and use exercise 13, p.36.}
+\begin{proof}[Solution]\let\qed\relax
+	Since $G$ is of even order, by exercise 13,
+	there exists some $a \in G$ such that $a \neq 1$ and $a^2 = 1$.
+	ff
+\end{proof}
+
+\subsection*{Problem 2 (Ch. 1.9)}
+{\it ff}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 4 (Ch. 1.9)}
+{\it ff}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 5 (Ch. 1.9)}
+{\it ff}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 8 (Ch. 1.9)}
+{\it ff}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\end{document}
