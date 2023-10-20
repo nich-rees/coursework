@@ -1,4 +1,4 @@
-`#lang plai
+#lang plai
 (require "../util/parsing.rkt")
 (require "../util/env.rkt")
 (require "../util/test-diverge.rkt")

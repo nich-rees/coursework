@@ -1,0 +1,629 @@
+#lang plai
+(require "../util/parsing.rkt")
+(require "../util/test-match.rkt") ;; for test/match
+
+(print-only-errors)
+(define (... . args) (cons '... args)) ;; enables us to use ... in templates
+
+;;
+;; WAE - Arithmetic Expressions with identifiers
+;;
+
+;; Any -> Boolean
+;; produce true if the given value is a gensym, otherwise false.
+(define (gensym? x)
+  (and (symbol? x)
+       (not (symbol-interned? x))
+       (not (symbol-unreadable? x))))
+
+(test (gensym? 's) #f)
+(test (gensym? (gensym)) #t)
+(test (gensym? (string->unreadable-symbol "hello")) #f)
+
+
+
+;; WaeID is Symbol
+;; INVARIANT: a WaeID cannot be equal to '+, '-, or 'with
+(define (identifier? x)
+  (and (symbol? x)
+       (not (member x '(+ - with)))))
+
+(define WID0 'a)
+(define WID1 'b)
+
+;; No template: atomic data
+
+
+
+(define-type WAE     
+  [num (n number?)]
+  [add (lhs WAE?) (rhs WAE?)]
+  [sub (lhs WAE?) (rhs WAE?)]
+  [with (id identifier?) (named WAE?) (body WAE?)]
+  [id (name identifier?)])
+;; interp.  program in the WAE language, corresponding to the following
+;; Backus-Naur Form (BNF) specification 
+;;   <WAE> ::= <num>
+;;          | { + <WAE> <WAE> }
+;;          | { - <WAE> <WAE> }
+;;          | { with {<id> <WAE>} <WAE>}
+;;          | <id>
+
+;; Every AE program is a WAE program
+(define AE1 (num 4))
+(define AE2 (add AE1 (num 5)))
+(define AE3 (sub (num 6) (num 3)))
+
+;; NOTE: WAES* are corresponding S-expression representations of WAE*
+
+;; WAE can associate identifiers with expressions
+(define WAES1 '{with {a 4} a})
+(define WAE1 (with 'a (num 4) (id 'a)))
+(define WAES2 '{with {a 4} {+ a a}})
+(define WAE2 (with 'a (num 4) (add (id 'a) (id 'a))))
+
+
+(define WAES3 '{with {a {+ 5 5}}
+                     {+ a a}})
+;; equivalent to the PLAI expression:
+#;(let ([a (+ 5 5)])
+    (+ a a))
+(define WAE3 (with 'a (add (num 5) (num 5))
+                   (add (id 'a) (id 'a))))
+
+(define WAES4 '{with {a {+ 5 5}}
+                     {with {b {- a 3}}
+                           {+ b b}}})
+(define WAE4 (with 'a (add (num 5) (num 5))
+                   (with 'b (sub (id 'a) (num 3))
+                         (add (id 'b) (id 'b)))))
+
+(define WAES5 '{with {a 5} {+ a {with {a 3} 10}}})
+(define WAE5 (with 'a (num 5) (add (id 'a) (with 'a (num 3) (num 10)))))
+
+(define WAES6 '{with {a 5}
+                     {+ a {with {a 3} a}}})
+#;(let ([a 5])
+    (+ a (let ([a 3]) a)))
+(define WAE6 (with 'a (num 5)
+                   (add (id 'a) (with 'a (num 3)
+                                      (id 'a)))))
+
+(define WAES7 '{with {a 5}
+                     {+ a
+                        {with {b 3}
+                              a}}})
+#;(let ([a 5])
+    (+ a (let ([b 3]) a)))
+(define WAE7 (with 'a (num 5)
+                   (add (id 'a)
+                        (with 'b (num 3)
+                              (id 'a)))))
+
+;; a is not bound in the first reference 
+;(let ([a a]) a)
+
+#;
+(define (fn-for-wae wae)
+  (type-case WAE wae
+    [num (n) (... n)]
+    [add (l r) (... (fn-for-wae l)
+                    (fn-for-wae r))]
+    [sub (l r) (... (fn-for-wae l)
+                    (fn-for-wae r))]
+    [with (id named body) (... id
+                               (fn-for-wae named)
+                               (fn-for-wae body))]
+    [id (x) (... x)]))
+
+
+;;
+;; Type Refinement
+;;
+
+;; NumWAE is (num Number)
+;; interp. a numeric WAE expression
+(define NW1 (num 0))
+(define NW2 (num 1))
+
+(define (fn-for-nw nw)
+  (... (num-n nw)))
+
+;; NOTE: every NumWAE is also a WAE., (i.e. NumWAE <: WAE)
+
+
+;;
+;; Free Identifiers
+;;
+
+;; Exercise:
+
+;; WAE -> (listof WaeID)
+;; produce a list of the free identifier instances in the given expressions
+;; (NOTE: since we want "instances" they need not be unique!)
+
+;(define (free-instance-ids initial-wae) empty) ; stub
+
+;; TEMPLATE w/ shiny shiny accumulator blended in
+#;
+(define (free-instance-ids wae0)
+  ;; Accumulator: binding-instances is ...
+  ;; Invariant: 
+  (local [(define (fn-for-wae wae binding-instances)
+            (type-case WAE wae
+              [num (n) (... n binding-instances)]
+              [add (l r) (... binding-instances
+                              (fn-for-wae l (... binding-instances))
+                              (fn-for-wae r (... binding-instances)))]
+              [sub (l r) (... binding-instances
+                              (fn-for-wae l (... binding-instances))
+                              (fn-for-wae r (... binding-instances)))]
+              [with (id named body)
+                    (... binding-instances
+                         id
+                         (fn-for-wae named (... id binding-instances))
+                         (fn-for-wae body (... id binding-instances)))]
+              [id (x) (... binding-instances x)]))]
+    (fn-for-wae wae0 (... wae0))))
+
+(define (free-instance-ids wae0)
+  ;; Accumulator: binding-instances is (listof WaeID)
+  ;; Invariant: all identifiers in wae0 with binding instances around wae
+  (local [(define (fn-for-wae wae binding-instances)
+            (type-case WAE wae
+              [num (n) empty]
+              [add (l r) (append (fn-for-wae l binding-instances)
+                                 (fn-for-wae r binding-instances))]
+              [sub (l r) (append (fn-for-wae l binding-instances)
+                                 (fn-for-wae r binding-instances))]
+              [with (id named body)
+                    (append (fn-for-wae named binding-instances)
+                            (fn-for-wae body (cons id binding-instances)))]
+              [id (x) (if (not (member x binding-instances))
+                          (list x)
+                          empty)]))]
+    (fn-for-wae wae0 empty)))
+
+(test (free-instance-ids (id 'a)) (list 'a))
+(test (free-instance-ids (with 'a (num 6) (id 'a))) (list))
+(test (free-instance-ids (with 'a (num 6) (id 'b))) (list 'b))
+(test (free-instance-ids (with 'a (id 'a) (id 'a))) (list 'a))
+(test (free-instance-ids (with 'a (id 'a) (id 'b))) (list 'a 'b))
+(test (free-instance-ids (with 'b (num 7)
+                               (with 'a (id 'a) (id 'b)))) (list 'a))
+(test (free-instance-ids (with 'a (num 7)
+                               (with 'b (id 'a)
+                                     (id 'b)))) (list))
+
+(test (free-instance-ids (with 'a (num 7)
+                               (with 'b  (id 'a)
+                                     (add (id 'b) (id 'b))))) (list))
+
+(test (free-instance-ids (with 'a (num 7)
+                               (with 'b  (id 'a)
+                                     (sub (id 'b) (id 'b))))) (list))
+;;
+;; Bound Identifiers
+;;
+;; WAE -> (listof WaeID)
+;; produce a list of the binding instances of ids.  Need not be unique!
+;(define (binding-instance-ids wae) empty) ; stub
+(define (binding-instance-ids wae)
+  (type-case WAE wae
+    [num (n) empty]
+    [add (l r) (append (binding-instance-ids l)
+                       (binding-instance-ids r))]
+    [sub (l r) (append (binding-instance-ids l)
+                       (binding-instance-ids r))]
+    [with (id named body) (cons id
+                                (append
+                                 (binding-instance-ids named)
+                                 (binding-instance-ids body)))]
+    [id (x) empty]))
+
+(test (binding-instance-ids (id 'a)) (list))
+(test (binding-instance-ids (with 'a (num 6) (id 'a))) (list 'a))
+(test (binding-instance-ids (with 'a (num 6) (id 'b))) (list 'a))
+(test (binding-instance-ids (with 'a (id 'a) (id 'a))) (list 'a))
+(test (binding-instance-ids (with 'a (id 'a) (id 'b))) (list 'a))
+(test (binding-instance-ids (with 'b (num 7)
+                                  (with 'a (id 'a) (id 'b)))) (list 'b 'a))
+(test (binding-instance-ids (with 'a (num 7)
+                                  (with 'b (id 'a) (id 'b)))) (list 'a 'b))
+(test (binding-instance-ids (with 'a (id 'a)
+                                  (with 'b (with 'c (num 5) (num 5)) (id 'b))))
+      (list 'a 'b 'c))
+
+
+
+
+;; Exercise:
+
+;; WAE -> (listof WaeID)
+;; produce a list of the bound identifier references in the given expressions
+;; (NOTE: since we want "instances" they need not be unique!)
+;(define (bound-instance-ids wae) empty) ; stub
+(define (bound-instance-ids wae0)
+  ;; Accumulator: binding-instances is (listof Symbol)
+  ;; Invariant: all identifiers in wae0 with binding instances around wae
+  (local [(define (fn-for-wae wae binding-instances)
+            (type-case WAE wae
+              [num (n) empty]
+              [add (l r) (append (fn-for-wae l binding-instances)
+                                 (fn-for-wae r binding-instances))]
+              [sub (l r) (append (fn-for-wae l binding-instances)
+                                 (fn-for-wae r binding-instances))]
+              [with (id named body)
+                    (append (fn-for-wae named binding-instances)
+                            (fn-for-wae body (cons id binding-instances)))]
+              [id (x) (if (member x binding-instances) ;; ONLY DIFFERENCE!
+                          (list x)
+                          empty)]))]
+    (fn-for-wae wae0 empty)))
+
+(test (bound-instance-ids (id 'a)) (list))
+(test (bound-instance-ids (with 'a (num 6) (id 'a))) (list 'a))
+(test (bound-instance-ids (with 'a (num 6) (id 'b))) (list))
+(test (bound-instance-ids (with 'a (id 'a) (id 'a))) (list 'a))
+(test (bound-instance-ids (with 'a (id 'a) (id 'b))) (list))
+(test (bound-instance-ids (with 'b (num 7)
+                                (with 'a (id 'a) (id 'b)))) (list 'b))
+(test (bound-instance-ids (with 'a (num 7)
+                                (with 'b (id 'a)
+                                      (id 'b)))) (list 'a 'b))
+
+(test (bound-instance-ids (with 'a (num 7)
+                                (with 'b  (id 'a)
+                                      (add (id 'b) (id 'b))))) (list 'a 'b 'b))
+
+(test (bound-instance-ids (with 'a (num 7)
+                                (with 'b  (id 'a)
+                                      (sub (id 'b) (id 'b))))) (list 'a 'b 'b))
+
+
+
+;;
+;; Substitution
+;;
+
+
+;; WAE WaeID NumWAE -> WAE
+;; naïvely substitute nw0 for free instances of x0 in wae0
+;(define (subst wae x nw) (num 0)) ; stub
+
+;; Version 1, a more direct version
+#;
+(define (subst wae0 x0 nw0)
+  ;; Accumulator: binding-instances is (listof WaeID)
+  ;; Invariant: all identifiers in wae0 with binding instances around wae
+  (local [(define (fn-for-wae wae binding-instances)
+            (type-case WAE wae
+              [num (n) (num n)]
+              [add (l r) (add (fn-for-wae l binding-instances)
+                              (fn-for-wae r binding-instances))]
+              [sub (l r) (sub (fn-for-wae l binding-instances)
+                              (fn-for-wae r binding-instances))]
+              [with (x named body)
+                    
+                    (with x (fn-for-wae named binding-instances)
+                          (fn-for-wae body (cons x binding-instances)))]
+              [id (x) (if (and (not (member x binding-instances))
+                               (symbol=? x x0))
+                          nw0
+                          (id x))]))]
+    (fn-for-wae wae0 empty)))
+
+;; Version 2: optimize the recursion on the body
+#;
+(define (subst wae0 x0 nw0)
+  ;; Accumulator: binding-instances is (listof WaeID)
+  ;; Invariant: all identifiers in wae0 with binding instances around wae
+  (local [(define (fn-for-wae wae binding-instances)
+            (type-case WAE wae
+              [num (n) (num n)]
+              [add (l r) (add (fn-for-wae l binding-instances)
+                              (fn-for-wae r binding-instances))]
+              [sub (l r) (sub (fn-for-wae l binding-instances)
+                              (fn-for-wae r binding-instances))]
+              [with (x named body)                    
+                    (with x (fn-for-wae named binding-instances)
+                          (if (symbol=? x x0)
+                              body
+                              (fn-for-wae body (cons x binding-instances))))]
+              [id (x) (if (and (not (member x binding-instances))
+                               (symbol=? x x0))
+                          nw0
+                          (id x))]))]
+    (fn-for-wae wae0 empty)))
+
+;; Version 3: optimize the predicate in the id case
+#;
+(define (subst wae0 x0 nw0)
+  ;; Accumulator: binding-instances is (listof WaeID)
+  ;; Invariant: all identifiers in wae0 with binding instances around wae
+  (local [(define (fn-for-wae wae binding-instances)
+            (type-case WAE wae
+              [num (n) (num n)]
+              [add (l r) (add (fn-for-wae l binding-instances)
+                              (fn-for-wae r binding-instances))]
+              [sub (l r) (sub (fn-for-wae l binding-instances)
+                              (fn-for-wae r binding-instances))]
+              [with (x named body)                    
+                    (with x (fn-for-wae named binding-instances)
+                          (if (symbol=? x x0)
+                              body
+                              (fn-for-wae body (cons x binding-instances))))]
+              [id (x) (if (symbol=? x x0)
+                          nw0
+                          (id x))]))]
+    (fn-for-wae wae0 empty)))
+
+;; Version 4: chuck the accumulator altogether since we're not using it
+
+(define (subst wae0 x0 nw0)
+  (local [(define (fn-for-wae wae)
+            (type-case WAE wae
+              [num (n) (num n)]
+              [add (l r) (add (fn-for-wae l)
+                              (fn-for-wae r))]
+              [sub (l r) (sub (fn-for-wae l)
+                              (fn-for-wae r))]
+              [with (x named body)
+                    (with x
+                          (fn-for-wae named)
+                          (if (symbol=? x x0)
+                              body
+                              (fn-for-wae body)))]
+              [id (x) (if (symbol=? x x0)
+                          nw0
+                          (id x))]))]
+    (fn-for-wae wae0)))
+
+
+(test (subst (id 'a) 'a (num 1)) (num 1))
+(test (subst (id 'a) 'a (num 2)) (num 2))
+
+(test (subst (id 'b) 'a (num 1)) (id 'b))
+(test (subst (num 10) 'a (num 1)) (num 10))
+(test (subst (add (id 'a) (num 10)) 'a (num 2)) (add (num 2) (num 10)))
+
+
+(test (subst (with 'a (num 2) (num 3)) 'a (num 1))
+      (with 'a (num 2) (num 3)))
+(test (subst (with 'b (num 2) (num 3)) 'a (num 1))
+      (with 'b (num 2) (num 3)))
+
+(test (subst (with 'a (num 2) (id 'a)) 'a (num 1))
+      (with 'a (num 2) (id 'a)))
+
+(test (subst (with 'b (num 2) (id 'a)) 'a (num 1))
+      (with 'b (num 2) (num 1)))
+
+
+(test (subst (with 'b (id 'a) (id 'a)) 'a (num 1))
+      (with 'b (num 1) (num 1)))
+
+(test (subst (with 'a (id 'a) (id 'a)) 'a (num 1))
+      (with 'a (num 1) (id 'a)))
+
+
+;; BONUS: Capture-Avoiding Substitution
+;; WAE WaeID WAE -> WAE
+;; substitute val for free instances of sub-id in expr, avoiding the capture
+;; of any free identifier instances in wae2.
+;(define (ca-subst expr sub-id wae2) (num 0)) ; stub
+(define (ca-subst wae0 x0 wae1)
+  (local [(define (fn-for-wae wae)
+            (type-case WAE wae
+              [num (n) (num n)]
+              [add (l r) (add (fn-for-wae l)
+                              (fn-for-wae r))]
+              [sub (l r) (sub (fn-for-wae l)
+                              (fn-for-wae r))]
+              [with (x named body)
+                    (let ([g (gensym)])
+                      (cond
+                        [(or
+                          ;; 1) x0 can only occur bound in body (like in subst)
+                          (symbol=? x x0) 
+                          ;; 2) x0 does not appear free in body
+                          (not (member x0 (free-instance-ids body))))
+                         ;; no cause to rename OR substitute in body
+                         (with x
+                               (fn-for-wae named)
+                               body)]
+                        [;; 3) no risk of x capturing free identifiers in wae1
+                         (not (member x (free-instance-ids wae1)))
+                         ;; no cause to rename BUT must still substitute
+                         (with x
+                               (fn-for-wae named)
+                               (fn-for-wae body))]
+                        [else ;; (and (member x (free-instance-ids wae1))
+                         ;;      (member x0 (free-instance-ids body))]
+                         ;;capture is imminent, so rename x
+                         (with g
+                               (fn-for-wae named)
+                               (fn-for-wae (ca-subst body x (id g))))]))]
+              [id (x) (if (symbol=? x x0)
+                          wae1
+                          (id x))]))]
+    (fn-for-wae wae0)))
+
+ 
+(test (ca-subst (id 'a) 'a (num 1)) (num 1))
+(test (ca-subst (id 'a) 'a (num 2)) (num 2))
+(test (ca-subst (with 'b (num 3)
+                      (add (id 'b) (id 'a)))
+                'a
+                (id 'c))
+      (with 'b (num 3)
+            (add (id 'b) (id 'c))))
+
+(test/match (ca-subst (with 'b (num 3)
+                            (add (id 'b) (id 'a)))
+                      'a
+                      (id 'b))
+            (with g (num 3)
+                  (add (id g) (id 'b)))
+            #:when (gensym? g))
+
+(test/match (ca-subst (with 'a (num 10) (id 'b)) 'b (id 'a))
+            (with g (num 10) (id 'a))
+            #:when (gensym? g))
+
+
+
+;; WAE -> Number
+;; consumes a WAE and computes the corresponding number
+;(define (interp/wae wae) 0) ; stub
+(define (interp/wae wae)
+  (type-case WAE wae
+    [num (n) n]
+    [add (l r) (+ (interp/wae l)
+                  (interp/wae r))]
+    [sub (l r) (- (interp/wae l)
+                  (interp/wae r))]
+    [with (x named body)
+          (interp/wae (subst body x (num (interp/wae named))))]
+    [id (x) (error 'interp/wae "Unbound identifier: ~a" x)]))
+
+
+(test (interp/wae WAE1) 4)
+(test (interp/wae WAE2) 8)
+(test (interp/wae WAE3) 20)
+(test (interp/wae WAE4) 14)
+(test (interp/wae WAE5) 15)
+(test (interp/wae WAE6) 8)
+(test (interp/wae WAE7) 10)
+
+(test/exn (interp/wae (id 'x)) "Unbound")
+  
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Parsing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;; WAEFS is one of:
+;; - Number
+;; - `(+ ,WAEFS ,WAEFS)
+;; - `(- ,WAEFS ,WAEFS)
+;; - `(with ,WaeID ,WAEFS ,WAEFS)
+;; -  WAEID
+;; - <any other s-expression>
+;; interp. any s-expression, focusing on those that represent WAE expressions.
+(define WAEFS1 '{with {a 4} a})
+(define WAEFS2 '{with {a 4} {+ a a}})
+(define WAEFS3 '{with {a {+ 5 5}} {+ a a}})
+(define WAEFS4 (list 'sleep 'is 'precious))
+
+#;
+(define (fn-for-wae-focused-sexp sexp)
+  (match sexp
+    [`,n
+     #:when (number? n)
+     (... n)]
+    [`(+ ,sexp1 ,sexp2)
+     (... (fn-for-wae-focused-sexp sexp1)
+          (fn-for-wae-focused-sexp sexp2))]
+    [`(- ,sexp1 ,sexp2)
+     (... (fn-for-wae-focused-sexp sexp1)
+          (fn-for-wae-focused-sexp sexp2))]
+    [`(with (,x ,sexp1) ,sexp2)
+     #:when (identifier? x)
+     (... x
+          (fn-for-wae-focused-sexp sexp1)
+          (fn-for-wae-focused-sexp sexp2))]
+    [`,x
+     #:when (identifier? x)
+     (... x)]
+    [else (... sexp)] ))
+
+
+;; WAEFS -> WAE
+;; produce a WAE value corresponding to the given WAE s-expression 
+;; Effect: signals an error if the given s-expression does not represent a wae
+
+(define (parse sexp)
+  (match sexp
+    [`,n
+     #:when (number? n)
+     (num n)]
+    [`(+ ,sexp1 ,sexp2)
+     (add (parse sexp1)
+          (parse sexp2))]
+    [`(- ,sexp1 ,sexp2)
+     (sub (parse sexp1)
+          (parse sexp2))]
+    [`(with (,x ,sexp1) ,sexp2)
+     #:when (identifier? x)
+     (with x
+           (parse sexp1)
+           (parse sexp2))]
+    [`,x
+     #:when (identifier? x)
+     (id x)]
+    [else (error 'parse "bad WAE: ~a" sexp)]))
+
+(test (parse 5) (num 5))
+(test/exn (parse '+) "bad WAE")
+(test (parse '(+ 5 (- 3 2))) (add (num 5)
+                                  (sub (num 3) (num 2))))
+(test/exn (parse '(+ 5 (- 3 #f))) "bad WAE")
+
+
+(test (parse WAEFS1) WAE1)
+(test (parse WAEFS2) WAE2)
+(test (parse WAEFS3) WAE3)
+(test/exn (parse WAEFS4) "bad WAE")
+
+
+(test (parse '{with {a {+ 5 5}} {with {b {- a 3}} {+ b b}}})
+      (with 'a (add (num 5) (num 5))
+            (with 'b (sub (id 'a) (num 3))
+                  (add (id 'b) (id 'b)))))
+
+(test (parse '{with {a 5} {+ a {with {a 3} 10}}})
+      (with 'a (num 5)
+            (add (id 'a)
+                 (with 'a (num 3)
+                       (num 10)))))
+
+(test (parse '{with {a 5} {+ a {with {a 3} a}}})
+      (with 'a (num 5)
+            (add (id 'a)
+                 (with 'a (num 3)
+                       (id 'a)))))
+
+(test (parse '{with {a 5} {+ a {with {b 3} a}}})
+      (with 'a (num 5)
+            (add (id 'a)
+                 (with 'b (num 3)
+                       (id 'a)))))
+
+
+;;
+;; PUTTING IT ALL TOGETHER  - an interpreter of files on disk
+;;
+
+;; String -> Number
+;; produce the result of interpreting the AE stored in the file fname
+;; EFFECT: signals an error if no file fname contains an AE representation
+(define (interp-file fname)
+  (interp/wae
+   (parse
+    (read-from-file fname))))
+
+(test (with-temporary-data-file "{+ 3 7}\n"
+        (λ (fname) (interp-file fname)))
+      10)
+
+(test (with-temporary-data-file "{+ {- 3 4} 7}\n"
+        (λ (fname) (interp-file fname)))
+      6)
+
+(test (with-temporary-data-file "{with {a 5} {+ a {with {b 3} a}}}"
+        (λ (fname) (interp-file fname)))
+      10)
+

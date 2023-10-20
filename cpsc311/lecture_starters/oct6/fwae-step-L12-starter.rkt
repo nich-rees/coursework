@@ -7,7 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Program 1
 '{with {double {fun {x} {+ x x}}}
-       {with {x 5} {double x}}}
+       {with {x 5} {double x}}}1
 
 '{with {x 5} {{fun {x} {+ x x}} x}}
 '{{fun {x} {+ x x}} 5} ;; the x in the fun is not free, binding pos., like with

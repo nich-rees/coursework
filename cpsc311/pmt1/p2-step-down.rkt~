@@ -1,0 +1,56 @@
+#lang plai
+(define (... . args) (cons '... args))
+(print-only-errors)
+
+;; Problem 2 - Step Down
+
+
+
+;; Consider the following FWAE program:
+;;'{with {down {fun {x}
+;;                  {if0 x
+;;                       0
+;;                       {down {- x 1}}}}}
+;;       {down 1}}
+
+
+;; You are to hand step this program using two different scoping disciplines.
+;; If the program terminates in a value, then that value should be the
+;; last step.  If the program terminates in an error, define the last step
+;; to be the string "error".
+
+
+;; Problem 2a: hand step the program using lexical scoping semantics.
+;; Write each step as a definition of P2A-STEP-N, incrementing
+;; N by one at each step until the program terminates.
+;; PROCEED FOR AT MOST 10 STEPS (i.e. up to P2A-STEP-10).  Full evaluation may
+;; take more or fewer than 10 steps.
+
+(define P2A-STEP-0
+  '{with {down {fun {x}
+                    {if0 x
+                         0
+                         {down {- x 1}}}}}
+         {down 1}})
+
+(define P2A-STEP-1 ...)
+
+(define P2A-STEP-2 ...)
+
+
+;; Problem 2b: hand step the program using *dynamic* scoping semantics.
+;; Write each step as a definition of P2B-STEP-N, incrementing
+;; N by one at each step until the program terminates.
+;; PROCEED FOR AT MOST 10 STEPS (i.e. up to P2B-STEP-10).  Full evaluation may
+;; take more or fewer than 10 steps.
+
+(define P2B-STEP-0
+  '{with {down {fun {x}
+                    {if0 x
+                         0
+                         {down {- x 1}}}}}
+         {down 1}})
+
+(define P2B-STEP-1 ...)
+
+(define P2B-STEP-2 ...)
