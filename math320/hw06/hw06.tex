@@ -1,0 +1,213 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 6}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it Let $0 < a_1 < b_1$ and define
+	$a_{n+1} = \sqrt{a_nb_n}$, $b_{n+1} = \frac{a_n + b_n}{2}$, $n \in \N$.
+\begin{enumerate}
+	\item Prove that the sequences $(a_n)$ and $(b_n)$ both converge.
+		(Suggestion: Use induction to prove $0 < a_n < a_{n+1} < b_{n+1} < b_n$.)
+	\item Prove that the sequences $(a_n)$ and $(b_n)$ have the same limit.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		First, we use induction to prove $0 < a_n < a_{n+1} < b_{n+1} < b_n$.
+		We do this in steps:
+		first we prove that $0 < a_n$ and $0< b_n$ for all $n \in \N$.
+		When $n = 1$, by assumption, $0 < a_1$ and $0 < b_1$.
+		Now let $n = j$, and $0 < a_j,b_j$.
+		Then $0 < \sqrt{a_jb_j} = a_{j+1}$
+		and $0 < \frac{a_j+b_j}{2} = b_{j+1}$
+		as desired.
+		Thus $0 < a_n,b_n, \forall n \in \N$.
+
+		Now we prove that $a_n < b_n$ for all $n \in \N$.
+		When $n = 1$, by assumption, $a_1 < b_1$.
+		Now let $n = j$, and $a_j < b_j$.
+		Then $a_{j+1} = \sqrt{a_jb_j}$
+		and $b_{j+1} = \frac{a_j + b_j}{2}$.
+		We have
+		\begin{align*}
+			b_{j+1}^2
+			&= (a_j^2 + 2a_jb_j + b_j^2)/4\\
+			&> (2a_jb_j + 2a_jb_j)/4\\
+			&= a_jb_j = a_{j+1}^2
+		\end{align*}
+		where the second line is because $a_j - b_j > 0 \implies (a_j - b_j)^2 > 0$
+		so $a_j^2 - 2a_jb_j + b_j^2 > 0 \implies a_j^2 + b_j^2 > 2a_jb_j$.
+		But since we know that both $a_{j+1}, b_{j+1} > 0$,
+		then $b^2_{j+1} > a^2_{j+1} \implies |b_{j+1}| > |a_{j+1}|
+		\implies b_{j+1} > a_{j+1}$, which closes the induction.
+
+		Now we prove that ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 2}
+{\it
+\begin{enumerate}
+	\item Suppose $(z_n)_{n\in\N}$ is a bounded sequence with integer values.
+	\begin{enumerate}
+		\item Prove that both numbers below are integers:
+			\[
+				\lambda = \liminf_{n\to\infty} z_n \qquad
+				\mu = \limsup_{n\to\infty} z_n
+			\]
+		\item Prove that there are infinitely many integers
+			$n$ for which $z_n = \lambda$.
+	\end{enumerate}
+	\item Let $d_n = p_{n+1} - p_n$ ($n \in \N$)
+		denote the sequence of prime differences,
+		built from the sequence of primes
+		\[
+			p_1 = 2, p_2 = 3, p_3 = 5, p_4 = 7, \dots
+		\]
+	\begin{enumerate}
+		\item Prove that $\limsup_{d\to\infty} = +\infty$.
+		\item Some mathematicians believe that
+			\begin{equation}\label{twin}
+				\delta := \liminf_{n \to\infty} d_n = 2
+			\end{equation}
+			However, the best estimate of $\delta$ known to date
+			is $2 \leq \delta \leq 246$.
+			Identify by name a famous unsolved problem in mathematics
+			that is equivalent to proving or disproving line (\ref{twin}).
+			(After giving the name, clearly explain the required relationship.)
+	\end{enumerate}
+\end{enumerate}}
+
+\begin{enumerate}
+	\item
+	\begin{enumerate}
+		\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+		\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+	\end{enumerate}
+	\item
+	\begin{enumerate}
+		\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+		\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+	\end{enumerate}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 3}
+{\it \begin{enumerate}
+	\item Prove: For any sequences $(a_n)$ and $(b_n)$ of nonnegative real numbers,
+		\[
+			\limsup_{n\to\infty}(a_nb_n) \leq \left(\limsup_{n\to\infty}a_n\right)
+			\left(\limsup_{n\to\infty} b_n\right),
+		\]
+		provided the right side does not involve the product of $0$ and $\infty$.
+	\item Give an example in which the result of part (a) holds with a strict inequality.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 4}
+{\it \begin{enumerate}
+	\item Show that for any $r \geq 1$, one has
+		\[
+			n(r-1) \leq r^n - 1 \leq nr^{n-1}(r-1) \quad \forall n \in \N
+		\]
+	\item Prove that for each real $a \geq 1$, the following sequences converges:
+		\[
+			x_n = n\left(a^{1/n} - 1\right), \quad n \in \N
+		\]
+	\item Prove that the sequence in (b) also converges for each real $a \in (0,1)$.
+	\item Let $L(x) = \lim_{n\to\infty} n\left(x^{1/n}-1\right)$ for $x > 0$.
+		Prove that $L(ab) = L(a) + L(b)$ for all $a > 0, b > 0$.
+\end{enumerate}
+\emph{Note:} Present solutions that use only methods discussed in MATH 320.
+No calculus, please!}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Recall the identity $b^n - a^n =
+		(b-a)(b^{n-1} + b^{n-2}a + \cdots + a^{n-1})$
+		for any $n \in \N$.
+		Since $r \geq 1$,
+		applying the identity when $b = r$ and $a = 1$,
+		we get
+		\[
+			r^n - 1 = (r-1)(r^{n-1} + r^{n-2} + \cdots + 1) \leq (r-1)nr^{n-1}
+		\]
+		since each $r^{n-j} \leq r^{n-1}$ ($1 \leq j \leq n$),
+		and there are $n$ many $r^{n-j}$ in the factor. 
+
+		To prove the second inequality,
+		we use the identity again,
+		however
+		\[
+			r^n - 1 = (r-1)(r^{n-1} + r^{n-2} + \cdots + 1) \geq n(r-1)
+		\]
+		since each $r^{n-j} \geq 1$ ($1 \leq j \leq n$),
+		and there are $n$ many $r^{n-j}$ in the factor.
+		Thus we have shown $n(r-1) \leq r^n - 1 \leq nr^{n-1}(r-1)$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have that for all $n \in \N$,
+		by part (a) of this problem,
+		$x_n = n\left(a^{1/n}-1\right) \leq a - 1$,
+		thus $x_n$ is bounded above.
+		Furthermore,
+		since $a \geq 1$, we must have $a^{1/n} = b \geq 0$ for all $n \in \N$,
+		otherwise if $a^{1/n'} < 0$ for some $n'$,
+		then $a < 1$, a contradiction
+		(ff).
+		weird inequality stuff.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\end{document}
