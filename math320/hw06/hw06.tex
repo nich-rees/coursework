@@ -63,10 +63,59 @@
 		then $b^2_{j+1} > a^2_{j+1} \implies |b_{j+1}| > |a_{j+1}|
 		\implies b_{j+1} > a_{j+1}$, which closes the induction.
 
-		Now we prove that ff
+		Now we prove that $a_n < a_{n+1}$ and $b_n > \frac{a_n+b_n}{2}$.
+		We have $a_{n+1} = \sqrt{a_nb_n} > \sqrt{a_n^2} = a_n$
+		(since $x^2 > y^2 \implies x > y$ when $x,y > 0$).
+		Furthermore, $b_{n+1} = \frac{a_n + b_n}{2} > \frac{2b_n}{2} = b_n$.
+		Both of these are true for all $n \in \N$,
+		so we have fully shown
+		\[
+			0 < a_n < a_{n+1} < b_{n+1} < b_n
+		\]
+
+		Note then that $(a_n)$ is monotonically increasing,
+		and bounded by $a_1$ and $b_1$,
+		and $(b_n)$ is monotonically decreasing,
+		and bounded by $a_1$ and $b_1$ as well.
+		Thus by the Monotone Convergence Theorem,
+		and the fact $\R$ is complete,
+		we have that $(a_n)$ and $(b_n)$ both converge.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We claim that $b_n - a_n < (b_1 - a_1)/2^{n-1}$
+		for all $n \geq 2$.
+		This is true in the base case ($n = 2$): $b_2 - a_2 = (b_1 + a_1)/2 - \sqrt{a_1b_1}
+		< (2b_1)/2 + (a_1 - b_1)/2 + \sqrt{a_1^2}
+		= b_1 - a_1 - (b_1 - a-1)/2 = (b_1 - a_1)/2$.
+		Now assume that $b_n - a_n < (b_1 - a_1)/2^{n-1}$.
+		Then
+		\begin{align*}
+			b_{n+1} - a_{n+1}
+			&= \frac{b_n+a_n}{2} - \sqrt{a_nb_n}\\
+			&< \frac{2b_n}{2} + \frac{a_n - b_n}{2} - \sqrt{a_n^2}\\
+			&= b_n - a_n - \frac{b_n - a_n}{2}\\
+			&= \frac{b_n - a_n}{2}\\
+			&< \frac{b_1 - a_1}{2^n}
+		\end{align*}
+		Thus we have closed the induction.
+
+		Now let $\alpha \in \R$ be the value that $(a_n)$ converges to
+		(as proven will exist with part (a)).
+		Let $\ep > 0$.
+		Let $\ep' = \ep/2$.
+		We know when there exists some $N_1 \in \N$ such that for all $n \geq N$,
+		we have $|\alpha - a_n| < \ep'$.
+		Additionally, by Archimedes, there exists some $N_2 \in \N$ such that
+		$0 < \frac{b_1-a_1}{\ep'} < N_2$,
+		and $N_2 \leq 2^{N_2}$,
+		thus $\ep' > (b_1 - a_1)/2^{N_2-1}$.
+		Since $(b_1 - a_1)/2^{n-1}$ is a monotonically decreasing function,
+		this $\ep' > (b_1 - a_1)/2^{n-1}$ for all $n \geq N_2$.
+		So $0 < b_n - a_n < \ep'$ for all $n \geq N_2$.
+		Thus $|b_n - \alpha| < |\ep' + a_n - \alpha| \leq |\ep'| + |a_n - \alpha|
+		< \ep' + \ep' = \ep$,
+		thus $b_n \to \alpha$ as well
+		(where the first substitution is valid, since $b_n, a_n, \ep' > 0$).
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -108,16 +157,60 @@
 	\item
 	\begin{enumerate}
 		\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			Let $E$ be the set of number $x$ such that
+			there exists a convergent subsequence $\{n_k\}$ where
+			$z_{n_k}$ converges to $x$
+			(which we know is nonempty by Bolzano-Weierstrass,
+			because $(z_n)$ is bounded).
+			We claim that each $x \in E$ is an integer.
+			Since every convergent sequence is Cauchy,
+			there must exist some $N$ where for all $k,k' \geq N$,
+			$|z_{n_k} - z_{n_k'}| < \frac{1}{2}$,
+			but since $z_{n_k}, z_{n_k'}$ are integers,
+			this is only true when $z_{n_k} = z_{n_k'}$.
+			Thus, for all $k \geq N$ $z_{n_k}$ is the same integer, call it $j$.
+			$x$ must equal $j$;
+			otherwise say $x = j + \delta$ for some fixed $\delta\in\R$,
+			then if $\ep = \delta$, for all $k \geq N$,
+			$|z_{n_k} - x| = |j - j \pm \delta| = |\delta| \not< \ep$,
+			which contradicts that $s_{n_k}$ converges to $x$.
+			Thus $x = j$, which is an integer.
+			Therefore, every element in $E$ is an integer.
+
+			Now, recall definition 3.16 in Rudin:
+			$\lambda = \liminf_{n \to \infty}z_n = \inf{E}$ and
+			$\mu = \limsup_{n\to\infty}z_n = \sup{E}$.
+			Furthermore, theorem 3.17 in Rudin tells us that
+			$\lambda \in E$ and $\mu \in E$.
+			But every element in $E$ is an integer, thus
+			$\lambda,\mu \in \Z$.
 		\end{proof}
 		\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			Recall that from the previous part of the question
+			that $\lambda \in E$ where $E$
+			are all such $x$ where there is a subsequence
+			$z_{n_k}$ that converges to $x$.
+			So there is a subsequence $z_{n_l}$
+			that converges to $\lambda$.
+			In order for $z_{n_l} \to \lambda$,
+			we must have that for all $\ep$,
+			there is some $N\in\N$ such that for all $l \geq N$,
+			we have $|z_{n_l} - \lambda| < \ep$.
+			If $\ep = \frac{1}{2}$,
+			since $z_{n_l}, \lambda$ are integers,
+			we must have that $z_{n_l} = \lambda$.
+			This is true for all $l \geq N$,
+			which there are infinitely many of in,
+			so there are infinitely many $z_{n_l} = \lambda$,
+			thus there are infitly many $n$ where $z_{n_l} = \lambda$
+			($n = n_l$ when $l \geq N$).
 		\end{proof}
 	\end{enumerate}
 	\item
 	\begin{enumerate}
 		\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			Let $k$ be given.
+			We want to show that 
 		\end{proof}
 		\item \begin{proof}[Solution]\let\qed\relax
 			ff
@@ -139,10 +232,58 @@
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Let $\alpha = \limsup_{n\to\infty} a_n$ and $\beta = \limsup_{n\to\infty}b_n$.
+
+		First let us consider when $\alpha = +\infty$.
+		Regardless of $\beta$ (since we are assuming $\beta > 0$),
+		our right hand side becomes $+\infty$,
+		and regardless of the left-hand side,
+		in the extended reals, our inequality holds.
+		WLOG, this is also true when $\beta = +\infty$.
+
+		Now we can assume $\alpha > 0$, $\beta > 0$.
+		Let $A > \alpha$.
+		Then by definition, $A > \inf_{n \in \N}\left(\sup_{k\geq n} a_k\right)$,
+		thus there exists some $N_1 \in \N$ such that $A > \sup_{k \geq N_1} a_k$,
+		so $A > a_k$ when $k \geq N_1$.
+		Similarly, if $B > \beta$,
+		there exists some $N_2 \in \N$ such that $B > b_k$ when $k \geq N_2$.
+		Let $N = \max\{N_1,N_2\}$.
+		Then for all $k \geq N$,
+		$a_k < A$ and $b_k < B$,
+		thus $a_kb_k < AB$
+		since both sides are nonnegative, and $A>\alpha\geq0$ and $B>\beta\geq0$.
+		Thus $\sup_{k \geq N} (a_kb_k) \leq AB$.
+		Any lower bound for a set of values indexed by $n$
+		must be less than or equal to each of them
+		(e.g. one where $n = N$).
+		Thus the previous inequality implies
+		\[
+			\limsup_{n\to\infty}(a_nb_n) = \inf_{n\in\N}\sup_{k\geq n}(a_nb_n)
+			\leq AB
+		\]
+		Since this holds for arbitrary $A > \alpha$ and $B > \beta$,
+		the real number on the left cannot exceed $\alpha \beta$.
+		Thus, we must have
+		\[
+			\limsup_{n\to\infty}(a_nb_n) \leq \alpha\beta = \limsup_{n\to\infty} a_n + \limsup_{n\to\infty} b_n
+		\]
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We give the sequences $a_n = (-1)^n$ and $b_n = (-1)^{n+1}$.
+		Then $a_nb_n = -1$,
+		so $\limsup_{n\to\infty}(a_nb_n) = -1$.
+		Additionally, $\limsup_{n\to\infty} a_n = 1$,
+		since for any $n \in \N$,
+		there always exists some $a_k = 1$ where $k \geq n$,
+		and so $\limsup_{n\to\infty} = \inf_{n\in\N} \sup_{k \geq n} a_n
+		= \inf_{n\in\N} 1 = 1$);
+		and for the same reason, $\limsup_{n\to\infty} b_n = 1$.
+		Thus
+		\[
+			\limsup_{n\to\infty} (a_nb_n) = -1 < 1 =
+			\left(\limsup_{n\to\infty} a_n\right)\left(\limsup_{n\to\infty}b_n\right)
+		\]
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -194,18 +335,40 @@ No calculus, please!}
 		by part (a) of this problem,
 		$x_n = n\left(a^{1/n}-1\right) \leq a - 1$,
 		thus $x_n$ is bounded above.
-		Furthermore,
-		since $a \geq 1$, we must have $a^{1/n} = b \geq 0$ for all $n \in \N$,
-		otherwise if $a^{1/n'} < 0$ for some $n'$,
-		then $a < 1$, a contradiction
-		(ff).
-		weird inequality stuff.
+		Additionally, $a \geq 1 = 1^n \implies a^{1/n} \geq 1$,
+		thus $n(a^{1/n}-1) \geq 0$, and so $x_n$ is bounded below.
+		Furthermore, we claim that $(x_n)$ is monotonically decreasing:
+		$x_{n+1} = (n+1)(a^{1/(n+1)} - 1) = n(a^{1/(n+1)} - 1) + a^{1/(n+1)} - 1$. 
+		That is $x_n  - x_{n+1} \geq 0$.
+		We see
+		\begin{align*}
+			x_n - x_{n+1}
+			&= n\left(a^{1/n} - 1\right) - (n+1)\left(a^{1/(n+1)}-1\right)\\
+			&\geq n^2\left(a^{1/n^2} - 1\right) - (n+1)\left(a^{1/(n+1)}-1\right)\\
+			&= 
+		\end{align*}
+		I can't figure this one out, but let's just assume it's monotonically decreasing.
+		Since it is bounded and monotonically decreasing,
+		it converges.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		The sequence is bounded above by $0$,
+		since $0 < a < 1 = 1^n \implies a^{1/n} < 1$,
+		thus $n(a^{1/n} - 1) < 0$.
+		Furthermore, it is bounded below, and monotonically decreasing
+		(same as above).
+		Thus the series converges.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+			We have
+			\begin{align*}
+				L(ab)
+				&= \lim_{n\to\infty} n((ab)^{1/n} - 1)\\
+				&= \lim_{n\to\infty} n(a^{1/n}b^{1/n} - 1)\\
+				&= \lim_{n\to\infty} n/2(-(a^{1/n} - b^{1/n})^2 - 2 + a^{2/n} + b^{2/n})\\
+				&=
+			\end{align*}
+			.
 	\end{proof}
 \end{enumerate}
 \clearpage

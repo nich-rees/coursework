@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1697826598 "hw06.tex" "hw06.pdf" "hw06" 1697826598 0
+["pdflatex"] 1697934946 "hw06.tex" "hw06.pdf" "hw06" 1697934946 0
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1689853683 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1689853683 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1689853683 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -16,6 +16,7 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb" 1689853683 37912 77d683123f92148345f3fc36a38d9ab1 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1689853683 36281 c355509802a035cadc5f15869451dcee ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1689853683 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb" 1689853683 31809 8670ca339bf94e56da1fc21c80635e2a ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1689853683 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1689853683 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1689853683 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
@@ -44,8 +45,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1689853683 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1694484303 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1694500201 6768047 77540929f7d62f2020e85a5c0029da8c ""
-  "hw06.aux" 1697826598 56 e79eb4493c4127877a4d6a7cdb36c89b "pdflatex"
-  "hw06.tex" 1697826597 6307 1f39746e5b81e33d5ed9ff3ae824a6f5 ""
+  "hw06.aux" 1697934946 56 e79eb4493c4127877a4d6a7cdb36c89b "pdflatex"
+  "hw06.tex" 1697934945 13270 b99e139dc30ffac3c09f9609043803f7 ""
   (generated)
   "hw06.aux"
   "hw06.log"
