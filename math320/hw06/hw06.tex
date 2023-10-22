@@ -119,6 +119,7 @@
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 2}
 {\it
@@ -209,15 +210,42 @@
 	\item
 	\begin{enumerate}
 		\item \begin{proof}[Solution]\let\qed\relax
-			Let $k$ be given.
-			We want to show th: 
+			Let $k$ be arbitrary.
+			It is sufficient to show that there
+			$k$ many consecutive composite numbers,
+			because then there is some $n$ such that $d_n > k$,
+			and since $k$ was arbitrary,
+			$\limsup_{n\to\infty} d_n = \inf_{n\in\N} \sup_{k \geq N} d_n
+			= \inf_{n\in\N} +\infty = +\infty$
+			(this works regardless of $n$, since we have that are $k + n$
+			consecutive composite numbers,
+			which surely $k$ of them occur after $n$).
+			
+			Thus, let $k \in \N$.
+			Note that $(k+1)! + 2, (k+1)! + 3, \dots, (k+1)! + k + 1
+			= \{(k+1)! + j \colon 2 \leq j \leq k+1\}$
+			are $k$ consecutive integers.
+			Furthermore, $(k+1)! + j$ is divisible by $j \neq 1$,
+			since $j \leq k + 1$, and so $j \mid (k+1)!$ 
+			(by definition of the factorial)
+			and $j \mid j$.
+			Thus, all of the consecutive integers are not prime.
+			So we are done.
 		\end{proof}
 		\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			The problem is the Twin Prime Conjecture.
+			This states that there are infinitely many primes
+			that differ by $2$.
+			This is equivalent to $\liminf_{n\to\infty}d_n = 2$,
+			since $\liminf_{n\to\infty}d_n = \sup_{n\in\N} \inf_{k\geq n} d_n = 2$
+			only when regardless of how far we go down the real line
+			(however big $n$ is),
+			we can find two primes that differ by only $2$ ($\inf_{k\geq n} d_n = 2$).
 		\end{proof}
 	\end{enumerate}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 3}
 {\it \begin{enumerate}
@@ -347,8 +375,14 @@ No calculus, please!}
 			&\geq n^2\left(a^{1/n^2} - 1\right) - (n+1)\left(a^{1/(n+1)}-1\right)\\
 			&= 
 		\end{align*}
-		I can't figure this one out, but let's just assume it's monotonically decreasing.
-		Since it is bounded and monotonically decreasing,
+		I can't figure this one out
+		(I'm pretty sure we have to use the inequalities from part (a)
+		to somehow rearrange to get the inequality,
+		like using one the less than direction on the positive term
+		and greater than direction on the negative term,
+		but it wasn't working for me in time)...
+		but if we just assume it's monotonically decreasing, we are done:
+		since it is bounded and monotonically decreasing,
 		it converges.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -356,7 +390,7 @@ No calculus, please!}
 		since $0 < a < 1 = 1^n \implies a^{1/n} < 1$,
 		thus $n(a^{1/n} - 1) < 0$.
 		Furthermore, it is bounded below, and monotonically decreasing
-		(same as above).
+		(ran out of time, same as above).
 		Thus the series converges.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -368,9 +402,13 @@ No calculus, please!}
 				&= \lim_{n\to\infty} n/2(-(a^{1/n} - b^{1/n})^2 - 2 + a^{2/n} + b^{2/n})\\
 				&=
 			\end{align*}
-			.
+			ran out of time;
+			I was trying to get $a_n$ and $b_n$ to seperate,
+			and then we would have $L(a) + L(b)$,
+			but I couldn't get rid of a square.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \end{document}
