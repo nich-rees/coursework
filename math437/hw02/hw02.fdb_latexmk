@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1697447046 "hw02.tex" "hw02.pdf" "hw02" 1697447046 0
+["pdflatex"] 1698043561 "hw02.tex" "hw02.pdf" "hw02" 1698043561 0
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1689853683 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1689853683 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1689853683 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -46,8 +46,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1689853683 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1694484303 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1694500201 6768047 77540929f7d62f2020e85a5c0029da8c ""
-  "hw02.aux" 1697447046 443 bcbccf7a4071e9bf80933a28259eea80 "pdflatex"
-  "hw02.tex" 1697447046 3215 30a0c351cf2b9b23754182caf9f54c1e ""
+  "hw02.aux" 1698043561 443 bcbccf7a4071e9bf80933a28259eea80 "pdflatex"
+  "hw02.tex" 1698043560 3457 b2644836624610dee47c595dfd69d184 ""
   (generated)
   "hw02.aux"
   "hw02.log"
