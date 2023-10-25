@@ -1171,4 +1171,220 @@ Note if $G$ finite, $\#(G/K) =$ the number of distinct cosets $=$
 the number of elements in $G$ divided by the number of elements of $K$,
 since each coset has $K$ elements.
 Thus $\#K \mid \#G$ (Lagrange), so $\#G/K \mid \#G$.
+
+\section{October 24}
+Recall our Fundamental Theorems:
+If $\phi \colon G \to G/K$.
+\begin{itemize}
+	\item $H \subseteq G/K$,
+		then $H' = \phi^{-1}(H)$ is a subgroup of $G$ containing $K$
+		and $H'$ normal $\iff H$ normal in $G/K$.
+		In this case $G/H' \cong (G/K)/H$,
+		$G \supseteq H' \supseteq K \xrightarrow{\phi} G/K
+		\supseteq H = H'/K \supseteq 1_{G/K} = K/K$
+		(the squiggly arrow just means this side becomes the other side
+		when we apply $\phi$).
+	\item If $H'$ is any subgroup of $G$ then
+		$\phi(H') = H \cong H/(H' \cap K) \cong (H'K)/K$.
+		$\phi^{-1}(H) = H'K$.
+		We talked about last time,
+		proof is just using the definitions.
+\end{itemize}
+
+Want to apply these to specific homomorphisms.
+This takes us to this business of groups acting on sets...
+the techinical heart of the class.
+
+Goal (a): given $n > 1$, find all groups of order $n$ (up to isomorphism).
+Goal (b): Is the converse of Lagrange's theorem true?
+(If $d \mid \#G$ does there exist a subgroup of order $d$.)
+
+Answers:
+\begin{enumerate}
+	\item In principle known, but very complicated.
+		We will give a (very) partial answer:
+		only for specific kinds of $n$
+	\item In general, the converse is false, but we still have that
+		if $p$ is a prime and $p \mid \#G$ then
+		\begin{enumerate}
+			\item $\exists x \in G$, $\mathrm{ord}(x) = p$ (Cauchy's Theorem)
+			\item if $\#G = p^r\cdot s$ with $(s,p) = 1$,
+				then there exists a subgroup of order $p^{r'}$
+				for all $r'$ in $0 \leq r' \leq r$.
+				So the converse of Lagrange's works if $d$ is a prime power
+				(Sylow's Theorem).
+		\end{enumerate}
+\end{enumerate}
+We will prove all of these before the end of the class.
+
+\subsection{Method of proof}
+Recall Lagrange's theorem: $\#G = n$, $H \subseteq G, \#H = d$.
+Divide $G$ into cosets of $H$, each coset has size $d$.
+If there are $t$ cosets, $n$ elements are grouped into $t$ subsets of size $d$.
+Thus $n = dt \implies d\mid n, t \mid n$.
+($\implies$ if $H$ is normal, then $\#(G/H) =t$ als divides $\#G = n$).
+Counting argument: we divide $n$ elements into $t$ equisize pieces.
+
+The new method is just counting again,
+but instead of counting elements of $G$,
+we count other sets.
+Quite clever: the other sets can be quite random,
+and there is lots of choice;
+we have to somehow relate them to $G$.
+
+How does this work: let $X$ be a finite set.
+Consider a homomorphism (assume it exists)
+$\phi \colon G \to S_X = $ set of permutation of $X$ $\cong S_m$, $m = \#X$.
+Recall $\#S_X = m!$.
+$\phi$ need not be injective or surjective.
+We partition $X$ into equivalence classes $X_i$
+where the equivalence relation is $x \sim y \iff \exists g \in G$
+such that $\phi(g)(x) = y$
+($\phi(g)\in S_X$ is a permutation of $X$).
+Recall that this is the definition of an orbit:
+the equivalence classes are just orbits of $G$ acting via $\phi$ as permutations.
+In this situation, we say that $G$ acts on $X$ via $\phi$.
+We have not told you anything about $X$ or $\phi$,
+so how will this help us understand $G$?
+
+Counting argument: $\#X = \sum$ sizes of orbits $ = \sum$ sizes of equivalence classes.
+This doesn't look particularly useful yet,
+we don't have size of $X$ yet.
+Here's the miracle:
+the size of these orbits $\#X_i$ has to divide the order of $G$
+(will have to prove this).
+This counting reveals the structure of $G$
+if we choose $X,\phi$ clearly.
+
+Ex. Cayley's theorem sets up an action of $G$ on $X = G$.
+$g \mapsto L_g$, $L_g(x) = gx$, $x \in G$
+(the left translation business).
+There's only one orbit,
+because $\forall g \in G$, $L_g(1)$ sends $1 \mapsto g\cdot 1 = g$,
+so $[1] = G$.
+(An orbit says there's one element in the group $L_g$???
+that can get you to the element;
+$x,y \in X$ in the same orbit $\iff \exists$ some $g \in G$
+with $\phi(g)(x) = y$,
+and don't care which $g$.)
+Counting doesn't say anything interesting:
+it just says $\#G = \#G$.
+
+Ex. Let $H$ be any subgroup of $G$
+(not necessarily normal)
+and set $X = G/H$ (quotient set of cosets).
+Given $g \in G$, we have to define $\phi(g)$ as a permutation of $X = G/H$.
+Define $\phi(g) \colon xH \mapsto gxH$.
+To get $\phi \colon G \to S_X$,
+have to check i) that $\phi$ is well-defined, and ii) $\phi(g_1g_2) = \phi(g_1)\phi(g_2)$.
+Check i): suppose we pick a different representative $x'$ in $xH$.
+Then $x' = xh, h \in H$, so $gx'H = (gxh)H = gxH$ since $H$ is closed.
+Check ii):
+\begin{align*}
+	\phi(g_1g_2)(xH)
+	&= g_1g_2xH\\
+	&= g_1(g_2xH)\\
+	&= \phi(g_1)(g_2xH)\\
+	&= \phi(g_1)\phi(g_2)(xH)
+\end{align*}
+Oh, and this is a permutation, since inverse is just $\phi^{-1} = g^{-1}$
+so bijection.
+
+Subexample:
+Suppose $G$ has order $n$ and $H \subseteq G$ has order $d$.
+This construction produces a homomorphism $G \to S_{n/d} \cong S_X$
+(where $n/d = \#(G/H) = $ the number of cosets).
+This is useful, because $n/d !$ because is usually much smaller than $n!$???
+Consider when $n = 15$, and assume $G$ is not cyclic.
+Let $H = \langle g \rangle$ for some $g \in G$, $g \neq 1$.
+$\# H = 3,5$.
+Suppose $\# H = 3$.
+We get $\phi \colon G \to S_X$,
+which is a map from a group of order $15$ ot one of order $(\#X)! = 5!$.
+The other case is more intersting:
+if $\#H = 5$, then $\#X = 3$, $\# S_X = 6 = 3!$.
+So $\phi\colon G \to S_X$,
+which is a map from a group of order $15$ to one of order $6$.
+Thus, this map cannot be injective!
+We have a nontrivial kernel,
+so there exists a normal subgruop of order $5$ or $15$.
+The reason for this is from Homomorphism theorems:
+$\phi(G) \subseteq S_X$, of order $6$.
+But $\phi(G) \cong G/K$, has order dividing $15 =\#G$
+has to divide $\#S_X = 6$.
+Thus, the only possibilities for $\#G/K$ divide $(15,6) = 3$.
+So $G/K$ has order $1$ or $3$,
+so either $K$ has order $15$ or order $5$.
+Now we claim that $\phi(G) \neq \{1\}$.
+$\phi(g)(H) = gH \neq H$ unless $g \in H$,
+thus $\phi(g)$ is not trivial if $g \not\in H$
+(such that $g$ exists since $\#H = 5$, $\#G = 15$).
+Thus, $phi(G)$ has order $3$,
+and $K = \ker(\phi)$ is a normal subgroup of order $5$.
+
+Recap of example:
+we start with $G$ of order $15$, not cyclic.
+Pick $g\in G$, $H = \langle g \rangle \subsetneq G$.
+$X = G/H = $ cosets of $H$,
+and $\phi \colon G \to S_X$ where $g \mapsto \phi(g) \colon xH \mapsto gxH$.
+$G$ is not cyclic, so $\#H = 3,5$,
+and if $\#H = 3$, got nothing.
+But when $\#H = 5 \implies \phi$ is not injective,
+and has a kernel $K$ of order $5$.
+We have two subgruops, $H,K$, and actually it will turn out that $H = K$,
+but not true in general.
+Conclusion (not obvious): if $\#G = 15$ and $G$ is not cyclic,
+and $g \in G$ has order $5$, then $\langle g \rangle$ is normal in $G$!!
+(Did assume that we could pick an element of order $5$.)
+
+Lol goat girl just pointed out that all groups of order $15$ are cyclic
+(all abelian).
+So we just throw on the condition that $g$ is not a generator of $G$.
+
+This is a very important example.
+Let's talk more about it.
+Let $G$ be any group and $H$ any subgroup.
+Let $X = G/H$ and $\phi$ as above.
+The question is, how many orbtis are there?
+Is $gH \sim H$ via $\phi$?
+Yes because $\phi(g)(H) = gH$ by definition ($H = 1\cdot H$).
+So there is only one orbit, of size $\# X = [G:H]$.
+\begin{definition}[Transitive]
+	Consider $\phi \colon G \to S_X$.
+	$\phi$ is called \emph{transitive}
+	if there is only one orbit.
+\end{definition}
+When $X = G/H$ and $\phi$ is as above, $\phi$ is transitive.
+The Cayley's action is also a transitive action.
+
+Ex (important):
+$X = G$, but this time, $\phi(g) = \phi(g)(x) = gxg^{-1}$ ($x \in G$).
+This is obviously a permutation since $\phi(g^{-1}) = \phi^{-1}(g)$,
+and so bijection,
+and $\phi(g_1g_2)(x) = (g_1g_2)x(g_1g_2)^{-1} = g_1g_2xg_2^{-1}g_1^{-1}
+= g_1(g_2xg_2^{-1})g_1^{-1} = \phi(g_1)(\phi(g_2)(x))$,
+so homomorphism.
+So we get $\phi \colon G \to S_n$ where $n = \# G$.
+Now, something interesting happens.
+We had a similar homomorphism with Cayley's theorem,
+but that was injective, and had one orbit.
+In general $\phi$ is not injective, and has many orbits.
+What you get is that
+\[
+	\# G = \sum\#(\text{orbits})
+\]
+(these terms can all be different).
+This is one of the most important equations in group theory,
+called a ``class equation".
+Recall we've seen this in linear algebra:
+we grouped together similar matrices $A \sim B$ when $A = MBM^{-1}$.
+Likewise, we're grouping together elements of the group when they're ``similar":
+$x \sim y \iff \exists g \in G$ such that $gxg^{-1} = g$ ($x,y \in G$).
+With matrices, the kernel of this map were the scalar matrcies
+(diagonal);
+notably, these commute with all other matrices.
+So $\ker(\phi) = \{g \in G \mid \phi(g) = \text{ trivial }
+\iff gxg^{-1} = x, \forall x\}
+= \{g \in G \mid gx = xg, \forall x\} =$
+center of $G$ (elements that commutie with everythinig).
 \end{document}
