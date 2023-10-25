@@ -987,7 +987,7 @@ Today is a special occasion." [he is wearing a tie]
 		c_n + \frac{r}{2} = (c_n + r) - \frac{r}{2} < b_n - \frac{r}{2}
 		< b_n - \frac{1}{2^N} \leq b_N - \frac{1}{2^N}
 	\]
-	(where the last step is because $b_n \geq b_{n+1}$.
+	(where the last step is because $b_n \geq b_{n+1}$).
 	Thus $\Phi(c) < \Phi(b_N)$.
 
 	ff he forgot about $\alpha$... check Canvas.
@@ -996,5 +996,131 @@ Thus every monotone bounded sequence of these converge.
 Every Cauchy sequence of these converges.
 
 Archimedean property follows (in Canvas notes).
-\end{document}
+
+\section{October 25}
+Recall we were trying to prove
+\begin{proposition}[Cauchy Condensation Test]
+	For $a_n \geq a_{n+1} \geq 0$, the following are equivalent:
+	\begin{enumerate}
+		\item $S = \sum_{n=1}^\infty a_n < + \infty$
+		\item $T = \sum_{k=0}^\infty 2^ka_{2^k} < + \infty$
+	\end{enumerate}
+\end{proposition}
+Last class, proved (b) $\implies$ (a). Now we prove the other direction.
+\begin{proof}
+	If $S$ converges,
+	consider a partial sum for $T$:
+	\begin{align*}
+		t_n
+		&= \sum_{k=0}^n 2^ka_{2^k}\\
+		&= a_1 + 2a_2 + 4a_4 + \cdots + 2^na_{2^n}\\
+		&= 2\left[\frac{1}{2}a_1 + a_2 + 2a_4 + \cdots + 2^{n-1}a_{2^n}\right]\\
+		&\leq 2\left[a_1 + a_2 + (a_3 + a_4) + (a_5 + a_6 + a_7 + a_8)
+		+ \cdots + (a^{2^{n-1}+1} + \cdots + a_{2^n})\right]\\
+		&\leq 2s_{2^n} \leq 2S
+	\end{align*}
+	Partial sums for $T$ are bounded $\implies T < + \infty$.
+\end{proof}
+\subsection{$p$-series}
+For fixed $p$, let
+\[
+	\zeta(p) = \sum_{n=1}^\infty \frac{1}{n^p}
+\]
+(Related to the $\zeta$ function from Riemann Hypothesis,
+but that's over complex values.)
+Which $p$ makes this converge?
+Reject all $p \leq 0$: crude test.
+For $p > 0$, summand decreases,
+so Cauchy Condensation Test (CCT) applies,
+so consider $\sum_{k = 0}^\infty \frac{2^k}{(2^k)^p}
+= \sum_{k=0}^\infty \frac{1}{(2^{p-1})^k}$.
+This is a gemotric series with ratio $r = 1/(2^{p-1})$.
+So the series converges if and only if $r < 1$, or $p > 1$.
+
+Digression: This is a glimpse through a keyhoel to a big room of mathematics.
+If you extended $\zeta(p)$ to complex inputs $p$,
+this will converge when the real part of $\mathrm{Re}(p)$...
+then extended to more $p \in \C$.
+We have $\sum_{k=1}^\infty p^k = \frac{1}{1-p}$ when $|p|<1$:
+we have a function defined through a series,
+but has an alternative form and can define the convergence to that form.
+He admittedly doesn't know a lot about the subject, but would like to point out.
+
+Note that this is new information:
+the ratio and root test will not help with $p$-series.
+The series converges to slowly to detect geometrically,
+and ratio and root test are not sharp enough to detect it.
+Indeed, $\alpha = \limsup_{n\to \infty}|a_n|^{1/n} = \limsup_{n\to\infty}\frac{1}{(n^p)^{1/n}}
+= \limsup_{n\to\infty} \frac{1}{(n^{1/n})^p} = 1$.
+And we already talked about how ratio test is even coarser than
+the ratio test, so it also lets us down (but have worked through the details on canvas).
+
+\subsection{Kummer's Test}
+(From TBB book, pp 115.)
+\begin{theorem}
+	Consider $S = \sum_{n=1}^\infty a_n$,
+	with all $a_n > 0$.
+	Let $(D_n)$ be a sequence with $D_n > 0, \forall n$.
+	Define
+	\[
+		\underline{L} = \liminf_{k\to\infty} \frac{D_ka_k - D_{k+1}a_{k+1}}{a_{k+1}}
+	\]
+	\[
+		\overline{L} = \limsup_{k\to\infty} \frac{D_ka_k - D_{k+1}a_{k+1}}{a_{k+1}}
+	\]
+	\begin{enumerate}
+		\item If $\underline{L} > 0$, then $S$ converges.
+		\item If $\overline{L} < 0$ and $\sum_{n=1}^\infty \frac{1}{D_n} = +\infty$
+			then $S$ diverges.
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{enumerate}
+	\item If $\underline{L} > 0$, then pick $r \in (o,\underline{L})$.
+		By definition of $\liminf$, $\exists N \in \N$ such that
+		$\forall k \geq N$, $r < \frac{D_ka_k - D_{k+1}a_{k+1}}{a_{k+1}}$,
+		i.e. $ra_{k+1} < D_ka_k - D_{k+1}a_{k+1}$.
+		Telescope these:
+		\begin{align*}
+			ra_{N+1} &< D_Na_N - D_{N+1}a_{N+1}\\
+			ra_{N+2} &< D_{N+1}a_{N+1} - D_{N+2}a_{N+2}\\
+					 &\vdots\\
+			ra_{N+p} &< D_{N+p-1}a_{N+p-1} - D_{N+p}a_{N+p}\\
+		\end{align*}
+		Thus $r\left[a_{N+1} + \cdots + a_{N+p}\right] < D_Na_N - D_{N+p}a_{N+p} < D_Na_N$.
+		Since $N$ fixed and $p \in \N$ arbtrary,
+		partial sums for $\sum_n a_n$ are bounded, so that series converges.
+	\item See Canvas notes (similar ideas)
+\end{enumerate}
+\end{proof}
+``I love WebWork [sarcastically]. I wrote some of those questions,
+and some of them really lit up Piazza."
+
+Example: Take constant $D_n = 1$ in Kummer's Test:
+\[
+	\underline{L} = \liminf_{k \to \infty} \frac{a_k - a_{k+1}}{a_{k+1}}
+	= \liminf \left(\frac{a_k}{a_{k+1}} - 1\right)
+\]
+\[
+	\overline{L} = \limsup \left(\frac{a_k}{a_{k+1}} - 1\right)
+	= \left( \frac{1}{\liminf\left(\frac{a_{k+1}}{a_k}\right)} - 1\right)
+\]
+as we have shown on some homework.
+So $\underline{L} = \frac{1}{\overline{\alpha}} - 1$,
+$\overline{L} = \frac{1}{\underline{\alpha}} - 1$,
+and we see convergence if $\overline{alpha} < 1$ and diverges if $\underline{\alpha} > 1$...
+that's the ratio test!
+So Kummer's test covers the ratio test.
+
+Example: Take $D_n = n$ in Kummer's test.
+(Note $\sum\frac{1}{D_n} = \sum{1}{n} = +\infty$.)
+Hence
+\begin{align*}
+	\frac{D_ka_k - D_{k+1}a_{k+1}}{a_{k+1}}
+	&= \frac{ka_k - (k+1)a_{k+1}}{a_{k+1}}\\
+	&= \frac{k(a_k - a_{k+1}) - a_{k+1}}{a_{k+1}}\\
+	&= k\left(\frac{a_k}{a_{k+1}} - 1\right) - 1
+\end{align*}
+Testing limits of this leads to the refined test named for Raabe.
+Details on Canvas notes and in HW07.
 \end{document}
