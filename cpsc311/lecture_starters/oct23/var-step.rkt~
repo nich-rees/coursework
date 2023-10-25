@@ -1,0 +1,22 @@
+#lang plai
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mutable Variables (Binding "by-value")
+
+'{with {x 5}
+       {with {y x}
+             {seqn {setvar y 7}
+                   x}}}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mutable Variables (Binding "by-reference")
+
+'{with {x 5}
+       {with {y x}
+             {seqn {setvar y 7}
+                   x}}}
+
