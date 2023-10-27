@@ -31,7 +31,54 @@ divisor $d$ of $n$, we also have that
 \]
 }
 \begin{proof}[Solution]
-	ff
+	We first show no even integers satisfy our property.
+	If $n$ is even, there exists some $k \in \N$ such that $2k = n$,
+	so $k \mid n$.
+	Furthermore, $n+2$ is even as well,
+	so $\frac{n+2}{2}$ is an integer,
+	specifically $\frac{n+2}{2} = \frac{n}{2}+1 = k+1$.
+	So $2(k+1) = n+2 \implies k+1 \mid n+2$.
+	Furthermore, $k+1$ must be the greatest possible divisor of $n+2$
+	that is not equal to $n+2$,
+	since if a divisor $d$ was greater than $k+1$,
+	there is some integer $1 < m < 2$ where $dm = n+2$,
+	but no such integer $m$ exists.
+	But $k + 2 > k + 1$, and $k + 2 = \frac{n}{2} + 2 \neq n + 2$
+	when $n > 1$,
+	so $k + 2 \nmid n + 2$.
+	So there exists a divisor of $n$ such that two more than it
+	is not a divisor of $n + 2$.
+
+	Now, we consider odd composite integers $n$.
+	Then there exists an integers $1 < d,q < n$ (not necessarily distinct)
+	such that $qd = n$ (so $d \mid n$).
+	Without loss of generality, let $d \geq q$.
+	Then $n + 2 = qd + 2$.
+	Note that both $q$ and $d$ must be odd,
+	otherwise $n$ would be divisible by $2$ and would be even,
+	which would be against our assumption.
+	We can write $n + 2 = qd + 2 + 2q - 2q = q(d+2) - 2(q-1)$,
+	so
+	\[
+		(n+2)/(d+2) = q - 2(q-1)/(d+2)
+	\]
+	But since $d \geq q$, $d+2 > q - 1$ so $d+2 \nmid q-1$.
+	Furthermore, $q-1$ is even so $2(q-1)$ is even,
+	but $d+2$ is odd, so $d+2 \nmid 2(q-1)$,
+	so $2(q-1)/(d+2)$ is not an integer,
+	thus our term on the right is not an integer.
+	But then $d + 2 \nmid n+2$.
+	Thus odd composite integers do not satisfy our property either.
+
+	Finally, consider the only remaining possibility,
+	when $n$ is an odd prime number.
+	The only such divisors of this is $n$ and $1$.
+	$n + 2 \mid n + 2$ trivially.
+	If and only if $1 + 2 = 3 \nmid n + 2$, we have our desired property then.
+	So if $n$ is prime and of the form $n = 3j - 2$ for some $j \in \N$,
+	then $n$ must satisfiy our property.
+	We have shown that no other such $n$ can satisfy our property,
+	thus this is all the possible solutions.
 \end{proof}
 \clearpage
 
@@ -79,14 +126,49 @@ divisor $d$ of $n$, we also have that
 with the property that no integer from this set is of the form
 $a^2 + b^2$ for some $a,b \in \Z$.}
 \begin{proof}[Solution]
-	Note if $k = a^2 + b^2$,
-	then $0 = a^2 - k + b^2$,
-	which only
+	Let $k \in \N$ be arbitrary.
+	Let $m$ be the product of the squares of the first
+	$k$ primes $q$ of the form $q = 4j + 3$
+	(for some $j \in \N$),
+	i.e. $m = \prod_{i=1}^k q^2_i$.
+	
+	Note that we can always $k$-many $q_i$.
+	To prove this, for the sake of contradiction,
+	assume there are only $r < k$ many such primes of this form,
+	$q_1,q_2,\dots,q_r$
+	(where $q_1 < q_2 < \cdots < q_r$).
+	Note that $n = 4q_1q_2\cdots q_r -1$ is of the form $4j+3$,
+	but $n > q_r$, so by assumption,
+	$n$ cannot be prime,
+	so is composite.
+	Further, note that none of the $q_i$ and $2$ divide $n$,
+	thus all the primes in the prime factor decomposition of $n$
+	is of the form $4j + 1$, thus $n \equiv 1\, (\mathrm{mod}\, 4)$
+	which is a contradiction.
+	Thus $n$ is a prime greater than $q_r$ and $n = 4j - 1$.
+	We can do this indefinitely to get $k$ many primes of the form $4j + 3$.
 
-	If $k = a^2 + b^2$,
-	then $k \equiv a^2 + b^2\;(\mathrm{mod}\; a) \equiv b^2 \; (\mathrm{mod}\; a)$
-	and $k \equiv a^2 + b^2\;(\mathrm{mod}\; b) = a^2 \; (\mathrm{mod}\; b)$.
-	ff
+	Now, consider the system
+	\begin{align*}
+		x &\equiv q_1 - 1 \, (\mathrm{mod}\, q_1^2)\\
+		x &\equiv q_2 - 2 \, (\mathrm{mod}\, q_2^2)\\
+		  &\vdots\\
+		x &\equiv q_k - k \, (\mathrm{mod}\, q_k^2)\\
+	\end{align*}
+	By the Chinese Remainder Theorem,
+	there exists a unique solution to the system modulo $m$,
+	which we'll call $x_0$.
+	Then, let $x_i = x_0 + i$ for $1 \leq i \leq k$.
+	Note that $x_i = q_i + nq_i^2$,
+	thus $q_i \mid x_i$ but $q_i^2 \nmid x_i$
+	(and so $q_i^s \nmid x_i$ for all $s \geq 2$).
+	Thus, there are $k$ consecutive integers $x_1,x_2,\dots,x_k$
+	whose prime number decomposition that contain
+	a prime of the form $4j+3$ with exponent $1$.
+	But by Theorem 13.4 from the notes,
+	for all $a,b \in \Z$, $a^2 + b^2 \neq x_i$ for all $1 \leq i \leq k$,
+	since the exponent of $q_i$ is $\gamma_i = 1$,
+	which is not even.
 \end{proof}
 \clearpage
 
@@ -106,15 +188,39 @@ Then compute the following limits:
 \begin{proof}[Solution]
 	\hfill\break
 	\textbf{Limit 1:}
-	$d(mn) = d(m)d(n), \phi(mn)=\phi(m)\phi(n)$ when $m,n$ coprime.
-	We can see that $d(n!) = d(p_1^{e_1})d(\prod_{i=2}^kp_i^{e_i})
-	= \prod (e_i + 1)$.
-	And can also check $\phi(n!) = \prod (p_j^{e_j} - p_{j-1}^{e_{j-1}}$
-	or something from $\phi(p_1\cdots p_k) = \prod\phi(p_i) = \prod(p_i-1)$.
-	Simpler case: $d(p_1\cdots p_k) = \prod_i^k d(p_i) = \prod_i^k 2 = 2^k$
-	and $\phi(p_1\cdots p_k) = ff$.
+	Note that the prime factor decomposition of $n!$
+	contains every prime that came before it,
+	since if $p$ is prime and $p < n$,
+	$p \mid n!$ by definition of factorial.
+	Thus, if we enumerate the primes in order (ie. $p_1 = 2$, $p_2 = 3$, etc.),
+	let $p_r$ be the greatest prime less than or equal to $n$.
+	Then we can write $n! = \prod_{i=1}^r p_i^{\alpha_i}$ thus
+	\[
+		\frac{n!}{d(n!)\phi(n!)} =
+		\prod_{i=1}^r \frac{p_i^{\alpha_i}}{d(p_i^{\alpha_i})\phi(p_i^{\alpha_i})}
+		= \prod_{i=1}^r \frac{p_i^{\alpha_i}}{(\alpha_i+1)p_i^{\alpha_i-1}(p-1)}
+		= \prod_{i=1}^r \frac{p_i}{(\alpha_i+1)(p_i-1)}
+	\]
+	Note that for any 
 
 	\hfill \break
-	\noindent\textbf{Limit 2:} ff
+	\noindent\textbf{Limit 2:}
+	We are proving $\frac{a_{n+1}}{a_n} = (n+1)2^{d(n!) - d((n+1)!)} < 1$.
+	If $n+1$ is prime,
+	then ff see photo.
+
+	Now if $n+1$ is not prime,
+	we claim the inequality $n+1 < 2^{\prod_{\beta_i \neq 0}(\alpha_i + \beta_i + 1)}$.
+	If $n+1$ is a prime squared,
+	something something $48^2$ has $6$ factors of $7$...
+	we show that it works.
+	Somehow, this links to when $n+1$ contains any prime squared.
+
+	Now, our remaining case is when $n+1$ is a sequence of primes with exponent $1$.
+
+	Current strategy:
+	if $d((n+1)!) - d(n!) > n \implies d((n+1)!) > n + d(n!)$,
+	we are done since $(n+1)2^{-n}$ is definitely less than $1$.
+	Asymptotoically, this looks like $d(n!) > n^2$.
 \end{proof}
 \end{document}
