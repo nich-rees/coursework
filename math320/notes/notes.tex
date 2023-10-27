@@ -1123,4 +1123,132 @@ Hence
 \end{align*}
 Testing limits of this leads to the refined test named for Raabe.
 Details on Canvas notes and in HW07.
+
+\section{October 27}
+``Let's give series one last shot." (Yoooo, last series lecture).
+\subsection{Alternating Series}
+Most of the series we've been looking at have had all
+positive terms, now we have ones that include negatives.
+\begin{theorem}
+	If $S = \sum_{n=0}^\infty (-1)^n a_n$ and
+	\begin{enumerate}
+		\item $a_0 \geq a_1 \geq a_2 \geq \cdots$
+		\item $\lim_{k \to \infty} a_k = 0$
+	\end{enumerate}
+	Then $S$ converges.
+\end{theorem}
+\begin{proof}
+	Let $s_n = \sum_{k=0}^n (-1)^k a_k$ for $n \geq 0$.
+	Can envision this as the partial sums going back and forth,
+	but shrinking in magnitude:
+	\[
+		s_1 \leq s_3 \leq s_5 \leq \cdots \leq s_6 \leq s_4 \leq s_2 \leq s_0
+	\]
+	Note that the odd partial sums form a monotonically increasing sequence,
+	and the even partial sums form a monotonically decreasing sequence,
+	and clearly both sequences are bounded.
+	Thus, they both converge.
+	But
+	\[
+		0 \leq s_{2n} - s_{2n+1} = a_{2n+1}
+	\]
+	which has limmit $0$,
+	so Squeeze theorem (with $a_k \to 0$) shows both have the same limit.
+\end{proof}
+Note from Math 101:
+any partial sum gives a lower or upper bound on the final value
+that $S$ converges to (depending on if even or odd);
+strategy for calculation (but we're not in this game for that).
+
+\subsection{Summation by Parts}
+``We love our add and subtract trick, we plan to use it for HW07 Q4.
+We love our telescoping series.
+What if we did both?"
+
+Consider $\sum_{k=0}^n A_k b_k$.
+Define $A'_k = A_k - A_{k-1}$, $B_n = b_0 + b_1 +\cdots + b_n$,
+and $b_k = B'_k = B_k - B_{k-1}$.
+Now
+\begin{align*}
+	\sum_{k=0}^n A_k b_k
+	&= \sum_{k=0}^n A_k B'_k\\
+	&= A_0b_0 + A_1b_1 + A_2b_2 + \cdots + A_nb_n\\
+	&= A_0B_0 + A_1(B_1 - B_0) + A_2(B_2 - B_1) + \cdots + A_n(B_n - B_{n-1})\\
+	&= (A_0 - A_1)B_0 + (A_1 - A_2)B_1 + \cdots + (A_{n-1} - A_n)B_{n-1} + A_nB_n\\
+	&= (-A'_1)B_0 + (-A'_2)B_1 + \cdots + (-A'_n)B_{n-1} + A_nB_n\\
+	&= A_nB_n - \sum_{k=1}^n A'_kB_{k-1}
+\end{align*}
+Now recall our analogue: $\int_a^b uv' dx = uv\vert_a^b - \int_a^bu'vdx$...
+looks similar enough to deserve the name.
+Our work will be useful in proving the following theorem.
+\begin{theorem}[Dirichlet's Test]
+	Consider $S = \sum_{n=0}^\infty a_nb_n$. If
+	\begin{enumerate}
+		\item $a_n \geq a_{n+1}$ for all $n$, and $a_n \to 0$ as $n \to \infty$.
+		\item $B_n = b_0 + b_1 + \cdots + b_n$ form a bounded sequence
+	\end{enumerate}
+	Then $S$ converges also.
+\end{theorem}
+\begin{remark}
+	If $b_n = (-1)^n$, this will give us the alternating series test.
+\end{remark}
+\begin{proof}
+	Use $A_k = a_k$ in the summation by parts formula.
+	Look at the partial sums, so
+	\[
+		S_n =  \sum_{k=0}^n a_kb_k
+		= a_nb_n - \sum_{k=1}^n\underbrace{(a_k - a_{k-1})}_{a'_k}B_{k-1}
+	\]
+	Both the right hand side pieces converge as $n \to \infty$.
+	Prove this using assumptiion (b) first.
+	Let $C = \sup_k |B_k|$... a number.
+	Then $|a_nB_n| \leq C|a_n| \to 0$ by (a).
+	For the second piece, use monotonicity
+	\[
+		\sum_{k=1}^n \left\lvert \left( a_k - a_{k-1}\right)B_{k-1}\right\rvert
+		\leq C \sum_{k=1}^n\left(a_{k-1} - a_k\right)
+		= C(a_0 - a_n) \leq Ca_0
+	\]
+	where the equality is because this is a telescoping series.
+	So the series $\sum_{k=1}^\infty(a_k - a_{k-1})B_{k-1}$ converges absolutely,
+	so it must converge.
+\end{proof}
+I asked if we could modify hypothesis to say for any monotone sequence;
+he says it's the same, we just multiply $a_n$ by a sign,
+and Dirichlet's still applies.
+
+Will try to come up with a question on HW08 that makes Dirichlet's
+test better than alternating series.
+Mostly, using convergence tests is a homework activity
+(people were complaining about memorizing all these tests);
+proving these tests can show up on exams.
+
+\subsection{Absolute Convergence vs Conditional Convergence}
+Recall: if $\underbrace{\sum_{n=1}^\infty |a_n| \leq +\infty}_{
+\text{absolute convergence for }\sum a_n}$,
+then $\sum_{n=1}^\infty a_n$ converges
+(and we say it is absolutely convergent).
+The converse is not true.
+The alternating series test shows $\sum_{n=1}^\infty \frac{(-1)^n}{n}$ converges,
+yet $\sum_{n=1}^\infty \left\lvert\frac{(-1)^n}{n}\right\rvert$
+is known to divierge.
+Any series where $\sum a_n$ converges but $\sum|a_n| = +\infty$
+are called conditionally convergent.
+
+\subsubsection{Rearrangement}
+Re-ordering terms is okay for absolutely convergent series,
+but strange for conditionally convergent ones, e.g.
+let $S = \sum\frac{(-1)^{n+1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} -+ \cdots$.
+Build $\tilde{S}$ using the same pieces, but shuffle the order:
+\begin{align*}
+	\tilde{S}
+	&= 1 - \frac{1}{2} - \frac{1}{4} + \frac{1}{3} - \frac{1}{6}
+	-\frac{1}{8} + \frac{1}{5}-\frac{1}{10} - \cdots\\
+	&= \left(1 - \frac{1}{2}\right) - \frac{1}{4} + \left(\frac{1}{3} - \frac{1}{6}\right)
+	-\frac{1}{8} + \left(\frac{1}{5}-\frac{1}{10}\right) - \cdots\\
+	&= \frac12\left[1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} +- \cdots\right]\\
+	&= \frac{1}{2}S
+\end{align*}
+Funny...
+\newline We start on the much awaited Chapter 2 next week.
 \end{document}
