@@ -1,0 +1,105 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry, hyperref}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 437}
+\chead{Homework 2}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\section{Problem 1}
+{\it Let $\{a_n\}_{n\geq 0}$ be a sequence defined as follows:
+\[
+	a_0 = 0; a_1 = 1; a_2 = 2 \text{ and}
+\]
+\[
+	a_{n+3} = 5^n\cdot a_{n+2} + n^2\cdot a_{n+1} + 11a_n
+	\text{ for }n\geq 0
+\]
+Prove that there exist infinitely many $n \in \N$
+such that $2023 \mid a_n$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+
+\section{Problem 2}
+{\it Let $n \in \N$.
+Find the number of solutions for the congruence equation:
+\[
+	x^3 \equiv 1 \; (\mathrm{mod}\, n)
+\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+
+\section{Problem 3}
+\textbf{As always, $\phi(\cdot)$ is the Euler-$\phi$ function.}\newline
+{\it Let $\alpha$ be any real number in the interval $[0,1]$.
+Prove that there exists an infinite sequence $\{n_k\}_{k \geq 1} \subset \N$ such that
+\[
+	\lim_{k\to\infty} \frac{\phi(n_k)}{n_k} = \alpha
+\]
+}
+\begin{proof}[Solution]\let\qed\relax
+If $n = \prod_{i=1}^{\pi(n)} p_i^{\alpha_i}$, then
+\[
+	\phi(n) = \prod_{i=1}^{\pi(n)}(p_i^{\alpha_i} - p_i^{\alpha_i - 1})
+	= n \prod_{\substack{p\mid n \\ p \text{ prime}}}\left(1 - \frac{1}{p}\right)
+\]
+Thus
+\[
+	\frac{\phi(n)}{n} = \prod_{\substack{p\mid n \\ p \text{ prime}}}\left(1 - \frac{1}{p}\right)
+\]
+To show that $\{\frac{\phi(n)}{n}\}$ is dense in $(0,1)$,
+let $x,y \in (0,1)$ where $x < y$,
+then we claim there exists $n$ such that $x < \frac{\phi(n)}{n} < y$.
+It is sufficient to consider when $x,y \in \Q \cap (0,1)$.
+Let $x = p'_1/q_1$ and $y = p'_2/q_2$ where $p'_i < q_i$ and $\gcd(p'_i,q_i) = 1$.
+We can rewrite them to have the same denomonator:
+$x = p_1/q$ and $y = p_2/q$, where $p_1 < p_2 < q$.
+Note $1 - \frac{1}{p} = \frac{p-1}{p}$.
+Choose the $p$ such that $p \mid q$
+(I want something more, like the product of all the primes is $q$).
+So let's just assume that $q$'s prime decomposition
+only has exponents $1$ (and then could show this is dense)
+so then we want $p_1 < \prod(p-1) < p_2$.
+Perhaps if it is too big, then we find more $p$ later and multiply it down.
+If it is too small, ff
+
+This is the problem: we can't write every rational number
+as a product of $(p-1)/p$,
+or even every rational with denominator whose prime number decomposition
+do not have extra exponents.
+But somehow we achieve density.
+
+Note that $\prod(1-\frac{1}{p})$ converges iff $\sum -\frac{1}{p}$ converges
+(\href{https://math.stackexchange.com/questions/2966559/convergence-of-infinite-product-prod1a-n-where-a-n-changes-sign}{stack exchange link in source code}).
+But I don't think we really care.
+
+Maybe useful: the rationals in simplified form do not
+contain any shared primes between the numerator and denominator.
+
+Maybe we do a completely different approach to density.
+What if $n = q$ or something.
+\end{proof}
+\end{document}
