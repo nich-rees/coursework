@@ -198,29 +198,148 @@ Then compute the following limits:
 	\[
 		\frac{n!}{d(n!)\phi(n!)} =
 		\prod_{i=1}^r \frac{p_i^{\alpha_i}}{d(p_i^{\alpha_i})\phi(p_i^{\alpha_i})}
-		= \prod_{i=1}^r \frac{p_i^{\alpha_i}}{(\alpha_i+1)p_i^{\alpha_i-1}(p-1)}
+		= \prod_{i=1}^r \frac{p_i^{\alpha_i}}{(\alpha_i+1)p_i^{\alpha_i-1}(p_i-1)}
 		= \prod_{i=1}^r \frac{p_i}{(\alpha_i+1)(p_i-1)}
 	\]
-	Note that for any 
+	Note that if $n$ is an integer such that $n > 3$,
+	we have $3n - 2n > 3 \implies 3(n-1) > 2n \implies \frac{n}{n-1} < \frac{3}{2}$.
+	Thus for $i \geq 3$, $p_i \geq 5$,
+	and since $\alpha_i \geq 1$, we have
+	\[
+		\frac{p_i}{(\alpha_i + 1)(p_i-1)} \leq \frac{p_i}{2(p_i-1)} < \frac{3}{4}
+	\]
+	for all $i \geq 3$.
+
+	If $\pi(n)$ denotes the prime counting function
+	(the number of prime numbers less than $n$),
+	we have that
+	\[
+		\frac{n!}{d(n!)\phi(n!)}
+		\leq \frac{p_1}{(\alpha_1+1)(p_1-1)}\frac{p_2}{(\alpha_2+1)(p_2-1)}\left
+	(\frac{3}{4}\right)^{r-2}
+	= \frac{p_1}{(\alpha_1+1)(p_1-1)}\frac{p_1}{(\alpha_1+1)(p_1-1)}
+	\left(\frac{3}{4}\right)^{\pi(n)-2}
+	\]
+	But since there are infinitly many primes, $\pi(n)$ approaches infinity
+	as $n$ does,
+	thus $\left(\frac{3}{4}\right)^{\pi(n)-2} \to 0$ as $n \to \infty$.
+	But since $\frac{n!}{d(n!)\phi(n!)}$ is bounded below by zero,
+	by squeeze theorem, we have that
+	\[
+		\lim_{n\to\infty} \frac{n!}{d(n!)\phi(n!)} = 0
+	\]
+	as well.
 
 	\hfill \break
 	\noindent\textbf{Limit 2:}
-	We are proving $\frac{a_{n+1}}{a_n} = (n+1)2^{d(n!) - d((n+1)!)} < 1$.
-	If $n+1$ is prime,
-	then ff see photo.
+	Let $a_n = \frac{n!}{2^{d(n!)}}$.
+	Then
+	\[
+		\frac{a_{n+1}}{a_n} = \frac{(n+1)!/2^{d((n+1)!)}}{n!2^{d(n!)}}
+		= (n+1)/2^{d(n!) - d((n+1)!)}
+	\]
+	Thus, it is sufficient to show that
+	$2^{d((n+1)!) - d(n!)} > 2n + 2$
+	for sufficiently large $n$,
+	because then $(n+1)/2^{d((n+1)!) - d(n!)} < (n+1)/(2n+2) = \frac{1}{2}$,
+	so $a_n < C\left(\frac{1}{2}\right)^n$
+	(where $C$ is a constant).
+	Since $C\left(\frac{1}{2}\right)^n \to 0$ as $n \to \infty$,
+	and $a_n > 0$ for all $n$,
+	by squeeze theorem, we would have $\lim_{n\to\infty} a_n = 0$.
 
-	Now if $n+1$ is not prime,
-	we claim the inequality $n+1 < 2^{\prod_{\beta_i \neq 0}(\alpha_i + \beta_i + 1)}$.
-	If $n+1$ is a prime squared,
-	something something $48^2$ has $6$ factors of $7$...
-	we show that it works.
-	Somehow, this links to when $n+1$ contains any prime squared.
+	We show first show that $d((n+1)!) - d(n!) \geq 2^{\pi(n)-1}$
+	(where $\pi(n)$ is number of primes $\leq n$).
+	To see this, let $n! = \prod_{i=1}^{\pi(n)}p_i^{\alpha_i}$
+	be the unique prime factorization of $n!$,
+	where $p_i$ is the $i$th prime number (e.g. $p_1 = 2$).
+	We deal with two case: when $n + 1$ is prime, and when it is composite.
+	First, let $n + 1$ be prime.
+	Then $(n+1)! = p_{\pi(n)+1}\prod_{i=1}^{\pi(n)}p_i^{\alpha_i}$.
+	Then let $\beta_i \in \{0,1\}$,
+	we have that $p_{\pi(n)+1}\prod_{i=1}^{\pi(n)}p_i^{\beta_i} \mid p_{\pi(n)+1} = n+1 \mid (n+1)!$,
+	but since $p_{n+1} \nmid n!$, we have
+	$p_{\pi(n)+1}\prod_{i=1}^{\pi(n)}p_i^{\beta_i} \nmid n!$.
+	There are a total of two possibilities for $\pi(n)$ many $\beta_i$,
+	thus there are $2^{\pi(n)}$ ways to choose the $\beta_i$,
+	so there are at least $2^{\pi(n)}$ many divisors of $(n+1)!$
+	but not of $n!$.
+	Thus
+	\[
+		d((n+1)!) - d(n!) \geq 2^{\pi(n)} \geq 2^{\pi(n)-1}
+	\]
+	which proves the $n+1$ is prime case.
+	Now let $n+1$ be composite.
+	Then we have the unique prime factorization
+	$(n+1)! = \prod_{i=1}^{\pi(n)} p_i^{\beta_i}$
+	where there is at least one $i$ such that $\gamma_i > \alpha_i$
+	(by unique factorization).
+	Denote this $\gamma_i$ by $\gamma_j$ (and $p_j$).
+	Then using $\beta_i \in \{0,1\}, i\neq j$ as before,
+	let
+	\[
+		m = p_j^{\gamma_j}\prod_{\substack{i=1\\i\neq j}}^{\pi(n)}p_i^{\beta_i}
+	\]
+	Similar to before, we have $m \mid (n+1)!$, but $m \nmid n!$
+	since $p_j^{\gamma_j} \nmid n!$.
+	There are $\pi(n)-1$ ways to choose the $\beta_i$ (similar to the prime case),
+	so there are at least $2^{\pi(n)-1}$ many divisors of $(n+1)!$
+	but not of $n!$.
+	Thus
+	\[
+		d((n+1)!) - d(n!) \geq 2^{\pi(n)-1}
+	\]
+	Thus, we have that $2^{d((n+1)!) - d(n!)} \geq 2^{2^{\pi(n)-1}}$.
 
-	Now, our remaining case is when $n+1$ is a sequence of primes with exponent $1$.
+	Note that for all $k \in \N$ such that $k \geq 5$, $2^{k - 1} > 2k + 2$
+	(since $2^{5-1} > 2\cdot 5 + 2$,
+	and the exponential grows faster than linear thereafter).
+	Since $\pi(n) \geq 5$ when $n \geq 11$, we have
+	$2^{2^{\pi(n) - 1}} > 2^{2\pi(n) + 2}$ when $n \geq 11$.
 
-	Current strategy:
-	if $d((n+1)!) - d(n!) > n \implies d((n+1)!) > n + d(n!)$,
-	we are done since $(n+1)2^{-n}$ is definitely less than $1$.
-	Asymptotoically, this looks like $d(n!) > n^2$.
+	Finally, we show that $2^{2\pi(n)} > n$.
+	Consider all $m \in \N$ such that $m \leq n$.
+	We can rewrite a unique prime factorization
+	$m = p_1^{\eta_1}p_2^{\eta_2}\cdots p_{\pi(n)}^{\eta_{\pi(n)}}$
+	where $\eta_i$ may be $0$.
+	By the division algorithm, we have $\eta_i = 2q_i + r_i$
+	where $r_i \in \{0,1\}$ and $r_i,q_i$ are unique.
+	Thus we can uniquely write $m = u^2p_1^{r_1}\cdots p_{\pi(n)}^{r_{\pi(n)}}$
+	where $u \in \N$ such that $u = p_1^{q_1}\cdots p_{\pi(n)}^{q_{\pi(n)}}$.
+	See that $u \leq \sqrt{m}$.
+	We use the notation $\N_j = \{i \colon i \in \N, i \leq j\}$.
+	Now define a map
+	\[
+		\phi \colon \N_n \to \N_{\lfloor \sqrt{n}\rfloor}
+		\times \mathcal{P}(\{p_i \colon i \in \N_{\pi(n)}\})
+	\]
+	with $m \mapsto (u, \{p_i \colon i\in \N_{\pi(n)}, r_i = 1\}$.
+	By uniqueness, this map is injective.
+	Thus we have that $|\N_n| \leq |\N_{\lfloor \sqrt{n}\rfloor}|
+	|\mathcal{P}(\{p_i \colon i \in \N_{\pi(n)}\})|$,
+	i.e. $n \leq 2^{\pi(n)}\sqrt{n}$.
+	We want to show the strict inequality.
+	We now deal with when $n$ is a perfect square, and when $n$ is not.
+	If $n$ is not a perfect square, we have that
+	\[
+		n \leq \lfloor \sqrt{n} \rfloor 2^{\pi(n)} < 2^{\pi(n)}\sqrt{n}
+	\]
+	Now let $n$ be a perfect square.
+	Note the pre-image of $(\sqrt{n},\{p_i \colon i \in \N_{\pi(n)}, r_i=1\}$
+	is the $m$ of the form $m = np_1p_2 \cdots p_{\pi(n)}$,
+	but then $m > n$, which is a contradiction.
+	But then the pre-image is empty,
+	thus $n \neq 2^{\pi(n)}\sqrt{n}$ giving us the strict inequality.
+	Thus, regardless of $n$, we have $n \neq 2^{\pi(n)}\sqrt{n}$,
+	and squaring both sides (both are positive)
+	gives us $2^{2\pi(n)} > n$.
+
+	Finally, we have that
+	\[
+		2^{d((n+1)!) - d(n!)} > 2^{2\pi(n)+2} > 2\cdot 2^{2\pi(n)}+2
+		> 2n+2
+	\]
+	for $n \geq 11$, as desired.
+	Thus we have shown the desired limit as observed before.
 \end{proof}
 \end{document}
