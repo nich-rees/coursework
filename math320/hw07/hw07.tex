@@ -1,0 +1,497 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 7}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it Use $\sum_{n=1}^\infty \frac{1}{n^4} = \frac{\pi^4}{90}$ and
+a splitting argument to evaluate
+$S = 1 + \frac{1}{3^4} + \frac{1}{5^4} + \frac{1}{7^4} + \cdots.$}
+
+\begin{proof}[Solution]\let\qed\relax
+	We have
+	\[
+		\frac{\pi^4}{90}
+		= \sum_{n=1}^\infty \frac{1}{n^4}
+		= S + \sum_{\substack{n=1\\n\text{ even}}}^\infty \frac{1}{n^4}
+		= S + \sum_{n=1}^\infty \frac{1}{(2n)^4}
+		= S + \frac{1}{16}\sum_{n=1}^\infty\frac{1}{n^4}
+		= S + \frac{\pi^4}{16\cdot90}
+	\]
+	Thus $S = \frac{\pi^4}{90} - \frac{\pi^4}{16\cdot90} = \frac{\pi^4}{96}$.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it Test the following series for convergence.
+Treat all real values of the constant parameter $p$.
+\begin{enumerate}
+	\item $\sum_{n=2}^\infty \frac{1}{(\log{n})^p}$
+	\item $\sum_{n=2}^\infty \frac{1}{(\log{n})^n}$
+	\item $\sum_{n=2}^\infty \frac{1}{n^p(\log{n})}$
+	\item $\sum_{n=2}^\infty \frac{1}{n(\log{n})^p}$
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Note that $\log{n}$ is monotonically increasing
+		and $\log{n} > 0$ when $n \geq 2$.
+		Let $p \leq 0$.
+		Then $(\log{n})^p$ is monotonically decreasing,
+		so $a_n = \frac{1}{(\log{n})^p}$ is monotonically increasing.
+		Note that $a_2 > 0$ for all $p$,
+		and $a_n \geq a_2$ for all $n$,
+		thus $(a_n)$ does not converge to zero
+		because it is bounded below away from zero
+		(one can use $\ep = a_2$ to show failiure to converge).
+		Thus, by the crude divergence,
+		$\sum_{n=2}^\infty \frac{1}{(\log{n})^p}$
+		does not converge.
+
+		Let $p > 0$.
+		Since $\log{n}$ is monotonically increasing,
+		$(\log{n})^p$ is also monotonically increasing.
+		Furthermore, for $n \geq 2$, $(\log{n})^p > 0$.
+		Thus, $(a_n)$, where $a_n = \frac{1}{(\log{n})^p}$,
+		is a monotonically decreasing series.
+		
+		Also note that
+		\[
+			\sum_{k=1}^\infty 2^k a_{2^k}
+			= \sum_{k=1}^\infty 2^k \frac{1}{(\log{2^k})^p}
+			= \frac{1}{(\log{2})^p}\sum_{k=1}^\infty \frac{2^k}{k^p}
+		\]
+		Note that $\left(\frac{2^k}{k^p}\right)^{-1} = \frac{k^p}{2^k}$.
+		Thus by Theorem 3.20 (d) in Rudin
+		(where $\alpha = p$ and $p = 1$)
+		we know that $\lim_{n\to\infty}\frac{k^p}{2^k} = 0$.
+		But by question 6 (b) from homework 6,
+		which states that if $x_n \to 0$ then $1/x_n$ cannot converge,
+		we have that $\frac{2^k}{k^p}$ diverges.
+		Thus, $\sum_{k=1}^\infty 2^k a_{2^k}$
+		diverges as well
+		(crude divergence test).
+		Then, by the Cauchy Condensation Test,
+		$\sum_{n=2}^\infty a_n$ must diverge as well
+		(since $(a_n)$ is monotonically decreasing
+		and bounded below by $0$).
+		Hence, regardless of $p$, the series fails to converge.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $a_n = \frac{1}{(\log{n})^n}$
+		and
+		\[
+			b_n = \begin{cases}
+				\frac{1}{(\log{2})^2} & n = 2\\
+				\frac{1}{(\log{3})^n} & n \geq 3
+			\end{cases}
+		\]
+		Consider the series $\sum_{n=2}^\infty b_n =
+		\frac{1}{(\log{2})^n} + \sum_{n=3}^\infty \frac{1}{(\log{3})^n}$.
+		Note that our series is a geometric series,
+		specifically $\log{3} > 1$ so $0 < \frac{1}{\log{3}} < 1$,
+		which is the common ratio $r$,
+		and so we know that the series $\sum_{n=2}^\infty b_n$ converges.
+
+		Now, since $0 < \log{3} \leq \log{n}$ for $n \geq 3$,
+		we have $0 < \frac{1}{\log{n}} < \frac{1}{\log{3}}
+		\implies 0 < \frac{1}{(\log{n})^n} < \frac{1}{(\log{3})^n}$,
+		thus $b_n \geq a_n = |a_n| \geq 0$ for all $n$,
+		and thus by the comparison test,
+		$\sum_{n=2}^\infty a_n$ must converge as well.
+		(This is true regardless of $p$; it was not used.)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $a_n = \frac{1}{n^p(\log{n})}$.
+		Let $p \leq 0$.
+		Then $n > 1 \implies 0 < \frac{1}{n} < 1
+		\implies \frac{1}{n^p} \geq 1$.
+		Furthermore, $0 < \log{n} < n \implies \frac{1}{\log{n}} > \frac{1}{n} > 0$.
+		Thus $\frac{1}{n^p}\frac{1}{\log{n}} > \frac{1}{n}
+		= \left\lvert \frac{1}{n}\right\rvert > 0$.
+		Recall that $\sum_n \frac{1}{n} = +\infty$,
+		so by the comparison test,
+		$\sum_{n=2}^\infty a_n = +\infty$ as well,
+		i.e. it fails to converge.
+
+		Now let $0 < p \leq 1$.
+		Note that $(n+1)^p > n^p > 0$ and $\log{n+1} > \log{n} > 0$
+		for all $n$,
+		thus $(n+1)^p\log{n+1} > n^p\log{n} > 0$,
+		and taking the reciprocal, we get $a_n > a_{n+1} > 0$.
+		Now see
+		\[
+			\sum_{k=1}^\infty 2^k\frac{1}{(2^k)^p(\log{2^k})}
+			= \frac{1}{\log{2}}\sum_{k=1}^\infty\frac{(2^k)^{1-p}}{k}
+		\]
+		First, if $p = 1$, then our sum becomes
+		$\frac{1}{\log{2}}\sum_{k=1}^\infty\frac{1}{k}$,
+		which diverges, so by the Cauchy condensation test,
+		$\sum_n a_n$ must diverge as well.
+		Now let $p \neq 1$.
+		Note that $\left(\frac{(2^k)^{1-p}}{k}\right)^{-1}
+		= \frac{k}{(2^{1-p})^k}$.
+		By Theorem 3.20 (d) in Rudin (where $\alpha = 1$ and $p = 2^{1-p}-1>0$),
+		we know that $\lim_{k\to\infty} \frac{k}{(2^{1-p})^k} = 0$.
+		But then by question 6 (b) from homework 6,
+		we have that $\frac{(2^k)^{1-p}}{k}$ must diverge as well.
+		Thus $\sum_{k=1}^\infty 2^ka_{2^k}$ diverges as well
+		(crude divergence test).
+		Then, by the Cauchy condensation test,
+		$\sum_{n=2}^\infty a_n$ must diverge as well.
+		Thus if $0 < p \leq 1$, the series fails to converge.
+
+		Finally, let $p > 1$.
+		Note that for all $n \geq 3$,
+		$\log{n} > 1$,
+		so $0 < n^p < n^p \log{n}$, thus $0 < \frac{1}{n^p\log{n}}
+		= \left\lvert \frac{1}{n^p\log{n}}\right\rvert < \frac{1}{n^p}$.
+		Since $p > 1$,
+		we know that $\sum_{n=3}^\infty \frac{1}{n^p}$ converges,
+		thus by the comparison test,
+		$\sum_{n=3}^\infty \frac{1}{n^p\log{n}}$ converges as well.
+		Therefore, when $p > 1$,
+		$\sum_{n=2}^\infty \frac{1}{n^p(\log{n})}$ converges.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $a_n = \frac{1}{n(\log{n})^p}$.
+		Let $p \leq 0$.
+		Note that since $0 < \frac{1}{\log{n}} < 1$ for $n \geq 3$,
+		we have $1 \leq \frac{1}{(\log{n})^p}$.
+		Thus, $\frac{1}{n(\log{n})^p} \geq \frac{1}{n} = \left\lvert \frac{1}{n}\right\rvert > 0$.
+		Furthermore, $\sum_n \frac{1}{n}$ diverges,
+		thus by the comparison test,
+		$\sum_{n=3}^\infty a_n$ diverges as well.
+		Thus, when $p \leq 0$, $\sum_{n=2}^\infty a_n$ does not converge.
+
+		Now let $p > 0$.
+		Note that $(n+1) > n > 0$ and $\log{n+1} > \log{n} > 0
+		\implies (\log{n+1})^p > (\log{n})^p > 0$ for all $n \geq 2$.
+		thus $(n+1)^p\log{n+1} > n^p\log{n} > 0$,
+		and taking the reciprocal, we get $a_n > a_{n+1} > 0$.
+		Consider
+		\[
+			\sum_{k=1}^\infty 2^k\frac{1}{2^k(\log{2^k})^p}
+			= \frac{1}{(\log{2})^p} \sum_{k=1}^\infty \frac{1}{k^p}
+		\]
+		But the sum is just the $p$-series.
+		Thus if $p \leq 1$, this sum diverges,
+		and if $p > 1$, the sum converges.
+		Thus, by the Cauchy condensation test,
+		when $0 < p \leq 1$, $\sum_n a_n$ fails to converge;
+		when $p > 1$, $\sum_n a_n$ converges.
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 3}
+{\it Consider the set $\ell^2$ consisting of all real sequences
+$x = (x_1, x_2, \dots)$ enjoying the special property that
+$\sum_n |x_n|^2$ converges.
+Define an inner product on $\ell^2$ as follows:
+\[
+	\forall x,y \in \ell^2, \; \langle x, y \rangle := \sum_{n=1}^\infty x_ny_n
+\]
+\begin{enumerate}
+	\item Prove that the series in this definition converges.
+\end{enumerate}
+Informally, this is the natural generalization of Euclidean $k$-space
+to the case $k = \aleph_0$;
+the inner product $\langle x,y \rangle$ in $\ell^2$ is
+analogous to the dot product $x \bullet y$ in $\R^k$.
+It's only a small stretch to call the elements of $\ell^2$ ``vectors".
+Add further credibility to this interpretation by defining
+$\lVert x \rVert = \sqrt{\langle x , x\rangle}$
+for each $x \in \ell^2$, and then proving
+\begin{enumerate}
+	\item[(b)] $\lvert \langle x,y \rangle| \leq \lVert x \rVert\lVert y \rVert$
+		for all $x,y \in \ell^2$.
+	\item[(c)] $\lVert x + y \rVert \leq \lVert x \rVert + \lVert y \rVert$ for all $x,y \in \ell^2$.
+\end{enumerate}
+This generalization has some limitations, however.
+In $\R^k$, any sequence of vectors $x^{(1)},x^{(2)},x^{(3)},\dots$,
+whose compoenent sequences converge must be a convergent sequence of vectors,
+and its limit can be identified by taking the limit in each component separetly.
+Show that this fails in $\ell^2$, as follows:
+\begin{enumerate}
+	\item[(d)] Construct a sequence $x^{(1)},x^{(2)},\dots$, of vectors in $\ell^2$
+		such that $\lVert x^{(n)} \rVert = 1$ for all $n$,
+		and yet every $p \in \N$ the `$p$-th component sequence'
+		$\langle \mathbf{e}_p, x^{(n)}\rangle$ converges to $0$ as $n \to \infty$.
+		Here, just as in $\R^k$, $\mathbf{e}_p$ denotes the ``standard unit vector"
+		with exactly one nonzero entry,
+		which is a $1$ in position $p$.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		For all $n$, we have $(x_n + y_n)^2 \geq 0$,
+		so $x_n^2 + y_n^2 \geq -2x_ny_n$,
+		and $(x_n - y_n)^2 \geq 0$,
+		so $x_n^2 + y_n^2 \geq 2x_ny_n$,
+		hence $x_n^2 + y_n^2 \geq 2|x_ny_n| \geq |x_ny_n|$.
+
+		Let $b_n = x_n^2 + y_n^2 = |x_n|^2 + |y_n|^2$.
+		We now show that $\sum_n b_n$ converges.
+		Let $X_n = \sum_{k=0}^n |x_k|^2$ and
+		$Y_n = \sum_{k=0}^n|y_k|^2$.
+		Thus $X_n + Y_n = \sum_{k=0}^n (|x_k|^2 + |y_k|^2) = \sum_{k=0}^n b_k$.
+		Since $\sum_n |x_n|^2$ and $\sum_n |y_n|^2$ converge,
+		denote their limits as
+		$X = \sum_n|x_n|^2 = \lim_{n\to\infty}X_n$
+		and $Y = \sum_n|y_n|^2 = \lim_{n\to\infty}Y_n$.
+		So by the addition limit law, we have
+		$\sum_n b_n = \lim_{n\to\infty} \sum_{k=0}^n b_k
+		= \lim_n\to\infty(X_n + Y_n) = X + Y$,
+		thus $\sum_n b_n$ converges.
+
+		Finally, by the comparison test, since $\sum_n (x_n^2 + b_n^2)$,
+		we have that $\sum_n (x_ny_n)$ converges as well.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Note that if we consider the first $k$ terms of $x_n$ and $y_n$
+		as entries of a $k$-tuple,
+		we have shown in class the Cauchy Schwartz inequality:
+		\[
+			L_k = \left\lvert\sum_{n=1}^k x_ny_n\right\rvert \leq
+			\sqrt{\sum_{n=1}^k x^2_n}\sqrt{\sum_{n=1}^k y^2_n}
+			= \sqrt{\sum_{n=1}^k x^2_n\sum_{n=1}^k y^2_n} = R_k
+		\]
+		Note that $L_k$ and $R_k$ are sequences that satisfy $L_k \leq R_k$
+		for all $k$.
+		Thus by the lemma from October 11 from the course notes,
+		we also have
+		\[
+			\liminf_{k\to\infty} L_k \leq \liminf_{k\to\infty} R_k
+			\quad \text{and} \quad
+			\limsup_{k\to\infty}L_n \leq \limsup_{k\to\infty}R_k
+		\]
+		Furthermore, both $\sum_n x_n^2$ and $\sum_n y_n^2$
+		converge,
+		so our limit laws tell us that their product must also converge,
+		and $R_k$ is just the square of a convergent sequence,
+		and so $R_k$ must also converge.
+		Additionally, we proved in part (a) that $L_k$ converges.
+		Thus, both of their $\limsup$s and $\liminf$s
+		must equal each other, so we get
+		\[
+			\lim_{k\to\infty} L_k \leq \lim_{k\to\infty} R_k
+		\]
+		But extracting the definitions of $L_k$ and $R_k$,
+		this is just
+		\[
+			\lim_{k\to\infty} \left\lvert\sum_{n=1}^k x_ny_n\right\rvert \leq
+			\lim_{k\to\infty} \sqrt{\sum_{n=1}^k x^2_n}\sqrt{\sum_{n=1}^k y^2_n}
+		\]
+		\[
+			\implies |\langle x,y \rangle| =
+			\left\lvert\sum_{n=1}^\infty x_ny_n\right\rvert \leq
+			\sqrt{\sum_{n=1}^\infty x^2_n}\sqrt{\sum_{n=1}^\infty y^2_n}
+			= \lVert x \rVert \lVert y \rVert
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff idk something to do with previous one.
+		Note that if we consider the first $k$ terms of $x_n$ and $y_n$
+		as entries of a $k$-tuple,
+		we have shown in class the triangle inequality:
+		\[
+			L_k = \sqrt{\sum_{n=1}^k x_n + y_n} \leq
+			\sqrt{\sum_{n=1}^k x^2_n}\sqrt{\sum_{n=1}^k y^2_n}
+			= \sqrt{\sum_{n=1}^k x^2_n\sum_{n=1}^k y^2_n} = R_k
+		\]
+		Note that $L_k$ and $R_k$ are sequences that satisfy $L_k \leq R_k$
+		for all $k$.
+		Thus by the lemma from October 11 from the course notes,
+		we also have
+		\[
+			\liminf_{k\to\infty} L_k \leq \liminf_{k\to\infty} R_k
+			\quad \text{and} \quad
+			\limsup_{k\to\infty}L_n \leq \limsup_{k\to\infty}R_k
+		\]
+		Furthermore, both $\sum_n x_n^2$ and $\sum_n y_n^2$
+		converge,
+		so our limit laws tell us that their product must also converge,
+		and $R_k$ is just the square of a convergent sequence,
+		and so $R_k$ must also converge.
+		Additionally, we proved in part (a) that $L_k$ converges.
+		Thus, both of their $\limsup$s and $\liminf$s
+		must equal each other, so we get
+		\[
+			\lim_{k\to\infty} L_k \leq \lim_{k\to\infty} R_k
+		\]
+		But extracting the definitions of $L_k$ and $R_k$,
+		this is just
+		\[
+			\lim_{k\to\infty} \left\lvert\sum_{n=1}^k x_ny_n\right\rvert \leq
+			\lim_{k\to\infty} \sqrt{\sum_{n=1}^k x^2_n}\sqrt{\sum_{n=1}^k y^2_n}
+		\]
+		\[
+			\implies |\langle x,y \rangle| =
+			\left\lvert\sum_{n=1}^\infty x_ny_n\right\rvert \leq
+			\sqrt{\sum_{n=1}^\infty x^2_n}\sqrt{\sum_{n=1}^\infty y^2_n}
+			= \lVert x \rVert \lVert y \rVert
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 4}
+{\it Given that the sequence $(s_n + 2s_{n+1})$ converges,
+prove that the sequence $(s_n)$ converges.}
+\begin{proof}[Solution]\let\qed\relax
+	Cauchy-ness:
+	Since $(s_n + 2s_{n+1})$ converges,
+	then for any $\ep'$, there exists some $N' \in \N$
+	such that for for all $n \geq N$ and for all $p \in \N$,
+	we have $|2s_{n+p+1} + s_{n+p} - 2s_{n+1} - s_n| < \ep'$.
+
+	We want to show that if $\ep > 0$,
+	there exists some $N \in \N$ such that
+	for all $n \geq N$ and for all $p \in \N$,
+	we have $|s_{n+p} - s_n| < \ep$.
+	To do this then, we want some bound on $|2s_{n+p+1} - 2s_{n+1}|$.
+	This kinda makes me feel like induction.
+	If we let $p = 1$, then we have $|2s_{n+2} - 2s_{n+1}|$.
+
+	Maybe something about how 
+
+	Let $\ep > 0$ be arbitrary.
+	Let $N = N'$.
+	We will show that $(s_n)$ is Cauchy.
+	Let $N = N'$ (where $N'$ is so that other series bounded by $\ep$ too).
+	Let $n \geq N$. We now induct on $p$.
+	Base case ($p = 1$):
+	we have $|s_{n+1} - s_n|$.
+	But note that $\ep > |2s_{n+2} + s_{n+1} - 2s_{n+1} - s_n|
+	= |2s_{n+2} - s_{n+1} - s_n|$.
+
+	Hmm, what if showing $s_n$ gets arbitrarily close to $s_n + 2s_{n+1}$.
+	ff
+
+	Let $a_n = s_n + 2s_{n+1}$.
+	Then $s_n = a_n - 2a_{n+1} + 4a_{n+2} - + \cdots =
+	\sum_{i=0}^\infty (-2)^ia_{n+i}$.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 5}
+{\it Prove that if $\sum^\infty_{n=1}a^2_n$ converges,
+then $\sum_{n=1}^\infty \frac{a_n}{n^q}$
+converges for any constant $q > \frac{1}{2}$.}
+
+\begin{proof}[Solution]\let\qed\relax
+	Apparently 3(a)... presumebly $a_n = x_n$
+	and $y_n = \frac{1}{n^q}$ ($p$-series so converges).
+\end{proof} 
+\clearpage
+~\clearpage
+
+\subsection*{Problem 6}
+{\it In parts (a)-(c) below, suppose $a_n > 0$ and $b_n > 0$ for all $n$, and define
+\[
+	A = \sum_{n=1}^\infty a_n, \quad B = \sum_{n=1}^\infty b_n
+\]
+\begin{enumerate}
+	\item Prove the Limit Comparison Test:
+		If $b_n/a_n$ converges to a real number $L > 0$,
+		then series $A$ converges if and only if series $B$ converges.
+	\item Prove the Ratio Comparison Test:
+		If $a_{n+1}/a_n \leq b_{n+1}/b_n$, convergence of series $B$
+		implies convergence of series $A$.
+		What if $a_{n+1}/a_n \leq b_n/b_{n-1}$ instead?
+		[Clue: Start by finding upper and lower bounds for the sequence $r_n = a_n/b_n$.]
+	\item Use (b) with $\zeta(p)$ to prove Raabe's Test:
+		if $p > 1$ and $a_{n+1}/a_n \leq 1 - p/n$ for all $n$ sufficiently large,
+		then series $A$ converges.
+		[Clue: First show that $1-px < (1-x)^p$ for all $x \leq 1$. Just use calculus.]
+	\item Test $\sum_n a_n$ for convergence,
+		where $a_n = \frac{1\cdot 4 \cdots (3n+1)}{n^23^nn!}$.
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 7}
+{\it Prove: If each $a_n \geq 0$ and $\sum_{n=1}^\infty a_n$ diverges,
+then $\sum_{n=1}^\infty \frac{a_n}{1+a_n}$ also diverges.
+Does the converse hold?}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff Contrapositive Contrapositive
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 8}
+{\it
+\begin{enumerate}
+	\item Prove: Given any $D \in \R$ and $\delta > 0$,
+		there is a finite collection of numbers $a_1,a_2,\dots,a_N$
+		such that $D = a_1 + a_2 + \cdots + a_N$ and
+		\[
+			\delta > |a_1| > |a_2| > \cdots > |a_N| > 0
+		\]
+	\item Let $(\sigma_n)_{n\in\N}$ be an arbitrary sequence of real numbers.
+		Explain how to construct a sequence $(x_n)_{n\in\N}$ in $\R$ satisfying, simultaneously
+		\begin{enumerate}
+			\item[(i)] $|x_n| > |x_{n+1}|$ for all $n$, and $x_n \to 0$ as $n \to \infty$, and
+			\item[(ii)] the sequence $(s_N)_{N\in\N}$ defined by
+				$s_N = \sum_{n=1}^N x_n$ has $(\sigma_n)_n$ as a subsequence.
+		\end{enumerate}
+\end{enumerate}
+\emph{Discussion}: This show badly the converse of the Crude Divergence Test can fail:
+the series $\sigma_n x_n$ has terms tending to $0$,
+yet its sequence of partial sums can be wild enough to
+hit all elements of the preassigned $(\sigma_n)_n$.
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof} 
+\end{enumerate}
+\clearpage
+
+\end{document}
