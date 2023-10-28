@@ -356,8 +356,26 @@ Show that this fails in $\ell^2$, as follows:
 		\]
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Consider the sequence of vectors:
+		\begin{align*}
+			x^{(1)} &= 1,0,0\dots\\
+			x^{(2)} &= \frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}},0,0,\dots\\
+					&\vdots\\
+			x^{(n)} &= \underbrace{\frac{1}{\sqrt{n}}, \frac{1}{\sqrt{n}},
+			\dots, \frac{1}{\sqrt{n}}}_{n \text{ times}}
+			0,0,\dots
+		\end{align*}
 	\end{proof}
+	All of these vectors lie in $\ell^2$,
+	since they are just the sum of a finite sequence of terms.
+	Note that $\lVert x^{(n)}\rVert = \sum_{k=0}^n \frac{1}{n} = 1$.
+
+	However, $\langle \mathbf{e}_p, x^{(n)} \rangle = \frac{1}{\sqrt{n}}$
+	if $p \leq n$ or $= 0$ if $p > n$.
+	Regardless,
+	as $n \to \infty$,
+	$\frac{1}{\sqrt{n}} \to 0$ as well,
+	thus $\langle \mathbf{e}_p, x^{(n)} \rangle \to 0$ as $n \to \infty$.
 \end{enumerate}
 \clearpage
 
@@ -407,8 +425,11 @@ then $\sum_{n=1}^\infty \frac{a_n}{n^q}$
 converges for any constant $q > \frac{1}{2}$.}
 
 \begin{proof}[Solution]\let\qed\relax
-	Apparently 3(a)... presumebly $a_n = x_n$
-	and $y_n = \frac{1}{n^q}$ ($p$-series so converges).
+	First, note that $\sum_{n}|\frac{1}{n^q}|^2 = \sum_n \frac{1}{n^{2q}}$.
+	Since $2q > 1$, this is a $p$-series that converges.
+	Thus, by problem 3(a), we have that
+	$\sum_{n=1}^\infty \frac{a_n}{n^q}$ will converge as well
+	(where  we substitute $x_n = a_n$ and $y_n = \frac{1}{n^q}$).
 \end{proof} 
 \clearpage
 ~\clearpage
@@ -437,12 +458,71 @@ converges for any constant $q > \frac{1}{2}$.}
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Let $b_n/a_n \to L > 0$ as $n \to \infty$.
+		Then for any $\ep = L$,
+		there exists some $N \in \N$ such that for $n \geq N$,
+		we have $|b_n/a_n - L| < L$.
+		Furthermore, since $a_n,b_n,L > 0$, we have
+		\[
+			\frac{b_n}{a_n} - L = \left\lvert\frac{b_n}{a_n}\right\rvert - |L|
+			\leq \left\lvert\left\lvert\frac{b_n}{a_n}\right\rvert - |L|\right\rvert
+			\leq \left\lvert \frac{b_n}{a_n} - L \right\rvert  < L
+		\]
+		Thus $0 < |b_n| < 2La_n$.
+		Assume that series $A$ converges.
+		Then $\lim_{n \to \infty} \sum_{k=N}^n (2La_k) = 2L\lim_{n \to \infty} \sum_{k=N}^n a_k$
+		converges as well.
+		Thus by the comparison test,
+		$\sum_{k=N}^\infty b_k$ converges,
+		thus $\sum_{k=1}^{N-1}b_k + \sum_{k=N}^\infty b_k = B$
+		converges as well.
+
+		Now, note that if $b_n/a_n$ converges to some positive value,
+		$a_n/b_n$ must converge to some positive value as well,
+		specifically, $L^{-1}$
+		(by Rudin Theorem 3.3 (d)),
+		since $b_n/a_n \neq0$ for all $n$ and $L\neq0$.
+		Thus, we can repeat an identical argument to the one above
+		to show that $B$ converging implies $A$ converging
+		(where we just swap the $a_n$'s and $b_n$'s around).
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Let $a_{n+1}/a_n \leq b_{n+1}/b_n$.
+		Then since $a_n,b_n > 0$, we have
+		\[
+			\frac{a_n}{b_n} \geq \frac{a_{n+1}}{b_{n+1}}
+		\]
+		This clearly has an upper bound,
+		namely $a_1/b_1$,
+		and since both $a_n,b_n > 0$ for all $n$, we must have
+		$a_n/b_n > 0$ for all $n$,
+		hence $0$ is a lower bound for $a_n/b_n$.
+		Thus, by the Monotone Convergence property,
+		we have that $a_n/b_n$ converges,
+		which we'll denote to be a value, $L \geq 0$.
+		If $L > 0$,
+		then convergence of $B$ implies convergence of $A$
+		by the Limit Comparison Test above.
+
+		It remains to show this is still true when $L = 0$.
+		If $a_n/b_n \to 0$ as $n \to \infty$,
+		then if $\ep = 1$,
+		there exists some $N \in \N$ such that for all $n \geq N$,
+		we have $\left|\frac{a_n}{b_n}\right| < 1$.
+		But $\frac{a_n}{b_n} = \left|\frac{a_n}{b_n}\right|$,
+		thus $0 < a_n = |a_n| < b_n$.
+		Assume that series $B$ converges.
+		Then $\lim_{n\to\infty}\sum_{k=N}^nb_n$ converges as well
+		(all subsequences of a convergent sequence converge).
+		Thus by the comparison test, $\sum_{k=N}^\infty a_k$ converges,
+		thus $\sum_{k=1}^{N-1}a_k + \sum_{k=N}^\infty a_k = A$
+		converges as well.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
+		Recall the binomial theorem, that is
+		\[
+			(1-x)^p = 1 - px + 
+		\]
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -457,7 +537,23 @@ then $\sum_{n=1}^\infty \frac{a_n}{1+a_n}$ also diverges.
 Does the converse hold?}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff Contrapositive Contrapositive
+	We prove the contrapositive.
+	Let each $a_n \geq 0$.
+	Let $\sum_{n=1}^\infty \frac{a_n}{1+a_n}$ converge.
+	By the Monotone Convergence criterion,
+	we must have that the sequence of partial sums of $\frac{a_n}{1+a_n}$
+	is bounded,
+	say $0 \leq \frac{a_n}{1+a_n} < M$ and $M > 1$.
+	ff wait this should be a partial sum
+	say $0 \leq \sum_{n=1}^k \frac{a_n}{1+a_n} < M$.
+	Then $a_n < M + Ma_n \implies -M < (M-1)a_n \implies -\frac{M}{M-1} < a_n$.
+	The thing is... I doubt that $M$ can turn into a bound for $\sum_n a_n$.
+	ff
+
+	The converse of this is if $\sum_n a_n$ converges,
+	then $\sum_n \frac{a_n}{1+a_n}$ converges as well.
+	This is not true: we provide the counter-example
+	$a_n = $
 \end{proof}
 \clearpage
 ~\clearpage
@@ -486,10 +582,41 @@ hit all elements of the preassigned $(\sigma_n)_n$.
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
+		Let $q = |D|/\delta$... the size of each partition.
+		First term needs to be better than half,
+		otherwise will get an infinite sum.
+		Each partition $\pi$ gets split into two that add up to total size of $q$,
+		the split depends on how many partititons there are... $q$ many.
+
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We construct our sequence $(x_n)$ inductively
+		such that $(\sigma_n)_n$ is a subsequence of $s_N$.
+		Let $x_1 = \sigma_1 \implies s_1 = \sigma_1$.
+		Now, for any $k \in \N$,
+		assume that $x_j$, for all $j \in \{1,\dots, N\}$,
+		has been defined such that $s_N = \sigma_k$
+		and $|x_n| > |x_{n+1}|$ for all $n$.
+		By part (a), if $\delta = \min\{|x_N|, \frac{1}{N}\}$
+		and $D = \sigma_{k+1} - \sigma_k$,
+		there is some finite collection of $M$ terms
+		such that $\min\{|x_N|,\frac{1}{N}\} > |x_{N+1}| > |x_{N+2}| > \cdots > |x_{N+M}| > 0$
+		and $\sigma_{k+1} - \sigma_k = x_{N+1} + x_{N+2} + \cdots + x_{N+M}$.
+		Thus, $s_{N+M} = s_N + x_{N+1} + x_{N+2} + \cdots + x_{N+M}
+		= \sigma_k + \sigma_{k+1} - \sigma_{k} = \sigma_{k+1}$.
+		Thus, our constructed sequence satisifes (ii).
+
+		To show it satisifies (i),
+		note that we have $|x_n| > |x_{n+1}|$ for all $n$, by construction.
+		Finally, to show that $x_n \to 0$ as $n \to \infty$,
+		let $\ep > 0$ be arbitrary.
+		Then by Archimedean property, there exists some $k \in \N$
+		such that $k > \frac{1}{\ep} > 0 \implies 0 < \frac{1}{k} < \ep$.
+		But then we know that for all $n > k$,
+		we have $|x_n| < \frac{1}{k} < \ep$ by the construction,
+		thus $x_n \to 0$ as $n \to \infty$,
+		giving us (i) as well.
 	\end{proof} 
 \end{enumerate}
 \clearpage
