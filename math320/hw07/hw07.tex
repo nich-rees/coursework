@@ -319,8 +319,7 @@ Show that this fails in $\ell^2$, as follows:
 		we have shown in class the triangle inequality:
 		\[
 			L_k = \sqrt{\sum_{n=1}^k x_n + y_n} \leq
-			\sqrt{\sum_{n=1}^k x^2_n}\sqrt{\sum_{n=1}^k y^2_n}
-			= \sqrt{\sum_{n=1}^k x^2_n\sum_{n=1}^k y^2_n} = R_k
+			\sqrt{\sum_{n=1}^k x^2_n} + \sqrt{\sum_{n=1}^k y^2_n} = R_k
 		\]
 		Note that $L_k$ and $R_k$ are sequences that satisfy $L_k \leq R_k$
 		for all $k$.
@@ -333,10 +332,11 @@ Show that this fails in $\ell^2$, as follows:
 		\]
 		Furthermore, both $\sum_n x_n^2$ and $\sum_n y_n^2$
 		converge,
-		so our limit laws tell us that their product must also converge,
+		so our limit laws tell us that their sum must also converge,
 		and $R_k$ is just the square of a convergent sequence,
 		and so $R_k$ must also converge.
-		Additionally, we proved in part (a) that $L_k$ converges.
+		Additionally, in order for $x,y \in \ell^2$,
+		we must have that $L_k$ converges.
 		Thus, both of their $\limsup$s and $\liminf$s
 		must equal each other, so we get
 		\[
@@ -345,14 +345,14 @@ Show that this fails in $\ell^2$, as follows:
 		But extracting the definitions of $L_k$ and $R_k$,
 		this is just
 		\[
-			\lim_{k\to\infty} \left\lvert\sum_{n=1}^k x_ny_n\right\rvert \leq
-			\lim_{k\to\infty} \sqrt{\sum_{n=1}^k x^2_n}\sqrt{\sum_{n=1}^k y^2_n}
+			\lim_{k\to\infty}\sqrt{\sum_{n=1}^k x_n + y_n} \leq
+			\lim_{k\to\infty}\sqrt{\sum_{n=1}^k x^2_n} +
+			\lim_{k\to\infty}\sqrt{\sum_{n=1}^k y^2_n}
 		\]
 		\[
-			\implies |\langle x,y \rangle| =
-			\left\lvert\sum_{n=1}^\infty x_ny_n\right\rvert \leq
-			\sqrt{\sum_{n=1}^\infty x^2_n}\sqrt{\sum_{n=1}^\infty y^2_n}
-			= \lVert x \rVert \lVert y \rVert
+			\implies \lVert x + y\rVert = \sqrt{\sum_{n=1}^\infty x_n + y_n}
+			\leq \sqrt{\sum_{n=1}^\infty x^2_n} + \sqrt{\sum_{n=1}^\infty y^2_n}
+			= \lVert x \rVert + \lVert y \rVert
 		\]
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -383,7 +383,6 @@ Show that this fails in $\ell^2$, as follows:
 {\it Given that the sequence $(s_n + 2s_{n+1})$ converges,
 prove that the sequence $(s_n)$ converges.}
 \begin{proof}[Solution]\let\qed\relax
-	Cauchy-ness:
 	Since $(s_n + 2s_{n+1})$ converges,
 	then for any $\ep'$, there exists some $N' \in \N$
 	such that for for all $n \geq N$ and for all $p \in \N$,
@@ -410,11 +409,9 @@ prove that the sequence $(s_n)$ converges.}
 	= |2s_{n+2} - s_{n+1} - s_n|$.
 
 	Hmm, what if showing $s_n$ gets arbitrarily close to $s_n + 2s_{n+1}$.
-	ff
 
-	Let $a_n = s_n + 2s_{n+1}$.
-	Then $s_n = a_n - 2a_{n+1} + 4a_{n+2} - + \cdots =
-	\sum_{i=0}^\infty (-2)^ia_{n+i}$.
+	\textbf{If the above is still gibberish, it's because I had to submit
+	in a rush and didn't end up solving/fixing this question.}
 \end{proof}
 \clearpage
 ~\clearpage
@@ -517,16 +514,59 @@ converges for any constant $q > \frac{1}{2}$.}
 		Thus by the comparison test, $\sum_{k=N}^\infty a_k$ converges,
 		thus $\sum_{k=1}^{N-1}a_k + \sum_{k=N}^\infty a_k = A$
 		converges as well.
+
+		Note that $a_{n+1}/a_n \leq b_n/b_{n-1}$ is also a valid
+		statement too,
+		since we can just reindex $b_n$ by bumping everything along by $1$,
+		(say set $b'_n = b_{n-1}$ and $b'_1 = 1$).
+		This doesn't alter the convergence of $B$ (ie. $\sum_n b'_n$ converges
+		if and only if $\sum_n b_n = B$ converges),
+		since we are just adding a finite term,
+		thus, the Ratio Comparison test still holds.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Recall the binomial theorem, that is
+		We first invoke calculus to show that $1 - px \leq (1-x)^p$
+		when $0 \leq x \leq 1$ and $p > 1$.
+		Note that
 		\[
-			(1-x)^p = 1 - px + 
+			\frac{d}{dx}(1-x)^p\vert_{x=0} = -p(1-x)^{p-1}\vert_{x=0} = -p
 		\]
-		ff
+		Now, at $x_0 = 0$, $(1-x_0)^p = 1 = y_0$.
+		Thus the tangent line at $x_0$ is $y_0 - p(x-x_0) = 1-px$.
+		Realize that $(1-x)^p$ is convex on $x \in [0,1]$
+		since $p > 1$
+		(one can confirm this with the second derivative, $p(p-1)(1-x)^{p-1}$).
+		Thus, our tangent line lies below the curve on the interval,
+		thus $1-px \leq (1-x)^p$.
+
+		Thus, we have for all $n$ sufficiently large,
+		\[
+			a_{n+1}/a_n \leq 1-p/n \leq (1-\frac{1}{n})^p = \left(\frac{n-1}{n}\right)^p
+		\]
+		(which is valid, since $\frac{1}{n} \in [0,1]$ for all $n \in \N$).
+		Thus, if $b_n = \frac{1}{n^p}$,
+		then by what we just proved in part (b) for the ratio comparison test,
+		since $a_{n+1}/a_n \leq b_n/b_{n-1}$,
+		and $B = \sum_{n}b_n$ converges since $b_n$
+		is a $p$-series with $p > 1$,
+		we can conclude that $\sum_n a_n = A$ converges as well.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Note that for all $n$.
+		\begin{align*}
+			a_{n+1}/a_n
+			&= \frac{(3(n+1)+1)n^2}{(n+1)^23(n+1)}\\
+			&= \frac{(3n+4)n^2}{3(n+1)^3}\\
+			&\leq \frac{(3(n+1)n^2}{3(n+1)^3}\\
+			&= \left(\frac{n}{n+1}\right)^2
+		\end{align*}
+		Then $a_{n+1}/a_n \leq \left(\frac{n}{n+1}\right)^2$.
+		Note that when $n \geq 2$,
+		we have that $1 - \frac{1.1}{n} \geq \frac{2}{n} \geq a_n$.
+		Thus for sufficiently large $n$,
+		there exists $p > 1$
+		such that $a_{n+1}/a_n \leq 1-p/n$,
+		so by Raabe's test, $\sum_na_n$ converges.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -582,13 +622,27 @@ hit all elements of the preassigned $(\sigma_n)_n$.
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Let $q = |D|/\delta$... the size of each partition.
-		First term needs to be better than half,
-		otherwise will get an infinite sum.
-		Each partition $\pi$ gets split into two that add up to total size of $q$,
-		the split depends on how many partititons there are... $q$ many.
-
-		ff
+		By the Archimedean property,
+		there exists an integer $q$ such that $q\delta > |D|$.
+		integer we can take).
+		Then let $l = |D|/q < \delta$.
+		Then assign $|a_1| = l\frac{2q+1-1}{2q+1}$,
+		$|a_2| = l\frac{2q+1-2}{2q+1}$, etc. $|a_j| = l\frac{2q+1-j}{2q+1}$
+		(we will assign signs later).
+		Note that each of these are less than $l$,
+		since the fraction is always less than $1$,
+		but never $0$.
+		Then letting $j$ vary from $1$ to $2q$, we have
+		\[
+			\sum_{j=1}^{2q}|a_j| = \sum_{j=1}^{2q}l\frac{2q+1-j}{2q+1}
+			= l\sum_{j=1}^{q}\left(\frac{2q+1-j}{2q+1} + \frac{2q+1+j}{2q+1}\right)
+			= lq = |D|
+		\]
+		Now, assign each $|a_n|$ the same sign as $D$,
+		and one now sees that,
+		$\delta > l > |a_1| > |a_2| > \cdots > |a_{2q}| > 0$;
+		and $D = a_1 + a_2 + \cdots + a_{2q}$.
+		Since $q$ was an integer, this is a finite collection.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		We construct our sequence $(x_n)$ inductively
@@ -620,5 +674,6 @@ hit all elements of the preassigned $(\sigma_n)_n$.
 	\end{proof} 
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \end{document}
