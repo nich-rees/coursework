@@ -395,23 +395,7 @@ prove that the sequence $(s_n)$ converges.}
 	To do this then, we want some bound on $|2s_{n+p+1} - 2s_{n+1}|$.
 	This kinda makes me feel like induction.
 	If we let $p = 1$, then we have $|2s_{n+2} - 2s_{n+1}|$.
-
-	Maybe something about how 
-
-	Let $\ep > 0$ be arbitrary.
-	Let $N = N'$.
-	We will show that $(s_n)$ is Cauchy.
-	Let $N = N'$ (where $N'$ is so that other series bounded by $\ep$ too).
-	Let $n \geq N$. We now induct on $p$.
-	Base case ($p = 1$):
-	we have $|s_{n+1} - s_n|$.
-	But note that $\ep > |2s_{n+2} + s_{n+1} - 2s_{n+1} - s_n|
-	= |2s_{n+2} - s_{n+1} - s_n|$.
-
-	Hmm, what if showing $s_n$ gets arbitrarily close to $s_n + 2s_{n+1}$.
-
-	\textbf{If the above is still gibberish, it's because I had to submit
-	in a rush and didn't end up solving/fixing this question.}
+	I didn't end up finishing...
 \end{proof}
 \clearpage
 ~\clearpage
@@ -580,20 +564,29 @@ Does the converse hold?}
 	We prove the contrapositive.
 	Let each $a_n \geq 0$.
 	Let $\sum_{n=1}^\infty \frac{a_n}{1+a_n}$ converge.
-	By the Monotone Convergence criterion,
-	we must have that the sequence of partial sums of $\frac{a_n}{1+a_n}$
-	is bounded,
-	say $0 \leq \frac{a_n}{1+a_n} < M$ and $M > 1$.
-	ff wait this should be a partial sum
-	say $0 \leq \sum_{n=1}^k \frac{a_n}{1+a_n} < M$.
-	Then $a_n < M + Ma_n \implies -M < (M-1)a_n \implies -\frac{M}{M-1} < a_n$.
-	The thing is... I doubt that $M$ can turn into a bound for $\sum_n a_n$.
-	ff
+	We must have that $\lim_{n\to\infty}\frac{a_n}{1+a_n} = 0$,
+	which means for any $\ep > 0$, there is some $N \in \N$
+	syc that for all $n > N$, we have
+	$\left|\frac{a_n}{1+a_n}\right| < \ep$.
+	When $\ep = \frac{1}{2}$, we get that $\frac{a_n}{1+a_n} < \frac{1}{2}$
+	(absolute values have been removed because always positive),
+	which implies that $a_n < 1$ when $n \geq N$.
+	So we have
+	\[
+		0 \leq \sum_n \frac{a_n}{2} < \sum_n \frac{a_n}{1+a_n}
+	\]
+	so by comparison test, $\sum_n\frac{a_n}{2}$ converges,
+	which is true if and only if $\sum_n a_n$ converges as well.
 
 	The converse of this is if $\sum_n a_n$ converges,
 	then $\sum_n \frac{a_n}{1+a_n}$ converges as well.
-	This is not true: we provide the counter-example
-	$a_n = $
+	This is true.
+	See that $\frac{a_n}{1+a_n} \leq a_n$ since $1 + a_n \geq 1$,
+	and $\frac{a_n}{1+a_n} = \left\lvert \frac{a_n}{1+a_n}\right\rvert$.
+	Thus, $0 \leq \left\lvert \frac{a_n}{1+a_n}\right\rvert \leq a_n$,
+	and since $\sum_na_n$ converges,
+	by the comparison test,
+	$\sum_n \frac{a_n}{1+a_n}$ does as well.
 \end{proof}
 \clearpage
 ~\clearpage
