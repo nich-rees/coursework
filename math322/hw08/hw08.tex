@@ -1,0 +1,122 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 322}
+\chead{Homework 8}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 2 (Ch. 1.12)}
+{\it Determine representatives of the conjugancy classes in $S_5$
+and the number of elements in each class.
+Use this information to prove that the only normal subgroups
+of $S_5$ are $1$, $A_5$, $S_5$.}
+\begin{proof}[Solution]\let\qed\relax
+	Recall that the conjugancy classes of $S_n$
+	are just the possible partitions of $n$ elements.
+	ff just silly calculations
+\end{proof}
+
+\subsection*{Problem 4 (Ch. 1.12)}
+{\it Show that if a finite group $G$ has a subgroup $H$ of index $n$
+then $H$ contains a normal subgroup of $G$ of index a divisor of $n!$.
+(\emph{Hint}: Consider the action of $G$ on $G/H$ by left translations.}
+\begin{proof}[Solution]\let\qed\relax
+	Now assume $n > 1$.
+	So $G = x_1H \sqcup x_2H \sqcup \cdots \sqcup x_nH$
+	where $x_1 = 1_G$.
+	Consider the action of $G$ on $G/H$.
+	$g$ acts on the coset $xH$ by $gxH$.
+	The kernel of this map is the set of all $G$ such that $gxH = xH$
+	for all $x \in H$.
+	But this is just $g'$ such that $x^{-1}g'x \in H$ for all $x \in H$.
+	we claim that $g' \in H$?
+
+
+	Note that $n \mid |G|$ so $n\leq |G|$,
+	but then a map representating the action of $G$ on $G/H$
+	is not injective.
+	Thus, there is a nontrivial kernel.
+	ff
+	something something subset $N \in H$ has $g^{-1}Ng \in N$
+	for all $g \in G$.
+
+	Theorem 1.10 says action of $G$ on $G/H$ is equivalent to
+	action of $G$ on $S$ (transtively) and $H = \mathrm{Stab}\;x$, $x\in S$.
+	ff
+
+	Wait, do we not have trivial group?
+	$1 \in H$, $1$ is a normal subgroup... ahh index! not order divides $n!$
+\end{proof}
+
+\subsection*{Problem 5 (Ch. 1.12)}
+{\it Let $p$ be the smallest prime dividing the order of a finite group.
+Show that any subgroup of $H$ of $G$ of index $p$ is normal.}
+\begin{proof}[Solution]\let\qed\relax
+	Apply Problem 4 from 1.12 (above):
+	if $H$ is a subgroup of $G$ of index $p$,
+	we have that $H$ contains a normal subgroup of $G$
+	of index a divisor of $p!$.
+	Note that if $p$ is the smallest prime dividing the order of $G$,
+	then there is no smaller value (other than $1$)
+	that divides the order of $G$,
+	since if there were,
+	then it must be composite (since $p$ is assumed to be the smallest),
+	but composite numbers are products of primes less than it,
+	but then those primes are less than $p$, which we can't have.
+	ff
+\end{proof}
+
+
+\subsection*{Problem 6 (Ch. 1.12)}
+{\it Show that evry group of order $p^2$, $p$ is a prime, is abelian.
+Show that up to isomorphism there are only two such groups.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 8 (Ch. 1.12)}
+{\it Let $G$ act on $S$, $H$ act on $T$, and assume $S \cap T = \emptyset.$
+Let $U = S \cup T$ and define for $g \in G$ ,$h \in H$, $s \in S$ $t \in T$;
+$(g,h)s = gs$, $(g,h)t = ht$.
+Show that this defines an action of $G \times H$ on $U$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 9 (Ch. 1.9)}
+{\it A group $H$ is said to \emph{act on a group $K$ by automorphisms}
+if we have an action of $H$ on $K$
+and for every $h \in H$ the map $k \to hk$ of $K$ is an automorphism.
+Suppose this is the case and let $H$ be the product set $K \times H$.
+Define a binary composition in $K \times H$ by
+\[
+	(k_1, h_1)(k_2, h_2) = (k_1(h_1k_2), h_1h_2)
+\]
+and define $1=(1,1)$ -- the units of $K$ and $H$ respectively.
+Verify that this defines a group such that $h \to (1,h)$
+is a monomorphism of $H$ into $K \times H$
+and $k \to (k,1)$ is a monomorphism of $K$ into $K \times H$
+whose image is a normal subgroup.
+$G$ is called a \emph{semi-direct product of $K$ and $H$}.
+Note that if $H$ and $K$ are finite than $|K \times H| = |K||H|$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\end{document}
