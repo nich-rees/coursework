@@ -1251,4 +1251,110 @@ Build $\tilde{S}$ using the same pieces, but shuffle the order:
 \end{align*}
 Funny...
 \newline We start on the much awaited Chapter 2 next week.
+
+\section{October 30}
+ff
+
+\section{November 1}
+\begin{definition}[Metric Space]
+	A \emph{metric space} is a pair $(X,d)$ combining a
+	nonempty set$X$ and a function $d \colon X\times X \to \R$
+	obeying conditions above.
+\end{definition}
+Using $d$ for ``distance" extends ideas/notations beyond Euclidean case
+E.g. $B[x;r) = \{x' \in X \colon d(x',x)< r\}$ defines a ``ball"
+with centre $x$ and radius $r>0$...
+now an idea not a literal shape but ok...
+Then declare a set $U \subseteq X$ to be \emph{open} exactly when
+\[
+	\forall x \in U, \exists \ep > 0 \colon B[x;r) \subseteq U
+\]
+Let $\mathcal{T}$ denote the set of all open sets in $X$:
+that's the 9metric) topology.
+As before, $B[x;r)$ is an open set for any $x \in X$,
+any $\ep > 0$, and the set $\mathcal{T}$ has properties (HTS1) - (HTS4).
+
+Why bother? to capture convergence of sequence ideas.
+\begin{definition}[Convergence]
+	Given sequence $x_1,x_2, \dots$ in $X$
+	and point $\hat{x} \in X$, to say
+	\[
+		\lim_{n\to\infty} x_n = \hat{x} \quad \text{or}
+		\quad x_n \to \hat{x} \text{ as } n \to \infty
+	\]
+	$\forall \ep > 0, \exists N \in \N$ such that $\forall n > N$, $d(x_n,\hat{x})<\ep$.
+\end{definition}
+``[After someone sneezed] I used to teach Engineers.
+When someone sneezed, the whole class would say `bless you`."
+
+\begin{proposition}
+	In metric space $(X,d)$, a set $U$ is open iff every point $x \in U$ does this:
+	whenver any $x_n$ has $x = \lim_{n\to\infty} x_n$ then
+	$x_n \in U$ for all $n$ sufficiently large.
+\end{proposition}
+\begin{proof}
+	$(\Rightarrow)$ Given $U \in \mathcal{T}$ and point $x \in U$,
+	definition of open gives some $\ep > 0$ such that $B[x;\ep) \subseteq U$.
+	So if $(x_n)$ is any sequence with $x_n \to x$, definition of
+	convergence gives $N \in \N$ such that $\forall n > N$,
+	$\underbrace{d(x_n,x)}_{x_n \in B[x;\ep) \subseteq U}< \ep$.
+
+	$(\Leftarrow)$ Work on the contrapositive, so assume set $U$ is not open.
+	Then some $x \in U$ breaks the defining property:
+	$\exists \ep > 0, B[x;\ep) \subseteq U$.
+	So for each $n \in \N$, $\ep=\frac{1}{n}$ here makes $B[x;\frac{1}{n}) \not\subseteq U$.
+	That is, some point $x_n \in B[x;\frac{1}{n})$ obeys $x_n \not\in U$.
+	Now $d(x_n,x) < \frac{1}{n}$ (some version of Squeeze in $\R$),
+	so sequence $x_n$ obeys $x_n \to x$ and $x \not\in U$.
+\end{proof}
+He got a lot of push back at the start of the course because
+was doing Rudin out of order;
+but now we have this hands-on example of dealing with convergence
+that we know a little how to play with metric spaces.
+
+\subsection{Ball shapes in $\R^2$}
+$\R^2 = \{x = (x_1,x_2) \colon x_1,x_2 \in \R\}$ can be given sseveral metrics, including:
+\begin{itemize}
+	\item $d_2(x,y) = \sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2}$.
+		We recover everyone's favourite ball $B[0;1)$.
+	\item $d_1(x,y) = |x_1 - y_1| + |x_2 - y_2|$.
+		Our ball is now shaped like a diamond.
+	\item $d_\infty(x,y) = \max\{|x_1-y_1|, |x_2-y_2|\}$.
+		Our ball is now a square.
+	\item Can interpolate: $d_p(x,y) = \left[|x_1-y_1|^p + |x_2 - y_2|\right]^{1/p}$,
+		a valid metric for any $p \geq 1$ (also $p = +\infty$).
+\end{itemize}
+
+In principle, each different metric gives a different family of open sets,
+and different story with convergence.
+But amazingly, these define a compatible idea of convergence:
+the set of open sets are the same regardless of these metrics.
+
+\subsection{Hausdorff Topological Spaces}
+``As is the norm in mathematics, I know the name [Hausdorff]
+and nothing else."
+\begin{definition}
+	A HTS is an ordered pair $(X,\mathcal{T})$ where $X$ is a
+	nonempety set, and $\mathcal{T} \subseteq \mathcal{P}(x)$
+	with these $4$ properties:
+	\begin{enumerate}
+		\item[(HTS 1)] $\emptyset \in \mathcal{T}$, $X \in \mathcal{T}$.
+		\item[(HTS 2)] For any collection $\mathcal{J} \subseteq \mathcal{T}$
+			one has $\bigcup \mathcal{J} \in \mathcal{T}$
+			(any union of open sets is open).
+		\item[(HTS 3)] If $U_1,\dots,U_N \in \mathcal{T}$ (and $N \in \N$)
+			then $\bigcap_{k=1}^N U_k \in \mathcal{T}$
+			(any finite intersection of open sets is open).
+		\item[(HTS 4)] Whenever $x \neq y$ in $X$,
+			there exists $U,V \in \mathcal{T}$ obeying
+			$x \in U, y \in V, U \cap V = \emptyset$
+			(enough open sets to separate points).
+	\end{enumerate}
+\end{definition}
+Examples
+\begin{itemize}
+	\item Any metric topology
+	\item Discrete topology: $\mathcal{T} = \mathcal{P}(X)$
+		(``every set is open.")
+\end{itemize}
 \end{document}
