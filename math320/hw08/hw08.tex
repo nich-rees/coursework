@@ -1,0 +1,195 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 8}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it Prove: If $\sum a_n$ converges and $\sum b_n$ converges absolutely,
+then $\sum a_nb_n$ converges.
+Is this statement still true if the word ``absolutely" is removed?}
+
+\begin{proof}[Solution]\let\qed\relax
+	It is sufficient to show that $\sum_n a_nb_n$ is absolutely convergent.
+	Consider the series $\sum_n|a_nb_n| = \sum_n|a_n||b_n|$.
+	Since $\lim_{n\to\infty} a_n = 0$
+	(by the contrapositive of the ``crude" divergence test since $\sum_n a_n$ converges),
+	we have that $a_n$ is bounded,
+	and so $|a_n|$ is bounded as well
+	(the upper bound is just the max of the lower and upper bound of $a_n$,
+	and it is bounded below by $0$).
+	Let $|a_n| \leq M$ for all $n \in \N$.
+	Then $|a_n||b_n| < M|b_n|$.
+	We have that $\sum_n M|b_n|$ converges,
+	since if $s_N = \sum_{n=1}^N |b_n|$, then
+	\[
+		\sum_n M|b_n| = \lim_{n\to\infty} M|b_0| + M|b_1| + \cdots + M|b_n|
+		= \lim_{n\to\infty} M(|b_0| + |b_1| + \cdots + |b_n|)
+		= \lim_{n\to\infty} Ms_n
+	\]
+	and since $(s_n)$ converges (by the absolute convergence of $b_n$),
+	by our constant multiplication limit law, $(Ms_n) = \sum_nM|b_n|$
+	converges as well.
+
+	Now since $0 \leq |a_nb_n| \leq M|b_n|$,
+	by the comparison test, $\sum_n |a_nb_n|$ converges,
+	thus $\sum_n a_nb_n$ is absolutely convergent,
+	which implies that $\sum_n a_nb_n$ converges.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it For each series below, find the set of $x \in \R$ where the series converges.
+\begin{enumerate}
+	\item $\sum_{n=1}^\infty c^{n^2}(x-1)^n$ ($c > 0$ const.)
+	\item $\sum_{n=1}^\infty \frac{x^n(1-x^n)}{n}$
+	\item $\sum_{n=1}^\infty \frac{1}{\sqrt{n}}\left[\frac{x+1}{2x+1}\right]^n$
+	\item $\sum_{n=1}^\infty \left[\frac{(2n)!}{n(n!)^2}\right](x-e)^n$
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 3}
+{\it Discuss the series whose $n$th terms are shown below:
+\begin{align*}
+	&a_n = (-1)^n\frac{n^n}{(n+1)^{n+1}},
+	&b_n = \frac{n^n}{(n+1)^{n+1}},\\
+	&c_n = (-1)^n\frac{(n+1)^n}{n^n},
+	&d_n = \frac{(n+1)^n}{n^n}.\\
+\end{align*}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 4}
+{\it Suppose $x_1 \geq x_2 \geq x_3 \geq \cdots$ and $\lim_{n \to \infty}x_n = 0$.
+Show that the following series converges:
+\[
+	x_1 - \frac{1}{2}(x_1 + x_2) + \frac{1}{3}(x_1 + x_2 + x_3)
+	- \frac{1}{4}(x_1 + x_2 + x_3 + x_4) \pm \cdots.
+\]}
+\begin{proof}[Solution]\let\qed\relax
+	Note that the sequence is bounded below by $0$.
+	We have a sum of geometric series.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 5}
+{\it \begin{enumerate}
+	\item Prove: if $a_n \geq a_{n+1} \geq 0$ for all $n$,
+	and $\sum a_n$ converges, then $\lim_{n\to\infty}na_n = 0$.
+	\item Prove: If $\sum(b_n^2/n)$ converges,
+	$\frac{1}{N}\sum_{j=1}^N b_j \to 0$ as $N \to \infty$.
+\end{enumerate}
+[Hint: In part (a), it's enough to prove that $\frac12 na_n \to 0$.]
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		It would be sufficient to show that $\sum_n \frac{1}{2}n a_n$ converges.
+		This converges if and only if $\sum_n 2^n a_n$
+		by the Cauchy condensation... this is not Cauchy condensation
+		because of $n$... but what about $n < 2^k$.
+
+		Since $a_n \geq a_{n+1} \geq 0$ for all $n$
+		and $\sum a_n$ converges,
+		the Cauchy Condensation Test gives $\sum_k 2^k a_{2^k}$ converges as well.
+		Since our sequence monotonically decreases and is always positive,
+		we have $2^k a_n \leq 2^ka_{2^k}$ for $n \in \N$ such that $2^{k} \leq n < 2^{k+1}$.
+		Note that for any $k$, $2^{k} \leq n < 2^{k+1}$ implies $\frac{n}{2} < 2^k$.
+		Thus, $0 \leq |\frac{n}{2}a_n| = \frac{n}{2}a_n < 2^ka_{n} \leq 2^k a_{2^k}$
+		for $2^{k} \leq n < 2^{k+1}$.
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		In Problem 8(a) from homework 3,
+		we proved that if $a_n \to 0$ as $n \to \infty$,
+		then $(a_1+a_2+\cdots a_n)/n \to 0$ as well.
+		Thus, it is sufficent to show that $b_n \to 0$
+		as $n \to \infty$.
+		
+		Since $\sum (b_n^2/n)$ converges,
+		by the crude divergence test, we have that $b_n^2/n \to 0$ as $n\to\infty$.
+		ff
+	\end{proof}
+\end{enumerate} 
+\clearpage
+~\clearpage
+
+\subsection*{Problem 6}
+{\it Define $f(\theta) = \sum_{k=1}^\infty \frac{1}{2k-1}\sin((2k-1)\theta)$.
+Determine the domain of $f$, namely,
+the set of all real $\theta$ where the series converges,
+by completing the steps below.
+\begin{enumerate}
+	\item Obtain the following identities, valid for each $n \in \N$
+		at all points where $\sin\theta \neq 0$:
+		\[
+			C_n(\theta) = \cos(\theta) + \cos(3\theta) + \cos(5\theta)
+			+ \cdots + \cos((2n-1)\theta) = \frac{\sin(2n\theta)}{2\sin\theta},
+		\]
+		\[
+			S_n(\theta) = \sin(\theta) + \sin(3\theta) + \sin(5\theta)
+			+ \cdots + \sin((2n-1)\theta) = \frac{1-\cos(2n\theta)}{2\sin\theta},
+		\]
+		[Suggestion: Use geometric sums of complex numbers,
+		with $e^{it} = \cos(t) + i\sin(t)$.]
+	\item Prove that the domain of $f$ is the interval $(-\infty,+\infty)$.
+	\item Find a sequence $(\theta_n)$ such that $\theta_n \to 0$
+		and $S_n(\theta_n) \to +\infty$ as $n \to \infty$.
+		Explain why your solution in part (b) is correct in spite
+		of the evident unboundedness of the sequence $(S_n(\theta_n))$.
+\end{enumerate}
+}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+\end{document}
