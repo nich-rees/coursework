@@ -112,7 +112,8 @@ Is this statement still true if the word ``absolutely" is removed?}
 		and then since $0 <2\lfloor (n-1)/2\rfloor+1<n$
 		so $0 < \left\lvert\frac{1}{n}\right\rvert
 		\leq \frac{1}{2\lfloor (n-1)/2\rfloor+1}$,
-		comparison test says this series diverges.
+		comparison test says this series diverges
+		(since the harmonic series diverges to infinity).
 		
 		Now consider when $|x| > 1$.
 		Then we claim there exists an $N\in \N$ such that $x^n(1-x^n) < -1$
@@ -195,7 +196,7 @@ Is this statement still true if the word ``absolutely" is removed?}
 		Furthermore, when $n$ is even, we have $a_n = \frac{|x|^n(1-|x|^n)}{n} < \frac{|x|^n(1 + |x|^n)}{n} < \frac{1}{n^2}$ as well.
 		Thus $|a_n| < \frac{1}{n^2}$ for all $n \geq N$.
 		And since $\sum_n \frac{1}{n^2}$ is a convergent $p$-series ($p > 1$),
-		the comparison test tells us that $\sum_n a_n$ converges as wel.
+		the comparison test tells us that $\sum_n a_n$ converges as well.
 
 		In summary: the series converges when $x \in (-1,1]$,
 		and diverges otherwise.
@@ -204,6 +205,8 @@ Is this statement still true if the word ``absolutely" is removed?}
 		Fix some arbitrary $x \in \R$.
 		Let $a_n = \frac{1}{\sqrt{n}}\left[\frac{x+1}{2x+1}\right]^n$
 		and $\alpha = \limsup_n|a_n|^{1/n}$.
+		Note that if $x = -\frac12$, none of our terms exist,
+		so we ignore that value.
 		We can compute
 		\[
 			\alpha =
@@ -218,10 +221,57 @@ Is this statement still true if the word ``absolutely" is removed?}
 		and by Problem 8(c) from homework 4,
 		$\limsup_n (n^{1/(2n)})^{-1} = 1^{-1} = 1$
 		(we've also used the fact $|a^n| = |a|^n$ for our first equality).
+		When $x > 0$, we have $|2x+1| = 2x+1 > x+1 = |x+1|$.
+		When $-\frac23 < x < 0$, $|2x+1| = -2x-1 < x+1 = |x+1|$.
+		When $x < -\frac23$, $|2x+1| > |x+1|$.
 		Now, ratio test gives convergence when $|x+1| < |2x+1|$.
+		Thus, when $x \in (-\infty, -\frac23) \cup (0,\infty)$,
+		$\alpha < 1$,
+		thus ratio test says the series converges.
+		When $x \in (-\frac23, -\frac12)\cup (-\frac12, 0)$,
+		$\alpha > 1$, thus the ratio test says the series diverges.
+
+		If $x = -\frac23$, we have $a_n = (-1)^n\frac{1}{\sqrt{n}}$.
+		Note that $\lim_{n\to\infty} \frac{1}{\sqrt{n}} = 0$,
+		and $\frac{1}{\sqrt{n+1}} < \frac{1}{\sqrt{n}}$,
+		thus the series is monotonically decreasing.
+		Thus, the alternating series test says the series converges.
+
+		Finally, if $x = 0$, $a_n = \frac{1}{\sqrt{n}}$,
+		thus $\sum_n a_n$ diverges since this is a $p$-series
+		where $p = \frac12 < 1$.
+		
+		In summary: the series converges when $x \in (-\infty,-\frac23] \cup (0,\infty)$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
+		Fix some arbitrary $x \in \R$.
+		Let $a_n = \left[\frac{(2n)!}{n(n!)^2}\right](x-e)^n$
+		and define $\overline\alpha = \limsup_n \left|\frac{a_{n+1}}{a_n}\right|$
+		and $\underline\alpha = \liminf_n \left|\frac{a_{n+1}}{a_n}\right|$.
+		$a_n = 0$ only when $x = e$.
+		In this case, $a_n = 0$, thus $\sum_n a_n$ converges.
+		Now assume that $x \neq e$.
+		We can compute
+		\[
+			\left\lvert \frac{a_{n+1}}{a_n}\right\rvert
+			= \left\lvert \frac{(2n+2)(2n+1)n}{(n+1)^2(n+1)}(x-e)\right\rvert
+			= |x-e| \frac{4n^2+2n}{n^2+2n+1}
+		\]
+		We see $\lim_{n\to\infty}\left\lvert \frac{a_{n+1}}{a_n}\right\rvert
+		= |x-e|\lim_{n\to\infty}\frac{4+2/n}{1+2/n + 1/n^2} = 4|x-e|$
+		(applying limit laws for multiplication and division).
+		Thus, $\overline\alpha = \underline\alpha = 4|x-e|$
+		since the limit exists.
+		Thus, the series converges when $4|x-e| < 1 \implies |x-e| < \frac14
+		\implies e-\frac14 < x < e + \frac14$ and diverges when $4|x-e| > 1 \implies |x-e| > \frac14 \implies
+		x-e > \frac14 \implies x > e + \frac14$ and $x-e < -\frac14
+		\implies x < e - \frac14$ by the ratio test.
+
+		If $x = e + \frac14$, we have
+		$a_n = \left[\frac{(2n)!}{n(n!)^2}\right]\left(\frac{1}{4}\right)^n$
 		ff
+		only need to prove this case: this is absolute value of other one,
+		so absolute convergence.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -232,11 +282,34 @@ Is this statement still true if the word ``absolutely" is removed?}
 	&a_n = (-1)^n\frac{n^n}{(n+1)^{n+1}},
 	&b_n = \frac{n^n}{(n+1)^{n+1}},\\
 	&c_n = (-1)^n\frac{(n+1)^n}{n^n},
-	&d_n = \frac{(n+1)^n}{n^n}.\\
+	&d_n = \frac{(n+1)^n}{n^{n+1}}.\\
 \end{align*}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	Let $\alpha = \limsup_n |a_n|^{1/n}$.
+	Then
+	\[
+		\alpha = \limsup_n \left(\frac{n^n}{(n+1)^{n+1}}\right)^{1/n}
+		= \limsup_n \frac{n}{n+1}\frac{1}{(n+1)^{1/n}}
+	\]
+	Hmm I think $\limsup = 1$, so this won't work.ff
+
+	Note that $c_n$ fails to converge.
+	Since $\frac{n+1}{n} > 1$ for all $n \in \N$,
+	we have $\left(\frac{n+1}{n}\right)^n > 1$.
+	Thus $\lim_{n\to\infty} \left(\frac{n+1}{n}\right)^n \geq 1 > 0$
+	if the limit exists.
+	Regardless, this implies $\lim_{n\to\infty}c_n \neq 0$,
+	and so the crude divergence test tells us $\sum_n c_n$ fails to converge
+	(and so fails to absolutely converge).
+
+	Note that $d_n$ fails to converge.
+	We have $d_n = \frac{(n+1)^n}{n^{n+1}} = \left(\frac{n+1}{n}\right)^n\cdot\frac{1}{n}$.
+	Since $\left(\frac{n+1}{n}\right)^n > 1$ for all $n$,
+	we have that $d_n > \frac{1}{n} = \left\lvert \frac{1}{n}\right\rvert> 0$.
+	Thus, by the comparison test, $\sum_n d_n$ diverges to infinity,
+	since the harmonic series also diverges to infinity
+	(and so $\sum_n d_n$ also fails to absolutely converge).
 \end{proof}
 \clearpage
 ~\clearpage
@@ -249,6 +322,12 @@ Show that the following series converges:
 	- \frac{1}{4}(x_1 + x_2 + x_3 + x_4) \pm \cdots.
 \]}
 \begin{proof}[Solution]\let\qed\relax
+	By the alternating series test, we know that $\sum_n(-1)^n x_n$ converges.
+	Now note that $\frac{1}{n}(x_1 + x_2 + \cdots + x_n) > x_n$.
+
+	Want to get hmm maybe even somethng about
+	how inside each parantheses looks like a series too?
+
 	Note that the sequence is bounded below by $0$.
 	We have a sum of geometric series.
 \end{proof}
@@ -289,8 +368,12 @@ Show that the following series converges:
 		as $n \to \infty$.
 		
 		Since $\sum (b_n^2/n)$ converges,
-		by the crude divergence test, we have that $b_n^2/n \to 0$ as $n\to\infty$.
+		$\liminf_n \left\lvert \frac{b^2_{n+1}/(n+1)}{b^2_n/n}\right\rvert \leq 0$
+		(contrapositive of part (b) of the ratio test).
 		ff
+
+		But need to prove that $b_n^2/n \geq b_{n+1}^2/(n+1) \geq 0$,
+		then can invoke part (a) and we're done.
 	\end{proof}
 \end{enumerate} 
 \clearpage
@@ -324,13 +407,50 @@ by completing the steps below.
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We have $\sum_{k=1}^n e^{i(2k-1)\theta} = C_n(\theta) + iS_n(\theta)$.
+		We can rewrite our sum as $\sum_{k=0}^{n-1} e^{i(2k+1)\theta}$.
+		But this is a geometric series with common ratio $e^{2i\theta}$
+		and initial value $e^{i\theta}$,
+		thus
+		\[
+			C_n(\theta) + iS_n(\theta) = e^{i\theta}\frac{1-(e^{2i\theta})^n}{1-e^{2i\theta}}
+			= \frac{1-\cos(2n\theta) - i\sin(2n\theta)}
+			{e^{-i\theta} - e^{i\theta}}
+		\]
+		But note that
+		\[
+			\frac{1}{e^{-i\theta} - e^{i\theta}}
+			= \frac{1}{\cos(-\theta) + i\sin(-\theta) - \cos(\theta) - i\sin\theta}
+			= \frac{1}{-2i\sin(\theta)}
+			= \frac{i}{2\sin\theta}
+		\]
+		Thus
+		\[
+			C_n(\theta) + iS_n(\theta) =
+			\frac{\sin(2n\theta)}{2\sin\theta} + i\frac{1-\cos(2n\theta)}{2\sin\theta}
+		\]
+		For equality, the real components must equal the real components,
+		and the imaginary components must equal the imaginary components,
+		thus since $C_n(\theta)$ and $S_n(\theta)$ are strictly
+		real-valued functions, we have
+		\[
+			C_n(\theta) = \frac{\sin(2n\theta)}{2\sin\theta},
+			\quad S_n(\theta) = \frac{1-\cos(2n\theta)}{2\sin\theta}
+		\]
+		as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We seek to show that the series converges for all $\theta \in \R$.
+		Recall that $|\sin(x)| \geq \frac{2x}{\pi}$ (Piazze @331),
+		and so $\frac{1}{2k-1}\sin((2k-1)\theta)$
+
+		It is suffient to show if
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Consider $(\theta_n) = \frac{1}{n}$.
+		Then $S_n(\theta_n) = \frac{1-\cos{2}}{2\sin\frac{1}{n}}$.
+		We have that $\sin(\frac{1}{n}) \to 0$ as $n \to \infty$
+		(since $\sin(\frac{1}{n}) \to 0$ as $n \to \infty$...).
 	\end{proof}
 \end{enumerate}
 \clearpage
