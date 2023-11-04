@@ -70,13 +70,155 @@ Is this statement still true if the word ``absolutely" is removed?}
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Fix some arbitrary $x \in \R$.
+		Let $a_n = c^{n^2}(x-1)^n$
+		and $\alpha = \limsup_n|a_n|^{1/n}$.
+		We can compute
+		\[
+			\alpha = \limsup_n \left\lvert c^{n^2}(x-1)^n\right\rvert^{1/n}
+			= \limsup_n \left\lvert c^n(x-1)\right\rvert
+			= \left\lvert x-1\right\rvert\limsup_n c^n
+		\]
+		where we've brought the exponent $n$ out in the first step,
+		since $|a^nb^n| = |ab|^n$.
+
+		If $x = 1$, then $\alpha = 0$,
+		so the series converges by the root test regardless of $c$.
+		Now let $x \in \R\setminus\{1\}$.
+		We know that $\lim_{n\to\infty} c^n \to +\infty$ if $c > 1$,
+		so $\limsup_n c^n = +\infty$, thus the series diverges for all $x$.
+		Additionally, $\lim_{n\to\infty}c^n = 0$ if $1 > c > 0$,
+		so $\limsup_n c^n = 0$, thus the series converges for all $x$.
+		Finally, if $c = 1$, $a_n = (x-1)^n$ which is a geometric series:
+		it will converge when $|x-1| < 1 \implies 0 < x < 2$ and will diverge otherwise.
+
+		In summary:
+		\begin{itemize}
+			\item If $c > 1$, $x \in \{1\}$ makes the series converge
+			\item If $c = 1$, $x \in (0,2)$ makes the series converge
+			\item If $0 < c < 1$, $x \in \R$ makes the series converge
+		\end{itemize}
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Let $a_n = \frac{x^n(1-x^n)}{n}$.
+		Let $x \in \{0,1\}$.
+		Then $a_n = 0$ for all $n$, thus the series converges.
+		Let $x = -1$.
+		Then our series is $\sum_n a_n = \sum_{n\text{ odd}}\frac{2}{n}$.
+		We can rewrite our sum to be $\sum_{n}\frac{1}{2\lfloor (n-1)/2\rfloor+1}$
+		(since if $n = 2k$, $2\lfloor (n-1)/2\rfloor+1 =n - 1$: the odd
+		number directly below it,
+		and if $n = 2k+1$, $2\lfloor (n-1)/2\rfloor+1 = n$: itself)
+		and then since $0 <2\lfloor (n-1)/2\rfloor+1<n$
+		so $0 < \left\lvert\frac{1}{n}\right\rvert
+		\leq \frac{1}{2\lfloor (n-1)/2\rfloor+1}$,
+		comparison test says this series diverges.
+		
+		Now consider when $|x| > 1$.
+		Then we claim there exists an $N\in \N$ such that $x^n(1-x^n) < -1$
+		for all $n \geq N$.
+		We prove this by considering when $n$ is positive and negative.
+		Let $x > 1$.
+		Note that there exists an $N$ such that $x^n > 2$
+		for all $n \geq N$:
+		using the inequality from Problem 4(a) of Homework 6 since $x > 1$,
+		we have that $x^n > x^n - 1 \geq n(x-1)$
+		and then invoke Archimedean property to find $N$ such that $N(x-1) > 2$,
+		it's trivial to see that $n \geq N$ also implies $x^n > 2$.
+		Now if $n \geq N$, we have $1-x^n < -1$ and since
+		$x^n > 1$, we have $x^n(1-x^n) < 1-x^n < -1$.
+		Now let $x < -1$.
+		If $n$ is even, $x^n(1-x^n) = |x|^n(1-|x|^n)$,
+		and we have the same $N$ from when $x > 1$
+		to have $x^n(1-x^n) < -1$.
+		If $n$ is odd, $x^n(1-x^n) = (-1)|x|^n(1-(-1)|x|^n) = -|x|^n(|x|^n + 1)$,
+		and using the $N$ from before, we have $-|x|^n (|x|^n+1) < -2(x^n+1) < -2 < -1$.
+		This proves our claim.
+		But then for all $n \geq N$,
+		we have that
+		\[
+			\frac{x^n(1-x^n)}{n} < \frac{-1}{n} < 0 \implies
+			0 < \frac{1}{n} = \left\lvert \frac{1}{n} \right\rvert < -\frac{x^n(1-x^n)}{n}
+		\]
+		And so by the comparison test,
+		$\sum_n -a_n$ diverges.
+		But this is true only if $\sum_n a_n$ diverges,
+		since if $s_N = \sum_{n=1}^N a_n$ and $s'_N = \sum_{n=1}^N -a_n$,
+		we have that $s'_N -\sum_{n=1}^N a_n = -s_N$,
+		and if $s_N$ converged as $N \to \infty$,
+		constant multiplication limit law would tell us that $s'_N$
+		would converge as well.
+		Thus, if $|x| > 1$, we have that the series diverges.
+
+		Now consider when $0 < x < 1$.
+		Consider $\sum_k 2^k\frac{x^{2^k}(1-x^{2^k})}{2^k} = \sum_k x^{2^k}(1-x^{2^k})$.
+		We have $0 < x^{2^k}(1-x^{2^k}) < x^{2^k} < x^k$
+		(where the inequality is due to the fact that
+		$x^a$ is monotonically decreasing when $0 < x < 1$,
+		and $2^k > k$),
+		and $\sum_k x^k$ converges since it is geometric series
+		with ratio $x < 1$.
+		Thus, by the comparison test,
+		we have that $\sum_k 2^k\frac{x^{2^k}(1-x^{2^k})}{2^k}$
+		converges as well.
+		Finally, $\frac{x^n(1-x^n)}{n}$ is monotonically
+		decreasing and bounded below by $0$:
+		all the terms are positive, so $a_n > 0$ for all $n$;
+		now see
+		\[
+			\frac{a_{n+1}}{a_n}
+			= \frac{x^{n+1}(1-x^{n+1})n}{x^n(1-x^n)(n+1)}
+			< x\frac{1-x^{n+1}}{1-x^n}{}
+		\]
+		and $x\frac{1-x^{n+1}}{1-x^n} \to x$ as $n \to \infty$
+		(limit laws),
+		thus for sufficiently large $n$,
+		we have that $\frac{a_{n+1}}{a_n} < x + \ep$
+		where setting $\ep = 1 - x > 0$ gives $\frac{a_{n+1}}{a_n} < 1$,
+		hence the series is monotonically decreasing past that point.
+		Thus, by Cauchy condensation, the series converges
+		when $0 < x < 1$
+		(technically, Cauchy Condensation only tells us that
+		the series converges starting from our $n$
+		where the series begins to be monotonically decreasing,
+		but then we have the sum of a convergent series
+		and a finite sum, which itself converges).
+
+		It remains to consider the case when $-1 < x < 0$.
+		Now if $n$ is odd, we have $a_n = \frac{(-1)|x|^n(1+|x|^n)}{n}
+		< \frac{-2|x|^n}{n}$.
+		Since $\lim_{n\to\infty}\frac{2n}{(1/|x|)^n} = 0$ by Rudin Theorem 3.20 (d),
+		we have some $N$ such that $\left(\frac{1}{|x|}\right)^n > 2n > 0$
+		for all $n \geq N$,
+		thus $0 < 2|x|^n < \frac{1}{n}$,
+		thus $|a_n| < \frac{2|x|^n}{n} < \frac{1}{n^2}$.
+		Furthermore, when $n$ is even, we have $a_n = \frac{|x|^n(1-|x|^n)}{n} < \frac{|x|^n(1 + |x|^n)}{n} < \frac{1}{n^2}$ as well.
+		Thus $|a_n| < \frac{1}{n^2}$ for all $n \geq N$.
+		And since $\sum_n \frac{1}{n^2}$ is a convergent $p$-series ($p > 1$),
+		the comparison test tells us that $\sum_n a_n$ converges as wel.
+
+		In summary: the series converges when $x \in (-1,1]$,
+		and diverges otherwise.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Fix some arbitrary $x \in \R$.
+		Let $a_n = \frac{1}{\sqrt{n}}\left[\frac{x+1}{2x+1}\right]^n$
+		and $\alpha = \limsup_n|a_n|^{1/n}$.
+		We can compute
+		\[
+			\alpha =
+			\limsup_n \left\lvert\frac{1}{\sqrt{n}}
+			\left[\frac{x+1}{2x+1}\right]^n\right\rvert^{1/n}
+			= \limsup_n (n^{1/(2n)})^{-1}\left\lvert\frac{x+1}{2x+1}\right\rvert
+			= \left\lvert\frac{x+1}{2x+1}\right\rvert\limsup_n(n^{1/(2n)})^{-1}
+			=\left\lvert\frac{x+1}{2x+1}\right\rvert
+		\]
+		where our final equality is due to $\lim_{n\to\infty} n^{1/(2n)} = 1$,
+		and so $\liminf_n n^{1/{2n}} = 1$ ($\liminf$ agrees with convergent limits),
+		and by Problem 8(c) from homework 4,
+		$\limsup_n (n^{1/(2n)})^{-1} = 1^{-1} = 1$
+		(we've also used the fact $|a^n| = |a|^n$ for our first equality).
+		Now, ratio test gives convergence when $|x+1| < |2x+1|$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff

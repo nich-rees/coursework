@@ -1,5 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1698900291 "hw08.tex" "hw08.pdf" "hw08" 1698900291 0
+["pdflatex"] 1699091893 "hw08.tex" "hw08.pdf" "hw08" 1699091893 0
+  "/home/nich/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1695159989 11524 a545fe7b6db104cbf3b60e865f10efb5 ""
+  "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1689853683 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1689853683 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1689853683 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1689853683 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -43,8 +45,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1689853683 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1694484303 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1694500201 6768047 77540929f7d62f2020e85a5c0029da8c ""
-  "hw08.aux" 1698900291 33 06c322e1d88c4778ac780ba5e7d05c77 "pdflatex"
-  "hw08.tex" 1698900290 6306 913675b6c36a790b51cea8a414c67a66 ""
+  "hw08.aux" 1699091893 33 cd8a9e253be16178be412705367a589a "pdflatex"
+  "hw08.tex" 1699091891 12606 ba168bff3dde4d4dcef192ce685718eb ""
   (generated)
   "hw08.aux"
   "hw08.log"
