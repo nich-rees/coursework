@@ -60,13 +60,7 @@ Is this statement still true if the word ``absolutely" is removed?}
 ~\clearpage
 
 \subsection*{Problem 2}
-{\it For each series below, find the set of $x \in \R$ where the series converges.
-\begin{enumerate}
-	\item $\sum_{n=1}^\infty c^{n^2}(x-1)^n$ ($c > 0$ const.)
-	\item $\sum_{n=1}^\infty \frac{x^n(1-x^n)}{n}$
-	\item $\sum_{n=1}^\infty \frac{1}{\sqrt{n}}\left[\frac{x+1}{2x+1}\right]^n$
-	\item $\sum_{n=1}^\infty \left[\frac{(2n)!}{n(n!)^2}\right](x-e)^n$
-\end{enumerate}}
+{\it For each series, find the set of $x \in \R$ where the series converges.}
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -145,7 +139,7 @@ Is this statement still true if the word ``absolutely" is removed?}
 		$\sum_n -a_n$ diverges.
 		But this is true only if $\sum_n a_n$ diverges,
 		since if $s_N = \sum_{n=1}^N a_n$ and $s'_N = \sum_{n=1}^N -a_n$,
-		we have that $s'_N -\sum_{n=1}^N a_n = -s_N$,
+		we have that $s'_N = -\sum_{n=1}^N a_n = -s_N$,
 		and if $s_N$ converged as $N \to \infty$,
 		constant multiplication limit law would tell us that $s'_N$
 		would converge as well.
@@ -268,10 +262,20 @@ Is this statement still true if the word ``absolutely" is removed?}
 		\implies x < e - \frac14$ by the ratio test.
 
 		If $x = e + \frac14$, we have
-		$a_n = \left[\frac{(2n)!}{n(n!)^2}\right]\left(\frac{1}{4}\right)^n$
-		ff
-		only need to prove this case: this is absolute value of other one,
-		so absolute convergence.
+		$a_n = \left[\frac{(2n)!}{n(n!)^2}\right]\left(\frac{1}{4}\right)^n$.
+		Then, $\lim_{n\to\infty} n\left(\frac{a_n}{a_{n+1}} - 1\right)
+		= \lim_{n\to\infty} n\left(\frac{1}{|x-e|}\frac{1+2/n+1/n^2}{4+2/n} - 1\right)
+		= \lim_{n\to\infty} \frac{n+2+1/n - n-1/2}{1+1/(2n)} = 2 > 1$,
+		thus by Raabe's test,
+		the series converges.
+
+		If $x = e-\frac14$,
+		we have $a_n = \left[\frac{(2n)!}{n(n!)^2}\right]\left(-\frac{1}{4}\right)^n$.
+		But we have already proven $\sum_n |a_n|$ converges (above),
+		and so the series converges absolutely,
+		thus this series converges.
+
+		In summary: the series converges when $x\in [e-\frac14, e+\frac14]$.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -286,13 +290,31 @@ Is this statement still true if the word ``absolutely" is removed?}
 \end{align*}
 
 \begin{proof}[Solution]\let\qed\relax
-	Let $\alpha = \limsup_n |a_n|^{1/n}$.
-	Then
+	$a_n$ will converge.
+	We have that
 	\[
-		\alpha = \limsup_n \left(\frac{n^n}{(n+1)^{n+1}}\right)^{1/n}
-		= \limsup_n \frac{n}{n+1}\frac{1}{(n+1)^{1/n}}
+		\frac{n^n}{(n+1)^{n+1}} = \left(\frac{n}{n+1}\right)^n\cdot\frac{1}{n+1}
+		< \frac{1}{n+1}
 	\]
-	Hmm I think $\limsup = 1$, so this won't work.ff
+	Then, since $\lim_{n\to\infty} \frac{1}{n+1}$, by Squeeze test,
+	we have that $\lim_{n\to\infty} \frac{n^n}{(n+1)^{n+1}} = 0$
+	as well (since it is bounded below by $0$).
+	Furthermore, note that $\left\lvert a_{n+1}\right\rvert = \frac{(n+1)^{2(n+1)}}{n^n(n+2)^{n+2}} \left\lvert a_{n}\right\rvert$,
+	and since $\frac{(n+1)^{2(n+1)}}{n^n(n+2)^{n+2}} < 1$
+	for all $n$, $|a_n|$ is monotonically decreasing.
+	Thus, applying the alternating series test, we get that $\sum_n a_n$ converges.
+
+	Note that $b_n$ fails to converge.
+	Let $s_n = \frac{1}{nb_n} = \frac{(n+1)^{n+1}}{n^{n+1}} = \left(\frac{n+1}{n}\right)^{n+1}$.
+	By the definition of $e$ in Rudin, we have that $s_n \to e$
+	as $n \to \infty$.
+	Thus, for all $\ep > 0$, we have that there exists $N$ such that
+	for all $n \geq N$ such that $|s_n - e| < \ep$.
+	Let $\ep = 1$. Thus, $0 < e - 1 < s_n < 1 + e$.
+	Rearranging, we get that $0 < \frac{1}{1+e}\frac{1}{n} < b_n$.
+	Thus, by the comparison test, since $\sum_n \frac{1}{n}$ diverges to infinity,
+	we must have that $b_n$ diverges as well.
+	This means that although $a_n$ is convergent, it is not absolutely convergent.
 
 	Note that $c_n$ fails to converge.
 	Since $\frac{n+1}{n} > 1$ for all $n \in \N$,
@@ -322,14 +344,39 @@ Show that the following series converges:
 	- \frac{1}{4}(x_1 + x_2 + x_3 + x_4) \pm \cdots.
 \]}
 \begin{proof}[Solution]\let\qed\relax
-	By the alternating series test, we know that $\sum_n(-1)^n x_n$ converges.
-	Now note that $\frac{1}{n}(x_1 + x_2 + \cdots + x_n) > x_n$.
+	Let $s_n = \frac{x_1 + x_2 + \cdots + x_n}{n}$.
+	Note that since $\lim_{n\to\infty} x_n = 0$,
+	we have that $\lim_{n\to\infty} s_n = 0$ as well,
+	by Problem 8(a) from homework 3.
+	Furthermore, note that $s_n$ is monotonically decreasing:
+	for the sake of contradiction, assume the opposite,
+	that is, there exists a $s_k$ such that $s_k > s_{k-1}$
+	(maybe assume that this is the first such $k$ff).
+	Then
+	\[
+		s_k = \frac{x_1}{k} + \frac{x_2}{k} + \cdots + \frac{x_{k-1}}{k} + \frac{x_k}{k}
+		> \frac{x_1}{k-1} + \frac{x_2}{k-1} + \cdots + \frac{x_{k-1}}{k-1} = s_{k-1}
+	\]
+	Then we have
+	\[
+		\frac{x_k}{k} > \frac{x_1 + x_2 + \cdots + x_{k-1}}{k-1} - \frac{x_1 + x_2 + \cdots + x_{k-1}}{k} = \frac{x_1 + x_2 + \cdots + x_{k-1}}{k(k-1)}
+	\]
+	Or
+	\[
+		x_k > \frac{x_1 + x_2 + \cdots + x_{k-1}}{k-1} \geq \frac{(k-1)x_{k-1}}{k-1} = x_{k-1}
+	\]
+	but this contradicts the assumption that $x_n$ are monotonically decreasing,
+	thus $s_k \leq s_{k-1}$.
 
-	Want to get hmm maybe even somethng about
-	how inside each parantheses looks like a series too?
-
-	Note that the sequence is bounded below by $0$.
-	We have a sum of geometric series.
+	Now let $b_n = (-1)^{n+1}$.
+	Note that $b_1 + b_2 + \cdots + b_N$ is bounded
+	(ie. it always either $0$ or $1$).
+	Thus, we can apply Dirichlet's Theorem to the series $\sum_n s_nb_n$,
+	which says that
+	\[
+		\sum_n s_nb_n = x_1 - \frac12(x_1 + x_2) + \frac13(x_1 + x_2 + x_3) -+ \cdots
+	\]
+	converges.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -345,35 +392,71 @@ Show that the following series converges:
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		It would be sufficient to show that $\sum_n \frac{1}{2}n a_n$ converges.
-		This converges if and only if $\sum_n 2^n a_n$
-		by the Cauchy condensation... this is not Cauchy condensation
-		because of $n$... but what about $n < 2^k$.
-
 		Since $a_n \geq a_{n+1} \geq 0$ for all $n$
 		and $\sum a_n$ converges,
 		the Cauchy Condensation Test gives $\sum_k 2^k a_{2^k}$ converges as well.
-		Since our sequence monotonically decreases and is always positive,
-		we have $2^k a_n \leq 2^ka_{2^k}$ for $n \in \N$ such that $2^{k} \leq n < 2^{k+1}$.
-		Note that for any $k$, $2^{k} \leq n < 2^{k+1}$ implies $\frac{n}{2} < 2^k$.
-		Thus, $0 \leq |\frac{n}{2}a_n| = \frac{n}{2}a_n < 2^ka_{n} \leq 2^k a_{2^k}$
+		Since $a_n$ monotonically decreases and is always positive,
+		we have $2^k a_n \leq 2^ka_{2^k}$ for $n \in \N$ such that $2^{k} \leq n$.
+		Note that for any $k$, $n < 2^{k+1}$ implies $\frac{n}{2} < 2^k$.
+		Thus, $0 \leq \frac{n}{2}a_n < 2^ka_{n} \leq 2^k a_{2^k}$
 		for $2^{k} \leq n < 2^{k+1}$.
-		ff
+		Not that $2^ka_{2^k} \to 0$ as $k \to \infty$.
+		Thus, givn $\ep > 0$,
+		there exists $K$ such that $0 < 2^ka_{2^k} < \ep$ for all $k \geq K$.
+		Then if $n \geq 2^K$, there exists $k \geq K$
+		such that $2^k \leq n < 2^{k+1}$,
+		and so $\frac12 na_n < 2^ka_{2^k} < \ep$.
+		Thus $\frac12 na_n \to 0$ as $n \to \infty$.
+		But then $na_n \to 0$ as well;
+		this is easy to see: if $na_n$ diverged,
+		then $\frac12n a_n$ would diverge as well
+		(one can simply consider $\ep/2$ and get breaking of convergence),
+		and if $na_n$ converges to a value,
+		the constant multiplication limit law tells us that $\frac12na_n$
+		would converge to half that value,
+		and so $\lim_{n\to\infty} na_n = 0$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		In Problem 8(a) from homework 3,
-		we proved that if $a_n \to 0$ as $n \to \infty$,
-		then $(a_1+a_2+\cdots a_n)/n \to 0$ as well.
-		Thus, it is sufficent to show that $b_n \to 0$
-		as $n \to \infty$.
-		
-		Since $\sum (b_n^2/n)$ converges,
-		$\liminf_n \left\lvert \frac{b^2_{n+1}/(n+1)}{b^2_n/n}\right\rvert \leq 0$
-		(contrapositive of part (b) of the ratio test).
-		ff
+		We first prove that if $a_n > 0$ and $\sum_n a_n$ converges,
+		then $\frac{1}{N}\sum_{n=1}^N na_n \to 0$ as $N \to \infty$.
+		Thus, let $\sum_{n=1}^\infty a_n = L$.
+		We see that
+		\begin{align*}
+			\frac{1}{N}\sum_{n=1}^Nna_n
+			&= \frac{1}{N}\sum_{n=1}^N\sum_{j=1}^n a_n\\
+			&\leq \frac{1}{N}\sum_{j=1}^N\sum_{n=j}^N a_n
+		\end{align*}
+		Thus
+		\begin{align*}
+			\frac{1}{N}\sum_{n=1}^Nna_n
+			&\leq \frac{1}{N} \sum_{n=1}^N\sum_{n=j}^\infty a_n\\
+			\implies \frac{1}{N}\sum_{n=1}^Nna_n
+			& \leq \frac{1}{N} \sum_{n=1}^N \left(L - \sum_{n=1}^{j-1}a_n\right)\\
+			\implies \frac{1}{N}\sum_{n=1}^Nna_n
+			& \leq L - \frac{1}{N}\sum_{n=1}^N \sum_{n=1}^{j-1}a_n
+		\end{align*}
+		If $s_j = \sum_{n=1}^{j-1} a_n$,
+		by Problem 8(a) from homework 3,
+		we have that $c_j \to L$ as $j \to \infty$,
+		thus $\frac{1}{N}\sum_{n=1}^Nc_n \to L$.
+		Thus, by Squeeze theorem, we have that $\frac{1}{N}\sum_{n=1}^Nna_n \to 0$
+		as $N \to \infty$.
 
-		But need to prove that $b_n^2/n \geq b_{n+1}^2/(n+1) \geq 0$,
-		then can invoke part (a) and we're done.
+		Now, applying this, we get that $\frac{1}{N}\sum{n=1}^N b_n^2 \to 0$
+		as $N \to \infty$.
+		Now, note that $\frac{1}{N}\sqrt{\sum_{n=1}^N \sum_{n=1}^N b_n^2}$
+		(this is done by Cauchy-Schwartz).
+		Thus, using triangle inequality, we arrive at
+		\[
+			0 \leq \left\lvert \frac{1}{N}\sum_{n=1}^N b_n\right\rvert
+			\leq \frac{1}{N} \sum_{n=1}^N |b_n|
+			\leq \sqrt{\frac{1}{N}\sum_{n=1}^N b_n^2}
+		\]
+		and so by Squeeze theorem,
+		since $\frac{1}{N}\sum^N_{n=1}b_n^2 \to 0$
+		(and so it's square root certainly does),
+		we have that $\frac{1}{N}\sum_{n=1}^N b_n \to 0$
+		as $N \to \infty$, as desired.
 	\end{proof}
 \end{enumerate} 
 \clearpage
@@ -444,14 +527,34 @@ by completing the steps below.
 		Recall that $|\sin(x)| \geq \frac{2x}{\pi}$ (Piazze @331),
 		and so $\frac{1}{2k-1}\sin((2k-1)\theta)$
 
-		It is suffient to show if
+		Fix some $\theta \in \R$.
+		Then $S_n(\theta) = \frac{1-\cos(2n\theta)}{2\sin{\theta}}
+		\leq$,
+		thus $\left\lvert \sum_k \sin((2k-1)\theta) \right\rvert =
+		\left\lvert S_n(\theta) \right\rvert \leq \frac{1}{2\sin{\theta}}$.
+		Thus $S_n(\theta)$ is a bounded sequence.
+		Additionally, $\frac{1}{2k-1} \to 0$ as $n \to \infty$,
+		and is monotonically decreasing.
+		Thus, we can apply Dirichlet's theorem to get that
+		$\sum_k \frac{\sin((2k-1)\theta)}{2k-1}$ converges.
+		Since $\theta \in \R$ was arbitrary,
+		we have that $f(\theta)$ has domain $(-\infty, \infty)$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		Consider $(\theta_n) = \frac{1}{n}$.
 		Then $S_n(\theta_n) = \frac{1-\cos{2}}{2\sin\frac{1}{n}}$.
 		We have that $\sin(\frac{1}{n}) \to 0$ as $n \to \infty$
-		(since $\sin(\frac{1}{n}) \to 0$ as $n \to \infty$...).
+		(since $\sin(x) \to 0$ as $x \to \infty$).
+		Thus $S_n(\theta_n) \to \infty$ as $n \to \infty$,
+		since we are just multiplying a divergent sequence
+		by a constant.
+
+		This doesn't change the convergence of part (b):
+		notably, $f(\theta) = S_n(\theta)/(2k-1)$:
+		this reciprocal term is ``controlling" the growth of $S_n(\theta)$.
+		So divergence here does not give divergence for $f(\theta)$.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 \end{document}
