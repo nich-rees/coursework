@@ -530,7 +530,7 @@
 (test/exn (value->num (boolV #t)) "Bad number")
 (test/exn (value->num (funV 'x (id 'x) empty-env)) "Bad number")
 
-;; Value value -> Value
+;; RValue RValue -> FValue
 ;; produce the sum of two numbers
 ;; Effect: signal an error if either argument does not represent a number
 (define (add/tfa v1 v2)
@@ -543,7 +543,21 @@
 (test/exn (add/tfa (numV 5) #t) "Bad number")
 (test/exn (add/tfa (funV 'x (id 'x) empty-env) (numV 6)) "Bad number")
 (test/exn (add/tfa (funV 'x (id 'x) empty-env)
-                     (funV 'x (id 'x) empty-env)) "Bad number")
+                   (funV 'x (id 'x) empty-env)) "Bad number")
+
+
+
+;; RValue -> Boolean
+;; produce true if v1 represents the number zero, else false
+(define (zero-value? v)
+  (type-case RValue v
+    [numV (n) (zero? n)]    
+    [else #f]))
+
+(test (zero-value? (numV 7)) #f)
+(test (zero-value? (numV 0)) #t)
+(test (zero-value? (funV 'x (id 'x) empty-env)) #f)
+(test (zero-value? (boolV #t)) #f)
 
 
 ;; Note: id/tfa has *three signatures*, one for each possible
@@ -563,7 +577,7 @@
 
 
 
-;; interp/tfa-acc : TFA Env Store -> (list Value Store)
+;; interp/tfa-acc : TFA Env Store -> (list RValue Store)
 ;; Accumulator: env is Env
 ;; Invariant: env represents the bindings (in inside-out order)
 ;;            of identifiers to values due to deferred substitutions
@@ -576,23 +590,26 @@
 #;
 (define (interp/tfa-acc f env store)
   (type-case TFA f
-    [num (n) (numV n)]
+    [num (n) (list (numV n) store)]
     [add (l r)
          (match-let ([`(,v1 ,store1) (interp/tfa-acc l env store)])
            (match-let ([`(,v2 ,store2) (interp/tfa-acc r env store1)])
              (list (add/tfa v1 v2) store2)))] ;; do I need to coerce rvalue?!!!
-    [nought? (e) (... (interp/tfa e))]
-    [bool (b) (... b)]
+    [nought? (e) (match-let ([`(,v1 ,store1) (interp-hg-acc e env store)])
+                   (if (zero-value? v1)
+                       (list (boolV #t) store1)
+                       (list (boolV #f) store1)))]
+    [bool (b) (list (boolV b) store)]
     [ifB (p c a)
-         (... (interp/tfa p)
-              (interp/tfa c)
-              (interp/tfa a))]
+         (... (interp/tfa-acc p)
+              (interp/tfa-acc c)
+              (interp/tfa-acc a))]
     [id (x) (... x)]
-    [setobj (l r) (... (interp/tfa l)
-                       (interp/tfa r))]
-    [fixFun (f x body) (... f x (interp/tfa body))]
-    [app (rator rand) (... (interp/tfa rator)
-                           (interp/tfa rand))]))
+    [setobj (l r) (... (interp/tfa-acc l)
+                       (interp/tfa-acc r))]
+    [fixFun (f x body) (... f x (interp/tfa-acc body))]
+    [app (rator rand) (... (interp/tfa-acc rator)
+                           (interp/tfa-acc rand))]))
 
 ;; TFA -> RValue
 ;; interpret the given TFA expression
@@ -613,7 +630,7 @@
 (test (interp/tfa WAE7) (numV 10))
 ;!!! include an error with RValue in LValue? what about binding?
 
-(funV (param symbol?) (body TFA?) (env procedure?))
+;(funV (param symbol?) (body TFA?) (env procedure?))
 
 (test (interp/tfa FWAE1) (funV 'x (add (id 'x) (id 'x)) empty-env))
 ; maybe include a not empty-env
@@ -627,7 +644,7 @@
 (test (interp/tfa (ifB (num 7) (bool #t) (num 9))) error) ;!!! update with error
 (test (interp/tfa (with 'a (bool #t) (ifB (id 'a) (num 7) (num 9))))
       (numV 7))
-(test (interp/tfa (with a' (num 7) (ifB (id 'a) (bool #t) (num 9)))) error) ;!!!
+(test (interp/tfa (with 'a (num 7) (ifB (id 'a) (bool #t) (num 9)))) error) ;!!!
 (test (interp/tfa (with 'a (num 7) (nought? (id 'a)))) (boolV #f))
 (test (interp/tfa (with 'a (fun 'x (id 'x)) (nought? (id 'a)))) error) ;!!!
 
