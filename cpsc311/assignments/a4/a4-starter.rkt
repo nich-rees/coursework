@@ -548,16 +548,30 @@
 
 
 ;; RValue -> Boolean
-;; produce true if v1 represents the number zero, else false
-(define (zero-value? v)
-  (type-case RValue v
-    [numV (n) (zero? n)]    
-    [else #f]))
+;; produce true if v represents the number zero, false if another number
+;; Effect: signal an error if v does not represent a number
+(define (nought?/tfa v)
+  (let ([n (value->num v)])
+    (zero? n)))
 
-(test (zero-value? (numV 7)) #f)
-(test (zero-value? (numV 0)) #t)
-(test (zero-value? (funV 'x (id 'x) empty-env)) #f)
-(test (zero-value? (boolV #t)) #f)
+(test (nought?/tfa (numV 7)) #f)
+(test (nought?/tfa (numV 0)) #t)
+(test/exn (nought?/tfa (funV 'x (id 'x) empty-env)) "Bad number")
+(test/exn (nought?/tfa (boolV #t)) "Bad number")
+
+
+;; RValue -> Boolean
+;; produce if v represents a boolean, produce its value
+;; Effect: signal an error if v does not represent a boolean
+(define (true-value? v)
+  (type-case RValue v
+    [boolV (b) b]
+    [else (error 'value->num "Bad boolean: ~a" v)]))
+
+(test (true-value? (boolV #t)) #t)
+(test (true-value? (boolV #f)) #f)
+(test (true-value? (funV 'x (id 'x) empty-env)) "Bad boolean")
+(test (true-value? (numV 23)) "Bad boolean")
 
 
 ;; Note: id/tfa has *three signatures*, one for each possible
@@ -573,7 +587,13 @@
 ;; and
 ;; Symbol Env Store rValueCtxt  -> (list RValue Store)
 ;; produce the value currently associated with the variable x and the context
-(define (id/tfa x env store ectxt) (list (...) empty-store)) ; stub
+;(define (id/tfa x env store ectxt) (list (...) empty-store)) ; stub
+(define (id/tfa x env store ectxt)
+  (let ([l (lookup-env env x)])
+    (type-case EvalContext
+      [lValueCtxt () (list l store)]
+      [bindingCtxt () (list l store)]
+      [rValueCtxt () (list (lookup-store l store) store)])))
 
 
 
@@ -585,26 +605,26 @@
 ;; Accumulator: store is Store
 ;; Invariant: store represents the present values of variables as they evolve
 ;;            during interpretation
-(define (interp/tfa-acc f env store)
-  (list (numV 0) store))
-#;
-(define (interp/tfa-acc f env store)
+#;(define (interp/tfa-acc f env store)
+    (list (numV 0) store))
+
+(define (interp/tfa-acc f env store ectxt)
   (type-case TFA f
     [num (n) (list (numV n) store)]
     [add (l r)
-         (match-let ([`(,v1 ,store1) (interp/tfa-acc l env store)])
-           (match-let ([`(,v2 ,store2) (interp/tfa-acc r env store1)])
+         (match-let ([`(,v1 ,store1) (interp/tfa-acc l env store ectxt)])
+           (match-let ([`(,v2 ,store2) (interp/tfa-acc r env store1 ectxt)])
              (list (add/tfa v1 v2) store2)))] ;; do I need to coerce rvalue?!!!
-    [nought? (e) (match-let ([`(,v1 ,store1) (interp-hg-acc e env store)])
-                   (if (zero-value? v1)
-                       (list (boolV #t) store1)
-                       (list (boolV #f) store1)))]
+    [nought? (e) (match-let ([`(,v1 ,store1)
+                              (interp/tfa-acc e env store ectxt)])
+                   (list (nought?/tfa v1) store1))]
     [bool (b) (list (boolV b) store)]
     [ifB (p c a)
-         (... (interp/tfa-acc p)
-              (interp/tfa-acc c)
-              (interp/tfa-acc a))]
-    [id (x) (... x)]
+         (match-let ([`(,v1 ,store1) (interp/tfa-acc p env store)])
+           (if (true-value? v1)
+               (interp/tfa-acc c env store1) ;; do I need to coerce rval?!!!
+               (interp/tfa-acc a env store1)))]
+    [id (x) (id/tfa x env store ectxt)]
     [setobj (l r) (... (interp/tfa-acc l)
                        (interp/tfa-acc r))]
     [fixFun (f x body) (... f x (interp/tfa-acc body))]
@@ -616,7 +636,8 @@
 ;; EFFECTS: Signals an error in case of runtime type error.
 ;(define (interp/tfa tfa) (numV 9)) ; stub for the examples
 (define (interp/tfa tfa)
-  (match-let ([`(,v1 ,store1) (interp/tfa-acc tfa empty-env empty-store)])
+  (match-let ([`(,v1 ,store1)
+               (interp/tfa-acc tfa empty-env empty-store rvalue)])
     v1))
 
 
