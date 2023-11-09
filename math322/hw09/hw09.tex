@@ -1,0 +1,128 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 322}
+\chead{Homework 9}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1 (Ch. 1.13)}
+{\it Show that if $P$ is a Sylow subgruop, then $N(N(P)) = N(P)$}
+\begin{proof}[Solution]\let\qed\relax
+	I'm pretty sure that $N(P)$ is just the Sylow $p$-subgroups
+	where $p^m = |P|$.
+	Recall that $N(H) = \{g \in G \mid gHg^{-1} = H\}$,
+
+	Let $G$ be our ambient group of order $p^nm$ where
+	$p$ is a prime and $p \nmid m$.
+	Then let $P$ be a Sylow $p$-subgroup, that is,
+	of order $p^n$.
+	Recall that if $P'$ is another subgroup of $G$ with order $p^n$,
+	then there exists $a \in G$ such that $P' = aPa^{-1}$
+	by Sylow's Theorem.
+	ff
+
+	We have $N(P) = \{g \in G \mid gPg^{-1} = P\}$,
+	and so $N(N(P)) = \{g_2 \in G \mid g_2N(P)g_2^{-1} = N(P)\}$.
+	Set inclusion.
+
+	Let $a \in N(P)$ (so $gPg^{-1} = P$).
+	
+	Consider the action of the $G$ on the set of Sylow $p$-subgroups by conjugation.
+	Recall from equation $(41)$ from Jacobson p. 76 that
+	$\mathrm{Stab} \, aPa^{-1} = a(\mathrm{Stab}\,P)a^{-1}$
+	where $a \in G$.
+	Note that $N(P)$ is the stablizer of $P$ under the conjugancy action,
+	thus $N(aPa^{-1}) = aN(P)a^{-1}$ for all $a \in G$.
+	ff something about how $G$ acting on Sylow $p$-subgropus by conjugation is transitive.
+\end{proof}
+
+\subsection*{Problem 2 (Ch. 1.13)}
+{\it Show that there are no simple groups of order $148$ or of order $56$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff lol Evan Chen problem.
+\end{proof}
+
+\subsection*{Problem 3 (Ch. 1.13)}
+{\it Show that there is no simple group of order $pq$,
+$p$, and $q$ primes (cf. exercise 5, p. 77).}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 4 (Ch. 1.13)}
+{\it Show that every non-abelian group of order $6$ is isomorphic to $S_3$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 5 (Ch. 1.13)}
+{\it Determine the number of non-isomorphic groups of order $15$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+An element of order $2$ in a group is called an \emph{involution}.
+An important insight into the structure of a finite group is obtained
+by studying its involutions and their centralizers.
+The next five excercises give a program for characterizing $S_5$ in this way.
+In all of these exercises, as well as in the rest of this set, $G$ is a finite group.
+
+\subsection*{Problem 6 (Ch. 1.13)}
+{\it Let $u$ and $v$ be distinct involutions in $G$.
+Show that $\langle u,v \rangle$ is (isomorphic to) a dihedral group.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 7 (Ch. 1.13)}
+{\it Let $u$ and $v$ be involutions in $G$.
+Show that if $uv$ is of odd order than $u$ and $v$
+are conjugate in $G$ ($v = gug^{-1}$).}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+\subsection*{Problem 8 (Ch. 1.13)}
+{\it Let $u$ and $v$ be involutions in $G$ such that $uv$ has even order $2n$,
+so $w = (uv)^n$ is an involution.
+Show that $u,v \in C(w)$.}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 9 (Ch. 1.13)}
+{\it Suppose $G$ contains exactly two conjugacy classes of involutions.
+Let $u_1$ and $u_2$ be non-conjugate involutions in $G$.
+Let $c_i = |C(u_i)|, i =1,2$.
+Let $S_i, i=1,2$, be the set of ordered pairs $(x,y)$ with
+$x$ conjugate to $u_1$, $y$ conjugate to $u_2$, and $(xy)^n = u_i$ for some $n$.
+Let $s_i = |S_i|$. Prove that $|G| = c_1s_2 + c_2s_1$.
+(\emph{Hint}: Count the number of ordered pairs $(x,y)$
+with $x$ conjugate to $u_1$ and $y$ conjugate to $u_2$ in two ways.
+First, this number is $(|G|/c_1)(|G|/c_2)$.
+Since $x$ is no conjugate to $y$, exercises $7$ and $8$ imply that
+for $n = o(xy)/2$, $(xy)^n$ is conjugate to either $u_1$ or $u_2$.
+This implies that $(|G|/c_1)(|G|/c_2) = (|G|/c_1)s_1 + (|G|/c_2)s_2$.)}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\end{document}
