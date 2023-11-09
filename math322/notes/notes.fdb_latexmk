@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1698186157 "notes.tex" "notes.pdf" "notes" 1698186157 0
+["pdflatex"] 1699571119 "notes.tex" "notes.pdf" "notes" 1699571119 0
   "/home/nich/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1695159989 11524 a545fe7b6db104cbf3b60e865f10efb5 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1689853683 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1689853683 1004 54797486969f23fa377b128694d548df ""
@@ -62,8 +62,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1689853683 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1694484303 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1694500201 6768047 77540929f7d62f2020e85a5c0029da8c ""
-  "notes.aux" 1698186157 1842 b5de0db7444433896815b56e6f4f89da "pdflatex"
-  "notes.tex" 1698186156 56012 7f784e93d7870c5c54a051a90cd0972a ""
+  "notes.aux" 1699571119 2198 33b54b33ac705650a713f982ba7e852a "pdflatex"
+  "notes.tex" 1699571117 64059 59eeaff009d8a2859298e5bd1cd6045e ""
   (generated)
   "notes.aux"
   "notes.log"

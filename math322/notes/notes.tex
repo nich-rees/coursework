@@ -1387,4 +1387,175 @@ So $\ker(\phi) = \{g \in G \mid \phi(g) = \text{ trivial }
 \iff gxg^{-1} = x, \forall x\}
 = \{g \in G \mid gx = xg, \forall x\} =$
 center of $G$ (elements that commutie with everythinig).
+
+\section{November 9}
+\subsection{Solvable Groups (Section 4.6)}
+The name comes from the origin of group theory.
+\begin{definition}[Solvable Group]
+	$G$ is called solvable if there exist subgroups $G_1 = G$,
+	$G_2 \subseteq G_1$, $G_3 \subseteq G_2$
+	until $G_r = \{1\} \subseteq G_{r-1}$ (decreasing).
+	\[
+		G = G_1 \supseteq G_2 \supseteq \cdots \supseteq G_{r-1} \supseteq G_r = \{1\}
+	\]
+	such that $G_{i+1}$ is normal inside $G_i$ (not neccessarily in $G$)
+	and $G_i/G_{i+1}$ is abelian.
+\end{definition}
+This definition looks arbitrary, but actuall goes back to Galois' study of polynomials.
+Motivating question: $f(x) = x^n + a_{n-1}x^{n-1} + \cdots + a_0$
+is a polynomial with rational coefficients,
+and $f(x) = \prod_{i=1}^n(x-\alpha_i)$ where $\alpha_i\in\C$ (complex roots);
+how do we find $\alpha_i$ in terms of the coefficients $a_1,a_2,\dots,a_{n-1}$
+(a formula for the roots)?
+We want polynomials in $a_1,a_2,\dots$ and $\sqrt{~}$ of some kind.
+Does this formula exist?
+
+In the case of $n=2$: $(x-\alpha_1)(x-\alpha_2) = x^2 + ax + b = 0$.
+Our formula is $\alpha_i = \frac{-a\pm\sqrt{a^2-4b}}{2}$
+(``I don't even know the quadratic formula").
+This is just found from completinng the square.
+Cubics: possible, messy.
+Quartics: possible, even worse (Jacobson exercise).
+$\mathrm{deg}\,5$ and up: no solution (due to Galois).
+The proof of this actually uses group theory.
+
+The way to do this is to realize that the coefficients have a simple
+expression in terms of the roots.
+E.g.:
+\begin{align*}
+	a_0 &= \prod(-\alpha_i) = (-1)^n\prod\alpha_i\\
+	a_1 &= \prod \alpha_{i_1}\alpha_{i_2}\cdots \alpha_{i_{n-1}})\pm\\
+		&\vdots\\
+	a_{n-1} &= \pm(\alpha_1 + \cdots + \alpha_n)???
+\end{align*}
+(where in $a_1$, they are the distinct $n-1$ tuples).
+These are all called symmetric functions:
+they are invariant under permutatin roots.
+The coefficients treat all roots the same!
+The problem is that these roots are different, they are not all the same;
+we have to somehow break the symmetry in the coefficients
+(otherwise we cannot determine the roots).
+
+How do we do this when $n=2$: $(x - \alpha)(x - \beta) = x^2 - (\alpha+\beta)x + \alpha\beta
+= x^2 - a_1x + a_0$
+This is symmetric in the sense that I could switch $\alpha$ and $\beta$
+and would get the same.
+Functions that are not symmetric: $\alpha/\beta, \alpha^\beta, \alpha-\beta$
+(we swap the two, we get a different value).
+So we can write $(\alpha-\beta)^2 = \alpha^2 - 2\alpha\beta + \beta^2
+= (\alpha+\beta)^2 - \alpha\beta = a_1^2 - 4a_0 = a^2-4b$
+(kind of a trick: we can write the square of this nonsymmetric expression
+in terms of things that were symmetric expressions).
+So $\alpha-\beta - \sqrt{a^2 -4b}$,
+$\alpha  = \frac{(\alpha+\beta)+(\alpha-\beta)}{2} = (a + \sqrt{a^2-4b})/2$
+and $\beta  = \frac{(\alpha+\beta)-(\alpha-\beta)}{2} = (a - \sqrt{a^2-4b})/2$.
+
+For cubics, we have three roots.
+$(x - \alpha_1)(x-\alpha_2)(x-\alpha_3) = x^3 + a_2x^2 + a_1x + a_0$.
+Note
+\begin{align*}
+	a_2 &= -(\alpha_1 + \alpha_2 + \alpha_3)\\
+	a_1 &= \alpha_1\alpha_2 + \alpha_1\alpha_3 + \alpha_2\alpha_3\\
+	a_0 = -\alpha_1\alpha_2\alpha_3
+\end{align*}
+which are all symmetric.
+We want expressions for $\alpha_1,\alpha_2,\alpha_3$.
+We have to do \emph{a lot} of algebra to produce expressions
+that are not symmetric but whose powers \emph{are} symmetric;
+it works out by an apparent miracle.
+For degree $4$, similar, but worse.
+For degree $5$, it just fails.
+
+Galois realized if you are just doing algebra,
+you are just lookinng at the shape of the equations.
+Galois realized that the key is understanding possible symmetries
+and their complexity is the key.
+These old school math people just did algebra: just computing machines.
+Galois reallized algebra is not going to get you anywhere:
+what are the relationships between roots and their symmetries.
+
+\begin{theorem}[Galois]
+	Given $f(x)$, a rational polynomial as above (degree $n$,
+	then (1) there exists a finite group $G_f \subseteq S_n$
+	(permutations of roots $\alpha_1,\dots,\alpha_n$)
+	and (2) there is a formula for the roots $\iff$
+	$G_f$ is solvable in the sense that we just defined.
+	Furthermore, (3) for most polynomials $G_f = S_n$ (might not be Galois).
+	(4) $S_n$ is not solvable if $n \geq 5$
+\end{theorem}
+That's why we call them solvable groups.
+They correspond to a solvable polynomial.
+Galois basically developed group theory to prove this...
+not with groups like we know, looking mostly at these permutations.
+Amazing: same age as us, but died shortly after, Nike's goat.
+
+How to define $G_f$?
+Idea: Consider polynomials $P(x_1,x_2,\dots,x_n)$ in $n$-variables
+(where $n$ is the degree) with rational coefficients.
+Say that $P$ is a relation between the roots if the following holds:
+$P(\alpha_1,\alpha_2,\dots,\alpha_n) = 0$ $(x_1=\alpha_1,x_2=\alpha_2,\dots,x_n=\alpha_n)$.
+$P_f = $ all possible $P$ that give relations like this.
+$G_f = $ set of permutations that preserves all the relations,
+which \emph{means} $\sigma \in G_f$ if for all(?) $P \in P_f$ we have
+$P(x_{\sigma(1)},x_{\sigma(2)},\dots,x_{\sigma(n)}) \in P_f$.
+
+Then $G_f \neq \{1\}$; Galois proved $f$ is solvable $\iff G_f$ is solvable.
+What we get is that two polynomials that look quite similar have
+Galois groups that are quite different.
+Example (Quanta Article, Aug. 3 2021): $x^3 - 7x + 5$ and $x^3 - 7x + 7$;
+gives examples of relations that are quite different...
+one actually has Galois group $S_3$, and one has a cyclic Galois group.
+The Galois group is the key, the underlying symmetry.
+
+\subsubsection{Proof that $S_5$ is not solvable}
+Recall the definition: $G$ is called solvable if there exists subgroups
+$G = G_1 \subseteq G_2 \subseteq \cdots \subseteq G_r = \{1\}$
+such that $G_{i+1}$ is normal in $G_i$ and $G_i/G_{i+1}$ is abelian.
+
+Condition with polynomials: taking a $d$-th root of $a$ solves $x^d = a$, $x = a^{1/d}$; $f(x) = x^d - a$.
+These have a Galois group that is (almost) abelian ($\implies$ solvability criterion).
+Nike was always confused how you go from polynomials to this definition,
+it lies somewhere in here.
+(Almost abelian here means if we allow $n$-th roots of unity, it becomes abelian,
+but the point is that they are solvable:
+either abelian already, or abelian after throwing in some roots).
+
+Goal: $S_n$ is not solvable if $n \geq 5$.
+The only normal subgroup of $S_n, n \geq 5$ are $\{1\}, A_n, S_n$
+(and $A_n$ haas no normal subgroups except $\{1\}$).
+
+For $n=2$ $S_2 = \{1\}, (12)$, and two element groups are obviously solvable:
+$G_1 = S_2, G_2 = \{1\}$.
+The solution is via just $\sqrt{(~)}$.
+For $n=3$ $S_3 \supseteq \langle (123)\rangle \supseteq \{1\}$.
+We have that $G_1/G_2 = $ cyclic or order $2$,
+and $G_2/G_3$ is cyclic of order $3$.
+Thus this is solvable,
+and solution via $\sqrt[2]{(~)}$ and $\sqrt[3]{(~)}$
+(which corresponds to our quotient groups).
+For $n=4$, $S_4 \supseteq A_4 \supseteq V = \{e, (12)(34), (13)(24), (14)(32)\} \supseteq \{1\}$.
+In order, our quotient groups have order $2$, order $3$, and $V$ is abelian,
+so it is solvable.
+The group theory actually gives a very precise way to write down
+these nonsymmetric expressions:
+for $n=3$, we want an expression invariant under cylic permutation of order $3$,
+but not invariant under a transposition (in $\langle (123)\rangle$
+vs. in $S_3\setminus \langle (123)\rangle$).
+This is very pretty: ``it's what got [Nike] interested in math in the first place."
+
+How do we deal with $S_n$ when $n\geq 5$.
+Recall that $G$ is called simple if it has no normal subgroups
+other than itself and the $\{1\}$.
+E.g. $G = $ cyclic, prime order (only abelian example).
+\begin{theorem}[Also due to Galois]
+	$A_n$ simple when $n \geq 5$
+\end{theorem}
+Strategy: consider $H \subseteq A_n$, $H \neq \{1\}$, normal.
+Step 1: show that $H$ contains a $3$-cycle $(abc)$.
+Step 2: using the fact that $H$ is normal, show $H$ contains all $3$-cyles.
+Step 3: show that the $3$-cycles generate $A_n$.
+Thus, $H = A_n$.
+The only hard part is the first step (but not terrible).
+
+Will end early for the Holiday, and present proof when we come back.
 \end{document}
