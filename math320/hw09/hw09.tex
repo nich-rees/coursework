@@ -1,0 +1,260 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 9}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it Solve in either order:
+\begin{enumerate}
+	\item Construct, with justification, a subset $A$ of $\R$ such that
+	every point of $A$ is isolated and $A'\neq\emptyset$.
+	\item Rudin Chapter 2, problem 5, page 43:
+		Construct a bounded set of real numbers with exactly three limit points.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We provide the subset $A = \{\frac{1}{n} \colon n \in \N\}$.
+		First, if $a \in A$, denote this as $a = \frac{1}{n'}$.
+		We show $a$ is an isolated point:
+		let $m = \mathrm{min}\left\{\left|\frac{1}{n'} - \frac{1}{n'+1}\right|,
+		\left|\frac{1}{n'} - \frac{1}{n'-1}\right|\right\}$.
+		Note that since for any $\overline{n} \geq n'$,
+		we have that $\left|\frac{1}{n'+1} - \frac{1}{n'}\right| \leq
+		\left|\frac{1}{\overline{n}} - \frac{1}{n'}\right|$,
+		thus any ball around $\frac{1}{n'}$ that contains $\frac{1}{\overline{n}}$
+		must also contain $\frac{1}{n'+1}$.
+		Now for any $\underline{n} \leq n'$,
+		we have that $\left|\frac{1}{n'-1} - \frac{1}{n'}\right| \leq
+		\left|\frac{1}{\underline{n}} - \frac{1}{n'}\right|$,
+		thus any ball around $\frac{1}{n'}$ that contains $\frac{1}{\underline{n}}$
+		must also contain $\frac{1}{n'-1}$.
+
+		Consider the open set of $R$
+		$U = \mathbb{B}[\frac{1}{n'}; \frac12m)$.
+		Note that $\frac{1}{n'-1} \not\in U$
+		and $\frac{1}{n'+1} \not\in U$.
+		Thus by the contrapositive of the claims we just said,
+		for any $n \in \N$ where $n \neq n'$,
+		we have that $\frac{1}{n} \not\in U$.
+		Thus, $\frac{1}{n'}$ is isolated.
+		Since this is true for arbitrary $n' \in \N$,
+		every point in $A$ is isolated.
+
+		Now, note that $0 \in A'$ so $A' \neq \emptyset$.
+		If $U$ is be an arbitrary open set in the neighbourhood of $0$.
+		Note that we will always have an element of $A$ in $U$.
+		Assume otherwise, that there exists an open set $U$ such that
+		$U \cap A = \emptyset$.
+		Conside a ball in $U$, specifically $\mathbb{B}[0,r) \subseteq U$.
+		Note by the Archimedean property of the reals,
+		there exists $n \in \N$ such that $n\cdot1 > r^{-1} > 0$,
+		thus $0 < \frac{1}{n} < r$.
+		But then $\frac{1}{n} \in \mathbb{B}[0,r)$,
+		thus a contradiction.
+		Thus, since $U \in \mathcal{N}(0)$ was arbitrary,
+		we have that every open set in the neighbourhood of $0$
+		has a non empty intersection with $A$,
+		thus $0$ is a limit piont of $A$.
+		Thus, $A' \neq \emptyset$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We give the set $A = \{\frac{1}{n} \colon n \in \N\}
+		\cup \{\frac{1}{n} + 10 \colon n \in \N\}
+		\cup \{\frac{1}{n} + 20 \colon n \in \N\}$.
+		From part (a) of this problem,
+		we note that no element in $A$ is a limit point of $A$,
+		since they are all isolated (and thus cannot be limit points);
+		the argument is the same, since the additional term
+		just makes it so that we have three subsets of $A$
+		that do not intersect.
+		Furthermore, we can make identical arguments as from part (a)
+		to show that $10$ and $20$ are in $A'$,
+		as well as $0$.
+		Thus, $A$ has exactly three limit points.
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it \begin{enumerate}
+	\item Give an example of two sets $A$ and $B$ in some HTS satisfying
+		\[
+			\mathrm{int}(A\cup B) \neq \mathrm{int}(A)\cup\mathrm{int}(B)
+		\]
+	\item Give an example of two sets $A$ and $B$ in some HTS satisfying
+		\[
+			\overline{A\cap B} \neq \overline{A} \cap \overline{B}
+		\]
+	\item Working $\R^k$ with the usual topology, express the open ball
+		$\mathbb{B}[0;1)$ as a union of closed sets.
+		Can $\mathbb{B}[0;1)$ be expressed as an intersection of closed sets?
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let our HTS be $\R$,
+		and let $A = [0,1]$ and $B = [1,2]$.
+		We have $\mathrm{int}(A\cup B) = \mathrm{int}([0,2]) = (0,2)$
+		and $\mathrm{int}(A) \cup \mathrm{int}(B) = (0,1) \cup (1,2) = (0,2)\setminus \{1\}$.
+		Hence we have shown $\mathrm{int}(A)\cup\mathrm{int}(B) = (0,2)\setminus\{1\}
+		\neq (0,2) = \mathrm{int}(A\cup B)$,
+		so we are done.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let our HTS be $\R$,
+		and let $A = (0,1)$ and $B = (1,2)$.
+		We have $\overline{A \cap B} = \overline{\emptyset} = (\R^o)^c$,
+		but since $A$ is open if and only if $A^0$ is open (from notes)
+		and $\R$ must be open, we have $\overline{A\cap B} = \R^c = \emptyset$.
+		Now, see that $\overline{A} \cap \overline{B} = [0,1] \cap [1,2] = \{1\}$,
+		where we have used the fact that in $\R$, $\overline{(a,b)} = (((a,b)^c)^o)^c
+		= (((-\infty,a]\cup [b,\infty))^o)^c$ but taking the largest
+		open subset we get $((-\infty,a)\cup (b,\infty))^c = [a,b]$.
+		Hence, $\overline{A \cap B} = \emptyset \neq \{1\} = \overline{A} \cap \overline{B}$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 3}
+{\it Define a family $\mathcal{T}$ of subsets of $\R$ as follows:
+	\begin{center}
+		A set $G \subseteq \R$ belongs to $\mathcal{T}$ if and only if
+		for every $x$ in $G$, there exists $r>0$ such that $[x,x+r)\subseteq G$.
+	\end{center}
+	\begin{enumerate}
+		\item Prove that $(\R,\mathcal{T})$ is a HTS. (It is called the \emph{Sorgenfrey line}.)
+	\end{enumerate}
+	All our terminology -- open set, closed set, boundary point, limit point, convergence
+	-- depends on what topology we use. Use the Sorgenfrey topology in parts (b)-(d):
+	\begin{enumerate}
+		\item[(b)] Show that the interval $[0,1)$ is open.
+		\item[(c)] Find all boundary points of the interval $(0,1)$.
+		\item[(d)] Let $s_n = -1/n$ and $t_n=1/n$.
+			Prove that one of these sequences converges to $0$, and the other does not.
+			Use the definition given in class, i.e. $x_n \to \hat{x}$
+			means that for every open set $U$ containing $\hat{x}$,
+			there exists $N \in \N$ such that for all $n > N$, $x_n \in U$.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Hmm... basically the open sets are just those are open on one end.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $x \in [0,1)$.
+		Then let $1 - x = \delta > 0$.
+		We have that $[x, x + \delta) = [x,1) \in [0,1)$.
+		Thus, $[0,1) \in \mathcal{T}$ and so is an open set.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 4}
+{\it Let $A$ be a subset of a HTS $(X,\mathcal{T})$.
+The \textbf{boundary of} $A$ is a set denoted $\partial A$:
+we say $z \in \partial A$ if and only if every open $U$ containing $z$
+satisfies both $U \cap A \neq \emptyset$ and $U \cap A^c \neq \emptyset$. Prove:}
+\begin{enumerate}
+	\item $\partial A = \overline{A} \cap \overline{A^c}$.
+	\item $A$ is closed if and only if $\partial A \subseteq A$.
+	\item $A$ is open if and only if $A \cap \partial A = \emptyset$.
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 5}
+{\it Prove: For every set $A$ in a HTS $(X, \mathcal{T})$, $A'$ is closed.}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 6}
+{\it Recall the sequence space $\ell^2$ from HW07 Q3.
+Given a specific $M = (M_1,M_2,\dots)$ in $\ell^2$, let
+\[
+	S = \{x \in \ell^2 \colon \forall n \in \N, |x_n| \leq M_n\}.
+\]
+Prove: every sequence $\left(x^{(n)}\right)$ in $S$ has a convergent subsequence,
+whose limit lies in $S$.}
+
+\begin{proof}[Solution]\let\qed\relax
+	Write out the sequence of the first components of our sequence, namely
+	\[
+		(x_1)^{(n)} = x_1^{(1)}, x_1^{(2)}, x_1^{(3)}, \dots
+	\]
+	Each term of $(x_1)^{(n)}$ is bounded by $M_1$,
+	thus, by Bolzano-Weierstrass
+	(which we can use since this is just a real-valued sequence),
+	there exists a subsequence $(n_{k_1})$ such that
+	$(x_1)^{(n_{k_1})}$ converges.
+	Denote this value that it converges to as $s_1$.
+	
+	Now consider the second components of our subsequence $(n_{k_1})$, namely
+	\[
+		(x_2)^{(n_{k_1})} = x_2^{(n_1)}, x_2^{(n_2)}, x_2^{(n_3)}, \dots
+	\]
+	Again, by Bolzano Weierstrass from boundedness by $M_2$,
+	there exists a subsequence of $n_{k_1}$, call it $n_{k_2}$ such that
+	$(x_2)^{(n_{k_2})}$ converges.
+	Denote this value that it converges to as $s_2$.
+	Note that since subsequences of convergent sequences converge to the same value,
+	we still have that $(x_1)^{(n_{k_2})} = s_1$.
+	
+	Now, for any $j$, we can iteratively acquire a subsequence $n_{k_j}$
+	such that $(x_j)^{(n_{k_j})}$ converges, call that value $s_j$,
+	and for all $i < j$, we have $(x_i)^{(n_{k_j})} = s_i$.
+
+	Thus, we have that $\lim_{j\to\infty} \left(x^{(n_{k_j})}\right)
+	 = s_1, s_2, s_3, \dots = \hat{s}$,
+	 and one can confirm that $\hat{s} \in S$.
+\end{proof}
+\clearpage
+\end{document}
