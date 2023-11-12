@@ -136,7 +136,24 @@
 		Hence, $\overline{A \cap B} = \emptyset \neq \{1\} = \overline{A} \cap \overline{B}$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We have
+		\[
+			\mathbb{B}[0;1) = \bigcup_{n\in\N} \mathbb{B}\left[0;1-\frac{1}{n}\right]
+		\]
+		To verify this equality, if $x \in \mathbb{B}[0;1)$ and $x\neq0$
+		(the $x = 0$ case is trivial, $x$ is definitely in the RHS)
+		note that $x_k < 1$, so
+		then by Archimedean, there exists some $n \in \N$ such that
+		$0 < \frac{1-x_k} < n\cdot 1 \implies 0 < x_k < 1 - \frac{1}{n}$,
+		thus $x \in \mathbb[0;1-\frac{1}{n}]$, so $x$ is in the RHS.
+		Now if $x \in \bigcup_{n\in\N}\mathbb{B}[0;1-\frac{1}{n}]$,
+		there exists some $n$ such that $0 \leq x_k \leq 1-\frac{1}{n}$.
+		But then $0 \leq x_k < 1$ for all $k$,
+		so $x \in \mathbb{B}[0;1)$, as desired.
+
+		We cannot write $\mathbb{B}[0;1)$ as an intersection of closed sets,
+		since we know that for any HTS< the arbitrary intersection of closed sets is also closed,
+		and $\mathbb{B}[0;1)$ is open by definition.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -165,7 +182,44 @@
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Hmm... basically the open sets are just those are open on one end.
+		First, note that $\R$ and $\emptyset$ are both open.
+		If $x \in \R$, then $[x,x+1) \in \R$ as well, so $\R \in \mathcal{T}$.
+		Additionally, $\emptyset$ vacuously satisfies our criteria,
+		and so $\emptyset \in \mathcal{T}$ as well.
+
+		Now consider a collection $\mathcal{G}$ of open sets in $\mathcal{T}$.
+		Let $V$ denote the set $\bigcup \mathcal{G}$.
+		If $x \in V$, then $x \in G$ for some $G \in \mathcal{G}$,
+		and by assumption, since $G \in \mathcal{T}$,
+		there exists some $r>0$ such that $[x,x+r) \in G$,
+		which means $[x,x+r) \in V$ as well (by definition of union).
+		Thus, $V \in \mathcal{T}$ as well.
+
+		Now let $U_1, U_2, \cdots , U_N \in \mathcal{T}$ (for some $N \in \N$),
+		and let $V$ denote the set $U_1 \cap U_2 \cap \cdots \cap U_N$.
+		If $x \in V$, then we must have that $x \in U_i$ for all $i \in \{1,\dots,N\}$.
+		And since $U_i \in \mathcal{T}$, there is some $r_i>0$ such that
+		$[x, x+r_i) \in U_i$.
+		Let $r = \min_i\{r_i\} > 0$.
+		Then surely $[x, x+r) \subseteq [x, x+r_i)$ for all $i \in \{1,\dots,N\}$,
+		thus $[x, x+r) \in U_i$ for all $i$,
+		so $[x, x+r) \in V$.
+		Thus, since $r>0$, $V \in \mathcal{T}$.
+
+		Let $x,y \in \R$ such that $x \neq y$.
+		WLOG assume $x < y$.
+		Clearly $x \in [x,y)$ and $y \in [y,y+1)$.
+		These are clearly distinct subsets of $\R$.
+		We now show that both are open.
+		If $z \in [x,y)$,
+		let $y - z = \delta > 0$.
+		We have that $[z, z + \delta) = [z,y) \in [x,z)$.
+		Thus, $[x,y)$ is an open set.
+		If $w \in [y,y+1)$,
+		let $y +1 - w = \delta > 0$.
+		We have that $[w, w + \delta) = [w,y+1) \in [y,y+1)$.
+		Thus, $[y,y+1)$ is an open set.
+		Thus, we have shown $(\R,\mathcal{T})$ is a HTS, as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		Let $x \in [0,1)$.
@@ -174,13 +228,58 @@
 		Thus, $[0,1) \in \mathcal{T}$ and so is an open set.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We claim the only boundary point of $(0,1)$ is $0$.
+		If $U$ is an open set containing $0$,
+		it is of the form $[a,b)\in\mathcal{T}$ such that $0 \in [a,b)$
+		($b = a + r$, $r > 0 \implies b > a$).
+		In order to have $0$ fall in it, we must have $a \leq 0$ and $b > 0$.
+		Since $0\in U$ and $0 \not\in (0,1)$, then $U \cap (0,1)^c \neq \emptyset$.
+		Now, either $b \geq 1$ or $ b < 1$.
+		If it is the former, then we have that $(0,1) \subset [a,b)$
+		and so $U \cap (0,1) \neq \emptyset$.
+		If it is the latter, then we have $b/2 \in [a,b)$ and $b/2 \in (0,1)$,
+		thus $U \cap (0,1) \neq \emptyset$ again.
+		This is sufficient to show that $0$ is a boundary point.
+		
+		We now show that there are no more boundary points of the set.
+		Let $x \in \R$ and $x \neq 0$.
+		If $x < 0$, the open set $[x,0)$ contains $x$ but does not
+		intersect $(0,1)$, so cannot be a boundary point for it.
+		If $x \in (0,1)$, then $[x,1)$ contains $x$ but does not intersect $(0,1)^c$,
+		so cannot be a boundary point for $(0,1)$.
+		And if $x \geq 1$, then $[x,x+1)$ contains $x$ but does not
+		intersect $(0,1)$ so cannot be a boundary point for it.
+		Thus, since $x$ was arbitrary, $x \in \R^*$ cannot be a boundary point for $(0,1)$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We claim that $s_n$ does not converge to $0$.
+		If $U = [0, 1)$,
+		then we have that $U$ is open from part (b) of this problem
+		and it contains $0$,
+		however, for all $n \in \N$, we have that $-1/n < 0$ and so
+		for no $n \in \N$ do we have $s_n \in U$.
+		Thus, $s_n \not\in U$ for all $n$, thus $s_n$ does not converge to $0$.
+
+		We claim that $t_n$ does converge to $0$.
+		Consider an open set $U$ that contains $0$.
+		That is, $U$ is of the form $[a,b)$ where $b > a$
+		(since $b = a+r$ and $r>0$ thus $b>a$)
+		such that $0 \in U$.
+		In order for this to happen, it is necessary that $a \leq 0$ and $b > 0$.
+		Thus, it is sufficient to show that $0 < t_n < b$ for large enough $n$
+		to show $t_n \in U$.
+		Clearly, $t_n > 0$ for all $n \in \N$.
+		Now, by Archimedean, there exists $N \in \N$ such that $N\cdot 1 > b^{-1}>0$,
+		thus $0 < \frac{1}{N} = t_N < b$.
+		Furthermore, $\frac{1}{n} \leq \frac{1}{N}$ for $n \geq N$
+		(this is obvious, but if really desired, this can be shown with induction),
+		thus for $n \geq N$, we have $0 < t_n < b$, thus $t_n \in U$.
+		Since $U$ was an arbitrary open set that contained $0$,
+		this is sufficient to show convergence of $t_n \to 0$.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 4}
 {\it Let $A$ be a subset of a HTS $(X,\mathcal{T})$.
@@ -195,13 +294,106 @@ satisfies both $U \cap A \neq \emptyset$ and $U \cap A^c \neq \emptyset$. Prove:
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Let $x \in \overline{A} \cap \overline{A^c}$.
+		Let $G \in \mathcal{N}(x)$.
+		We first prove that $A \cap G \neq \emptyset$.
+		If $x \in A$, we are done, since $\{x\} \in A \cap G$.
+		Now, assume that $x \not\in A$.
+		For the sake of contradiction, assume that $A \cap G = \emptyset$.
+		This means that $G \subseteq A^c$
+		Thus, $A$ is closed (by the lemma from class).
+		Then $A = \overline{A}$.
+		But recall that $x \in \overline{A} = A$, thus a contradiction.
+		We now prove that $A^c \cap G \neq \emptyset$.
+		If $x \in A^c$, we are done, since $\{x\} \in A^c \cap G$.
+		Now, assume that $x \not\in A^c$.
+		For the sake of contradiction, assume that $A^c \cap G = \emptyset$.
+		This means that $G \subseteq A$
+		Thus, $A^c$ is closed (by the lemma from class).
+		Then $A^c = \overline{A^c}$.
+		But recall that $x \in \overline{A^c} = A^c$, thus a contradiction.
+		Thus, since $G$ was arbitrary, we have both
+		$A \cap G \neq \emptyset$ and $A^c \cap G \neq 0$
+		for all $G \in \mathcal{N}(x)$,
+		which by definition, means that $x \in \partial A$.
+		Thus, $\overline{A}\cap\overline{A^c} \subseteq \partial A$.
+
+		Now let $x \in \partial A$.
+		We now prove that $x \in \overline{A}$.
+		If $x \in A$, we are done, since $A \subset \overline{A}$.
+		If $x \not\in A$, since $\overline{A}$ is closed,
+		we have that there exists some neighbourhood $U \in \mathcal{N}(x)$
+		such that $U \subseteq A^c$,
+		and since $A^c \cap A = \emptyset$,
+		this implies that $U \cap A = \emptyset$.
+		But recall that since $x \in \partial A$, we have that $A \cap U \neq \emptyset$,
+		thus, a contradiction.
+		Hence, $x \in \overline{A}$.
+		Now we prove that $x \in \overline{A^c}$.
+		If $x \in A^c$, we are done, since $A^c \subset \overline{A^c}$.
+		If $x \not\in A^c$, since $\overline{A^c}$ is closed,
+		we have that there exists some neighbourhood $U \in \mathcal{N}(x)$
+		such that $U \subseteq (A^c)^c = A$,
+		and since $A^c \cap A = \emptyset$,
+		this implies that $U \cap A^c = \emptyset$.
+		But recall that since $x \in \partial A$, we have that $A^c \cap U \neq \emptyset$,
+		thus, a contradiction.
+		Hence, $x \in \overline{A^c}$.
+		Thus, $x \in \overline{A} \cap \overline{A^c}$,
+		so $\overline{A} \cap \overline{A^c} \subseteq \partial A$.
+		
+		We have shown set inclusion in both directions,
+		so $\partial A = \overline{A} \cap \overline{A^c}$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Assume that $A$ is closed.
+		Let $x \in \partial A$.
+		From part (a) of this problem,
+		we have $\partial A = \overline{A} \cap \overline{A^c}$,
+		thus $z \in \overline{A} \cap\overline{A^c} \implies z \in \overline{A}$.
+		But since $A$ is closed, $A = \overline{A}$,
+		thus $z \in A$.
+		Since $z$ was arbitrary, this implies that $\partial A \subseteq A$.
+
+		Now assume that $\partial A \subseteq A$.
+		From part (a) of this problem, we have
+		$\partial A = \overline{A} \cap \overline{A^c} =
+		\overline{A}\cap(((A^c)^c)^o)^c = \overline{A} \cap (A^o)^c
+		= \overline{A} \setminus A^o$,
+		thus $\partial A \cup A^o = \overline{A}$.
+		Thus, since $\partial{A} \subseteq A$, by assumption,
+		and $A^o \subseteq A$,
+		we have $\overline{A} \subseteq A$.
+		But $A \subseteq \overline{A}$ by definition,
+		so $A = \overline{A}$.
+		But this is true only $A$ is closed.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Assume that $A$ is open.
+		Then $A^c$ is closed, and thus $A^c = \overline{A^c}$.
+		Invoking part (a) of this problem, we have
+		\begin{align*}
+			A \cap \partial A
+			&= A \cap (\overline{A} \cap \overline{A^c})\\
+			&= (A \cap A^c) \cap \overline{A}\\
+			&= \emptyset \cap \overline{A}\\
+			&= \emptyset
+		\end{align*}
+
+		Now assume that $A \cap \partial A = \emptyset$.
+		But then $A \cap \overline{A} \cap \overline{A^c} = \emptyset$.
+		Since $A \subseteq \overline{A}$, we have $A \cap \overline{A} = A$,
+		thus we have $A \cap \overline{A^c} = \emptyset$.
+		Writing out the full definition for the closure of $A^c$, we have
+		$\overline{A^c} = (((A^c)^c)^o)^c = (A^o)^c$,
+		thus we have $A \cap (A^o)^c = \emptyset$.
+		For the sake of contradiction, assume that $A$ is not open.
+		Then, there exists $x \in A$ such that $x \not \in A^o$
+		(since $A^o \subset A$ and $A^o \neq A$).
+		Then, $x \in (A^o)^c$.
+		But then $x \in A \cap (A^o)^c) \implies A \cap (A^o)^c \neq \emptyset$,
+		thus a contradiction.
+		Hence $A$ must be open.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -211,7 +403,29 @@ satisfies both $U \cap A \neq \emptyset$ and $U \cap A^c \neq \emptyset$. Prove:
 {\it Prove: For every set $A$ in a HTS $(X, \mathcal{T})$, $A'$ is closed.}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	It is sufficient to show that $\partial A' \subseteq A'$,
+	by problem 4(b).
+	Let $x \in \partial A'$.
+	By definition, this means that for all open sets $U \in \mathcal{N}(x)$,
+	we have $U \cap A' \neq \emptyset$.
+	Thus, let $y \in U \cap A'$.
+	Since $U$ is an open set and $y \in U$,
+	there exists $U' \in \mathcal{N}(y)$ such that $U' \subseteq U$.
+	Now define $V = U'\setminus{x}$.
+	Note that $y \in V$ still,
+	and $V$ is open, since $V = U' \setminus{x} = U' \cap \{x\}^c$
+	which is a finite intersection of open sets
+	($\{x\}^c$ is open since $\{x\}$ is closed), so is also open,
+	thus $V \in \mathcal{N}(y)$ still.
+	Now, since $y \in A'$, then for all open $W \in \mathcal{N}(y)$,
+	we have $W\setminus\{y\} \cap A\neq \emptyset$,
+	so $V\setminus\{y\} \cap A \neq \emptyset$.
+	Thus, there exists $z \in V \setminus\{y\} \cap A \implies
+	z \in U$ since $V\setminus\{y\} \subseteq U$.
+	Thus, we se that there exists $z \in U \cap A$
+	where $z \neq x$, or $U \setminus \{x\} \cap A \neq \emptyset \implies x \in A'$.
+	Hence, we have that $\partial A' \subseteq A'$,
+	which shows that $A'$ is closed.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -228,33 +442,135 @@ whose limit lies in $S$.}
 \begin{proof}[Solution]\let\qed\relax
 	Write out the sequence of the first components of our sequence, namely
 	\[
-		(x_1)^{(n)} = x_1^{(1)}, x_1^{(2)}, x_1^{(3)}, \dots
+		\left(x_1^{(n)}\right) = x_1^{(1)}, x_1^{(2)}, x_1^{(3)}, \dots
 	\]
-	Each term of $(x_1)^{(n)}$ is bounded by $M_1$,
+	Each term of $\left(x_1^{(n)}\right)$ is bounded by $M_1$,
 	thus, by Bolzano-Weierstrass
 	(which we can use since this is just a real-valued sequence),
 	there exists a subsequence $(n_{k_1})$ such that
-	$(x_1)^{(n_{k_1})}$ converges.
-	Denote this value that it converges to as $s_1$.
+	$\left(x_1^{(n_{k_1})}\right)$ converges.
+	This is a convergent sequence,
+	so denote $\lim_{k_1} x_1^{(n_{k_1})} = s_1$;
+	since $|x_1^{(i)}| \leq M_1$ for all $i \in n_k$,
+	the limit is at most $M_1$, thus $|s_1| \leq M_1$ as well.
+	We will now use the notation $k_1(i)$ to be the $i$th
+	integer of $n_{k_1}$.
+	Thus our new subsequence of elements in $S$ is
+	$\left(x^{(n_{k_1})}\right) = x^{(k_1(1))}, x^{(k_1(2))}, x^{(k_1(3))}, \dots$.
 	
-	Now consider the second components of our subsequence $(n_{k_1})$, namely
+	Now consider the second components of our subsequence $\left(x^{(n_{k_1})}\right)$:
 	\[
-		(x_2)^{(n_{k_1})} = x_2^{(n_1)}, x_2^{(n_2)}, x_2^{(n_3)}, \dots
+		\left(x_2^{(n_{k_1})}\right) = x_2^{(k_1(1))}, x_2^{(k_1(2))}, x_2^{(k_1(3))}, \dots
 	\]
 	Again, by Bolzano Weierstrass from boundedness by $M_2$,
 	there exists a subsequence of $n_{k_1}$, call it $n_{k_2}$ such that
-	$(x_2)^{(n_{k_2})}$ converges.
-	Denote this value that it converges to as $s_2$.
-	Note that since subsequences of convergent sequences converge to the same value,
-	we still have that $(x_1)^{(n_{k_2})} = s_1$.
+	$\left(x_2^{(n_{k_2})}\right)$ converges.
+	Again, $k_2(i)$ is the $i$th integer of $n_{k_2}$.
 	
-	Now, for any $j$, we can iteratively acquire a subsequence $n_{k_j}$
-	such that $(x_j)^{(n_{k_j})}$ converges, call that value $s_j$,
-	and for all $i < j$, we have $(x_i)^{(n_{k_j})} = s_i$.
+	Now, for any $j$, we can iteratively acquire a subsequence $n_{k_j}$.
+	We write it them all out below:
+	\begin{align*}
+		\left(x^{(n_{k_1})}\right) &= x^{(k_1(1))}, x^{(k_1(2))}, x^{(k_1(3))}, \dots\\
+		\left(x^{(n_{k_2})}\right) &= x^{(k_2(1))}, x^{(k_2(2))}, x^{(k_2(3))}, \dots\\
+						&\vdots\\
+		\left(x^{(n_{k_j})}\right) &= x^{(k_j(1))}, x^{(k_j(2))}, x^{(k_j(3))}, \dots
+	\end{align*}
+	Some remarks to note:
+	\begin{enumerate}
+		\item $\left(x^{(n_{k_j})}\right)$ is a subsequence of
+			$\left(x^{(n_{k_{j-1}})}\right)$ for all $j = 2,3,4,\dots$.
+		\item $\left(x_j^{(n_{k_j})}\right)$ converges as $k_j \to \infty$
+		(since each step, Bolzano Weierstrass lets us pick a convergent subsequence),
+		whose value we denote $s_j$ and $|s_j| \leq M_j$
+		(by the argument we provided when $j=1$).
+		\item By the definition of a subsequence,
+			if $x^{(m)}$ comes before $x^{(m')}$ in $\left(x^{(n_{k_j})}\right)$,
+			we must have that $x^{(m)}$ comes before $x^{(m')}$ in
+			$\left(x^{(n_{k_i})}\right)$ for all $1 \leq i \leq j$
+			by the definition of a subsequence.
+	\end{enumerate}
+	We now pick entries from our diagonal to form a new subsequence of
+	$\left(x^{(n)}\right)$, which we will call $\left(x^{(n_k)}\right)$:
+	\[
+		\left(x^{(n_k)}\right) = x^{(k_1(1))}, x^{(k_2(2))}, x^{(k_3(3))}, \dots
+	\]
+	Define $\hat{s} = s_{k_1(1)}, s_{k_2(2)}, s_{k_3(3)}, \dots$.
+	Recall that $0 < |s_n| \leq M_n \implies 0 < |s_n|^2 \leq M_n^2$.
+	Note since $\sum_n M_n^2$ converges by definition of being in $\ell^2$,
+	we also have that $\sum_n |s_n|^2$ converges,
+	thus $\hat{s} \in \ell^2$ as well.
+	Hence, $\hat{s} \in S$.
+	Therefore, it is sufficient to show now that
+	$\left(x^{(n_k)}\right) \to \hat{s}$ as $k \to \infty$.
 
-	Thus, we have that $\lim_{j\to\infty} \left(x^{(n_{k_j})}\right)
-	 = s_1, s_2, s_3, \dots = \hat{s}$,
-	 and one can confirm that $\hat{s} \in S$.
+	From our previous homework, our notion of distance is
+	\[
+		d(x,y) = \lVert x - y\rVert = \sqrt{\sum_{n=1}^\infty (x_n-y_n)^2}
+	\]
+	Thus to say that $\left(x^{(n_k)}\right) \to \hat{s}$ as $k \to \infty$,
+	we would need to show that for all $\ep > 0$, there exists $K\in\N$,
+	such that for all $k > K$, we have
+	$\sqrt{\sum_{i=1}^\infty (x^{(n_k)}_i-\hat{s}_i)^2} < \ep$.
+
+	Thus let $\ep > 0$ be arbitrary.
+	Since $(M_n) \in \ell^2$, $\sum_n M_n^2$ converges;
+	denote the value it converges to by $L$.
+	Note that $(\sum_n M_{n_k})$ is a subsequence,
+	and subsequences converge to the same limit.
+	Then there exists $K-1 \in \N$ such that for all $k \geq K-1$, we have
+	\[
+		\left\lvert L - \sum_{i=1}^k M_i^2\right\rvert < \frac{\ep^2}{4}
+	\]
+	This applies when $k = K-1$, thus
+	\[
+		\left\lvert  L - \sum_{i=1}^{K-1} M_i^2\right\rvert
+		< \frac{\ep^2}{4} \implies \sum_{i=K}^\infty M_i^2 < \frac{\ep^2}{4}
+	\]
+	where the implication is because $L = \sum_{i=1}^{K-1} M_i^2 + \sum_{i=K}^\infty M_i^2$,
+	and we remove the absolute value, because $M_i^2 > 0$ always,
+	so the sum is $>0$ always.
+
+	Now, note that for any $k$,
+	$0 < |x^{(n_k)}_i - \hat{s}_i| \leq |x^{(n_k)}_i| + |\hat{s}_i| \leq 2M_i$
+	for all $i$.
+	Since $0 < |x^{(n_k)}_i - \hat{s}_i|^2 \leq 4M_i^2$,
+	and we know that $\sum_n 4M_i^2$ converges,
+	we know that $\sum_n|x^{(n_k)}_i - \hat{s}_i|^2$ converges too.
+	Thus, writing an infinite series means something,
+	and so for any $p \in P$,
+	we have $\sum_{i=p}^\infty|x^{(n_k)}_i - \hat{s}_i|^2 \leq
+	\sum_{i=p}^\infty M_i^2$.
+	Thus, if we let $P_K = \sum_{i=1}^{K-1}|x^{(n_k)}_i - \hat{s}_i|^2$,
+	we have
+	\[
+		\sum_{i=1}^\infty |x^{(n_k)}_i - \hat{s}_i|^2
+		= P_K + \sum_{i=K}^\infty |x^{(n_k)}_i - \hat{s}_i|^2
+		\leq P_K + 4\sum_{i=K}^\infty M_i^2
+	\]
+	Taking the $\limsup$ of both sides, we get
+	\[
+		\limsup_{k\to\infty} \sum_{i=1}^\infty |x^{(n_k)}_i - \hat{s}_i|^2
+		\leq \limsup_{k\to\infty}\left(P_K + 4\sum_{i=K}^\infty M_i^2\right)
+		\leq \limsup_{k\to\infty P_K} + 4\limsup_{k\to\infty}\sum_{i=K}^\infty M_i^2
+	\]
+	On the right hand side, note that $\limsup P_K = 0$,
+	since $x^{(n_k)}_i \to \hat{s}_i$ as $k \to \infty$ by construction
+	(note (b) from above);
+	additionally $\sum_{i=K}^\infty M_i^2$ does not vary with $k$.
+	Thus, we have
+	\[
+		\limsup_{k\to\infty} \sum_{i=1}^\infty |x^{(n_k)}_i - \hat{s}_i|^2
+		\leq 4\sum_{i=K}^\infty M_i^2 < \ep^2
+	\]
+	By the definition of $\limsup$, this gives us
+	\[
+		\sum_{i=1}^\infty |x^{(n_k)}_i - \hat{s}_i|^2 < \ep^2
+	\]
+	hence
+	\[
+		\sqrt{\sum_{i=1}^\infty |x^{(n_k)}_i - \hat{s}_i|^2} < \ep
+	\]
+	for all $k \geq K$, as desired.
 \end{proof}
 \clearpage
 \end{document}

@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1699698373 "hw09.tex" "hw09.pdf" "hw09" 1699698373 0
+["pdflatex"] 1699754074 "hw09.tex" "hw09.pdf" "hw09" 1699754074 0
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1689853683 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1689853683 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1689853683 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -25,6 +25,7 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1689853683 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1689853683 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1689853683 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb" 1689853683 35309 940e81a5b9e04201a07e8b33a3ae6e64 ""
   "/usr/share/texmf-dist/tex/generic/iftex/iftex.sty" 1689853683 7237 bdd120a32c8fdb4b433cf9ca2e7cd98a ""
   "/usr/share/texmf-dist/tex/generic/iftex/ifvtex.sty" 1689853683 1057 525c2192b5febbd8c1f662c9468335bb ""
   "/usr/share/texmf-dist/tex/latex/amscls/amsthm.sty" 1689853683 12594 0d51ac3a545aaaa555021326ff22a6cc ""
@@ -46,8 +47,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1689853683 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1694484303 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1694500201 6768047 77540929f7d62f2020e85a5c0029da8c ""
-  "hw09.aux" 1699698373 33 06c322e1d88c4778ac780ba5e7d05c77 "pdflatex"
-  "hw09.tex" 1699698372 9577 ac9f160a79cf3a8adce27afb4ecf2d06 ""
+  "hw09.aux" 1699754074 33 e6d77a6cc1977d88a849501f83258f9d "pdflatex"
+  "hw09.tex" 1699754074 24076 fb4f294d70f5afc4fb958d897d6d1d46 ""
   (generated)
   "hw09.aux"
   "hw09.log"
