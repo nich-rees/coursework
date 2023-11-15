@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 10}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it Prove the following theorem (terminology is given below):
+\begin{center}
+	Suppose $X$ is compact and $f \colon X \to \R$ is lower semicontinuous.
+	Then $F$ is bounded below on $X$,
+	and there exists a point $z \in X$ satisfying $f(z) \leq f(x)$ for all $x \in X$.
+\end{center}
+Recall that in a HTS $(X, \mathcal{T})$, a function $f \colon X \to \R$
+is called \emph{lower semicontinuous} if the following set
+is closed for every $p \in \R$:
+\[
+	f^{-1}((-\infty,p]) = \{x \in X \colon f(x) \leq p \}.
+\]
+(One approach uses the family of closed sets
+$f^{-1}((-\infty,p])$ satisfyin $p > \inf f(x)$.)}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it Let $(X, d)$ be a metric space, with $K \subseteq X$ a compact set.
+Prove that whenever $\mathcal{G}$ is an open cover for $K$,
+there exists $r < 0$ with this property:
+for every pair of points $x,y \in K$ obeying $d(x,y) > r$,
+some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
+
+\begin{proof}[Solution]\let\qed\relax
+	Let $G_1, G_2, \dots, G_N$ be the finite subcover of $K$
+	such that $G_i \in \mathcal{G}$ for all $i \in 1,2,\dots,N$
+	and $K \subseteq \bigcup_{1\leq i \leq N}G_i$,
+	which we know exists from the compactness of $K$.
+	Since $G_i$ is open, there exists some $r_i$
+	such that $\mathbb{B}[x,r_i) \subseteq G_i$ for all $x \in G$.
+	Then, let $r:= \min_i\{r_i\}$.
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 3}
+{\it Define the set-valued ``projection" mapping
+$p_1 \colon \mathcal{P}(\R^2) \to \mathcal{P}(\R)$ by
+\[
+	p_1(S) = \{x_1 \in \R \colon (x_1,x_2) \in S \text{ for some }x_2\},
+	\qquad S \subseteq \R^2
+\]
+\begin{enumerate}
+	\item If $S$ is bounded, must $p_1(S)$ be bounded? (Why or why not?)
+	\item If $S$ is closed, must $p_1(S)$ be closed? (Why or why not?)
+	\item If $S$ is compact, must $p_1(S)$ be compact? (Why or why not?)
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 4}
+{\it Recall the set $\ell^2$ from HW07 Q3,
+and the standard ``unit vectors" $\hat{\mathbb{e}}_p = (0,0,\dots,0,1,0,\dots)$,
+where the only nonzero entry in $\hat{\mathbb{e}}_p$ occurs in component $p$.
+For any $x$ in $\ell^2$ and subset $V \subseteq \ell^2$, write
+\[
+	\Omega(x;V) = \{y \in \ell^2 \colon -1 < (v,y-x)<1, \forall v \in V\}.
+\]
+Then define a collection $\mathcal{T}$ of subsets of $\ell^2$ by saying
+$G \in \mathcal{T}$ if and only if every point $x \in G$ has the property
+that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \ell^2$.
+\begin{enumerate}
+	\item Prove that $\Omega(x;V) \in \mathcal{T}$ of every finite set
+		$V \subseteq \ell^2$ and point $x \in \ell^2$.
+	\item Prove that $(\ell^2, \mathcal{T})$ is a Hausdorff Topological Space.
+	\item Let $S = \{\hat{\mathbb{e}}_p \colon p \in \N\}$.
+		Prove that $0 \in S'$.
+		(Here $0$ denotes $(0,0,\dots)$, the ``origin in $\ell^2$.)
+		\emph{Note}: This fact proves that $\mathcal{T}$ is
+		different from the metric topology on $\ell^2$.
+	\item Prove that every $G$ in $\mathcal{T}$ has the property:
+		for every $x$ in $G$, there exists $r>0$ such that
+		\[
+			G \supseteq \mathbb{B}[x;r) = \{y \in \ell^2 \colon
+			\lVert y - x \rVert < r\}.
+		\]
+		This fact proves that every set considered ``open" in $\mathcal{T}$
+		is also open in the metric topology on $\ell^2$.
+		This explains why $\mathcal{T}$ gets called ``the weak topology"
+		and the metric topology is also called ``the strong topology."
+	\item Prove that the following set is closed in the weak topology of $\ell^2$:
+		$\mathbb{B}[0;1] = \{y \in \ell^2 \colon \lVert y \rVert \leq 1\}$.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+\end{document}
