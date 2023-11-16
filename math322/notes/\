@@ -898,4 +898,734 @@ Would suggest pre-reading it.
 There's a lot of notation, really need to see it a little before.
 Make sure you understand 1.8, 1.9, but 1.10 might be a bit rough.
 Midterm will be whatever we cover up to a week before.
+
+\section{October 10}
+Midterm 1: Thursday, next week, up to and including 1.10.
+
+Recall last time: hommomorphisms and quotients.
+\[
+	G_1 \xrightarrow{\phi} G_2
+\]
+$K = \mathrm{kernel}(\phi) = \ker(\phi) = \phi^{-1}(1_{G_2})$.
+$K$ is a normal subgroup, $G_1 / K \cong \phi(G_1) \subseteq G_2$.
+We saw (draw picture ff page 1).
+
+\begin{corollary}
+	If $\phi$ is surjective, $\phi(G_1) \cong G_1/K$.
+\end{corollary}
+Notation (exact sequence): $G$ group $K \subseteq G$ normal.
+$1 \xrightarrow{\subseteq} K \xrightarrow{\subseteq} G \xrightarrow{\pi} G/K \xrightarrow{\text{all to }1}1$
+means the image of each group on the left of the arrow
+is the kernel of the next map (arrows are homomorphisms).
+$1 \to K$ subset (is injective)
+and $K \to G$ subset (injective).
+(Yoo it's like the thing Sebastian drew for the de Rahm cohomology).
+Some clarity: can draw $G_1 \xrightarrow{\phi_1} G_2 \xrightarrow{\phi_2} G_3$,
+means that $\phi_1(G_1) = \ker(\phi_2(G_2))$.
+
+The point is $G$ is ``built" from $K, G/K$.
+Our goal is to study $G$ by analysing the smaller pieces $K, G/K$.
+Answer (partial): fundamental theorems.
+
+The first fundamental theorem relates subgroups of $G/K$ with certain subgroups of $G$.
+Note that this numbering is specific to Jacobson.
+\begin{theorem}[First Fundamental Theorem (Part a)]
+	Construction: $H \subseteq G/K$ a subgroup. $\pi^{-1}(H) = H' \subseteq G$.
+	Then $H \leftrightarrow H'$ is a bijective correspondence between subgroups of
+	$G/K$ and subgroups of $G$ which contain $K$.
+\end{theorem}
+\begin{proof}
+	Note that since $H$ is a subgroup of $G/K$,
+	$\pi^{-1}(H) = H' = $ subgroup of $G$, contains $K$.
+	Want to show bijection, so show $\pi^{-1}$ has an inverse.???
+	If $H'$ is a subgroup of $G$ containing $K$,
+	then $H = \pi(H')$ and is a subgroup of $G/K$.
+	We are going from subgroups of $G$ that contain $K$ to subgroups of $G/K$.
+	Note that this is the inverse of the previous function, $\phi(\phi^{-1} x))
+	= x, \forall x \in G/K$.
+	Thus $H \xrightarrow{\text{preimage}} H' \xrightarrow{\pi} H$ follows.
+	For a bijection, have to check inverse on the other side as well.
+	So start with $H' \supset K$, subgroup of $G$.
+	Send to $H = \pi(H')$, take preimage.
+	Do we get $H'$ back?
+	Recall $\pi \colon G \to G/K$, $x \mapsto xK$.
+	So $\pi^{-1}(\pi(x)) = xK \subseteq G$ (the whole coset).
+	Thus, for any $x \in G$, $\pi(x) = xK$, $\pi^{-1}(\pi(x)) = \pi^{-1}(xK)
+	= xK \subseteq G = \{xk \mid k \in K\}$.
+	Thus $\pi^{-1}(\pi(H')) = \{h'k \mid k \in K, h' \in H\} = \text{ union of cosets coming from } H' = H'$
+	since $K \subseteq H'$ by assumption.
+\end{proof}
+Really important to understand this. This is only part a in theorem 1, and will use alot.
+
+\begin{corollary}
+	Assume that $H' \supseteq K$.
+	\begin{enumerate}
+		\item $H$ is normal in $G/K$ $\iff$ $H'$ is normal in $G$.
+		\item If so, $(G/K)/H \cong G/H'$
+	\end{enumerate}
+\end{corollary}
+Intuitively, $G \supseteq H' \supseteq K$,
+divide by $K$ to get $G/K$, divide again by $H = \pi(H')$,
+this is the same as dividing by $H'$ in one step.
+
+Modding out by $K$ squashes kernel to identity, and we do it twice
+(from $G$ to $G/K$ and then to $(G/K)/H$, or just $G/H'$).
+
+Example (Abelian setting where everything is normal):
+$\Z \supseteq 2\Z \supseteq 6\Z$.
+Here, $G = \Z, H' = 2\Z, K = 6\Z$.
+$G/H' = $ cyclic of order $2$.
+$G/K = $ cyclic of order $6\supseteq$ a subgroup of $H$ of order $3$.
+$\underbrace{(G/K)}_{\text{order }6}/\underbrace{H}_{\text{order }3}$ has order $2 \cong \Z/H'$.
+Explicitly: $G/K = \Z/6\Z$ are the cosets: $\{0+6\Z,1+6\Z,2+6\Z, \dots\}$.
+We have $\pi \colon x \mapsto x + 6\Z$.
+We now have $H = \pi(H') = \{0+\Z, 2+6\Z, 4+6\Z\}$.
+So then $G/H' = \{0+2\Z, 1+2\Z\}$.
+Again, to see this more explicitly,
+we have $H = \{[0], [2], [4]\}$,
+and $[1] \in G/K$, we have $1 + H = [1], [3], [5]$.
+So $G/K = H \sqcup [1] + H$.
+Could have just modded out by $H'$ at the beginning (cutting group up into evens and odds).
+
+\begin{proof}
+	\begin{enumerate}
+		\item Is easy.
+			Suppose $H'$ is normal in $G$.
+			This means that $gH'g^{-1} \subseteq H'
+			\iff gh'g^{-1} \in H' \forall g\in G, h'\in H'$.
+			We have to show $\pi(H') = H$ is normal in $G/K$.
+			But note we have $\pi(x)\pi(h')\pi(x)^{-1} = \pi(xh'x^{-1}) \in H$,
+			and since $xh'x^{-1} \in H'$ and $\pi(H') = H$.
+			Thus $H'$ normal in $G$ $\implies$ $H$ normal in $G/K$.
+
+			Conversely, given $H$ normal in $G/K$ and want $H' = \pi^{-1}(H)$ is normal in $G$.
+			By definition, this means $\forall g \in G$, $h' \in H'$, $gh'g^{-1} \in H'$,
+			which is truee if and only if $\pi(gh'g^{-1}) \in H$.
+			But recall that $\pi(gh'g^{-1}) = \pi(g)\pi(h')\pi(g^{-1})
+			= (gK)(h'K)(gK)^{-1} \in H$
+			(elements of $H$ are cosets).
+			But by assumption, $H$ is normal, so we are done.
+
+		\item (Sketch) Consider $G \supseteq H \supseteq K$
+			($K, H'$ both normal).
+			Then $H' \supseteq K$ means we can write $H' = \sqcup h'_iK$
+.
+			Then each coset $xH' = \sqcup xh'_i K$
+			($h'_iK \in H = \pi(H')$).
+			So cosets of $H'$ break up as cosets of $K$.
+			Dividing by $K$ and then by the image of $H'$ turns out to be the same as
+			first grouping according to cosets of $K$,
+			then some of these cosets together to get cosets of $H'$.
+	\end{enumerate}
+\end{proof}
+
+\section{October 17}
+Recall from last time:
+Fundamental Theorem (part 1):
+$G$ is a group, $K$ is normal, and $\phi \colon G \to G/K$ is surjective.
+\begin{theorem}
+	\begin{enumerate}
+		\item $H \leftrightarrow \phi^{-1}(H) = H'$ is bijection between
+			\newline
+		$\{\text{subgroups of }G/K\} \leftrightarrow
+		\{\text{subgroups of }G\text{ containing }K\}$.
+		\item $H$ normal in $G/K$ $\iff$ $H'$ normal in $G$.
+			In this case $(G/K)/H \cong G/H'$.
+	\end{enumerate}
+\end{theorem}
+Last time, proved (i), but it still remains to show (ii).
+\begin{proof}
+$H'$ normal in $G$ $\iff$ $gH'g^{-1} \subseteq H' \forall g \in G$.
+Apply $\phi$: get $\phi(g)\phi(H')\phi(g)^{-1} \subseteq \phi(H') = H$ for all $g \in G$.
+Since $\phi$ is surjective, $G \to G/K$.
+$\phi(g)$ covers all of $G/K$ as $g$ varies, thus get that $H$ is normal in $G/K$.
+
+Other direction: if $H$ is normal in $G/K$ want $\phi^{-1}(H) = H'$ is normal in $G$.
+By definition of normal, we have that for all cosets $gK \in G/K$,
+$(gK)H(gK)^{-1} \subseteq H$.
+We do the algebra:
+\begin{align*}
+	(gK)(H)(gK)^{-1} \subseteq H
+	&\implies \phi(g) H \phi(g^{-1}) \subseteq H\\
+	&\implies \phi(g) \phi(H') \phi(g^{-1}) \subseteq \phi(H')
+	& \forall  g \in G\\
+	&\implies \phi(g)\phi(h')\phi(g^{-1}) = \phi(h'')
+	& \forall h'\in H', \text{ some }h'' \in H'\\
+	&\implies \phi(gh'g^{-1}) = \phi(h'') \in H
+\end{align*}
+This is true for all $g \in G, h' \in H'$, and for some $h'' \in H'$,
+thus $gh'g^{-1} \in \phi^{-1}(\phi(h'')) \subseteq H'$.
+\end{proof}
+Get used to this.
+We are going to be doing a lot of symbol pushing.
+This is why the book is called basic algebra;
+stuff like this should become doing arithmetic.
+
+Now how do we get the second bit, $(G/K)/H \cong G / H'$.
+\begin{proof}
+	Start by getting a map from one to the other.
+	Need to remember that $\phi^{-1}(H) = H' \supseteq K$.
+	Start with $(G/K)/H$.
+	The element of this are of the form $xH$ for $x \in G/K$.
+	But $x = yK$ for some $y \in G$.
+	Want to get form this an element on the right: $zH', z \in G$.
+	Then we use the obvious map, $x = yK \to yH'$ (it maps to itself).
+	There is ambiguity: different representative $y' = yk, k \in K$.
+	Our function gives $ykH'$ but
+	this is equal to $yH'$ since $K \subseteq H' \implies kH' = H'$.
+	So we get a well defined function from $G/K \to G/H'$.
+	
+	Standard: we are defining a function on cosets, not on elements,
+	so need to show well-defined;
+	regardless of choice of element in the set, map to the same set.
+
+	Example (aside): $G = \Z$ and $K = 4\Z$.
+	Then $G/K$ are the remainders modulo $4$: $\{[0,[1],[2],[3]\}$.
+	And if $H = \{[0],[2]\}$.
+	What is pre-image of this ($\phi$ is a map from $G$ to $G/K$???
+	so $H$ is a subset of $G/K$?...
+	wait yeah, obviously, otherwise how would we mod out by $H$)?
+	$\phi^{-1}(H) =$ even numbers (remainders are $0$ and $2$)
+	$= H' = 2\Z \supseteq 4\Z = K$.
+	What is a map $G/H' \to (G/K)/H$.
+	We have $\{[0],[2]\} = H$ and $\{[1] + [3]\} = [1] + H$
+	in $(G/K)/H$.
+	Chinese Remainder Theorem!!!
+	(I think... he was doing $\Z/6\Z$ example with $\Z/2\Z$ and $\Z/3\Z$)
+
+	Back to the theorem: $G \supseteq H' \supseteq K$.
+	Map is $G/K \to G/H'$, $xK \mapsto xH'$
+	(well-defined by what we said before since $K \subseteq H'$).
+	Our claimm is this is a homomorphism when $H', K$ is normal.
+	We know that by the construction of quotients that
+	$(xK)(yK) = xyK$ thus $(xH')(yH') = xyH'$ so homomorphism
+	(multiplication is inerited from $G$).
+	Now what is our theorem on homomorphisms say?
+	It says that if $\psi$ is onto,
+	then $\mathrm{image}(\psi) \cong \text{ domain of }\psi / \ker(\psi)$.
+	$\psi$ is obviously onto (because all the coset representatives are in $G$;
+	all a surjective images of $G$).
+	What is our kernel?
+	Well, it's $H$! Because these are the elements $xK$ such that $xH' = H$
+	which are just the ones in $H'$.
+	Thus the kernel are the cosets $xK, x \in H' = H'$ (by definition $H = \phi(H')$).
+	[I answered and solved this, my (equivalent) explanation:
+	the identity of the cosets in $G/H'$ is $H'$,
+	and $\phi(H) = H'$]
+\end{proof}
+
+\subsection{Isomorphism Theorem 2}
+This works for any subgroup of $G$ which contains $K$.
+What about other subgroups?
+Start with $G \supseteq K$ normal,
+$H'$ is any subgroup of $G$ (not necessaryily $H' \supseteq K$),
+$\phi \colon G \to G/K$,
+and define $H = \phi(H')$ as before.
+This is a subgroup of $G/K$.
+Our bijective correspondance isn't going to work anymore,
+because we don't have $H' \not \supseteq K$.
+
+Fact: $\phi \colon H' \to H$ is onto by definition, thus $H \cong H'$.
+$\ker(H' \to G/K) = K' = K \cap H'$
+(since these are the elements $x \in H'$ where $\phi(x) \in K = 1_{G/K}$).
+So
+\[
+	H \cong H'/K', \; K' = H'\cap K
+\]
+(consistent with previous case $H' \supseteq K \implies K' = K$).
+Now $\phi^{-1}(H) = $ all the cosets $h'K$, where $h' \in H'$
+$= \{h'k \mid h' \in H', k' \in K\}$.
+Nike growled because he kept getting the primes wrong lol.
+"When the notation is harder to keep track of than the ideas,
+you're in a good spot."
+
+Point: $\phi^{-1}(\phi(H')) = H'K = \{h'k \mid h' \in H, k \in K\}$
+is a group since the preimage of a group is a group
+(homomorphism theorems).
+Direct check (need to use $K$ is normal):
+$(h'k)(h''k'') = h'(h'')h''^{-1}kh''k''$ and $h''^{-1}k'' \in K$
+so this is $h'''k'''$ (something in $H'$ times something in $K'$).
+Used the algebra trick:
+\begin{align*}
+	x_1y_1 x_2 y_2
+	&= x_1x_2 x_2^{-1} y_1 x_2 y_2 &\text{multiplying by }x_2x_2^{-1}\\
+	&= [x_1(x_2)](x_1^{-1}y_1x_2)y_2\\
+	&= (x_1x_2)(y_3y_2) &\text{if normal}
+\end{align*}
+So normal is very useful, because $xy \neq yx$ typically in groups.
+but to compare $xyx^{-1}x = y'x, \; y' =xyx^{-1}$,
+$xy = y'x$ always if $y' = xyx^{-1}$.
+
+Strongly recommend doing the 10 million problems in Herstein.
+Do the problems in Herstein in the early sections.
+You just need to get familiar with the algebra.
+Do all these in the beginning of chapter 2 in Herstein
+(his print out is page 48).
+Don't panic about this, just do a lot of problems.
+
+Properties of homomorphisms are quite important.
+It will allows us to find out that there are only two groups of order $55$,
+one commutative and one non commutative, etc.
+
+Note if $G$ finite, $\#(G/K) =$ the number of distinct cosets $=$
+the number of elements in $G$ divided by the number of elements of $K$,
+since each coset has $K$ elements.
+Thus $\#K \mid \#G$ (Lagrange), so $\#G/K \mid \#G$.
+
+\section{October 24}
+Recall our Fundamental Theorems:
+If $\phi \colon G \to G/K$.
+\begin{itemize}
+	\item $H \subseteq G/K$,
+		then $H' = \phi^{-1}(H)$ is a subgroup of $G$ containing $K$
+		and $H'$ normal $\iff H$ normal in $G/K$.
+		In this case $G/H' \cong (G/K)/H$,
+		$G \supseteq H' \supseteq K \xrightarrow{\phi} G/K
+		\supseteq H = H'/K \supseteq 1_{G/K} = K/K$
+		(the squiggly arrow just means this side becomes the other side
+		when we apply $\phi$).
+	\item If $H'$ is any subgroup of $G$ then
+		$\phi(H') = H \cong H/(H' \cap K) \cong (H'K)/K$.
+		$\phi^{-1}(H) = H'K$.
+		We talked about last time,
+		proof is just using the definitions.
+\end{itemize}
+
+Want to apply these to specific homomorphisms.
+This takes us to this business of groups acting on sets...
+the techinical heart of the class.
+
+Goal (a): given $n > 1$, find all groups of order $n$ (up to isomorphism).
+Goal (b): Is the converse of Lagrange's theorem true?
+(If $d \mid \#G$ does there exist a subgroup of order $d$.)
+
+Answers:
+\begin{enumerate}
+	\item In principle known, but very complicated.
+		We will give a (very) partial answer:
+		only for specific kinds of $n$
+	\item In general, the converse is false, but we still have that
+		if $p$ is a prime and $p \mid \#G$ then
+		\begin{enumerate}
+			\item $\exists x \in G$, $\mathrm{ord}(x) = p$ (Cauchy's Theorem)
+			\item if $\#G = p^r\cdot s$ with $(s,p) = 1$,
+				then there exists a subgroup of order $p^{r'}$
+				for all $r'$ in $0 \leq r' \leq r$.
+				So the converse of Lagrange's works if $d$ is a prime power
+				(Sylow's Theorem).
+		\end{enumerate}
+\end{enumerate}
+We will prove all of these before the end of the class.
+
+\subsection{Method of proof}
+Recall Lagrange's theorem: $\#G = n$, $H \subseteq G, \#H = d$.
+Divide $G$ into cosets of $H$, each coset has size $d$.
+If there are $t$ cosets, $n$ elements are grouped into $t$ subsets of size $d$.
+Thus $n = dt \implies d\mid n, t \mid n$.
+($\implies$ if $H$ is normal, then $\#(G/H) =t$ als divides $\#G = n$).
+Counting argument: we divide $n$ elements into $t$ equisize pieces.
+
+The new method is just counting again,
+but instead of counting elements of $G$,
+we count other sets.
+Quite clever: the other sets can be quite random,
+and there is lots of choice;
+we have to somehow relate them to $G$.
+
+How does this work: let $X$ be a finite set.
+Consider a homomorphism (assume it exists)
+$\phi \colon G \to S_X = $ set of permutation of $X$ $\cong S_m$, $m = \#X$.
+Recall $\#S_X = m!$.
+$\phi$ need not be injective or surjective.
+We partition $X$ into equivalence classes $X_i$
+where the equivalence relation is $x \sim y \iff \exists g \in G$
+such that $\phi(g)(x) = y$
+($\phi(g)\in S_X$ is a permutation of $X$).
+Recall that this is the definition of an orbit:
+the equivalence classes are just orbits of $G$ acting via $\phi$ as permutations.
+In this situation, we say that $G$ acts on $X$ via $\phi$.
+We have not told you anything about $X$ or $\phi$,
+so how will this help us understand $G$?
+
+Counting argument: $\#X = \sum$ sizes of orbits $ = \sum$ sizes of equivalence classes.
+This doesn't look particularly useful yet,
+we don't have size of $X$ yet.
+Here's the miracle:
+the size of these orbits $\#X_i$ has to divide the order of $G$
+(will have to prove this).
+This counting reveals the structure of $G$
+if we choose $X,\phi$ clearly.
+
+Ex. Cayley's theorem sets up an action of $G$ on $X = G$.
+$g \mapsto L_g$, $L_g(x) = gx$, $x \in G$
+(the left translation business).
+There's only one orbit,
+because $\forall g \in G$, $L_g(1)$ sends $1 \mapsto g\cdot 1 = g$,
+so $[1] = G$.
+(An orbit says there's one element in the group $L_g$???
+that can get you to the element;
+$x,y \in X$ in the same orbit $\iff \exists$ some $g \in G$
+with $\phi(g)(x) = y$,
+and don't care which $g$.)
+Counting doesn't say anything interesting:
+it just says $\#G = \#G$.
+
+Ex. Let $H$ be any subgroup of $G$
+(not necessarily normal)
+and set $X = G/H$ (quotient set of cosets).
+Given $g \in G$, we have to define $\phi(g)$ as a permutation of $X = G/H$.
+Define $\phi(g) \colon xH \mapsto gxH$.
+To get $\phi \colon G \to S_X$,
+have to check i) that $\phi$ is well-defined, and ii) $\phi(g_1g_2) = \phi(g_1)\phi(g_2)$.
+Check i): suppose we pick a different representative $x'$ in $xH$.
+Then $x' = xh, h \in H$, so $gx'H = (gxh)H = gxH$ since $H$ is closed.
+Check ii):
+\begin{align*}
+	\phi(g_1g_2)(xH)
+	&= g_1g_2xH\\
+	&= g_1(g_2xH)\\
+	&= \phi(g_1)(g_2xH)\\
+	&= \phi(g_1)\phi(g_2)(xH)
+\end{align*}
+Oh, and this is a permutation, since inverse is just $\phi^{-1} = g^{-1}$
+so bijection.
+
+Subexample:
+Suppose $G$ has order $n$ and $H \subseteq G$ has order $d$.
+This construction produces a homomorphism $G \to S_{n/d} \cong S_X$
+(where $n/d = \#(G/H) = $ the number of cosets).
+This is useful, because $n/d !$ because is usually much smaller than $n!$???
+Consider when $n = 15$, and assume $G$ is not cyclic.
+Let $H = \langle g \rangle$ for some $g \in G$, $g \neq 1$.
+$\# H = 3,5$.
+Suppose $\# H = 3$.
+We get $\phi \colon G \to S_X$,
+which is a map from a group of order $15$ ot one of order $(\#X)! = 5!$.
+The other case is more intersting:
+if $\#H = 5$, then $\#X = 3$, $\# S_X = 6 = 3!$.
+So $\phi\colon G \to S_X$,
+which is a map from a group of order $15$ to one of order $6$.
+Thus, this map cannot be injective!
+We have a nontrivial kernel,
+so there exists a normal subgruop of order $5$ or $15$.
+The reason for this is from Homomorphism theorems:
+$\phi(G) \subseteq S_X$, of order $6$.
+But $\phi(G) \cong G/K$, has order dividing $15 =\#G$
+has to divide $\#S_X = 6$.
+Thus, the only possibilities for $\#G/K$ divide $(15,6) = 3$.
+So $G/K$ has order $1$ or $3$,
+so either $K$ has order $15$ or order $5$.
+Now we claim that $\phi(G) \neq \{1\}$.
+$\phi(g)(H) = gH \neq H$ unless $g \in H$,
+thus $\phi(g)$ is not trivial if $g \not\in H$
+(such that $g$ exists since $\#H = 5$, $\#G = 15$).
+Thus, $phi(G)$ has order $3$,
+and $K = \ker(\phi)$ is a normal subgroup of order $5$.
+
+Recap of example:
+we start with $G$ of order $15$, not cyclic.
+Pick $g\in G$, $H = \langle g \rangle \subsetneq G$.
+$X = G/H = $ cosets of $H$,
+and $\phi \colon G \to S_X$ where $g \mapsto \phi(g) \colon xH \mapsto gxH$.
+$G$ is not cyclic, so $\#H = 3,5$,
+and if $\#H = 3$, got nothing.
+But when $\#H = 5 \implies \phi$ is not injective,
+and has a kernel $K$ of order $5$.
+We have two subgruops, $H,K$, and actually it will turn out that $H = K$,
+but not true in general.
+Conclusion (not obvious): if $\#G = 15$ and $G$ is not cyclic,
+and $g \in G$ has order $5$, then $\langle g \rangle$ is normal in $G$!!
+(Did assume that we could pick an element of order $5$.)
+
+Lol goat girl just pointed out that all groups of order $15$ are cyclic
+(all abelian).
+So we just throw on the condition that $g$ is not a generator of $G$.
+
+This is a very important example.
+Let's talk more about it.
+Let $G$ be any group and $H$ any subgroup.
+Let $X = G/H$ and $\phi$ as above.
+The question is, how many orbtis are there?
+Is $gH \sim H$ via $\phi$?
+Yes because $\phi(g)(H) = gH$ by definition ($H = 1\cdot H$).
+So there is only one orbit, of size $\# X = [G:H]$.
+\begin{definition}[Transitive]
+	Consider $\phi \colon G \to S_X$.
+	$\phi$ is called \emph{transitive}
+	if there is only one orbit.
+\end{definition}
+When $X = G/H$ and $\phi$ is as above, $\phi$ is transitive.
+The Cayley's action is also a transitive action.
+
+Ex (important):
+$X = G$, but this time, $\phi(g) = \phi(g)(x) = gxg^{-1}$ ($x \in G$).
+This is obviously a permutation since $\phi(g^{-1}) = \phi^{-1}(g)$,
+and so bijection,
+and $\phi(g_1g_2)(x) = (g_1g_2)x(g_1g_2)^{-1} = g_1g_2xg_2^{-1}g_1^{-1}
+= g_1(g_2xg_2^{-1})g_1^{-1} = \phi(g_1)(\phi(g_2)(x))$,
+so homomorphism.
+So we get $\phi \colon G \to S_n$ where $n = \# G$.
+Now, something interesting happens.
+We had a similar homomorphism with Cayley's theorem,
+but that was injective, and had one orbit.
+In general $\phi$ is not injective, and has many orbits.
+What you get is that
+\[
+	\# G = \sum\#(\text{orbits})
+\]
+(these terms can all be different).
+This is one of the most important equations in group theory,
+called a ``class equation".
+Recall we've seen this in linear algebra:
+we grouped together similar matrices $A \sim B$ when $A = MBM^{-1}$.
+Likewise, we're grouping together elements of the group when they're ``similar":
+$x \sim y \iff \exists g \in G$ such that $gxg^{-1} = g$ ($x,y \in G$).
+With matrices, the kernel of this map were the scalar matrcies
+(diagonal);
+notably, these commute with all other matrices.
+So $\ker(\phi) = \{g \in G \mid \phi(g) = \text{ trivial }
+\iff gxg^{-1} = x, \forall x\}
+= \{g \in G \mid gx = xg, \forall x\} =$
+center of $G$ (elements that commutie with everythinig).
+
+\section{November 9}
+\subsection{Solvable Groups (Section 4.6)}
+The name comes from the origin of group theory.
+\begin{definition}[Solvable Group]
+	$G$ is called solvable if there exist subgroups $G_1 = G$,
+	$G_2 \subseteq G_1$, $G_3 \subseteq G_2$
+	until $G_r = \{1\} \subseteq G_{r-1}$ (decreasing).
+	\[
+		G = G_1 \supseteq G_2 \supseteq \cdots \supseteq G_{r-1} \supseteq G_r = \{1\}
+	\]
+	such that $G_{i+1}$ is normal inside $G_i$ (not neccessarily in $G$)
+	and $G_i/G_{i+1}$ is abelian.
+\end{definition}
+This definition looks arbitrary, but actuall goes back to Galois' study of polynomials.
+Motivating question: $f(x) = x^n + a_{n-1}x^{n-1} + \cdots + a_0$
+is a polynomial with rational coefficients,
+and $f(x) = \prod_{i=1}^n(x-\alpha_i)$ where $\alpha_i\in\C$ (complex roots);
+how do we find $\alpha_i$ in terms of the coefficients $a_1,a_2,\dots,a_{n-1}$
+(a formula for the roots)?
+We want polynomials in $a_1,a_2,\dots$ and $\sqrt{~}$ of some kind.
+Does this formula exist?
+
+In the case of $n=2$: $(x-\alpha_1)(x-\alpha_2) = x^2 + ax + b = 0$.
+Our formula is $\alpha_i = \frac{-a\pm\sqrt{a^2-4b}}{2}$
+(``I don't even know the quadratic formula").
+This is just found from completinng the square.
+Cubics: possible, messy.
+Quartics: possible, even worse (Jacobson exercise).
+$\mathrm{deg}\,5$ and up: no solution (due to Galois).
+The proof of this actually uses group theory.
+
+The way to do this is to realize that the coefficients have a simple
+expression in terms of the roots.
+E.g.:
+\begin{align*}
+	a_0 &= \prod(-\alpha_i) = (-1)^n\prod\alpha_i\\
+	a_1 &= \prod \alpha_{i_1}\alpha_{i_2}\cdots \alpha_{i_{n-1}})\pm\\
+		&\vdots\\
+	a_{n-1} &= \pm(\alpha_1 + \cdots + \alpha_n)???
+\end{align*}
+(where in $a_1$, they are the distinct $n-1$ tuples).
+These are all called symmetric functions:
+they are invariant under permutatin roots.
+The coefficients treat all roots the same!
+The problem is that these roots are different, they are not all the same;
+we have to somehow break the symmetry in the coefficients
+(otherwise we cannot determine the roots).
+
+How do we do this when $n=2$: $(x - \alpha)(x - \beta) = x^2 - (\alpha+\beta)x + \alpha\beta
+= x^2 - a_1x + a_0$
+This is symmetric in the sense that I could switch $\alpha$ and $\beta$
+and would get the same.
+Functions that are not symmetric: $\alpha/\beta, \alpha^\beta, \alpha-\beta$
+(we swap the two, we get a different value).
+So we can write $(\alpha-\beta)^2 = \alpha^2 - 2\alpha\beta + \beta^2
+= (\alpha+\beta)^2 - \alpha\beta = a_1^2 - 4a_0 = a^2-4b$
+(kind of a trick: we can write the square of this nonsymmetric expression
+in terms of things that were symmetric expressions).
+So $\alpha-\beta - \sqrt{a^2 -4b}$,
+$\alpha  = \frac{(\alpha+\beta)+(\alpha-\beta)}{2} = (a + \sqrt{a^2-4b})/2$
+and $\beta  = \frac{(\alpha+\beta)-(\alpha-\beta)}{2} = (a - \sqrt{a^2-4b})/2$.
+
+For cubics, we have three roots.
+$(x - \alpha_1)(x-\alpha_2)(x-\alpha_3) = x^3 + a_2x^2 + a_1x + a_0$.
+Note
+\begin{align*}
+	a_2 &= -(\alpha_1 + \alpha_2 + \alpha_3)\\
+	a_1 &= \alpha_1\alpha_2 + \alpha_1\alpha_3 + \alpha_2\alpha_3\\
+	a_0 = -\alpha_1\alpha_2\alpha_3
+\end{align*}
+which are all symmetric.
+We want expressions for $\alpha_1,\alpha_2,\alpha_3$.
+We have to do \emph{a lot} of algebra to produce expressions
+that are not symmetric but whose powers \emph{are} symmetric;
+it works out by an apparent miracle.
+For degree $4$, similar, but worse.
+For degree $5$, it just fails.
+
+Galois realized if you are just doing algebra,
+you are just lookinng at the shape of the equations.
+Galois realized that the key is understanding possible symmetries
+and their complexity is the key.
+These old school math people just did algebra: just computing machines.
+Galois reallized algebra is not going to get you anywhere:
+what are the relationships between roots and their symmetries.
+
+\begin{theorem}[Galois]
+	Given $f(x)$, a rational polynomial as above (degree $n$,
+	then (1) there exists a finite group $G_f \subseteq S_n$
+	(permutations of roots $\alpha_1,\dots,\alpha_n$)
+	and (2) there is a formula for the roots $\iff$
+	$G_f$ is solvable in the sense that we just defined.
+	Furthermore, (3) for most polynomials $G_f = S_n$ (might not be Galois).
+	(4) $S_n$ is not solvable if $n \geq 5$
+\end{theorem}
+That's why we call them solvable groups.
+They correspond to a solvable polynomial.
+Galois basically developed group theory to prove this...
+not with groups like we know, looking mostly at these permutations.
+Amazing: same age as us, but died shortly after, Nike's goat.
+
+How to define $G_f$?
+Idea: Consider polynomials $P(x_1,x_2,\dots,x_n)$ in $n$-variables
+(where $n$ is the degree) with rational coefficients.
+Say that $P$ is a relation between the roots if the following holds:
+$P(\alpha_1,\alpha_2,\dots,\alpha_n) = 0$ $(x_1=\alpha_1,x_2=\alpha_2,\dots,x_n=\alpha_n)$.
+$P_f = $ all possible $P$ that give relations like this.
+$G_f = $ set of permutations that preserves all the relations,
+which \emph{means} $\sigma \in G_f$ if for all(?) $P \in P_f$ we have
+$P(x_{\sigma(1)},x_{\sigma(2)},\dots,x_{\sigma(n)}) \in P_f$.
+
+Then $G_f \neq \{1\}$; Galois proved $f$ is solvable $\iff G_f$ is solvable.
+What we get is that two polynomials that look quite similar have
+Galois groups that are quite different.
+Example (Quanta Article, Aug. 3 2021): $x^3 - 7x + 5$ and $x^3 - 7x + 7$;
+gives examples of relations that are quite different...
+one actually has Galois group $S_3$, and one has a cyclic Galois group.
+The Galois group is the key, the underlying symmetry.
+
+\subsubsection{Proof that $S_5$ is not solvable}
+Recall the definition: $G$ is called solvable if there exists subgroups
+$G = G_1 \supseteq G_2 \supseteq \cdots \supseteq G_r = \{1\}$
+such that $G_{i+1}$ is normal in $G_i$ and $G_i/G_{i+1}$ is abelian.
+
+Condition with polynomials: taking a $d$-th root of $a$ solves $x^d = a$, $x = a^{1/d}$; $f(x) = x^d - a$.
+These have a Galois group that is (almost) abelian ($\implies$ solvability criterion).
+Nike was always confused how you go from polynomials to this definition,
+it lies somewhere in here.
+(Almost abelian here means if we allow $n$-th roots of unity, it becomes abelian,
+but the point is that they are solvable:
+either abelian already, or abelian after throwing in some roots).
+
+Goal: $S_n$ is not solvable if $n \geq 5$.
+The only normal subgroup of $S_n, n \geq 5$ are $\{1\}, A_n, S_n$
+(and $A_n$ haas no normal subgroups except $\{1\}$).
+
+For $n=2$ $S_2 = \{1\}, (12)$, and two element groups are obviously solvable:
+$G_1 = S_2, G_2 = \{1\}$.
+The solution is via just $\sqrt{(~)}$.
+For $n=3$ $S_3 \supseteq \langle (123)\rangle \supseteq \{1\}$.
+We have that $G_1/G_2 = $ cyclic or order $2$,
+and $G_2/G_3$ is cyclic of order $3$.
+Thus this is solvable,
+and solution via $\sqrt[2]{(~)}$ and $\sqrt[3]{(~)}$
+(which corresponds to our quotient groups).
+For $n=4$, $S_4 \supseteq A_4 \supseteq V = \{e, (12)(34), (13)(24), (14)(32)\} \supseteq \{1\}$.
+In order, our quotient groups have order $2$, order $3$, and $V$ is abelian,
+so it is solvable.
+The group theory actually gives a very precise way to write down
+these nonsymmetric expressions:
+for $n=3$, we want an expression invariant under cylic permutation of order $3$,
+but not invariant under a transposition (in $\langle (123)\rangle$
+vs. in $S_3\setminus \langle (123)\rangle$).
+This is very pretty: ``it's what got [Nike] interested in math in the first place."
+
+How do we deal with $S_n$ when $n\geq 5$.
+Recall that $G$ is called simple if it has no normal subgroups
+other than itself and the $\{1\}$.
+E.g. $G = $ cyclic, prime order (only abelian example).
+\begin{theorem}[Also due to Galois]
+	$A_n$ simple when $n \geq 5$
+\end{theorem}
+Strategy: consider $H \subseteq A_n$, $H \neq \{1\}$, normal.
+Step 1: show that $H$ contains a $3$-cycle $(abc)$.
+Step 2: using the fact that $H$ is normal, show $H$ contains all $3$-cyles.
+Step 3: show that the $3$-cycles generate $A_n$.
+Thus, $H = A_n$.
+The only hard part is the first step (but not terrible).
+
+Will end early for the Holiday, and present proof when we come back.
+
+\section{November 16}
+Last time, we were talking about solvable groups and where they come from.
+Recall $G$ is called solvable if there exists subgroups
+$G = G_0 \supseteq G_1 \supseteq \cdots \supseteq G_r = \{1\}$
+wherre $G_{i+1}$ is normal inside $G_i$, and $G_i/G_{i+1}$ is abelian.
+
+Claim (Galois): these correspond to equations whose roots admit a formula
+(no proof: like a year away from us).
+But then people saw these solvable groups come up in other contexts,
+so started studying them on their own.
+
+Today: $A_n$ is simmple $\implies S_n$ is not solvable $(n \geq 5)$,
+which implies (no proof) that equations of $\deg{5}$ or more are not in general solvable.
+
+NOTE: the midterm cutoff is the end of today's class (4.6).
+
+\subsection{Proving $A_n$ is simple $(n \geq 5)$}
+Steps:
+Assuming $n \geq 5$, and $H$ is a normal subgroup of $A_n$,
+where $H \neq \{1\}$, we want to show $H = A_n$.
+\begin{enumerate}
+	\item[(1).] Show that $H$ contains a $3$-cycle $(abc)$
+	\item[(2).] Show that $H$ contains all $3$-cycles
+	\item[(3).] Show that $A_n$ is generated by $3$-cycles $(\implies H = A_n)$
+\end{enumerate}
+(3) is actually the easiest part: we have to show that any even permutation
+is a product of $3$ cycles.
+If $\tau$ is even, it is the product of $2t$ transpositions,
+so enough to show that a product of $2$ transposition is a product of $3$ cycles.
+Consider $(ab)(cd)$:
+\begin{enumerate}
+	\item[i)] no intersection
+	\item[ii)] one element common in $(ab),(cd)$
+	\item[iii)] both elements are the same
+\end{enumerate}
+i): $(ab)(cd) = (ab)(bc)(bc)(cd) = (abc)(bcd)$
+ii): $(ab)(bd) = (abd)$
+iii): $(ab)(ab) = 1 = (abc)(cba)$.
+So everything is a product of three cycles, and we're done.
+
+(2) says that if $H \ni (abc)$ then $H \ni (pqr)$ for all $p\neq q, q \neq r$
+and $(a \neq b \neq c)$,
+i.e. if it contains one $3$-cycle, it contains all of them.
+Note that we cannot just say that the conjugacy classes of a $3$-cycle
+are the other $3$-cycles, and then normal gives it to us:
+that is for $S_n$, not $A_n$.
+So consider: $H$ is normal, thus $\sigma (abc) \sigma^{-1} \in H,
+\forall \sigma \in A_n$;
+we have $\sigma(abc)\sigma^{-1} = (\sigma(a),\sigma(b),\sigma(c))$,
+but is this equal to an arbitrary $(pqr)$?
+We want $\sigma(a) = p$, $\sigma(b) = q$, and $\sigma(c) = r$
+for some $\sigma \in A_n$...
+it is clear this exists in $S_n$, but we want an even transpositions.
+We need to use the fact that $n \geq 5$ to get this to work:
+(MY IDEA: we have two additional elements (or some case work) $m,n$,
+so $\sigma = (mn)(cr)(bq)(ap)$.)
+We have
+\begin{align*}
+	a &\to p\\
+	b &\to q\\
+	c &\to r\\
+	d &\to l\\
+	e &\to m\\
+	  &\vdots
+\end{align*}
+Either we have $\sigma$ that works (is even),
+or if it's odd then replace by $(lm)\sigma$ even, works as well
+(we are really using $n \geq 5$ to ensure we have $d,e$).
+
 \end{document}
