@@ -50,7 +50,7 @@ $f^{-1}((-\infty,p])$ satisfyin $p > \inf f(x)$.)}
 {\it Let $(X, d)$ be a metric space, with $K \subseteq X$ a compact set.
 Prove that whenever $\mathcal{G}$ is an open cover for $K$,
 there exists $r < 0$ with this property:
-for every pair of points $x,y \in K$ obeying $d(x,y) > r$,
+for every pair of points $x,y \in K$ obeying $d(x,y) < r$,
 some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
 
 \begin{proof}[Solution]\let\qed\relax
@@ -58,10 +58,67 @@ some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
 	such that $G_i \in \mathcal{G}$ for all $i \in 1,2,\dots,N$
 	and $K \subseteq \bigcup_{1\leq i \leq N}G_i$,
 	which we know exists from the compactness of $K$.
-	Since $G_i$ is open, there exists some $r_i$
-	such that $\mathbb{B}[x,r_i) \subseteq G_i$ for all $x \in G$.
-	Then, let $r:= \min_i\{r_i\}$.
+	Define $I_{i,j} := G_i \cap G_j$ where $1 \leq i < j \leq N$.
+	Note then that $I_{i,j}$ is open as well.
+	For each $I_{i,j}$, pick some $x_{i,j} \in I_{i,j}$ if $I_{i,j} \neq \emptyset$.
+	Then, since $X$ is a metric space and $I_{i,j}$ is an open set,
+	we must have that there exists some $r_{i,j} > 0$
+	such that $\mathbb{B}[x_{i,j};r_{i,j}) \subseteq I_{i,j}$
+	(if $I_{i,j} = \emptyset$, just let $r_{i,j} = 1$).
+	Let $r = \min_{1\leq i<j\leq N}\{r_{i,j}\}$.
+	Since there are only finitely many $r_{i,j}$, all of them greater than $0$,
+	we must have $r > 0$ as well.
+	
+	Now consider any $x,y \in K$ such that $d(x,y) < r$.
+	Consider $\mathbb{B}[x;r)$.
+	By our distance condition, we have $y \in \mathbb[x;r)$.
+	It is sufficient to show now that there exists some $G \in \mathcal{G}$
+	such that $\mathbb{B}[x;r) \subseteq G$.
+	Since $\{G_i\}_{1\leq i\leq N}$ is a covering of all of $K$,
+	there exists some $G_x \in \{G_i\}_{1\leq i\leq N}$ such that $x \in G_x$.
+	If $\mathbb{B}[x;r) \subseteq G_x$, we are done.
+	For the sake of contradiction, assume then that $\mathbb{B}[x;r) \not\subseteq G_x$.
+	hmm it's not this, it's either in $G_x$, or in $G'_x$...
+	consider the $G_i$ for which $x$ is in?
+
+	I don't even have that $\mathbb{B}[x;r) \subseteq K$.
+	Hmm, so we don't want to lose $y$, because we'll always have
+	$x \in \partial K$ (since $K$ is closed) violate our condition with the ball.
 	ff
+
+	So let $x \in G_x$ and $y \in G_y$.
+	We claim that either $x \in G_y$ or $y \in G_x$
+	(this is trivial if $G_x = G_y$, so we now assume that $G_x \neq G_y$).
+	For the sake of contradiction, assume this is false:
+	$x, y \not\in G_x \cap G_y$.
+	Then by construction, for some $x_{x,y} \in G_x \cap G_y$,
+	$x,y \not\in \mathbb{B}[x_{x,y},r)$.
+	Then $d(x_{x,y},x) > r$ and $d(x_{x,y},y) > r$.
+	We hav $d(x,y) \leq d(x_{x,y},x) + d(x_{x,y},y)$.
+	Hmm... the thing on the right is bounded below by $2r$,
+	and the thing on the left is bounded above by $r$.
+	We want to use this inequality in a different way I think,
+	like $d(x_{x,y},x) < d(x,y)$ and $d(x_{x,y},y) < d(x,y)$ somehow.
+	Maybe something to do with them being in the same $G_i$?
+
+	So we have $d(x_{x,y}, x) < d(x,y) + d(x_{x,y},y)$.
+	But $d(x_{x,y},y) < d(x,y) + d(x_{x,y},x)$, thus
+	$d(x_{x,y}, x) < 2d(x,y) + d(x_{x,y},x) \implies 0 < 2d(x,y)$ trivially.
+	ff
+	So the claim I want to make is that the intersection between
+	two open sets in a metric space is closer to each other than
+	they are to each other.
+
+
+	Hmm, we might need to define $r$ in terms of points that are
+	not in the same $G_i$, but are close to each other.
+	Think of a square donut that his a tiny slit that doesn't touch,
+	and an open cover of two sets that intersect on the non-slit side.
+
+	So it seems the problem is when I fix the slit,
+	I get a problem with the intersection.
+	When I fix the intersection, I get a problem with the slit.
+	I will think about this later.
 \end{proof}
 \clearpage
 ~\clearpage
