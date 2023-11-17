@@ -47,6 +47,11 @@ $f^{-1}((-\infty,p])$ satisfying $p > \inf f(x)$.)}
 	Consider $f^{-1}((-\infty, p])$ for some $p \in \R$.
 	ff
 
+	Supposedly, we just have $f^{-1}((-\infty,p])^c = f^{-1}((-\infty,p]^c) = f^{-1}((p,\infty))$
+	which is open.
+	And maybe a union?
+	And open covers over all of $X$, and can get a finite subcover.ff
+
 	Consider the family of closed sets of $f^{-1}((-\infty,p])$
 	satisfying $p > \inf{f(x)}$, call it $\mathcal{F}$.
 	First, remark that each element in $\mathcal{F}$ is nonempty,
@@ -176,13 +181,43 @@ $p_1 \colon \mathcal{P}(\R^2) \to \mathcal{P}(\R)$ by
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
+		It must. If $S$ is bounded, then by definition,
+		there exists $x \in S$ and $R>0$ such that
+		$S \subseteq \mathbb{B}[x;R)$.
+		Using the the standard metric on $\R^2$
+		(namely $d(x,y) = \sqrt{(y_1 - x_1)^2 + (y_2 - x_2)^2}$),
+		this means for any $y \in S$, we have
+		$d(x,y) < r$, or $\sqrt{(y_1 - x_1)^2 + (y_2 - x_2)^2} < R$.
+		Consider $x_1 = p_1(x)$.
+		Then for any $y_1 \in p_1(S)$
+		(using the standard metric on $\R$, $d(x,y) = |y-x|$), we have
+		\[
+			d(x_1,y_1) = |y_1 - x_1| = \sqrt{(y_1-x_1)^2}
+			\leq \sqrt{(y_1-x_1)^2 + (y' - x_2)^2} < R
+		\]
+		where $y' \in p^{-1}(y_1)$,
+		and so the last inequality follows from the boundedness of $S$.
+		Thus, $p_1(S) \subseteq \mathbb{B}[x_1;R)$,
+		so $p_1(S)$ is bounded.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		It must. Consider some $x_1 \in p_1(S)^c$,
+		and some open set $U \in \mathcal{N}(x_1)$.
+		We can write this explicitly as $U = \mathbb{B}[x_1;r)$
+		for some $r>0$,
+		or $U = \{y_1 \in \R \colon |y_1 - x_1| < r\}$.
+		We have $p_1^{-1}(U) = $
+		We want to show that $U \subseteq p_1(S)^c$.
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
-	\end{proof}
-	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		It must.
+		By the Heine-Borel Theorem,
+		since $S$ is compact in $\R^2$, we have that $S$ is closed and bounded.
+		Then by parts (a) and (b) of this problem,
+		$p_1(S)$ must also be closed and bounded.
+		Hence, by Heine-Borel again,
+		we have that $p_1(S)$ is compact.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -190,20 +225,20 @@ $p_1 \colon \mathcal{P}(\R^2) \to \mathcal{P}(\R)$ by
 
 \subsection*{Problem 4}
 {\it Recall the set $\ell^2$ from HW07 Q3,
-and the standard ``unit vectors" $\hat{\mathbb{e}}_p = (0,0,\dots,0,1,0,\dots)$,
-where the only nonzero entry in $\hat{\mathbb{e}}_p$ occurs in component $p$.
+and the standard ``unit vectors" $\hat{\mathbf{e}}_p = (0,0,\dots,0,1,0,\dots)$,
+where the only nonzero entry in $\hat{\mathbf{e}}_p$ occurs in component $p$.
 For any $x$ in $\ell^2$ and subset $V \subseteq \ell^2$, write
 \[
-	\Omega(x;V) = \{y \in \ell^2 \colon -1 < (v,y-x)<1, \forall v \in V\}.
+	\Omega(x;V) = \{y \in \ell^2 \colon -1 < \langle v,y-x\rangle<1, \forall v \in V\}.
 \]
 Then define a collection $\mathcal{T}$ of subsets of $\ell^2$ by saying
 $G \in \mathcal{T}$ if and only if every point $x \in G$ has the property
 that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \ell^2$.
 \begin{enumerate}
-	\item Prove that $\Omega(x;V) \in \mathcal{T}$ of every finite set
+	\item Prove that $\Omega(x;V) \in \mathcal{T}$ for every finite set
 		$V \subseteq \ell^2$ and point $x \in \ell^2$.
 	\item Prove that $(\ell^2, \mathcal{T})$ is a Hausdorff Topological Space.
-	\item Let $S = \{\hat{\mathbb{e}}_p \colon p \in \N\}$.
+	\item Let $S = \{\hat{\mathbf{e}}_p \colon p \in \N\}$.
 		Prove that $0 \in S'$.
 		(Here $0$ denotes $(0,0,\dots)$, the ``origin in $\ell^2$.)
 		\emph{Note}: This fact proves that $\mathcal{T}$ is
@@ -224,19 +259,93 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
+		Let $x' \in \Omega(x;V)$.
+		Want to show there exists a finite set $V' \subseteq \ell^2$
+		such that $\Omega(x';V') \subseteq \Omega(x,V)$.
+		Then $-1 < \langle v, x' - x \rangle < 1$ for all $v \in V$.
+		This is equivalent to
+		\[
+			-1 < \sum_{n = 1}^\infty v_n(x'_n - x_n) < 1
+		\]
+		for all $v \in V$.
 		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have that $\emptyset \in \mathcal{T}$,
+		since there does not exist $x \in \emptyset$ so it
+		satisfies our condition to be in $\mathcal{T}$ vacuously.
+		We also have $\ell^2 \in \mathcal{T}$,
+		since $\Omega(x;V)$ is composed of elements of $\ell^2$,
+		and so for any $x \in \ell^2$, $\Omega(x;V) \subseteq \ell^2$.
+		
+		Now consider $\mathcal{G} \subseteq \mathcal{T}$.
+		Consider an arbitrary element $x \in \bigcup \mathcal{G}$.
+		Then for some $G \in \mathcal{G}$, we have $x \in G$.
+		Then $\Omega(x;V) \subseteq G \subseteq \bigcup\mathcal{G}$
+		for some finite set $V \subseteq \ell^2$ since $G \in \mathcal{T}$,
+		so $\bigcup \mathcal{G} \in \mathcal{T}$ as well.
+
+		Now consider $U_1,\dots,U_N \in \mathcal{T}$ where $N \in \N$.
+		Consider an arbitrary element $x \in \bigcap_i^N U_i$.
+		Then for all $1 \leq i \leq N$, $x \in U_i$.
+		Then by definition of each $U_i$ being in $\mathcal{T}$,
+		we have that there exists a finite set $V_i \subseteq \ell^2$
+		such that $\Omega(x;V_i) \subseteq U_i$.
+		ff
+
+		Finally, let $x, y \in \ell^2$ such that $x \neq y$.
+		ff this one doesn't look bad, we use part (a)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			Let $U \in \mathcal{N}(0)$ be an arbitrary open set,
+			ie. $U \in \mathcal{T}$ such that $0 \in U$.
+			We want to show that $(U\setminus\{0\})\cap S \neq \emptyset$;
+			since $0 \not\in S$ anyway, we just need to show
+			$U \cap S \neq \emptyset$.
+
+			Since $0 \in U$, there exists a finite set $V\subseteq \ell^2$
+			such that $\Omega(0;V) \subseteq U$.
+			If $V = \emptyset$, then $\Omega(0;V) = \ell^3$
+			since $-1 < \langle v, y-x \rangle < 1$ is now
+			vacuously true for all $y \in \ell^2$;
+			then $\Omega(0;V) \cap S$ since $\hat{\mathbf{e}}_1 \in \ell^2 \cap S$,
+			and since $\Omega(0;V) \subseteq U$, $U \cap S \neq \emptyset$.
+			So now assume $V$ is not empty.
+			Denote the elements of $V$ as $v^{i}$ where $1 \leq i \leq k$.
+			Then since $v^i \in \ell^2$,
+			we must have that $\lim_n (v^i_n)^2 = 0$ (crude divergence test).
+			Then there exists some $N_i$ where $(v^i_{N_i})^2 < 1$ by the definition of convergence.
+			Let $N = \min_i\{N_i\}$.
+			Then $-1 < v^i_N < 1$ as well.
+			See
+			\[
+				\langle v^i, \hat{\mathbf{e}}_N \rangle =
+				\sum_{n=1}^\infty v^i_n (\hat{\mathbf{e}}_N)_n
+				= v^i_N
+			\]
+			Thus $\hat{\mathbf{e}}_N \in \Omega(0,V)$ since
+			$-1 < \langle v, \hat{\mathbf{e}}_N - 0 \rangle = v_N < 1$
+			for all $v \in V$.
+			Thus, $\hat{\mathbf{e}}_N \in \Omega(0,V) \subseteq U$.
+			Since $\hat{\mathbf{e}}_N \in S$,
+			thus shows that $S \cap U \neq \emptyset$,
+			so we are done since $U$ was arbitrary
+			(this works for any open $U \in \mathcal{N}(0)$).
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff
-	\end{proof}
-	\item \begin{proof}[Solution]\let\qed\relax
-		ff
-	\end{proof}
-	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+
+		Recap of what still needs to be done:
+		\begin{itemize}
+			\item Wrapping up Q1: bounded case and end of attaining minimum
+			\item All of Q2 (with contradiction)
+			\item 3(b) (closed implies closed)
+			\item 4(a), 4(b) with the second two conditions for HTS,
+				4(d), 4(e)
+		\end{itemize}
 	\end{proof}
 \end{enumerate}
 \clearpage
