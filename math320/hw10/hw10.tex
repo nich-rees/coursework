@@ -28,7 +28,7 @@
 {\it Prove the following theorem (terminology is given below):
 \begin{center}
 	Suppose $X$ is compact and $f \colon X \to \R$ is lower semicontinuous.
-	Then $F$ is bounded below on $X$,
+	Then $f$ is bounded below on $X$,
 	and there exists a point $z \in X$ satisfying $f(z) \leq f(x)$ for all $x \in X$.
 \end{center}
 Recall that in a HTS $(X, \mathcal{T})$, a function $f \colon X \to \R$
@@ -38,9 +38,44 @@ is closed for every $p \in \R$:
 	f^{-1}((-\infty,p]) = \{x \in X \colon f(x) \leq p \}.
 \]
 (One approach uses the family of closed sets
-$f^{-1}((-\infty,p])$ satisfyin $p > \inf f(x)$.)}
+$f^{-1}((-\infty,p])$ satisfying $p > \inf f(x)$.)}
 
 \begin{proof}[Solution]\let\qed\relax
+	We first prove that $f$ is bounded below on $X$,
+	that is, $\inf{f(x)} > -\infty$.
+	For the sake of contradiction, assume the opposite, that $\inf{f(x)} = -\infty$.
+	Consider $f^{-1}((-\infty, p])$ for some $p \in \R$.
+	ff
+
+	Consider the family of closed sets of $f^{-1}((-\infty,p])$
+	satisfying $p > \inf{f(x)}$, call it $\mathcal{F}$.
+	First, remark that each element in $\mathcal{F}$ is nonempty,
+	otherwise $f^{-1}(-\infty,p])$ is nonempty,
+	thus there is no $x_0 \in X$ where $f(x_0) \in (-\infty,p]$
+	and so $p \leq \inf{f(x)}$, which we assumed not true.
+	Secondly, by the assumption that $f$ is lower semicontinuous,
+	each element in $\mathcal{F}$ is also closed.
+	Finally, note that $\mathcal{F}$ has the finite intersection property:
+	let $N \in \N$ and $F_1, \dots, F_N$ are sets in $\mathcal{F}$,
+	which we can write explicitly as $F_i = f^{-1}((-\infty, p_i])$
+	where $p_i > \inf{f(x)}$;
+	denote $p_0 = \min_i\{p_i\}$.
+	Then $F_0 = f^{-1}((-\infty, p_0]) \subseteq F_i$ for all $1 \leq i \leq N$,
+	and since we're just minimizing over a finite number of sets,
+	$F_0 \in \{F_1,\dots,F_n\} \subseteq \mathcal{F}$, thus
+	\[
+		\bigcap_{i=1}^N F_i = f^{-1}((-\infty,p_o]) = F_0 \neq \emptyset
+	\]
+	so we have the finite intersection property.
+
+	Now, since we're in a a HTS and $X$ is compact,
+	any collection of elements of $\mathcal{F}$ has nonempty intersection,
+	by the theorem proved in class
+	(every element is a subset of $X$ and are closed,
+	and any finite collection has the finite intersection property).
+	Notably, $\bigcap \mathcal{F} \neq \emptyset$.
+	This means that there exists some $z \in X$ where $z \in \bigcap\mathcal{F}$.
+	Then, for all $p > \inf{f(x)}$, we have $z \in f^{-1}((-\infty,p])$.
 	ff
 \end{proof}
 \clearpage
@@ -119,6 +154,9 @@ some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
 	I get a problem with the intersection.
 	When I fix the intersection, I get a problem with the slit.
 	I will think about this later.
+
+
+	So Tighe said to do a proof by contradiction.
 \end{proof}
 \clearpage
 ~\clearpage
