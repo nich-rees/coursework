@@ -41,21 +41,10 @@ is closed for every $p \in \R$:
 $f^{-1}((-\infty,p])$ satisfying $p > \inf f(x)$.)}
 
 \begin{proof}[Solution]\let\qed\relax
-	We first prove that $f$ is bounded below on $X$,
-	that is, $\inf{f(x)} > -\infty$.
-	For the sake of contradiction, assume the opposite, that $\inf{f(x)} = -\infty$.
-	Consider $f^{-1}((-\infty, p])$ for some $p \in \R$.
-	ff
-
-	Supposedly, we just have $f^{-1}((-\infty,p])^c = f^{-1}((-\infty,p]^c) = f^{-1}((p,\infty))$
-	which is open.
-	And maybe a union?
-	And open covers over all of $X$, and can get a finite subcover.ff
-
 	Consider the family of closed sets of $f^{-1}((-\infty,p])$
 	satisfying $p > \inf{f(x)}$, call it $\mathcal{F}$.
 	First, remark that each element in $\mathcal{F}$ is nonempty,
-	otherwise $f^{-1}(-\infty,p])$ is nonempty,
+	otherwise $f^{-1}((-\infty,p])$ is empty,
 	thus there is no $x_0 \in X$ where $f(x_0) \in (-\infty,p]$
 	and so $p \leq \inf{f(x)}$, which we assumed not true.
 	Secondly, by the assumption that $f$ is lower semicontinuous,
@@ -75,13 +64,16 @@ $f^{-1}((-\infty,p])$ satisfying $p > \inf f(x)$.)}
 
 	Now, since we're in a a HTS and $X$ is compact,
 	any collection of elements of $\mathcal{F}$ has nonempty intersection,
-	by the theorem proved in class
+	by the theorem proven in class
 	(every element is a subset of $X$ and are closed,
 	and any finite collection has the finite intersection property).
 	Notably, $\bigcap \mathcal{F} \neq \emptyset$.
 	This means that there exists some $z \in X$ where $z \in \bigcap\mathcal{F}$.
 	Then, for all $p > \inf{f(x)}$, we have $z \in f^{-1}((-\infty,p])$.
-	ff
+	If $x \in X$, then $z \in f^{-1}((-\infty,f(x)])$, thus $f(z) \leq f(x)$.
+	Therefore, $f$ is bounded below on $X$, specifically
+	by $f(z)$ where $z \in X$,
+	since $f(z) \leq f(x)$ for all $x \in X$.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -292,6 +284,29 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 		\]
 		for all $v \in V$.
 		Let $v'$ be the sequence $v_n(y_n - x_n) = v'_n(y_n - x'_n)$,
+		$v_ny_n - v_nx_n = v_n'y_n - v_n'x'_n$
+		if $v'_n = v_nx_n/x'_n$ we get $v_ny_n = v_ny_nx_n/x'_n$.
+
+		Let $v'$ be the sequence defined by $v'_n = v_nx_n/x'_n$.
+
+		Let $y \in \Omega(x';V')$.
+		Then
+		\[
+			-1 < \sum_{n=1}^\infty v'_n(y_n - x'_n) < 1
+		\]
+		for all $v' \in V'$.
+		Then
+		\[
+			-1 < \sum_{n=1}^\infty v_n(y_nx_n/x'_n - x_n) < 1
+		\]
+		ff
+
+		Actually, let $v'_n = v_n(x'_n - x_n)$.
+		It is clear that $v' \in \ell^2$,
+		since ff
+
+		Or can use Cauchy-Schwartz: $|\langle v, y-x \rangle|
+		\leq \lVert v \rVert \lVert y-x \rVert$
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -315,7 +330,17 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 		Then by definition of each $U_i$ being in $\mathcal{T}$,
 		we have that there exists a finite set $V_i \subseteq \ell^2$
 		such that $\Omega(x;V_i) \subseteq U_i$.
-		ff
+		Note that by definition, if $y \in \Omega(x; V_i \cup V_j)$,
+		then $y \in \Omega(x; V_i)$ and $y \in \Omega(x; V_j)$.
+		So let $V = \cup_i V_i$. This is still a finite set,
+		since we are just unioning a finite number of finite sets.
+		Then if $y \in \Omega(x;V)$, we have that $y \in \Omega(x;V_i)$
+		for all $1 \leq i \leq N$,
+		thus $y \in U_i$.
+		Since $y \in \Omega(x;V)$ was arbitrary, we have that
+		$\Omega(x;V) \subseteq U_i$ for all $1 \leq i \leq N$,
+		thus $\Omega(x;V) \subseteq \bigcap_i^N U_i$,
+		hence $\bigcap_i^N U_i \in \mathcal{T}$ as well.
 
 		Finally, let $x, y \in \ell^2$ such that $x \neq y$.
 		We have that $y_N \neq x_N$ for some $N \in \N$.
@@ -341,56 +366,110 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 		thus $(\ell^2,\mathcal{T})$ is a HTS.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-			Let $U \in \mathcal{N}(0)$ be an arbitrary open set,
-			ie. $U \in \mathcal{T}$ such that $0 \in U$.
-			We want to show that $(U\setminus\{0\})\cap S \neq \emptyset$;
-			since $0 \not\in S$ anyway, we just need to show
-			$U \cap S \neq \emptyset$.
+		Let $U \in \mathcal{N}(0)$ be an arbitrary open set,
+		ie. $U \in \mathcal{T}$ such that $0 \in U$.
+		We want to show that $(U\setminus\{0\})\cap S \neq \emptyset$;
+		since $0 \not\in S$ anyway, we just need to show
+		$U \cap S \neq \emptyset$.
 
-			Since $0 \in U$, there exists a finite set $V\subseteq \ell^2$
-			such that $\Omega(0;V) \subseteq U$.
-			If $V = \emptyset$, then $\Omega(0;V) = \ell^3$
-			since $-1 < \langle v, y-x \rangle < 1$ is now
-			vacuously true for all $y \in \ell^2$;
-			then $\Omega(0;V) \cap S$ since $\hat{\mathbf{e}}_1 \in \ell^2 \cap S$,
-			and since $\Omega(0;V) \subseteq U$, $U \cap S \neq \emptyset$.
-			So now assume $V$ is not empty.
-			Denote the elements of $V$ as $v^{i}$ where $1 \leq i \leq k$.
-			Then since $v^i \in \ell^2$,
-			we must have that $\lim_n (v^i_n)^2 = 0$ (crude divergence test).
-			Then there exists some $N_i$ where $(v^i_{N_i})^2 < 1$ by the definition of convergence.
-			Let $N = \min_i\{N_i\}$.
-			Then $-1 < v^i_N < 1$ as well.
-			See
-			\[
-				\langle v^i, \hat{\mathbf{e}}_N \rangle =
-				\sum_{n=1}^\infty v^i_n (\hat{\mathbf{e}}_N)_n
-				= v^i_N
-			\]
-			Thus $\hat{\mathbf{e}}_N \in \Omega(0,V)$ since
-			$-1 < \langle v, \hat{\mathbf{e}}_N - 0 \rangle = v_N < 1$
-			for all $v \in V$.
-			Thus, $\hat{\mathbf{e}}_N \in \Omega(0,V) \subseteq U$.
-			Since $\hat{\mathbf{e}}_N \in S$,
-			thus shows that $S \cap U \neq \emptyset$,
-			so we are done since $U$ was arbitrary
-			(this works for any open $U \in \mathcal{N}(0)$).
+		Since $0 \in U$, there exists a finite set $V\subseteq \ell^2$
+		such that $\Omega(0;V) \subseteq U$.
+		If $V = \emptyset$, then $\Omega(0;V) = \ell^3$
+		since $-1 < \langle v, y-x \rangle < 1$ is now
+		vacuously true for all $y \in \ell^2$;
+		then $\Omega(0;V) \cap S$ since $\hat{\mathbf{e}}_1 \in \ell^2 \cap S$,
+		and since $\Omega(0;V) \subseteq U$, $U \cap S \neq \emptyset$.
+		So now assume $V$ is not empty.
+		Denote the elements of $V$ as $v^{i}$ where $1 \leq i \leq k$.
+		Then since $v^i \in \ell^2$,
+		we must have that $\lim_n (v^i_n)^2 = 0$ (crude divergence test).
+		Then there exists some $N_i$ where $(v^i_{N_i})^2 < 1$ by the definition of convergence.
+		Let $N = \min_i\{N_i\}$.
+		Then $-1 < v^i_N < 1$ as well.
+		See
+		\[
+			\langle v^i, \hat{\mathbf{e}}_N \rangle =
+			\sum_{n=1}^\infty v^i_n (\hat{\mathbf{e}}_N)_n
+			= v^i_N
+		\]
+		Thus $\hat{\mathbf{e}}_N \in \Omega(0,V)$ since
+		$-1 < \langle v, \hat{\mathbf{e}}_N - 0 \rangle = v_N < 1$
+		for all $v \in V$.
+		Thus, $\hat{\mathbf{e}}_N \in \Omega(0,V) \subseteq U$.
+		Since $\hat{\mathbf{e}}_N \in S$,
+		thus shows that $S \cap U \neq \emptyset$,
+		so we are done since $U$ was arbitrary
+		(this works for any open $U \in \mathcal{N}(0)$).
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
+		If $x \in G$, there exists a finite set $V \subseteq \ell^2$
+		where $\Omega(x;V) \subseteq G$.
+		If there exists some $v_0 \in V$ such that $\lVert v_0 \rVert =0$,
+		then $v_0$ must be the zero sequence
+		(otherwise $\lVert v_0 \rVert = \sum_n v_0^2 > 0$),
+		but then regardless of $y \in \ell^2$,
+		$\langle v_0, y-x\rangle = \sum_n 0(y_n-x_n) = 1$,
+		so $G = \ell^2$, and so $\mathbb{B}[x;1) \subseteq \ell^2 = G$
+		and we are done (note we just made $r=1>0$ here).
+
+		Now consider the remaining case when $0 < \lVert v_i \rVert$
+		where $v_i \in \{v_1, \dots, v_N\} = V$.
+		Let $r = \min_i\{\lVert v_i \rVert^{-1}\}$.
+		Note that since is just the minimum of a finite number of values,
+		all greater than zero, we have $r > 0$ as well.
+		Let $y \in \mathbb{B}[x;r)$.
+		Then $\lVert y - x \rVert < r \leq \lVert v \rVert^{-1}$ for all $v \in V$.
+		Thus $\lVert v \rVert\lVert y - x \rVert < 1$.
+		Now using Cauchy-Schwartz (which we proved for this norm in homework 7),
+		we have $|\langle v, y-x \rangle \leq \lVert v \rVert\lVert y - x \rVert < 1$,
+		but this is equivalent to $-1 < \langle v, y-x \rangle < 1$,
+		so $y \in \Omega(x;V)$ (since this was true for any $v \in V$),
+		thus $y \in G$.
+		Since $y \in \mathbb{B}[x;r)$ was arbitrary,
+		this means $\mathbb{B}[x;r) \subseteq G$,
+		as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		It is sufficient to show that $\mathbb{B}[0;1]^c
+		= \{y \in \ell^2 \colon \lVert y \rVert > 1\}$ is open.
+		Let $x \in \mathbb{B}[0;1]^c$.
+		Consider $y \in \Omega(x;V)$ (ff don't forget to choose $V$).
+		Then $|\langle v, y-x \rangle| < 1$ for all $v \in V$.
+		ff
+
+		we want to show that $\lVert y \rVert > 1$.
+		It would be sufficient to show that $|\langle v, y-x \rangle|/\lVert v \rVert > 1$.
+		So we want
+		\[
+			\left\lvert\sum_{n=1}^\infty v_n(y_n-x_n) \right\rvert
+			 > \sqrt{\sum_{n=1}^\infty v^2_n} > 0
+		\]
+		\[
+			\left\lvert\sum_{n=1}^\infty v_n(y_n-x_n) \right\rvert^2
+			 > \sum_{n=1}^\infty v^2_n > 0
+		\]
+
+
+		Problem 8 of last homework
+		(it was a bonus problem, but solutions were still posted):
+		if $A,B$ are closed and one of them are bounded, then $A + B$ is closed.
+		$\mathbb{B}[0,1] = \{y \in \ell^2 \colon \lVert y \rVert \leq 1\}$.
+		oh but this was for $A,B \subseteq \R$.
+
+		Boundary point??
+		We claim $\partial \mathbb{B}[0;1]$ are the $y \in \ell^2$
+		such that $\lVert y \rVert = 1$.
+		This means $\sum_n y_n^2 = 1$.
+		Let $x \in \Omega$... neighbourhoods?
+		Show that $\Omega(y,V)$ has some sequences $z$ $\lVert z \rVert > 1$
+		and $\lVert z \rVert \leq 1$ (but this is trivial from $y$).
 		ff
 	\end{proof}
-	\item \begin{proof}[Solution]\let\qed\relax
-		ff Minkowski sum?
-
-		Recap of what still needs to be done:
-		\begin{itemize}
-			\item Wrapping up Q1: bounded case and end of attaining minimum
-			\item All of Q2 (with contradiction)
-			\item 3(b) (closed implies closed)
-			\item 4(a), 4(b) with the second two conditions for HTS,
-				4(d), 4(e)
-		\end{itemize}
-	\end{proof}
 \end{enumerate}
+Recap of what still needs to be done:
+	\begin{itemize}
+		\item Evan Chen Q2
+		\item 4(a), 4(e)
+	\end{itemize}
 \clearpage
 \end{document}
