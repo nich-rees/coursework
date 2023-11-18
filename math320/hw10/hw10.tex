@@ -201,23 +201,51 @@ $p_1 \colon \mathcal{P}(\R^2) \to \mathcal{P}(\R)$ by
 		so $p_1(S)$ is bounded.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		It must. Consider some $x_1 \in p_1(S)^c$,
-		and some open set $U \in \mathcal{N}(x_1)$.
-		We can write this explicitly as $U = \mathbb{B}[x_1;r)$
-		for some $r>0$,
-		or $U = \{y_1 \in \R \colon |y_1 - x_1| < r\}$.
-		We have $p_1^{-1}(U) = $
-		We want to show that $U \subseteq p_1(S)^c$.
-		ff
+		This is not true. We provide the counter-example
+		$S = \{(2^{-n}, 2^n) \in \R^2 \colon n \in \N\}$.
+
+		We first prove that $S$ is closed.
+		Note that $S' = \emptyset$.
+		To see this, for the sake of contradiction, let $s \in S'$.
+		Then for some sequence $s_n$ of distinct elements of $S$,
+		we have $\lim_{n\to\infty} s_n = s$ (by the proposition proven in class).
+		Unraveling the definition of the limit, this means that for
+		any $\ep > 0$, there exists some $N \in \N$ where $\forall n \geq N$,
+		we have $d(s,s_n) < \ep$.
+		For the sake of contradiction, assume that this is true;
+		then let $\ep = \frac12$, which gives us some $N$
+		where $d(s,s_n) < \frac12$ when $n \geq N$.
+		But note that for any $s_n, s_{n+1} \in S$, since $s_n \neq s_{n+1}$,
+		we have that $d(s_n, s_{n+1}) > 2$
+		(by construction, since $2 \leq 2^{n+1} - 2^n =
+		y_{s_{n+1}} - y_{s_{n+1}} = \sqrt{(y_{s_{n+1}} - y_{s_{n+1}})^2}
+		\leq \sqrt{(y_{s_{n+1}} - y_{s_{n+1}})^2 + (x_{s_{n+1}} - x_{s_{n+1}})^2} = d(s_n,s_n+1)$).
+		Thus $2 \leq d(s_{n+1},s_n) \leq d(s,s_n) + d(s,s_{n+1}) \leq \frac12 + d(s,s_{n+1})
+		\implies \frac32  < d(s,s_{n+1})$.
+		But this contradicts our assumption, since $n+1 > n \geq N$,
+		but $d(s,s_{n+1} > \frac32 > \frac12 = \ep$.
+		Thus, there are no limit points of $S$, so $S' = \emptyset$.
+		
+		Now recall the theorem proven in class, $\overline{S} = S \cup S'$.
+		Since $S' = \emptyset$, this leaves us $\overline{S} = S$.
+		But recall that this is true only if $S$ is closed.
+
+		We now prove that $p_1(S)$ is not closed.
+		Note that $p_1(S) = \{2^{-n} \colon n \in \N\}$.
+		See that $0 \in p_1(S)'$ but $0 \not\in p_1(S)$.
+		The second of these is obvious, $0 < 2^{-n}$ for all $n \in \N$.
+		To see that $0$ is a limit point,
+		we have $\lim_{n\to\infty} 2^{-n} = 0$ (obviously, we are in $\R$),
+		and $2^{-n} \in p_1(S)$ are distinct points,
+		thus $0 \in p_1(S)'$ (by our proposition in metric spaces).
+		Thus, $p_1(S) \neq p_1(S) \cup p_1(S)' = \overline{p_1(S)}$.
+		But this is true only if $p_1(S)$ is not closed.
+		Hence, $S$ is closed but $p_1(S)$ is not closed.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		It must.
-		By the Heine-Borel Theorem,
-		since $S$ is compact in $\R^2$, we have that $S$ is closed and bounded.
-		Then by parts (a) and (b) of this problem,
-		$p_1(S)$ must also be closed and bounded.
-		Hence, by Heine-Borel again,
-		we have that $p_1(S)$ is compact.
+		It must. Assume that $S$ is compact.
+		Consider an open cover $\mathcal{G}$ of $p_1(S)$.
+		ff
 	\end{proof}
 \end{enumerate}
 \clearpage
