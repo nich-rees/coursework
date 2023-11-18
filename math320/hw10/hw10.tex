@@ -94,74 +94,23 @@ for every pair of points $x,y \in K$ obeying $d(x,y) < r$,
 some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
 
 \begin{proof}[Solution]\let\qed\relax
-	Let $G_1, G_2, \dots, G_N$ be the finite subcover of $K$
-	such that $G_i \in \mathcal{G}$ for all $i \in 1,2,\dots,N$
-	and $K \subseteq \bigcup_{1\leq i \leq N}G_i$,
-	which we know exists from the compactness of $K$.
-	Define $I_{i,j} := G_i \cap G_j$ where $1 \leq i < j \leq N$.
-	Note then that $I_{i,j}$ is open as well.
-	For each $I_{i,j}$, pick some $x_{i,j} \in I_{i,j}$ if $I_{i,j} \neq \emptyset$.
-	Then, since $X$ is a metric space and $I_{i,j}$ is an open set,
-	we must have that there exists some $r_{i,j} > 0$
-	such that $\mathbb{B}[x_{i,j};r_{i,j}) \subseteq I_{i,j}$
-	(if $I_{i,j} = \emptyset$, just let $r_{i,j} = 1$).
-	Let $r = \min_{1\leq i<j\leq N}\{r_{i,j}\}$.
-	Since there are only finitely many $r_{i,j}$, all of them greater than $0$,
-	we must have $r > 0$ as well.
-	
-	Now consider any $x,y \in K$ such that $d(x,y) < r$.
-	Consider $\mathbb{B}[x;r)$.
-	By our distance condition, we have $y \in \mathbb[x;r)$.
-	It is sufficient to show now that there exists some $G \in \mathcal{G}$
-	such that $\mathbb{B}[x;r) \subseteq G$.
-	Since $\{G_i\}_{1\leq i\leq N}$ is a covering of all of $K$,
-	there exists some $G_x \in \{G_i\}_{1\leq i\leq N}$ such that $x \in G_x$.
-	If $\mathbb{B}[x;r) \subseteq G_x$, we are done.
-	For the sake of contradiction, assume then that $\mathbb{B}[x;r) \not\subseteq G_x$.
-	hmm it's not this, it's either in $G_x$, or in $G'_x$...
-	consider the $G_i$ for which $x$ is in?
+	For the sake of contradiction,
+	assume that for all $r>0$, there are some $x_r,y_r \in K$ such that $d(x_r,y_r) <r$
+	but for any $G \in \mathcal{G}$, $x_r,y_r$ are not both in $G$.
+	Note that 
+	Since $\mathcal{G}$ covers $K$,
+	we have that both $x_r,y_r$ are in some $G \in \mathcal{G}$,
+	so have $x \in G_x$ and $y \in G_y$ but $G_x \neq G_y$.
 
-	I don't even have that $\mathbb{B}[x;r) \subseteq K$.
-	Hmm, so we don't want to lose $y$, because we'll always have
-	$x \in \partial K$ (since $K$ is closed) violate our condition with the ball.
-	ff
+	Hmm, have a two sequences go towards each other.
 
-	So let $x \in G_x$ and $y \in G_y$.
-	We claim that either $x \in G_y$ or $y \in G_x$
-	(this is trivial if $G_x = G_y$, so we now assume that $G_x \neq G_y$).
-	For the sake of contradiction, assume this is false:
-	$x, y \not\in G_x \cap G_y$.
-	Then by construction, for some $x_{x,y} \in G_x \cap G_y$,
-	$x,y \not\in \mathbb{B}[x_{x,y},r)$.
-	Then $d(x_{x,y},x) > r$ and $d(x_{x,y},y) > r$.
-	We hav $d(x,y) \leq d(x_{x,y},x) + d(x_{x,y},y)$.
-	Hmm... the thing on the right is bounded below by $2r$,
-	and the thing on the left is bounded above by $r$.
-	We want to use this inequality in a different way I think,
-	like $d(x_{x,y},x) < d(x,y)$ and $d(x_{x,y},y) < d(x,y)$ somehow.
-	Maybe something to do with them being in the same $G_i$?
+	TFAE: $K$ is compact and every sequence $(x_n)$ in $K$ has
+	a convergent subsequence whose limit lies in $K$.
 
-	So we have $d(x_{x,y}, x) < d(x,y) + d(x_{x,y},y)$.
-	But $d(x_{x,y},y) < d(x,y) + d(x_{x,y},x)$, thus
-	$d(x_{x,y}, x) < 2d(x,y) + d(x_{x,y},x) \implies 0 < 2d(x,y)$ trivially.
-	ff
-	So the claim I want to make is that the intersection between
-	two open sets in a metric space is closer to each other than
-	they are to each other.
+	TFAE: $A$ is an open set and for every $x \in A$ and every sequence
+	$(x_n)$ obeying $x_n \to x$, one has $x_n \in A$ for all $n$ sufficiently large.
 
-
-	Hmm, we might need to define $r$ in terms of points that are
-	not in the same $G_i$, but are close to each other.
-	Think of a square donut that his a tiny slit that doesn't touch,
-	and an open cover of two sets that intersect on the non-slit side.
-
-	So it seems the problem is when I fix the slit,
-	I get a problem with the intersection.
-	When I fix the intersection, I get a problem with the slit.
-	I will think about this later.
-
-
-	So Tighe said to do a proof by contradiction.
+	Evan has a solution ff
 \end{proof}
 \clearpage
 ~\clearpage
@@ -243,13 +192,59 @@ $p_1 \colon \mathcal{P}(\R^2) \to \mathcal{P}(\R)$ by
 		Hence, $S$ is closed but $p_1(S)$ is not closed.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		It must. Assume that $S$ is compact.
+		Now, assume that $S$ is compact.
 		Consider an open cover $\mathcal{G}$ of $p_1(S)$.
-		ff
+		If $G \in \mathcal{G}$, extract the ``open column" corresponding
+		to $G$, namely $G^2 = \{(x,y) \in \R^2 \colon x \in G, y \in \R\}$.
+		Notice two things:
+		each $G^2$ is open, and
+		$\mathcal{G}^2$, the collection of all $G^2$ such that $G \in \mathcal{G}$,
+		covers $S$.
+
+		To see the first, let $g \in G^2$ and denote $g = (x_0, y_0)$.
+		Since $x_0 \in G$, we have that there exists $r$
+		such that $\mathbb{B}_1[x_0,r) = \{x \in \R \colon |x_0-x|<r\} \subseteq G$
+		by the fact that $G$ is open.
+		We claim that $\mathbb{B}_2[g,r) \subset G^2$ as well;
+		for the sake of contradiction, assume there is
+		$(x_1,y_1) \in \mathbb{B}_2[g,r)$ but $(x_1,y_1) \not\in G^2$.
+		Then $x_1 \not\in G$ so $x_1 \not\in \mathbb{B}_1[x_0,r)$,
+		which give us $|x_0 - x_1| \geq r$.
+		But then $\sqrt{(x_1-x_0)^2 + (y_1 - y_0)^2} \geq \sqrt{r^2 (y_1 - y_0)^2}
+		\geq \sqrt{r^2} = r$,
+		which contradicts the fact that $(x_1,y_1) \in \mathbb{B}_2[g,r)$.
+		Thus, $\mathbb{B}_2[g,r) \subset G^2$,
+		and since $g \in G$ was arbitrary, this proves that $G^2$ is open.
+		
+		To see the second claim, that $\mathcal{G}^2$ covers $S$,
+		let $s = (x_0,y_0) \in S$.
+		Then since $\mathcal{G}$ covers $p_1(S)$,
+		we have $p_1(s) = x_0 \in G$ for some $G \in \mathcal{G}$.
+		Then $(x_0,y_0) \in G^2$ by definition,
+		and $G^2 \in \mathcal{G}^2 \subseteq \bigcup_{G^2 \in \mathcal{G}^2} G^2$.
+		Thus $s \in \bigcup_{G^2 \in \mathcal{G}^2} G^2$,
+		so $\mathcal{G}^2$ covers $S$ since $s \in S$ was arbitrary.
+
+		Hence, $\mathcal{G}^2$ is an open cover of $S$.
+		By the compactness of $S$, there exists a finite subcover of $\mathcal{G}^2$,
+		which we can denote as $G_1^2, G_2^2, \dots, G_N^2$.
+		So $S \subseteq \bigcup_i G_i^2$.
+		But recall that each $G_i^2 \in \mathcal{G}^2$ had some corresponding
+		$G \in \mathcal{G}$ by definition
+		(recall that the $x$-values of each $G^2$ were determined by some $G$),
+		so we have a finite collection of open sets $G_1,G_2,\dots,G_N \in \mathcal{G}$.
+		We prove that this is a finite subcover of $p_1(S)$.
+		Let $x_0 \in p_1(s)$.
+		Then $\exists y_0$ such that $(x_0,y_0) \in S$.
+		Then $(x_0,y_0) \in G^2_j$ for some $1 \leq j \leq N$.
+		But then by definition of $G^2_j$, $x_0 \in G_j$.
+		Therefore, since $x_0 \in p_1(S)$ was arbitrary,
+		$p_1(S) \subseteq \bigcup_i G_i$,
+		hence $G_1,\dots,G_N \in \mathcal{G}$ is a finite subcover,
+		thus $p_1(S)$ is compact.
 	\end{proof}
 \end{enumerate}
 \clearpage
-~\clearpage
 
 \subsection*{Problem 4}
 {\it Recall the set $\ell^2$ from HW07 Q3,
@@ -296,6 +291,7 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 			-1 < \sum_{n = 1}^\infty v_n(x'_n - x_n) < 1
 		\]
 		for all $v \in V$.
+		Let $v'$ be the sequence $v_n(y_n - x_n) = v'_n(y_n - x'_n)$,
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
@@ -322,7 +318,27 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 		ff
 
 		Finally, let $x, y \in \ell^2$ such that $x \neq y$.
-		ff this one doesn't look bad, we use part (a)
+		We have that $y_N \neq x_N$ for some $N \in \N$.
+		Let $v \in \ell^2$ be defined by
+		$v_N = 2(y_N - x_N)^{-1}$ and $v_n = 0$ for all other $n$.
+		Define $V = \{v\}$.
+		We claim that $x\in\Omega(x;V)$ and $y\in\Omega(y;V)$ are disjoint
+		(and they are open sets by part (a) of this problem).
+		Let $x' \in \Omega(x;V)$.
+		It is sufficient to show $x' \not\in \Omega(y;V)$.
+		We have $-1 < \langle v, x' - x \rangle =
+		\sum_n v_n(x'_n - x_n) = 2(x'_N - x_N)/(y_N - x_N) < 1$,
+		or $0 \leq |2(x'_N - x_N)/(y_N - x_N)| < 1$,
+		so $0 \leq |x'_N - x_N| < \frac12|y_N - x_N|$.
+		Note $|y_N - x_N| \leq |x'_N - y_N| + |x'_N - x_N| < |x'_N - y_N| + \frac12|y_N - x_N|$
+		thus $\frac12|y_N - x_N| < |x'_N - y_N|$.
+		But then $1 < |2(x'_N - y_N)/(y_N - x_N)|$
+		and $\sum_n v_n(x'_n - y_n) = 2(x'_N - y_N)/(y_N-x_N)$.
+		Thus $\sum_n v_n(x'_n - y_n) < -1$ or $\sum_n v_n(x'_n - y_n) > 1$,
+		in either case, $x' \not\in \Omega(y;V)$.
+
+		This satisfies all the conditions for a HTS,
+		thus $(\ell^2,\mathcal{T})$ is a HTS.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 			Let $U \in \mathcal{N}(0)$ be an arbitrary open set,
@@ -364,7 +380,7 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		ff Minkowski sum?
 
 		Recap of what still needs to be done:
 		\begin{itemize}
