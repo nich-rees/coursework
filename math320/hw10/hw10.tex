@@ -87,22 +87,41 @@ some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
 
 \begin{proof}[Solution]\let\qed\relax
 	For the sake of contradiction,
-	assume that for all $r>0$, there are some $x_r,y_r \in K$ such that $d(x_r,y_r) <r$
-	but for any $G \in \mathcal{G}$, $x_r,y_r$ are not both in $G$.
-	Note that 
-	Since $\mathcal{G}$ covers $K$,
-	we have that both $x_r,y_r$ are in some $G \in \mathcal{G}$,
-	so have $x \in G_x$ and $y \in G_y$ but $G_x \neq G_y$.
-
-	Hmm, have a two sequences go towards each other.
-
-	TFAE: $K$ is compact and every sequence $(x_n)$ in $K$ has
-	a convergent subsequence whose limit lies in $K$.
-
-	TFAE: $A$ is an open set and for every $x \in A$ and every sequence
-	$(x_n)$ obeying $x_n \to x$, one has $x_n \in A$ for all $n$ sufficiently large.
-
-	Evan has a solution ff
+	assume that for all $r>0$, there are some $x, y \in K$ such that
+	$d(x,y) < r$ but for any $G \in \mathcal{G}$, $x,y$ are not both in $G$.
+	This is equivalent to saying that for any $r > 0$,
+	there is some $x \in K$ such that
+	$\mathbb{B}[x;r) \not\subseteq G$ for any $G \in \mathcal{G}$.
+	Let $r_n = \frac{1}{n}$,
+	which gives us $x_n$ where $\mathbb{B}[x_n;r_n) \not\subseteq G$
+	for any $G \in \mathcal{G}$.
+	Since $K$ is compact,
+	we can take a subsequence $x_{n_k}$ which converges to some value,
+	call it $x \in K$.
+	Since $x \in K$, there is some $G' \in \mathcal{G}$ where $x \in G'$.
+	Let $\ep > 0$ and consider the ball $\mathbb{B}[x;\ep)$.
+	By the Archimedean property, there is some $n$ such that
+	$n\ep>2$.
+	Let $j_1$ be any integer such that $n_{j_1} > n$ (where $n_{j_1}$ is a term in our subsequence),
+	so $\ep > \frac{2}{n_{j_1}}$.
+	Since $x_{n_k} \to x$, we know there exists some $j > j_1$ such that
+	$d(x_{n_j},x) < \frac{1}{n_{j_1}}$.
+	Thus $d(x_{n_j},x) + \frac{1}{n_j} < \frac{1}{n_{j_1}} + \frac{1}{n_{j_1}} < \ep$.
+	So for any $y \in \mathbb{B}[x_{n_j},\frac{1}{n_j})$,
+	we have $d(x,y) \leq d(x_{n_j},x) + d(x_{n_j},y) \leq d(x_{n_j},x) + d(x_{n_j},y) < \ep$,
+	thus $y \in \mathbb{B}[x;\ep)$.
+	This $y$ was arbitrary in the ball, so
+	$\mathbb{B}[x_{n_j};\frac{1}{n_j}) \subseteq \mathbb{B}[x;\ep)$.
+	But recall that our assumption was that $\mathbb{B}[x_{n_j};\frac{1}{n_j})$
+	is not contained in any open set, specifically $G'$ here.
+	Thus $\mathbb{B}[x;\ep) \not\subseteq G'$.
+	But this is true for any $\ep>0$,
+	so there are no open balls around $x$ within $G'$,
+	even though $x \in G'$, thus $G'$ can't be open.
+	But this violates our assumption that $G'$ is an open set.
+	Hence, contradiction,
+	and we get that there does exist an $r>0$ where any $x,y \in K$
+	such that $d(x,y)<r$ does gaurantee that $x,y \in G \in \mathcal{G}$.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -307,6 +326,34 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 
 		Or can use Cauchy-Schwartz: $|\langle v, y-x \rangle|
 		\leq \lVert v \rVert \lVert y-x \rVert$
+		ff
+
+		Consider $\R^2$, and $\Omega(0, \{(1,1)\})$.
+		Then we are looking for a vectors of the form $(x_1,x_2)$
+		where $-1 < x_1 + x_2 < 1$.
+		These are vectors of the form...
+
+		so these are the vectors that are very orthogonal to $v$
+		after subtrating by our intial vector.
+		So if we have 
+
+		Note that $\Omega(x;\{v_1,\dots,v_N\}) =
+		\Omega(x;\{v_1\}) \cap \cdots \cap \Omega(x;\{v_N\})$
+		by definition (since $y \in \Omega(x;\{v_1,\dots,v_N\})$
+		if and only if $|\langle v_i, y-x\rangle| < 1 \Leftrightarrow y \in \Omega(x;\{v_i\})$
+		for each $1 \leq i \leq N$).
+		If $x' \in \Omega(x;V)$, then for any $v \in V$,
+		we have $x' \in \Omega(x;\{v\})$.
+		Define $v'$ by defining component-wise $v'_n = |\langle v, x' - x\rangle|^{-1}v_n$.
+		Then we claim that $\Omega(x';\{v'\}) \subseteq \Omega(x;\{v\})$.
+		To see this, let $y \in \Omega(x';\{v'\})$.
+		Then $1> |\langle v', y-x'\rangle| =
+		|\langle \frac{1}{|\langle v, x' - x\rangle|}v, y-x'\rangle|
+		= \frac{1}{|\langle v, x' - x\rangle|}|\langle v, y-x'\rangle|$,
+		so $|\langle v,x'-x\rangle| > |\langle v, y-x' \rangle|$.
+		ff
+
+		We're aiming to show that $|\langle v, y-x \rangle|<1$.
 		ff
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
