@@ -89,7 +89,7 @@ some open set $G \in \mathcal{G}$ contains both $x$ and $y$.}
 	For the sake of contradiction,
 	assume that for all $r>0$, there are some $x, y \in K$ such that
 	$d(x,y) < r$ but for any $G \in \mathcal{G}$, $x,y$ are not both in $G$.
-	This is equivalent to saying that for any $r > 0$,
+	This impiles that for any $r > 0$,
 	there is some $x \in K$ such that
 	$\mathbb{B}[x;r) \not\subseteq G$ for any $G \in \mathcal{G}$.
 	Let $r_n = \frac{1}{n}$,
@@ -293,68 +293,38 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Let $x' \in \Omega(x;V)$.
-		Want to show there exists a finite set $V' \subseteq \ell^2$
-		such that $\Omega(x';V') \subseteq \Omega(x,V)$.
-		Then $-1 < \langle v, x' - x \rangle < 1$ for all $v \in V$.
-		This is equivalent to
-		\[
-			-1 < \sum_{n = 1}^\infty v_n(x'_n - x_n) < 1
-		\]
-		for all $v \in V$.
-		Let $v'$ be the sequence $v_n(y_n - x_n) = v'_n(y_n - x'_n)$,
-		$v_ny_n - v_nx_n = v_n'y_n - v_n'x'_n$
-		if $v'_n = v_nx_n/x'_n$ we get $v_ny_n = v_ny_nx_n/x'_n$.
-
-		Let $v'$ be the sequence defined by $v'_n = v_nx_n/x'_n$.
-
-		Let $y \in \Omega(x';V')$.
-		Then
-		\[
-			-1 < \sum_{n=1}^\infty v'_n(y_n - x'_n) < 1
-		\]
-		for all $v' \in V'$.
-		Then
-		\[
-			-1 < \sum_{n=1}^\infty v_n(y_nx_n/x'_n - x_n) < 1
-		\]
-		ff
-
-		Actually, let $v'_n = v_n(x'_n - x_n)$.
-		It is clear that $v' \in \ell^2$,
-		since ff
-
-		Or can use Cauchy-Schwartz: $|\langle v, y-x \rangle|
-		\leq \lVert v \rVert \lVert y-x \rVert$
-		ff
-
-		Consider $\R^2$, and $\Omega(0, \{(1,1)\})$.
-		Then we are looking for a vectors of the form $(x_1,x_2)$
-		where $-1 < x_1 + x_2 < 1$.
-		These are vectors of the form...
-
-		so these are the vectors that are very orthogonal to $v$
-		after subtrating by our intial vector.
-		So if we have 
-
 		Note that $\Omega(x;\{v_1,\dots,v_N\}) =
 		\Omega(x;\{v_1\}) \cap \cdots \cap \Omega(x;\{v_N\})$
-		by definition (since $y \in \Omega(x;\{v_1,\dots,v_N\})$
+		by definition (since $y$ is in the set $\Omega(x;\{v_1,\dots,v_N\})$
 		if and only if $|\langle v_i, y-x\rangle| < 1 \Leftrightarrow y \in \Omega(x;\{v_i\})$
 		for each $1 \leq i \leq N$).
 		If $x' \in \Omega(x;V)$, then for any $v \in V$,
 		we have $x' \in \Omega(x;\{v\})$.
-		Define $v'$ by defining component-wise $v'_n = |\langle v, x' - x\rangle|^{-1}v_n$.
+		Define $v'$ by defining component-wise $v'_n = (1-|\langle v, x' - x\rangle|)^{-1}v_n$.
+		Note that $v' \in \ell^2$ still, since constant
+		multiplication does not change convergence
+		(and also note that $(1-|\langle v, x' - x\rangle|)^{-1}$
+		is positive).
 		Then we claim that $\Omega(x';\{v'\}) \subseteq \Omega(x;\{v\})$.
 		To see this, let $y \in \Omega(x';\{v'\})$.
 		Then $1> |\langle v', y-x'\rangle| =
-		|\langle \frac{1}{|\langle v, x' - x\rangle|}v, y-x'\rangle|
-		= \frac{1}{|\langle v, x' - x\rangle|}|\langle v, y-x'\rangle|$,
-		so $|\langle v,x'-x\rangle| > |\langle v, y-x' \rangle|$.
-		ff
-
-		We're aiming to show that $|\langle v, y-x \rangle|<1$.
-		ff
+		|\langle \frac{1}{1-|\langle v, x' - x\rangle|}v, y-x'\rangle|
+		= \frac{1}{1-|\langle v, x' - x\rangle|}|\langle v, y-x'\rangle|$,
+		so $1-|\langle v,x'-x\rangle| > |\langle v, y-x' \rangle|$.
+		By the triangle inequality, we have
+		\[
+			|\langle v, y-x \rangle|  = |\langle v, y-x'\rangle + \langle v, x' - x \rangle|
+			\leq |\langle v, y-x'\rangle| + |\langle v, x' - x \rangle|
+			\leq 1 - |\langle v, x' - x\rangle| + |\langle v, x' - x \rangle| < 1
+		\]
+		Where we can rearrange our summation (ie. pull out the other inner product)
+		because our series is absolutely convergent on account
+		of all of them being in $\ell^2$.
+		Thus $y \in \Omega(x;\{v\})$.
+		We can repeat this process for each $v \in V$
+		(since our $v$ was arbitrary)
+		to show that $y \in \Omega(x;\{v_1\}) \cap \cdots \cap \Omega(x;\{v_N\})$
+		thus $y \in \Omega(x;V)$ as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		We have that $\emptyset \in \mathcal{T}$,
@@ -477,46 +447,42 @@ that $x \in \Omega(x;V) \subseteq G$ for some \emph{finite set} $V \subseteq \el
 		as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		It is sufficient to show that $\mathbb{B}[0;1]^c
-		= \{y \in \ell^2 \colon \lVert y \rVert > 1\}$ is open.
+		It is sufficient to show that $\mathbb{B}[0;1]^c$ is open,
 		Let $x \in \mathbb{B}[0;1]^c$.
-		Consider $y \in \Omega(x;V)$ (ff don't forget to choose $V$).
-		Then $|\langle v, y-x \rangle| < 1$ for all $v \in V$.
-		ff
-
-		we want to show that $\lVert y \rVert > 1$.
-		It would be sufficient to show that $|\langle v, y-x \rangle|/\lVert v \rVert > 1$.
-		So we want
+		Thus, $\lVert x \rVert > 1 \implies \lVert x \rVert > 1$.
+		Let $0 < \lambda \in \R$ to be chosen later and let $V = \{\lambda x\}$.
+		Consider $y \in \Omega(x; V)$.
+		By the triangle inequality (proven in HW7), we have
 		\[
-			\left\lvert\sum_{n=1}^\infty v_n(y_n-x_n) \right\rvert
-			 > \sqrt{\sum_{n=1}^\infty v^2_n} > 0
+			1 > |\langle \lambda x, y - x \rangle|
+			= |\langle \lambda x, y\rangle - \langle \lambda x, x\rangle|
+			\geq \lambda\lVert x \rVert^2 - \langle \lambda x, y \rangle
 		\]
+		Which gives us $\lambda\lVert x \rVert^2 - 1 < \langle \lambda x, y \rangle$.
+		By Cauchy-Schwartz (also proven in HW7), we have
 		\[
-			\left\lvert\sum_{n=1}^\infty v_n(y_n-x_n) \right\rvert^2
-			 > \sum_{n=1}^\infty v^2_n > 0
+			\lambda\lVert x \rVert^2 - 1 \leq \langle \lambda x, y \rangle \leq
+			\lambda \lVert x \rVert \lVert y \rVert
 		\]
-
-
-		Problem 8 of last homework
-		(it was a bonus problem, but solutions were still posted):
-		if $A,B$ are closed and one of them are bounded, then $A + B$ is closed.
-		$\mathbb{B}[0,1] = \{y \in \ell^2 \colon \lVert y \rVert \leq 1\}$.
-		oh but this was for $A,B \subseteq \R$.
-
-		Boundary point??
-		We claim $\partial \mathbb{B}[0;1]$ are the $y \in \ell^2$
-		such that $\lVert y \rVert = 1$.
-		This means $\sum_n y_n^2 = 1$.
-		Let $x \in \Omega$... neighbourhoods?
-		Show that $\Omega(y,V)$ has some sequences $z$ $\lVert z \rVert > 1$
-		and $\lVert z \rVert \leq 1$ (but this is trivial from $y$).
-		ff
+		Now we can fix our $\lambda$ to be $\frac{1}{\lVert x \rVert(\lVert x \rVert - 1)}$
+		(this is defined since $\lVert x \rVert \neq 1$).
+		Subbing it in, wee arrive at
+		\[
+			\lVert x \rVert/(\lVert x \rVert - 1) - 1 \leq
+			\lVert y \rVert/(\lVert x \rVert - 1)
+			\implies
+			\lVert x \rVert - (\lVert x \rVert - 1) \leq \lVert y \rVert
+		\]
+		And so $1 \leq \lVert y \rVert$
+		(where we have used the fact that $\lVert x \rVert > 1$
+		so the inequality was not flipped).
+		Thus, $y \in \mathbb{B}[0;1]^c$,
+		and since $y$ was arbitrary, this implies that
+		$\Omega(x;V) \subseteq \mathbb{B}[0;1]^c$.
+		Since $x$ was any point in $\mathbb{B}[0;1]^c$,
+		this shows that $\mathbb{B}[0;1]^c \in \mathcal{T}$ is open.
+		Thus, $\mathbb{B}[0;1]$ is closed, as desired.
 	\end{proof}
 \end{enumerate}
-Recap of what still needs to be done:
-	\begin{itemize}
-		\item Evan Chen Q2
-		\item 4(a), 4(e)
-	\end{itemize}
 \clearpage
 \end{document}
