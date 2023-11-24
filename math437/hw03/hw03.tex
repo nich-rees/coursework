@@ -7,7 +7,7 @@
 \pagestyle{fancy}
 
 \lhead{Math 437}
-\chead{Homework 2}
+\chead{Homework 3}
 \rhead{Nicholas Rees, 11848363}
 \cfoot{Page \thepage}
 
@@ -36,36 +36,84 @@ Prove that there exist infinitely many $n \in \N$
 such that $2023 \mid a_n$.
 }
 \begin{proof}[Solution]\let\qed\relax
+	Let
+	\[
+		V_n = (\overline{a_{n+2}}, \overline{a_{n+1}}, \overline{a_{n}},
+		\overline{5^n}, \overline{n})
+	\]
+	where $\overline{m}$ is the equivalence class of $m$ modulo $2023$.
 	Note that there are only $2023^5$ permutations of
-	$(a_{n+2}, a_{n+1}, a_{n}, 5^n, n)$ when each element
-	is considered modulo $2023$.
-	Furthermore, $a_{n+2}\,(\mathrm{mod}\,2023), a_{n+1}\,(\mathrm{mod}\,2023),
-	a_{n}\,(\mathrm{mod}\,2023), 5^n\,(\mathrm{mod}\,2023), n\,(\mathrm{mod}\,2023)$
-	determines the value $a_{n+3}\,(\mathrm{mod}\,2023)$,
-	since ff (need to consider $n \implies n^2$).
+	\newline$(a_{n+2}, a_{n+1}, a_{n}, 5^n, n)$ when each element
+	is considered modulo $2023$,
+	thus there are only $2023^5$ possible values of $V_n$.
+	Furthermore, $V_n$ determines uniquely $V_{n+1}$:
+	if $V_n =
+	(\overline{v_1},\overline{v_2},\overline{v_3},\overline{v_4},\overline{v_5})$, then
+	\begin{align*}
+		n+1 &\equiv v_5 + 1 \,(\mathrm{mod}\, 2023)\\
+		5^{n+1} &\equiv 5v_4 \,(\mathrm{mod}\, 2023)\\
+		a_{n+1} &\equiv v_2 \,(\mathrm{mod}\, 2023)\\
+		a_{n+2} &\equiv v_1 \,(\mathrm{mod}\, 2023)\\
+		a_{n+3} &\equiv v_4v_1 + v_5^2v_2 + 11v_3 \,(\mathrm{mod}\, 2023)
+	\end{align*}
+	which determines $V_{n+1}$.
+	Hence $V_n$ determines uniquely $V_{n+i}$ for all $i \in \N$
+	(since $V_{n+i}$ is determined by $V_{n+i-1}$,
+	and $V_{n+i-1}$ is determined by $V_{n+i-2}$, etc.
+	until we get that it is determined by $V_{n}$).
+	Hence, if $V_n = V_m$, we must have $V_{n+i} = V_{m+i}$
+	for all $i \in \N$.
 
-	Let $k = 2023^5 + 1$, and consider the $a_k$.
-	By the pigeon-hole principle, there must exist some $m$ such that
-	$(a_{k+2},a_{k+1},a_{k},5^k,k) = (a_{m+2},a_{m+1},a_{m},5^m,m)$
-	(recall that these are all modulo $2023$),
-	and thus we must have that $a_{k+i} = a_{m+i}$ for all $i \in \N$,
-	as we proved before.
+	Let $k = 2023^5 + 1$, and consider $V_k$.
+	By the pigeon-hole principle, there must exist some $m \leq 2023^5$ such that
+	$V_k = V_m$ and thus we must have that
+	$V_{k+i} = V_{m+i}$ for all $i \in \N$, as we proved before.
+	Hence, $a_{k+i} \equiv a_{m+i}\, (\mathrm{mod} \, 2023)$ for all $i \in \N$,
+	since these are just the third element of our $V$'s,
+	which must be equal for equality of $V_{k+i}$ and $V_{m+i}$.
 	Thus, $(a_n)$ is periodic with period $p = k - m$.
 
 	Note that $a_0 = 0$, thus, it is sufficient to show that
-	$a_0 = a_{0+p}$.
+	$\overline{a_0} = \overline{a_{0+p}}$.
 	To prove this, assume for the sake of contradiction that there
-	is some least $j > 0$ where $a_{j+p} = a_j$ but $a_{j+p-1} \neq a_{j-1}$.
-	Then $(a_{j+2}, a_{j+1}, a_{j}, 5^j, j) =
-	(a_{j+p+2}, a_{j+p+1}, a_{j+p}, 5^{j+p}, j+p)$
-	and $(a_{j+1}, a_{j}, a_{j-1}, 5^{j-1}, j-1) \neq
-	(a_{j+p+1}, a_{j+p}, a_{j+p-1}, 5^{j+p-1}, j+p-1)$.
-	But then we have one of $a_{j-1} \neq a_{j+p-1} \,(\mathrm{mod}\,2023)$,
-	$5^{j-1} \neq 5^{j+p-1} \,(\mathrm{mod}\,2023)$,
-	or $j-1 \neq n+p-1 \,(\mathrm{mod}\,2023)$.
-	ff
-
-	ff we can repeat this process with $j-1$, until we get to $j=0$.
+	is some least $j > 0$ where $\overline{a_{j+p}} = \overline{a_j}$
+	but $\overline{a_{j+p-1}} \neq \overline{a_{j-1}}$
+	($a_{j-1}$ will always be defined since $j-1 \geq 0$).
+	Then $V_j = V_{j+p}$ and $V_{j-1} \neq V_{j + p - 1}$.
+	See that
+	\begin{itemize}
+		\item $a_{j+1} \equiv a_{j+p+1} \, (\mathrm{mod}\, 2023)$
+		\item $a_{j} \equiv a_{j+p} \, (\mathrm{mod}\, 2023)$
+		\item $5^{j} \equiv 5^{j+p} \, (\mathrm{mod}\, 2023)$
+			implies $5^{j-1} \equiv 5^{j+p-1} \, (\mathrm{mod}\, 2023)$
+			since $5$ is coprime with $2023$ and so we can divide it out
+		\item $j \equiv j+p \, (\mathrm{mod}\, 2023)$
+			implies that  $j-1 \equiv j+p-1 \, (\mathrm{mod}\, 2023)$
+			(and also $j^2 \equiv (j+p)^2 \,(\mathrm{mod}\, 2023)$,
+			which we will make use of later).
+	\end{itemize}
+	Thus, since $V_{j-1} \neq V_{j + p - 1}$,
+	since all the other elements are the same,
+	we must have that $a_{j-1} \not\equiv a_{j+p-1}\,(\mathrm{mod}\,2023)$.
+	But since we have $a_{j+2} \equiv a_{j+p+2} \, (\mathrm{mod}\, 2023)$,
+	we have
+	\[
+		5^j\cdot a_{j+1} + j^2\cdot a_j + 11a_{j-1}
+		\equiv 5^{j+p}\cdot a_{j+p+1} + (j+p)^2\cdot a_{j+p} + 11a_{j+p-1}
+		\;(\mathrm{mod}\,2023)
+	\]
+	\[
+		\implies 11a_{j-1} \equiv 11a_{j+p-1}\;(\mathrm{mod}\,2023)
+	\]
+	\[
+		\implies a_{j-1} \equiv a_{j+p-1}\;(\mathrm{mod}\,2023)
+	\]
+	since $11$ is coprime with $2023$ so we can divide out by it.
+	But this contradicts that $V_{j-1} \neq V_{j + p - 1}$.
+	Therefore, $j\not>0$,
+	so $\overline{a_0} = \overline{a_{0+p}} = \overline{0}$,
+	and this infinitly repeats every $p$,
+	thus there are infinitely many $n$ such that $2023 \mid a_n$.
 \end{proof}
 \clearpage
 
@@ -80,9 +128,20 @@ Find the number of solutions for the congruence equation:
 	Consider the unique prime factors of $n$,
 	specifically $n = p_1^{\alpha_1}p_2^{\alpha_2} \cdots p_r^{\alpha_r}$
 	(where $\alpha_i \geq 1$).
-	If $p_i = 2$, then $x^3 \equiv 1 \, (\mathrm{mod}\,2)$
-	is solved whenever $x^3$ is odd,
-	which has one solution $\mathrm{mod}\,2$, namely $x = 1$.
+
+	If we have $p_i = 2$, we seek to find the number of solutions to
+	$x^3 - 1 \equiv 0 \, (\mathrm{mod}\, 2^{\alpha_i})$.
+	Notice that we must have $2^{\alpha_i} \mid x^3 - 1$,
+	so $x^3 - 1$ is even, hence $x^3$ is odd, which implies $x$ is odd.
+	Then, $\frac{d}{dx}(x^3-1) = 3x^2$ is not even,
+	so $\frac{d}{dx}(x^3-1) \neq 0 \,(\mathrm{mod}\,2^{\alpha_i})$.
+	Therefore, we can invoke Hensel's lemma:
+	if $x^3 - 1 \equiv 0 \, (\mathrm{mod}\, 2)$,
+	the only solution modulo $2$ is $x = 1$,
+	thus we know that $x^3 - 1 \equiv 0 \,(\mathrm{mod}\, 2^{\alpha_i})$
+	has only one solution as well.
+	Thus, there is only one solution to $x^3 \equiv 1 \, (\mathrm{mod}\, p_i^{\alpha_i})$.
+
 	If $p_i \neq 2$,
 	note that since $p \nmid 1$, and $3 \in \Z^+$,
 	by theorem 18.2, we have the number of solutions to
@@ -152,45 +211,81 @@ Prove that there exists an infinite sequence $\{n_k\}_{k \geq 1} \subset \N$ suc
 \]
 }
 \begin{proof}[Solution]\let\qed\relax
-If $n = \prod_{i=1}^{\pi(n)} p_i^{\alpha_i}$, then
+For any $n \in \N$, we can take the prime factor decomposition
+$n = p_1^{\alpha_1} \cdots p_r^{\alpha_r}$ where all $\alpha_i \geq 1$.
+Furthermore, recall that $\phi(n) = \prod_{i=1}^r p_i^{\alpha_i-1}(p_i-1)$, hence
 \[
-	\phi(n) = \prod_{i=1}^{\pi(n)}(p_i^{\alpha_i} - p_i^{\alpha_i - 1})
-	= n \prod_{\substack{p\mid n \\ p \text{ prime}}}\left(1 - \frac{1}{p}\right)
+	\frac{\phi(n)}{n} =
+	\frac{\prod_{i=1}^r p_i^{\alpha_i-1}(p_i-1)}{\prod_{i=1}^r p_i^{\alpha_i}}
+	= \prod_{i=1}^r \frac{p_i-1}{p_i}
+\]
+
+We let $\ep > 0$ be arbitrary.
+By the Archimedean principle, there exists some $N \in \N$ such that
+$N > \ep > 0$, so $\frac{1}{N} < \ep$.
+By the infinitude of primes, there is some $J \in \N$ such that
+$p_J > N$ so $\frac{1}{p_J} < \ep$ as well.
+If $j > J$, and we assume that we indexed the primes so that they were increasing,
+we have that $0 < \frac{1}{p_j} < \ep$ as well.
+
+We now provide the sequence defined by
+\[
+	x_n = \prod_{i=0}^n \frac{p_{i+J}-1}{p_{i+J}}
+\]
+Note that if $m = \prod_{i=0}^n p_{i+J}$, we showed above then that
+\[
+	x_n = \frac{\phi(m)}{m}
+\]
+We have $1 > \frac{p_J-1}{p_J} = x_0 = 1 - \frac{1}{p_J} > 1- \ep$.
+Furthermore, for any $n \in \N$, $x_n > x_{n+1}$ since
+we are multiplying by a value less than one,
+hencee
+\begin{align*}
+	0 < x_n - x_{n+1}
+	&= \prod_{i=0}^n\frac{p_{i+J} - 1}{p_{i+J}} -
+	\prod_{i=0}^{n+1}\frac{p_{i+J} - 1}{p_{i+J}} \\
+	&= \prod_{i=0}^n\left(\frac{p_{i+J} - 1}{p_{i+J}}\left(1-1+\frac{1}{p_{n+J+1}}\right)\right)\\
+	&= \frac{1}{p_{n+J+1}}\prod_{i=0}^n\frac{p_{i+J}-1}{p_{i+J}}\\
+	&< \ep\prod_{i=0}^n\frac{p_{i+J}-1}{p_{i+J}} < \ep
+\end{align*}
+
+Now we can invoke the Euler product formula to get
+\[
+	\prod_{p\text{ prime}}\left(\frac{1}{1-\frac{1}{p^s}}\right)
+	= \sum_{n=1}^\infty \frac{1}{n^s}
+\]
+therefore
+\[
+	\lim_{n\to\infty} \prod_{i=1}^n \frac{p_i}{p_i-1}
+	= \lim_{n\to\infty} \prod_{i=1}^n \frac{1}{1-\frac{1}{p_i}}
+	= \sum_{k=1}^\infty \frac{1}{k} = +\infty
+\]
+which gives that
+\[
+	\lim_{n\to\infty}\prod_{i=1}^n \frac{p_i-1}{p_i} = 0
+\]
+Now, by the definition of the limit, there exists $N \in \N$ such that for all $n > N$, we get
+\[
+	\prod_{i=1}^n \frac{p_i-1}{p_i} < \left(\frac{1}{\prod_{i=1}^{J-1}\frac{p_i}{p_i-1}}\right)\ep
 \]
 Thus
 \[
-	\frac{\phi(n)}{n} = \prod_{\substack{p\mid n \\ p \text{ prime}}}\left(1 - \frac{1}{p}\right)
+	x_{N} = \prod_{i=0}^J\frac{p_{i+J}-1}{p_{i+J}}
+	= \left(\prod_{i=1}^{N+J}\frac{p_i-1}{p_i}\right)
+	\left(\prod_{i=1}^{J-1}\frac{p_i}{p_i-1}\right) < \ep
 \]
-To show that $\{\frac{\phi(n)}{n}\}$ is dense in $(0,1)$,
-let $x,y \in (0,1)$ where $x < y$,
-then we claim there exists $n$ such that $x < \frac{\phi(n)}{n} < y$.
-It is sufficient to consider when $x,y \in \Q \cap (0,1)$.
-Let $x = p'_1/q_1$ and $y = p'_2/q_2$ where $p'_i < q_i$ and $\gcd(p'_i,q_i) = 1$.
-We can rewrite them to have the same denomonator:
-$x = p_1/q$ and $y = p_2/q$, where $p_1 < p_2 < q$.
-Note $1 - \frac{1}{p} = \frac{p-1}{p}$.
-Choose the $p$ such that $p \mid q$
-(I want something more, like the product of all the primes is $q$).
-So let's just assume that $q$'s prime decomposition
-only has exponents $1$ (and then could show this is dense)
-so then we want $p_1 < \prod(p-1) < p_2$.
-Perhaps if it is too big, then we find more $p$ later and multiply it down.
-If it is too small, ff
+Thus, $0 < x_N < \ep$.
 
-This is the problem: we can't write every rational number
-as a product of $(p-1)/p$,
-or even every rational with denominator whose prime number decomposition
-do not have extra exponents.
-But somehow we achieve density.
-
-Note that $\prod(1-\frac{1}{p})$ converges iff $\sum -\frac{1}{p}$ converges
-(\href{https://math.stackexchange.com/questions/2966559/convergence-of-infinite-product-prod1a-n-where-a-n-changes-sign}{stack exchange link in source code}).
-But I don't think we really care.
-
-Maybe useful: the rationals in simplified form do not
-contain any shared primes between the numerator and denominator.
-
-Maybe we do a completely different approach to density.
-What if $n = q$ or something.
+Now, we know that after some $J$, $x_n$ is within $\ep$ of $1$,
+the sequence is monotonically decreasing and within $\ep$ of each other as well,
+and for large enough $N$, we are also within $\ep$ of $0$.
+So for any $\alpha \in [0,1]$, we have that $(x_n)\cap (\alpha - \ep, \alpha + \ep) \neq \emptyset$,
+and there are infinitly points in the intersection.
+So $\{x_n\}$ is dense in $[0,1]$, hence we must always have that
+$\alpha$ is a limit point for some subsequence of $(x_{n_k})$ of $(x_n)$.
+Thus, we can always find a subsequence $(n_k)$ such that
+\[
+	\lim_{k\to\infty}x_{n_k} = \lim_{k\to\infty}\frac{\phi(n_k)}{n_k} = \alpha
+\]
 \end{proof}
 \end{document}
