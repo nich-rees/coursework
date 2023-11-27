@@ -1,0 +1,185 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 11}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it In a metric space $(Y,d)$, suppose $S \subseteq Y$ is dense,
+i.e., $\overline{S} = Y$.
+Suppose that every cauchy sequence $(x_n)$ for which $x_n \in S$ converges in $Y$.
+Prove that $Y$ is complete.}
+
+\begin{proof}[Solution]\let\qed\relax
+	Didn't do :)
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it (Nearest Points) Let $(X,d)$ be a metric space,
+and let $K$ be a nonempty subset of $X$.
+Define the functoin $d_K\colon X \to \R$ representing
+``the distance from $K$ by
+\[
+	d_K(p) = \inf\{d(p,x) \colon x \in K, \quad p \in X
+\]
+\begin{enumerate}
+	\item Prove that $d_K(p) = d_{\overline{K}}(p)$ for all $p$ in $X$.
+	\item Prove that $\lvert d_K(p) - d_K(q)\rvert \leq d(p,q)$ for any $p,q \in X$.
+	\item Suppose $K$ is compact.
+		Prove: $\forall p \in X, \exists \hat{x} \in K \colon d_K(p) = d(p,\hat{x})$.
+	\item Prove that in the special metric space $\R^k$,
+		the result in part (c) remains valid for every closed set $K$.
+		(This is interesting because some closed sets are not compact.)
+\end{enumerate}}
+
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 3}
+{\it Equip $\R$ with its usual topology.
+	Recall that a set $A \subseteq \R$ is called \textbf{dense} iff $\overline{A} = \R$.
+\begin{enumerate}
+	\item Prove: A set $A \subseteq \R$ is dense if and only if
+		for every nonempty open interval $(a,b)$, $A \cap (a,b) \neq \emptyset$.
+	\item A sequence of sets $G_1,G_2,G_3,\dots$ in $\R$ is given.
+		Each $G_k$ is \emph{open} and \emph{dense}.
+		Prove that $S = \bigcap_{k\in\N}G_k$ is dense.
+		[Suggestion: Use the characterization from part (a).
+		Construct a suitable Cauchy sequence.]
+	\item Prove that the subset $\Q$ of $\R$ cannot be expressed as a
+		countable intersection of open sets.
+		[Hint: Such a representation is incompatible with the result in (b).]
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		First, assume that $A \subseteq \R$ is dense.
+		That is to say, $\overline{A} = \R$,
+		so $\R = A' \cup A$.
+		Let $(a,b)$ be a nonempty open interval of $\R$.
+		Define $\alpha = (b-a)/2 \in \R$.
+		Either $\alpha \in A'$ or $\alpha \in A$.
+		If $\alpha \in A$, we are done.
+		So let $\alpha \in A'$.
+		Then by definition of a limit point, $(a,b)\setminus\{\alpha\}) \cap A \neq \emptyset$.
+		So $(a,b) \cap A \neq \emptyset$, as desired.
+
+		Now assume that for every nonempty open interval $(a,b)$,
+		$A \cap (a,b) \neq \emptyset$.
+		Let $x \in \R$.
+		Either $x \in A$ or $x \not\in A$.
+		If $x \not\in A$, then every open set around $x$ excluding $x$,
+		i.e. $(x-r,x+r) \setminus \{x\}$ must have a nonempty intersection
+		with $A$, since $(x-r,x+r) \cap A \neq \emptyset$
+		and we already assumed that $x \not\in A$.
+		Hence, $x \in A'$.
+		Thus, for any $x \in \R$, we have $x \in A \cup A'$.
+		Thus, $\R \subseteq A \cup A'$.
+		Now, by definition, $A \cup A' \subseteq \R$,
+		so $\R = A \cup A' \implies \overline{A} = \R$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 4}
+{\it Prove: If $E \subseteq \R$ is uncountable, then $E' \cap E \neq \emptyset$.
+[Hint: Try the contrapositive.]}
+
+\begin{proof}[Solution]\let\qed\relax
+	We prove using the contrapositive,
+	that is, assume that $E' \cap E = \emptyset$.
+	That means that every point in $E$ is an isolated point,
+	hence for every point $x \in E$,
+	there exists some $r>0$ where $(x-r, x+r) \cap E = \{x\}$.
+	Since the rationals are dense in the reals, there exists some $q_1,q_2 \in \Q$
+	such that $(q_1,q_2) \subseteq (x-r, x+r)$.
+	Furthermore, we can make such pairs unique for each $x$,
+	since we can just find rationals that are even closer
+	(i.e. some $q$ between $q_1$ and $x$, etc.).
+	Let our set of such $(q_i,q_j)$ pairs be denoted $Q$.
+	We have that $|Q|\geq |E|$ by the obvious injective map from $x$
+	to $q_1$.
+	Furthermore, $\Q$ is countable, and $Q \subseteq \Q \times \Q$
+	is countable,
+	hence $|Q|$ is countable.
+	Hence, $E$ is countable, as desired.
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 5}
+{\it Let $(X,\mathcal{T})$ be a HTS and suppose $K_1$ and $K_2$
+are nonempty compact sets in $X$ with $K_1 \cap K_2 = \emptyset$.
+Prove that there are open sets $U_1$ and $U_2$ in $X$ such that
+\[
+	K_1 \subseteq U_1, \quad K_2 \subseteq U_2, \quad U_1 \cap U_2 = \emptyset
+\]}
+
+\begin{proof}[Solution]\let\qed\relax
+	Didn't finish :)
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 6}
+{\it Given an enumeration of $\Q$ as $(q_1,q_2,q_3,\dots)$, define
+$f \colon \R \to (0,1)$ by
+\[
+	f(x) := \sum\left\{\frac{1}{2^k} \colon q_k < x\right\}
+\]
+Prove that $f$ is ``lower semicontinuous", i.e. that the
+following set is open for every $p \in \R$:
+\[
+	f^{-1}((p,+\infty)) = \{x \in \R \colon f(x) > p\}.
+\]}
+
+\begin{proof}[Solution]\let\qed\relax
+	Didn't finish :)
+\end{proof}
+\clearpage
+~\clearpage
+\end{document}
