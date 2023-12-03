@@ -1733,4 +1733,170 @@ But would suggest reading 4.6 because we will cover it and it will be on the fin
 There are 5 more lectures, and we're kinda done with the Jacobson material.
 So will cover the direct product stuff in Herstein (will put up the readings on piazza).
 
+\section{November 28}
+\subsection{Direct Products}
+Rough idea: build groups from smaller ones.
+E.g. start with $G$, express in terms of smaller groups:
+if $G$ is simple, can't do much;
+if $G$ is not simple, then $\exists K \subseteq G$ normal, quotient $G/K$,
+then $K$ and $G/K$ are ``smaller" (but may be infinite).
+So: supppose we have $K$, and $H = G/K$, how do we recover $G$?
+In general, this is not straightforward.
+
+Ex. $G = \Z$, $K = 2\Z \subseteq \Z$, $G/K = \Z/2\Z = H$ which is cyclic of order $2$.
+$H,K = \{\Z/2\Z, 2\Z\} \to G = \Z$, not clear how we glue back together
+(recall $2\Z \cong \Z$).
+
+Ex. $G = 2\times 2$ invertible matrices with rational entries.
+Let $K$ be the subgroup of $\det = 1$,
+then $G/K \cong \Q^\times$ under multiplication
+(via $g \mapsto \det(g)$; the coset is the matrices with the same determinant).
+We can let $g = \begin{pmatrix} \det(g) & 0 \\ 0 & 1\end{pmatrix}\cdot k,
+\det(k) = 1$.
+So in this case we can somehow produce a copy of $\Q^\times \subseteq G$,
+$x \in \Q^\times \mapsto \begin{pmatrix} x &0 \\0 & 1\end{pmatrix}$.
+
+So $G = H \times K$ as a set, but NOT as a group.
+The problem is we could have some
+$g_1 \mapsto \begin{pmatrix} \det(g_1) &0 \\ 0 & 1\end{pmatrix}k_1$
+and $g_2 \mapsto \begin{pmatrix} \det(g_2) &0 \\ 0 & 1\end{pmatrix}k_2$.
+We have
+\[
+	g_1g_2 = \begin{pmatrix} \det(g_1g_2)&0 \\ 0 & 1\end{pmatrix} k_1k_2
+\]
+But also
+\begin{align*}
+	g_1g_2
+	&= \begin{pmatrix} \det(g_1) & 0 \\ 0 & 1\end{pmatrix} k_1
+	\begin{pmatrix} \det(g_2) & 0 \\ 0 & 1\end{pmatrix} k_2\\
+	&= \begin{pmatrix} \det(g_1) & 0 \\ 0 & 1\end{pmatrix}
+	\begin{pmatrix} \det(g_2) & 0 \\ 0 & 1\end{pmatrix}
+	\begin{pmatrix} \det(g_1)^{-1} & 0 \\ 0 & 1\end{pmatrix}k_1
+	\begin{pmatrix} \det(g_2) & 0 \\ 0 & 1\end{pmatrix}k_2\\
+	&= \begin{pmatrix} \det(g_1g_2) & 0 \\ 0 & 1\end{pmatrix} k_1'k_2
+\end{align*}
+and $k_1'$ does not necessarily equal $k_1$.
+So we can't just randomly choose representatives of $H$ and expect
+things to work... if you think more, will find can't redeem these groups.
+
+The direct product is the simplest possible way to fit given $H,K$
+together to get a larger group.
+\begin{definition}[Direct Product]
+	$H \times K =$ cartesian  product as a set and as a group,
+	where multiplication $(h_1,k_1)(h_2,k_2) = (h_1h_2,k_1k_2)$.
+\end{definition}
+Contrast this to the two previous examples: NOT direct products.
+In direct product, our subgroups were not really interacting with each other at all.
+But in $2 \times 2$ example, we showed that these products
+are not just the product of the groups.
+We actually can't find subgroups that will commute in the way we want
+to get our product to work out (this won't fail in $\C$):
+our choice of representatives don't work, but it is not obvious
+that no choice works.
+
+Some notes on homomorphism:
+if we project on the second component, we get $K$;
+if we project on the first component, we get $H$.
+And the kernals of these two maps are exactly the other group.
+This is important: to get have a direct product,
+means have homomorphisms whose kernels' are the other group.
+
+\subsubsection{Properties of $H \times K$}
+We just said this, but:
+\begin{itemize}
+	\item $\pi_1 \colon (h,k) \mapsto h$ is a surjective homomophism onto $H$.
+	\item $\pi_2 \colon (h,k) \mapsto 2$ is a surjective homomophism onto $K$.
+	\item $\ker(\pi_1) = \{(1,k) \mid k \in K\} \cong K$
+	\item $\ker(\pi_2) = \{(h,1) \mid h \in H\} \cong H$
+\end{itemize}
+\begin{corollary}
+	$H \times K$ contains isomorphic copies of $H$ ($= \ker(\pi_2) \subseteq H \times K$)
+	and $K$ ($= \ker(\pi_1) \subseteq H \times K$).
+	So we can view $H,K$ as \emph{normal} subgroups of $H \times K$
+	where $H \cap K = 1_{H \times K}$ (inside $H \times K$).
+\end{corollary}
+Typical example: $H = K = \R$ and $G = \R^2$ (early homework question).
+
+\begin{remark}
+	We can always form $G = H \times K$, given $H,K$ (external direct product).
+\end{remark}
+The opposite way is harder:
+given $G$, do there exist $H,K$ such that $G \cong H \times K$?
+It depends on $G,H,K$.
+Necessary conditions: if $G \cong H \times K$,
+then there are homomorphisms from $G \to K$ and $G \to H$,
+hence there have to be homomorphisms from $G \to K$ and $G \to H$ that are both surjective,
+so $G$ has to contain copies of $H,K$ as normal subgroups.
+Copies of $H$, $K$ in $G$ have to intersect trivially $H \cap K = 1_G$.
+From homework then, $K,H$ commute.
+
+We claim: if $G$ contains copies of $H,K$ satisfying all these conditions
+(that the copies of $H$ and $K$ are normal; and that they intersect trivially)
+then $G \cong H \times K$.
+\begin{proof}
+	Fix $g \in G$.
+	Then $\tilde{\pi}_1(g) \in H$ and $\tilde{\pi}_2(g) \in K$.
+	Define $\phi \colon G \to H \times K$ where $g \mapsto
+	(\tilde{\pi}_1(g),\tilde{\pi}(g))$.
+	We have to show this is a bijective homomorphism.
+	The homomorphisms property is clear, since
+	$\tilde{\pi}_1,\tilde{\pi}_2$ are homomorphisms.
+	Note that $\ker(\phi) = \ker(\tilde{\pi}_1) \cap \ker(\tilde{\pi}_2) = 1_G$
+	by assumption, hence injective.
+	Note $G$ has copies of $H,K$ as the kernel of $\tilde{\pi}_1,\tilde{\pi}_2$,
+	so take pairs:
+	$\phi(H) = (\tilde{\pi}_1(H),\tilde{\pi}_2(H)) = (\text{isomorphic to }H,1)$
+	and $\phi(K) = (\tilde{\pi}_1(K),\tilde{\pi}_2(K)) = (1,\text{isomorphic to }K)$.
+	So $H,K$ together map onto $H \times K$.
+\end{proof}
+
+Moving away from homomorphism, we can decompose a group into a direct product
+if we can find subgroups which are normal, intersect only at $1$,
+and cover all the elements of $G$.
+This is not common in general.
+The only place this shows up with abelian groups,
+since we always have normality feature.
+
+This is called the internal direct product:
+need $H \cap K = 1$, $H,K$ are normal in $G$, and $HK = G$,
+then we get $\exists \tilde{\pi}_1 \colon G \to H$ with kernel $K$,
+and $\exists \tilde{\pi}_2 \colon G \to K$ with kernel $H$.
+``$H,K$" are the axes of $G$...
+this notion is generalizing the idea of a basis: spanning and independent,
+but we need this normality property now.
+If these conditions hold, then we have the internal direct product
+is isomorphic to an external direct product.
+It's like the difference between picking a basis of a two-dimensional vector space,
+and forming a two-dimensional vector space given two one-diemnsional vector spaces.
+
+\subsection{Semidirect Product}
+Suppose given $H,K$ arbitrary.
+There is a different way to make $H \times K$ a group!
+Need a homomorphsm $\phi \colon H \to \mathrm{Aut}(K)$,
+so $\forall h \in H$, $\phi(h)\colon K \to K$ is an automorphism of $K$.
+Then we have $(h_1,k_1)(h_2,k_2) = (h_1h_2, \phi(h_1)(k_1)k_2)$
+which turns out tob ea group.
+Contains copies of $H$: $(h,1)$, $K$: $(1,k)$,
+only $K$ is normal so $H,K$ won't commute.
+The matrix example is of this type, $S_n$ as well!
+Will say more next time.
+
+There is another way to find a group, quotient group not even subgroup,
+called a group extension: would see in algebraic topology.
+
+Next time: will look at direct products of more than one group,
+and semidirect products of two groups.
+Only three more classes, will spend last couple classes review
+(so if you have something you want to cover again, let him know).
+So not a lot of new material for the final that has not already been tested.
+Prep tip for the final: go back to the beginning of Herstein,
+and do those problems.
+You want to really be really good on the early stuff,
+then the rest will follow:
+you want to get used to playing around, and be able to recall the random facts
+(like that if things intersect only at $1$, then they commute).
+It's like analysis, but our library of facts have been drilled into you when you were young.
+Just a weird artifact of the education system that algebra is not taught elsewhere from this class.
+
+Nike did not think midterm was long: all of them have short solutions.
 \end{document}
