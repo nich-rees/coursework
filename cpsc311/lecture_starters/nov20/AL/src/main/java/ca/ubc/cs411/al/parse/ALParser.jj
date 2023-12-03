@@ -1,0 +1,128 @@
+/**
+ * JavaCC file
+ *
+ * You do not need to modify this file!
+ */
+
+options {
+  JDK_VERSION = "1.8";
+  STATIC = false; /* Make a REAL OO Parser. Default is true, which creates a hacky static parser */
+}
+
+PARSER_BEGIN(ALParser)
+
+package ca.ubc.cs411.al.parse;
+
+import ca.ubc.cs411.al.expr.*;
+
+public class ALParser {
+}
+
+PARSER_END(ALParser)
+
+SKIP:
+{
+  " "
+| "\n"
+| "\t"
+| "\r"
+}
+
+TOKEN:
+{
+  <LPAREN : "(">
+| <RPAREN : ")">
+| <LBRACK : "[">
+| <RBRACK : "]">
+| <MUL: "*">
+| <SUB1: "sub1">
+| <NUM: (["0"-"9"])+>
+| <TRUE: "#t">
+| <FALSE: "#f">
+| <ISZERO: "zero?">
+| <LETCC: "letcc">
+| <BEGIN: "begin">
+| <LET: "let">
+| <CALLCC: "call/cc">
+| <THROW: "throw">
+| <LAMBDA: "lambda">
+| <BOX: "box">
+| <SETBOX: "set-box!">
+| <UNBOX: "unbox">
+| <IF: "if">
+| <REC: "rec">
+| <EXIT: "exit">
+| <IDENTIFIER: <LETTER> (<LETTER> | "_" | <NUM>)* >
+| <#LETTER: ["A" - "Z", "a" - "z"]>
+}
+
+/* Expects exactly ONE Expression, then end of file. */
+Expr Program():
+{
+    Expr result;
+}
+{
+    result = Expression() <EOF> { return result; }
+}
+
+Expr REPLCmd():
+{
+    Expr a;
+}
+{   "exit" { return null; }
+  | a=Expression() { return a; }
+}
+
+
+Var Var():
+{
+    Token t;
+}
+{
+    t = <IDENTIFIER> { return new Var(t.image); }
+}
+
+/* Upon successfully parsing an expression, returns it, leaving the rest of the input stream available */
+Expr Expression():
+{
+    Token t;
+    Expr a;
+}
+{
+    t=<NUM> { return new Num(Integer.parseInt(t.image)); }
+    | "#t" { return new Bool(true); }
+    | "#f" { return new Bool(false); }
+    | "(" a=Op() ")" { return a; }
+    | a=Var() { return a; }
+}
+
+Expr Op():
+{
+    Token t;
+    Expr first, second, third, more;
+    Var var1, var2;
+}
+{
+    t = "*" first=Expression() second=Expression() { return new Multiply(first, second); }
+    | "sub1" first=Expression() { return new Sub1(first); }
+    | "zero?" first=Expression() { return new IsZero(first); }
+    | "letcc" var1=Var() second=Expression() { return new LetCC(var1, second); }
+    | "call/cc" first=Expression() {
+        Var x = new Var(java.util.UUID.randomUUID().toString());
+        Var v = new Var(java.util.UUID.randomUUID().toString());
+        Expr lambda = new Lambda(v, new Throw(x, v));
+        Expr apply = new Apply(first, lambda);
+        return new LetCC(x, apply);
+    }
+    | "throw" first=Expression() second=Expression() { return new Throw(first, second); }
+    | "lambda" "(" var1=Var() ")" first=Expression() { return new Lambda(var1, first); }
+    | "box" first=Expression() { return new Box(first); }
+    | "set-box!" first=Expression() second=Expression() { return new SetBox(first, second); }
+    | "unbox" first=Expression() { return new Unbox(first); }
+    | "let" "(" "[" var1=Var() first=Expression() "]" ")" second=Expression() { return new Apply(new Lambda(var1, second), first); }
+    | "begin" first=Expression()
+              (more = Expression() { first = new Begin(first,more); })*  { return first; }
+    | "if" first=Expression() second=Expression() third=Expression() { return new Conditional(first, second, third); }
+    | "rec" var1=Var() "(" var2=Var() ")" first=Expression() { return new Apply(new Lambda(new Var("Y"), new Apply(new Var("Y"), new Lambda(var1, new Lambda(var2, first)))), new Lambda(new Var("f"), new Apply(new Lambda(new Var("w"), new Apply(new Var("w"), new Var("w"))), new Lambda(new Var("x"), new Apply(new Var("f"), new Lambda(new Var("a"), new Apply(new Apply(new Var("x"), new Var("x")), new Var("a")))))))); }
+    | first=Expression() second=Expression() { return new Apply(first, second); }
+}

@@ -1,0 +1,29 @@
+(define-union kt
+  (empty dismount)
+  (extend n k))
+
+(define-union th
+  (factorial n k)
+  (apply_k k v))
+
+(define-function (factorial_cps n k)
+  (cond
+    [(zero? n) (th_apply_k k 1)]
+    [else (th_factorial n k)]))
+
+(define-function (apply_k k v)
+  (union-case k kt
+    [(empty dismount) (dismount-trampoline dismount v)]
+    [(extend n k) (th_apply_k k (* n v))]))
+
+(define-function (apply_th thunk)
+  (union-case thunk th
+    [(factorial n k) (factorial_cps (sub1 n) (kt_extend n k))]
+    [(apply_k k v) (apply_k k v)]))
+
+(define-function (factorial n)
+  (mount-trampoline dismount apply_th (factorial_cps n (kt_empty dismount))))
+
+
+(define-function (main)
+  (printf "Factorial 5:  ~d\n" (factorial 5)))

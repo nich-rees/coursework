@@ -44,8 +44,8 @@
 ;; internal language intentionally looks *a lot* like the implementations of
 ;; our previous interpreters, in that it has features corresponding to our
 ;; effect abstraction:
-;;   a) let/eff ≡ do
-;;   b) return/eff ≡ return
+;;   a) let/eff ≡ let/fx
+;;   b) return/eff ≡ return/fx
 ;; 
 ;; also the language will explicitly be split into two parts: Pure MCA
 ;; Expressions (PMCA) e and
@@ -61,19 +61,19 @@
 ;; interpreter in interesting ways (naturally with tradeoffs):
 ;;
 ;; 1) Our front-end compiler is now responsible for describing the dependency
-;;    order of our source computations:  "do", like let/eff, determines which
-;;    computations happen in which order, and "return" exposes the
+;;    order of our source computations:  "let/fx", like let/eff, determines
+;;    which computations happen in which order, and "return/fx" exposes the
 ;;    distinction between where values and computations are created and
 ;;    produced.
 ;;
 ;; 2) Our substitution function subst gets more complicated.  Now we have to
 ;;    deal with mutual references, so mutual recursion comes into play. :(
 ;;
-;; 3) Our interpreter gets *even simpler*.  Now there's a case for do and for
-;;    return, but in trade every other case has gotten super-simple because
-;;    the compilation phase has turned all the necessary subcomputations into
-;;    values already.  This style (compile then interpret) is how Eugenio Moggi
-;;    originally presented these ideas in a purely mathematical context.
+;; 3) Our interpreter gets *even simpler*.  Now there's a case for let/fx and
+;;    for return/fx, but in trade every other case has gotten super-simple
+;;    because the compilation phase has turned all the necessary subcomputations
+;;    into values already.  This style (compile then interpret) is how Eugenio
+;;    Moggi originally presented these ideas in a purely mathematical context.
 ;;    It turns out that they also lead to an interesting and useful
 ;;    design pattern for writing interpreters.
 
@@ -97,7 +97,8 @@
   [fun (param symbol?) (body CMCA?)]
   [kont (k Kont?)])
 ;; interp. an internal, core, "computational" language for MCA, which
-;; explicitly distinguishes between computations (CMCA) and values (Value).
+;; explicitly distinguishes between computation-producing expressions (CMCA) and
+;; value-producing expressions (Value).
 
 (define (fn-for-cmca f)
   (type-case CMCA f
@@ -147,7 +148,7 @@
     [(kont k) (... k)]))
 
 
-;; any -> boolean
+;; Any -> Boolean
 ;; produce true if x is a value, otherwise false
 (define (Value? x)
   (match x
@@ -167,8 +168,11 @@
     [(cid x) x]))
 
 
-;; NOTE: the following signature is a "union type" = two distinct signatures!
-;; (CMCA id Value -> CMCA) ∪ (CMCA cid CMCA -> CMCA)
+;; NOTE: the following signature is an "intersection type" so the
+;; function has two distinct signatures!
+;; (CMCA id Value -> CMCA)
+;; and
+;; (CMCA cid CMCA -> CMCA)
 ;; substitute v0 for references to ident0 in mca
 ;; NOTE: it's not a well-formed operation to substitute computations for vars!
 (define (subst mca ident0 v0)
@@ -311,7 +315,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; Value -> number
+;; Value -> Number
 ;; produce the number corresponding to the given Value
 ;; Effect: signal an error if the value does not represent a number
 (define (value->num v)
@@ -338,7 +342,7 @@
     (num (- n1 n2))))
 
 
-;; Value -> boolean
+;; Value -> Boolean
 ;; produce true if the v is zero, otherwise false
 (define (zero?-value v)
   (match v
@@ -354,7 +358,7 @@
     [else (error 'interp "bad function: ~a" v1)]))
 
 
-;; symbol CMCA -> Computation
+;; Symbol CMCA -> Computation
 ;; interpret the self-referential expression (fix f mca)
 ;; Effect: signal an error in case of runtime error
 (define (interp-fix f mca)
@@ -378,7 +382,7 @@
     [else (error 'interp "bad continuation: ~a" v)]))
 
 
-;; symbol CMCA -> Computation
+;; Symbol CMCA -> Computation
 ;; interpret the given letcc expression
 (define (interp-letcc k cbody)
   (letcc/eff ([k-capture])
@@ -398,10 +402,17 @@
 (define (interp-pmca/eff e)
   (type-case PMCA e
     [id (x) (error 'interp "Unbound identifier: ~s" x)]
-    [add (el er) (add-value el er)]
-    [sub (el er) (sub-value el er)]
-    [else e]))
+    [add (el er) (add-value (interp-pmca/eff el) (interp-pmca/eff er))]
+    [sub (el er) (sub-value (interp-pmca/eff el) (interp-pmca/eff er))]
+    [else e])) ;; Values are self-evaluating
 
+(test (interp-pmca/eff (add (num 7) (num 6)))
+      (num 13))
+
+(test (interp-pmca/eff (add (add (num 4) (num 3)) (add (num 2) (num 4))))
+      (num 13))
+
+(test/exn (interp-pmca/eff (add (id 'x) (num 6))) "Unbound")
 
 ;; CMCA -> Computation
 ;; produce the result of interpreting the given MCA computation
@@ -410,15 +421,23 @@
   (type-case CMCA cmca
     [return/fx (e) (return/eff (interp-pmca/eff e))]
     [let/fx (x c1 c2) (interp-let/fx x c1 c2)]
-    [app (vrator vrand) (apply-value vrator vrand)]         
-    [if0 (vp cc ca)
-         (if (zero?-value vp)
+    [app (erator erand) (apply-value (interp-pmca/eff erator)
+                                     (interp-pmca/eff erand))]         
+    [if0 (ep cc ca)
+         (if (zero?-value (interp-pmca/eff ep))
              (interp-cmca/eff cc)
              (interp-cmca/eff ca))]
     [fix (x cbody) (interp-fix x cbody)]
     [cid (f) (error 'interp "Unbound computation identifier: ~s" f)]
     [letcc (k cbody) (interp-letcc k cbody)]
-    [throwcc (kont varg) (interp-throwcc kont varg)]))
+    [throwcc (ekont evarg) (interp-throwcc (interp-pmca/eff ekont)
+                                         (interp-pmca/eff evarg))]))
+
+(test/exn (run/eff (interp-cmca/eff
+                (if0 (id 'x)
+                     (return/fx (num 7))
+                     (return/fx (num 8)))))
+          "Unbound identifier")
 
 
 ;; Examples for interp-mca/eff
@@ -548,7 +567,7 @@
 ;; an empty env (initial environment)
 (define empty-env empty)
 
-;; Env symbol -> CMCA
+;; Env Symbol -> CMCA
 ;; look up x in env
 ;; Effect: signal an error if x is not bound in env
 (define (lookup-env env x)
@@ -557,7 +576,7 @@
     [else (error 'interp "Unbound Identifier: ~a" x)]))
 
 
-;; Env symbol CMCA -> Env
+;; Env Symbol CMCA -> Env
 ;; produce a new environment that is updated with the new binding
 (define (update-env env x cmca)
   (cond
@@ -571,7 +590,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; s-expression -> CMCA
+;; S-expression -> CMCA
 ;; Compile the given MCA program into its corresponding CMCA program
 ;; EFFECT: signals an error on failure
 (define (compile-expr sexp)
@@ -676,7 +695,7 @@
 ;; PUTTING IT ALL TOGETHER  - an interpreter of files on disk
 ;;
 
-;; sexpr -> Value
+;; S-Expression -> Value
 ;; produce the result of interpreting the provided MCA program in input
 ;; EFFECT: signals an error if interpretation signals a runtime error.
 (define (interp-sexpr pgm)

@@ -115,27 +115,32 @@
 ;;
 
 ;; Computation is Natural -> (list Natural Natural)
-;; interp. threaded accumulator computation
+;; interp.  a threaded accumulator computation
 
 
 ;; ??? (effect-specific operators)
 
 ;; return/eff
-(define (return/eff v)
-  (λ (f) (list v f)))
+(define-syntax return/eff
+  (syntax-rules ()
+    [(_ v) (λ (f) (list v f))]))
 
 ;; run/eff
-(define (run/eff c vi)
-  (match-let ([`(,vo, factor) (c vi)])
-    vo))
+(define-syntax run/eff
+  (syntax-rules ()
+    [(_ c vi)
+     (match-let ([`(,vo ,thacc) (c vi)])
+       vo)]))
 
 ;; let/eff
 (define-syntax let/eff
   (syntax-rules ()
     [(_ ([x c1]) c2)
      (λ (f)
-       (match-let ([`(,x, f^) (c1 f)])
+       (match-let ([`(,x ,f^)
+                    (c1 f)])
          (c2 f^)))]))
+
 
 ;; Compose many computations
 (define-syntax let/eff*
@@ -149,40 +154,47 @@
 ;; End of Effect Abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-syntax get-acc
+(define-syntax use&update
+  (syntax-rules (use update)
+    [(_ acc
+        [use e1]
+        [update e2])     
+     (λ (acc)
+       (list e1 e2))]))
+
+(define-syntax get-state
   (syntax-rules ()
-    [(_)
-     (λ (acc) (list acc acc))]))
+    ((_) (λ (acc) (list acc acc)))))
 
-(define-syntax update-acc
+(define-syntax update-state
   (syntax-rules ()
-    [(_ acc)
-     (λ (acc0) (list acc0 acc))]))
+    [(_ v) (λ (acc0) (list acc0 v))]))
 
-
-;; Computation is Natural -> (list Natural Natural)
 ;; interp.  a function that awaits an accumulator value and produces a
 ;; number and an accumulated value.
 
 (define (split-score2 split0)
-  (local [;; Split Natural -> (list Natural Natural)
+  (local [;; Split -> Computation
           (define (split-score--acc s)
             (cond [(empty? s) (return/eff 0)]
-                  [(number? s) (let/eff* ([f (get-acc)]
-                                          [value (return/eff (* s f))]
-                                          [_ #;(update-acc (if (= value 5)
-                                                               (* f 2)
-                                                               f))
-                                             ;; why doesn't this work?
-                                             (if (= s 5)
-                                                 (update-acc (* f 2))
-                                                 (return/eff -99))])
-                                         (return/eff value))]
-                  [else ; (list? s)
-                   (let/eff* ([sum1 (split-score--acc (cut-first s))]
-                              [sum2 (split-score--acc (cut-second s))])
-                             (return/eff (+ sum1 sum2)))]))]
-    (run/eff (split-score--acc split0) 1)))
+                  [(number? s)
+                   #;
+                   (let ([value (* s factor)])
+                     (begin
+                       (when (= s 5)
+                         (set! factor (* factor 2)))
+                       value))
+                   (let/eff* ([factor (get-state)]
+                              [value (return/eff (* s factor))]
+                              [_ (if (= s 5)
+                                     (update-state (* factor 2))
+                                     (return/eff -99))])
+                             (return/eff value))]
+[else ; (list? s)
+ (let/eff ([sum1 (split-score--acc (cut-first s))])
+          (let/eff ([sum2 (split-score--acc (cut-second s))])
+                   (return/eff (+ sum1 sum2))))]))]
+(run/eff (split-score--acc split0) 1)))
 
 
 (test (split-score2 S1) 751)

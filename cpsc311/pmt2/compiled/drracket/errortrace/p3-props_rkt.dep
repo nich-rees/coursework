@@ -1,0 +1,1 @@
+("8.10" ta6le ("1fe329b5b2d715fb4b490c5334a985ee954f3d3a" . "7a7c8a9ddd5b4d62e8acd1d0f0370074d7b7351b") #"/home/nich/coursework/cpsc311/pmt2/appendix.rkt" (collects #"drracket" #"private" #"drracket-errortrace-key.rkt") (collects #"plai" #"lang" #"reader.rkt") (collects #"plai" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

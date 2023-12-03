@@ -114,28 +114,17 @@
 ;; Effect Implementation
 ;;
 
-;; Computation is Natural -> (list Natural Natural)
-;; interp. threaded accumulator computation
+;; Computation is ???
+;; interp.  
 
 
 ;; ??? (effect-specific operators)
 
 ;; return/eff
-(define (return/eff v)
-  (λ (f) (list v f)))
 
 ;; run/eff
-(define (run/eff c vi)
-  (match-let ([`(,vo, factor) (c vi)])
-    vo))
 
 ;; let/eff
-(define-syntax let/eff
-  (syntax-rules ()
-    [(_ ([x c1]) c2)
-     (λ (f)
-       (match-let ([`(,x, f^) (c1 f)])
-         (c2 f^)))]))
 
 ;; Compose many computations
 (define-syntax let/eff*
@@ -149,16 +138,28 @@
 ;; End of Effect Abstraction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-syntax get-acc
+(define-syntax return/eff
   (syntax-rules ()
-    [(_)
-     (λ (acc) (list acc acc))]))
+    [(_ v) (λ (factor) (list v factor))]))
 
-(define-syntax update-acc
+(define-syntax run/eff
   (syntax-rules ()
-    [(_ acc)
-     (λ (acc0) (list acc0 acc))]))
+    [(_ c vi)
+     (match-let ([`(,vo ,thacc) (c vi)])
+       vo)]))
+;; Abstraction of below... see the match let, c is computation:
+#;(match-let ([`(,sum ,factor) (split-score--acc split0 1)])
+    sum)
 
+(define-syntax let/eff
+  (syntax-rules ()
+    [(_ ([x c1]) c2)
+     #;(match-let ([`(,sum2 ,factor^^)
+                    ((split-score--acc (cut-second s)) factor^)])
+         ((return/eff (+ sum1 sum2)) factor^^))
+     (match-let ([`(,x ,f^)
+                    (c1 f)])
+         (c2 f^))]))
 
 ;; Computation is Natural -> (list Natural Natural)
 ;; interp.  a function that awaits an accumulator value and produces a
@@ -168,20 +169,28 @@
   (local [;; Split Natural -> (list Natural Natural)
           (define (split-score--acc s)
             (cond [(empty? s) (return/eff 0)]
-                  [(number? s) (let/eff* ([f (get-acc)]
-                                          [value (return/eff (* s f))]
-                                          [_ #;(update-acc (if (= value 5)
-                                                               (* f 2)
-                                                               f))
-                                             ;; why doesn't this work?
-                                             (if (= s 5)
-                                                 (update-acc (* f 2))
-                                                 (return/eff -99))])
-                                         (return/eff value))]
+                  [(number? s)
+                   (λ (factor) (list (* s factor)
+                                     (if (= s 5)
+                                         (* factor 2)
+                                         factor)))]
                   [else ; (list? s)
-                   (let/eff* ([sum1 (split-score--acc (cut-first s))]
-                              [sum2 (split-score--acc (cut-second s))])
-                             (return/eff (+ sum1 sum2)))]))]
+                   ; give me the split, when I can't do more work, factor
+                   (λ (factor)
+                     ; these matches are sequences, and have a notion of
+                     ; sequencing in our effect abstraction...
+                     ; but they're tethered
+                     (match-let ([`(,sum1 ,factor^)
+                                  (split-score--acc (cut-first s) factor)])
+                       ((λ (factor^)
+                          (match-let ([`(,sum2 ,factor^^)
+                                       ((split-score--acc (cut-second s))
+                                        factor^)])
+                            #;(let ([f factor^^])
+                                (λ (f)
+                                  (list (+ sum1 sum2) f)))
+                            ((return/eff (+ sum1 sum2)) factor^^)))
+                        factor^)))]))] ; will put in let/eff
     (run/eff (split-score--acc split0) 1)))
 
 
