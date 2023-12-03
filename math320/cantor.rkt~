@@ -1,0 +1,5 @@
+#plai
+
+;; Natural -> String
+;; prints the intervals of the first n layers of the middle thirds Cantor set
+(define (cantor n))

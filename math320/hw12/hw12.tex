@@ -1,0 +1,175 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 320}
+\chead{Homework 12}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+{\it If $f \colon X \to Y$ is a continuous mapping between
+Hausdorff topological spaces $X$ and $Y$,
+prove that
+\[
+	f(\overline{E}) \subseteq \overline{f(E)}
+\]
+for every set $E \subseteq X$.
+Show, by an example, that $f(\overline{E})$ can be a proper subset of $\overline{f(E)}$.}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 2}
+{\it
+\begin{enumerate}
+	\item Let $X$ and $Y$ be metric spaces. Prove that for $f \colon X \to Y$, TFAE:
+	\begin{enumerate}
+		\item $f$ is uniformly continuous on $X$;
+		\item for any sequences $(x_n)$ and $(x'_n)$ in $X$
+			satisfying $d_X(x_n,x'_n) \to 0$,
+			one has $d_Y(y_n,y'_n) \to 0$, where $y_n = f(x_n), y'_n=f(x'_n)$.
+	\end{enumerate}
+	\item Identify, with proof, all real numbers $p$ for which the function
+		$f(x) = x^p$ is uniformly continuous on $X = (0,+\infty)$.
+		[It's OK to use a little calculus to support your findings.]
+\end{enumerate}}
+
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 3}
+{\it A metric space $(X,d)$ is called an \emph{ultrametric space} if $d$ satisfies the condition
+\[
+	\forall x,y,z \in X, \quad d(x,z) \leq \max\{d(x,y),d(y,z)\}.
+\]
+(This makes $d$ itself ``an ultrametric".) Show that in any ultrametric space $(X,d)$,...
+\begin{enumerate}
+	\item every open ball $\mathbb{B}[x;r)$ is a closed set;
+	\item one has $y \in \mathbb{B}[x;r)$ if and only if $\mathbb{B}[y;r) = \mathbb{B}[x;r)$; and
+	\item if $\mathbb{B}[x;r_1) \cap \mathbb{B}[y;r_2) \neq \emptyset$,
+		then one of these balls must contain the other, i.e.,
+		\[
+			\mathbb{B}[x;r_1) \subseteq \mathbb{B}[y;r_2) \neq \emptyset
+			\; \text{ or }\;
+			\mathbb{B}[x;r_1) \supseteq \mathbb{B}[y;r_2) \neq \emptyset
+		\]
+\end{enumerate}
+[The ``$p$-adic numbers" form an ultrametric space of interest in number theory.]}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 4}
+{\it Given Hausdorff Topological Spaces $(X,\mathcal{T}_X)$ and $(Y,\mathcal{T}_Y)$,
+and continuous functions $f,g \colon X \to Y$, consider the \emph{equalizer}:
+\[
+	E = \{x \in X \colon f(x) = g(x)\}.
+\]
+Prove that $E$ is closed in $X$.}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\clearpage
+~\clearpage
+
+\subsection*{Problem 5}
+{\it Three continuous functions $f,g,h \colon \R \to \R$ are related by the identity
+\[
+	f(x+y) = g(x) + h(y)
+\]
+\begin{enumerate}
+	\item In the special case where $f=g=h$, show that there must
+	be a real number $m$ such that $f(t) = mt$ for all real $t$.
+	\item Drop the hypothesis that $f,g,h$ are identical.
+	Describe the most general trio of continuous functions
+	compatible with the given identity.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+
+\subsection*{Problem 6}
+{\it Here's a key fact every math student should know:
+\begin{center}
+	Every nonempty open set in $\R$ can be expressed
+	as a finite or countable union of disjoint open intervals
+\end{center}
+Prove this, referring to a given open set $U \neq \emptyset$, by following these steps:
+\begin{enumerate}
+	\item For each $x \in U$, let $I(x) = (\alpha(x),\beta(x))$, where
+	\[
+		\alpha(x) = \inf\{a \colon \text{ one has }x\in(a,b) \text{ for some }(a,b)\subseteq U\}\\
+		\beta(x) = \sup\{a \colon \text{ one has }x\in(a,b) \text{ for some }(a,b)\subseteq U\}
+	\]
+	Prove that $x \in I(x)$ and $I(x) \subseteq U$,
+	while $\alpha(x) \not\in U$ and $\beta(x) \not\in U$.
+	[Argue carefully, since both $\alpha(x) = -\infty$ and $\beta(x) = +\infty$ are possible.]
+	\item Let $\mathcal{G} = \{I(x) \colon x \in U\}$.
+		Show that any two intervals in $\mathcal{G}$ must be either disjoint or identical.
+	\item Explain why the key fact stated above must hold.
+\end{enumerate}}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+\clearpage
+\end{document}
