@@ -280,13 +280,55 @@
           "Unbound")
 
 
+;; Thunking (i.e. more defuntionalization)
+
+(define-type thunk
+  [num/th (n number?) (k Continuation?)]
+  [add/th (l KRA?) (env Env?) (k Continuation?)]
+  [nought?/th (e KRA?) (env Env?) (k Continuation?)]
+  [bool/th (b boolean?) (k Continuation?)]
+  [ifB/th (p KRA?) (env Env?) (k Continuation?)]
+  [id/th (v Value?) (k Continuation?)]
+  [fixFun/th (f Value?) (k Continuation?)]
+  [app/th (rator KRA?) (env Env?) (k Continuation?)]
+  [ext-nought/th (k Continuation?) (v Value?)]
+  [ext-addr/th (k Continuation?) (v Value?)]
+  [ext-addl/th (k Continuation?) (kra KRA?) (env Env?)]
+  [ext-if/th (k Continuation?) (kra KRA?) (env Env?)]
+  [ext-appran/th (k Continuation?) (v1 Value?) (v2 Value?)]
+  [ext-apprat/th (k Continuation?) (kra KRA?) (env Env?)]
+  [apply-kra/th (body KRA?) (env Env?) (k Continuation?)])
+;; interp. represents a computation to be done by the trampoline loop
+
+;; thunk -> Value
+;; produces the value given by running the thunk th
+(define (apply-th th)
+  (type-case thunk th
+    [num/th (n k) (apply-k k (numV n))]
+    [add/th (l env k) (interp/kra-env/kdtd l env k)]
+    [nought?/th (e env k) (interp/kra-env/kdtd e env k)]
+    [bool/th (b k) (apply-k k (boolV b))]
+    [ifB/th (p env k) (interp/kra-env/kdtd p env k)]
+    [id/th (v k) (apply-k k v)]
+    [fixFun/th (f k) (apply-k k f)]
+    [app/th (rator env k) (interp/kra-env/kdtd rator env k)]
+    [ext-nought/th (k v) (apply-k k v)]
+    [ext-addr/th (k v) (apply-k k v)]
+    [ext-addl/th (k kra env) (interp/kra-env/kdtd kra env k)]
+    [ext-if/th (k kra env) (interp/kra-env/kdtd kra env k)]
+    [ext-appran/th (k v1 v2) (apply/kra/kdtd v2 v1 k)]
+    [ext-apprat/th (k kra env) (interp/kra-env/kdtd kra env k)]
+    [apply-kra/th (body env k) (interp/kra-env/kdtd body env k)]))
+
+
 ;;
 ;; Trampolining (with some copy/paste action from Lecture 29: trampoline.rkt)
 ;;
 
+
 (define-type trampoline
-  [bounce [p procedure?]]
-  [dismount [v (λ (x) #t)]])
+  [bounce [th thunk?]]
+  [dismount [v Value?]])
 
 ;; (trampolineof X) is one of:
 ;; - (bounce ( -> (trampolineof X))
@@ -295,37 +337,19 @@
 
 (define (fn-for-trampoline t)
   (type-case trampoline t
-    [bounce (p) (... (fn-for-trampoline (p)))]
+    [bounce (th) (... (fn-for-trampoline (th)))]
     [dismount (v) (... v)]))
 
 
-;; Stuff to just implement a C-like While loop in Racket,
-;; so it won't be necessary in the transliteration
-;; (-> Boolean) (-> Void) -> Void
-(define (while-fn pred do)
-  (when (pred)
-    (begin (do)
-           (while-fn pred do))))
-
-(define-syntax while
-  (syntax-rules ()
-    [(while pred body)
-     (while-fn (λ () pred) (λ () body))]))
-
-
 ;; (trampolineof X) -> X
-;; run the given trampoline to completion
-(define (loop-trampoline t0)
+;; run the given trampoline t0 to completion
+(define (mount-trampoline t0)
   ;; Accumulator: t is (trampolineof X)
   ;; Invariant: t represents pending computation (if any)
-  (local [(define t (void))]
-    (begin
-      (set! t t0)
-      (while (bounce? t)
-             (let ([c (bounce-p t)])
-               (set! t (c))))
-      ;; t is now a dismount
-      (dismount-v t))))
+  (let loop ([t t0])
+    (type-case trampoline t
+      [bounce (th) (loop (apply-th th))]
+      [dismount (v) v])))
 
 
 ;;
@@ -334,33 +358,34 @@
 
 
 ;; Continuation is one of:
-;; - `empty-k
-;; - `(extend-k-nought ,Continuation)
-;; - `(extend-k-addl ,Continuation ,KRA ,Env)
-;; - `(extend-k-addr ,Continuation, Value)
-;; - `(extend-k-if ,Continuation ,KRA ,KRA ,Env)
-;; - `(extend-k-apprat ,Continuation ,KRA ,Env)
-;; - `(extend-k-appran ,Continuation ,Value)
+;; - 'empty-k
+;; - '(extend-k-nought ,Continuation)
+;; - '(extend-k-addl ,Continuation ,KRA ,Env)
+;; - '(extend-k-addr ,Continuation ,Value)
+;; - '(extend-k-if ,Continuation ,KRA ,KRA ,Env)
+;; - '(extend-k-apprat ,Continuation ,KRA ,Env)
+;; - '(extend-k-appran ,Continuation ,Value)
 ;; interp. representation of the rest of computation
+
 
 ;; Continuation Value -> (trampolineof Value)
 (define (apply-k k v)
   (match k
     [`empty-k (dismount v)] 
     [`(extend-k-nought ,k^)
-     (bounce (λ () (apply-k k^ (nought?/kra v))))]
+     (bounce (ext-nought/th k^ (nought?/kra v)))]
     [`(extend-k-addr ,k^ ,v^)
-     (bounce (λ () (apply-k k^ (add/kra v^ v))))]
+     (bounce (ext-addr/th k^ (add/kra v^ v)))]
     [`(extend-k-addl ,k^ ,kra^ ,env^)
-     (bounce (λ () (interp/kra-env/kdt kra^ env^ (extend-k-addr k^ v))))]
+     (bounce (ext-addl/th (extend-k-addr k^ v) kra^ env^))]
     [`(extend-k-if ,k^ ,krac^ ,kraa^, env^)
      (if (value->bool v)
-         (bounce (λ () (interp/kra-env/kdt krac^ env^ k^)))
-         (bounce (λ () (interp/kra-env/kdt kraa^ env^ k^))))]
+         (bounce (ext-if/th k^ krac^ env^))
+         (bounce (ext-if/th k^ kraa^ env^)))]
     [`(extend-k-appran ,k^ ,v^)
-     (bounce (λ () (apply/kra/kdt v^ v k^)))]
+     (bounce (ext-appran/th k^ v v^))]
     [`(extend-k-apprat ,k^ ,kra^ ,env^)
-     (bounce (λ () (interp/kra-env/kdt kra^ env^ (extend-k-appran k^ v))))]))
+     (bounce (ext-apprat/th (extend-k-appran k^ v) kra^ env^))]))
 
 (define empty-k `empty-k)
 (define (extend-k-nought k)
@@ -375,6 +400,19 @@
   `(extend-k-appran ,k ,v))
 (define (extend-k-apprat k kra env)
   `(extend-k-apprat ,k ,kra ,env))
+
+;; Just so that I can use this in my thunk definition,
+;; since I didn't actually create a Continuation type
+(define (Continuation? x)
+  (match x
+    [`empty-k #t] 
+    [`(extend-k-nought ,k^) #t]
+    [`(extend-k-addr ,k^ ,v^) #t]
+    [`(extend-k-addl ,k^ ,kra^ ,env^) #t]
+    [`(extend-k-if ,k^ ,krac^ ,kraa^, env^) #t]
+    [`(extend-k-appran ,k^ ,v^) #t]
+    [`(extend-k-apprat ,k^ ,kra^ ,env^) #t]
+    [else #f]))
 
 
 ;;
@@ -460,49 +498,45 @@
 ;; produce a trampoline of the result of applying v1 to v2
 ;; Effect: signal an error if v1 does not represent a function
 ;; Effect: signal an error in case of subsequent runtime error
-(define (apply/kra/kdt v1 v2 k)
+(define (apply/kra/kdtd v1 v2 k)
   ;; Accumulator: k is Continuation
   ;; Invariant: represents the rest of the computation that interprets
   ;;            the greater KRAken program
   (type-case Value v1
     [funV (x body env)
-          (bounce (λ () (interp/kra-env/kdt body (extend-env env x v2) k)))]
-    [else (error 'apply/kra/kdt "Bad function: ~a" v1)]))
+          (bounce (apply-kra/th body (extend-env env x v2) k))]
+    [else (error 'apply/kra/kdtd "Bad function: ~a" v1)]))
 
 
 
 ;; KRA Env Continuation -> (trampolineof Value)
 ;; produce a trampoline of the result of interpreting kra in environment env
 ;; Effect: signal an error in case of runtime type mismatch
-(define (interp/kra-env/kdt kra env k)
+(define (interp/kra-env/kdtd kra env k)
   ;; Accumulator: k is Continuation
   ;; Invariant: represents the rest of the computation that interprets the
   ;;            given KRAken program (kra0)
   (type-case KRA kra
-    [num (n) (bounce (λ () (apply-k k (numV n))))]
-    [add (l r) (bounce
-                (λ () (interp/kra-env/kdt l env (extend-k-addl k r env))))]
-    [nought? (e) (bounce
-                  (λ () (interp/kra-env/kdt e env (extend-k-nought k))))]
-    [bool (b) (bounce (λ () (apply-k k (boolV b))))]
-    [ifB (p c a) (bounce
-                  (λ () (interp/kra-env/kdt p env (extend-k-if k c a env))))]
-    [id (x) (bounce (λ () (apply-k k (id/kra x env))))]
-    [fixFun (f x body) (bounce (λ () (apply-k k (fixFun/kra f x body env))))]
+    [num (n) (bounce (num/th n k))]
+    [add (l r) (bounce (add/th l env (extend-k-addl k r env)))]
+    [nought? (e) (bounce (nought?/th e env (extend-k-nought k)))]
+    [bool (b) (bounce (bool/th b k))]
+    [ifB (p c a) (bounce (ifB/th p env (extend-k-if k c a env)))]
+    [id (x) (bounce (id/th (id/kra x env) k))]
+    [fixFun (f x body) (bounce (fixFun/th (fixFun/kra f x body env) k))]
     [app (rator rand)
-         (bounce
-          (λ () (interp/kra-env/kdt rator env (extend-k-apprat k rand env))))]))
+         (bounce (app/th rator env (extend-k-apprat k rand env)))]))
 
 
 ;; KRA -> Value
 ;; interpret the given KRA expression
 ;; EFFECTS: Signals an error in case of runtime type error.
-(define (interp/kra/kdt kra0)
-  (loop-trampoline (interp/kra-env/kdt kra0 empty-env empty-k)))
+(define (interp/kra/kdtd kra0)
+  (mount-trampoline (interp/kra-env/kdtd kra0 empty-env empty-k)))
 
 
 (test
- (interp/kra/kdt
+ (interp/kra/kdtd
   (with '* (fixFun 'mult 'lhs
                    (fun 'rhs
                         (ifB  (nought? (id 'rhs))
@@ -659,7 +693,7 @@
 ;; produce the result of interpreting the KRAken program in input
 ;; EFFECT: signals an error if interpretation signals a runtime error.
 (define (interp-sexp pgm)
-  (interp/kra/kdt
+  (interp/kra/kdtd
    (parse/kra
     pgm)))
 
@@ -697,7 +731,7 @@
 ;; produce the result of interpreting the KRAken program in input
 ;; Effect: signals an error if interpretation signals a runtime error.
 (define (interp-string pgm)
-  (interp/kra/kdt
+  (interp/kra/kdtd
    (parse/kra
     (read-from-string pgm))))
 
@@ -707,7 +741,7 @@
 ;; Effect: signals an error if no file fname contains a KRAken representation
 ;; Effect: signals an error if interpretation signals a runtime error.
 (define (interp-file fname)
-  (interp/kra/kdt
+  (interp/kra/kdtd
    (parse/kra
     (read-from-file fname))))
 

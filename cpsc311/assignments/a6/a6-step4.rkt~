@@ -284,12 +284,9 @@
 ;; Trampolining (with some copy/paste action from Lecture 29: trampoline.rkt)
 ;;
 
-(define (thunk? x)
-  (procedure? x))
-
 (define-type trampoline
-  [bounce [th thunk?]]
-  [dismount [v Value?]])
+  [bounce [p procedure?]]
+  [dismount [v (λ (x) #t)]])
 
 ;; (trampolineof X) is one of:
 ;; - (bounce ( -> (trampolineof X))
@@ -298,19 +295,37 @@
 
 (define (fn-for-trampoline t)
   (type-case trampoline t
-    [bounce (th) (... (fn-for-trampoline (th)))]
+    [bounce (p) (... (fn-for-trampoline (p)))]
     [dismount (v) (... v)]))
 
 
+;; Stuff to just implement a C-like While loop in Racket,
+;; so it won't be necessary in the transliteration
+;; (-> Boolean) (-> Void) -> Void
+(define (while-fn pred do)
+  (when (pred)
+    (begin (do)
+           (while-fn pred do))))
+
+(define-syntax while
+  (syntax-rules ()
+    [(while pred body)
+     (while-fn (λ () pred) (λ () body))]))
+
+
 ;; (trampolineof X) -> X
-;; run the given trampoline t0 to completion
-(define (mount-trampoline t0)
+;; run the given trampoline to completion
+(define (loop-trampoline t0)
   ;; Accumulator: t is (trampolineof X)
   ;; Invariant: t represents pending computation (if any)
-  (let loop ([t t0])
-    (type-case trampoline t
-      [bounce (th) (loop (th))]
-      [dismount (v) v])))
+  (local [(define t (void))]
+    (begin
+      (set! t t0)
+      (while (bounce? t)
+             (let ([c (bounce-p t)])
+               (set! t (c))))
+      ;; t is now a dismount
+      (dismount-v t))))
 
 
 ;;
@@ -483,7 +498,7 @@
 ;; interpret the given KRA expression
 ;; EFFECTS: Signals an error in case of runtime type error.
 (define (interp/kra/kdt kra0)
-  (mount-trampoline (interp/kra-env/kdt kra0 empty-env empty-k)))
+  (loop-trampoline (interp/kra-env/kdt kra0 empty-env empty-k)))
 
 
 (test
