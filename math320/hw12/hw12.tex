@@ -146,7 +146,21 @@ Show, by an example, that $f(\overline{E})$ can be a proper subset of $\overline
 		This shows that $(a) \iff (b)$, as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We note that $|x|^p$ is not uniformly continuous on $X$
+		when $p < 0$ and $p >1$:
+		via calculus, the slopes are increasing at some point,
+		and so for any $\ep$, we can always find an two points $x_1,x_2$
+		such that $|x_1-x_2| < \delta$ but $|f(x_1) - f(x_2)| \geq \ep$.
+
+		In the case when $p = 0$, this is uniformly continuous trivially:
+		we just pick $\delta = \ep/2$.
+
+		In the $p \in (0,1]$ case, we have uniform continiuity.
+		I ran out of time, but the essential idea
+		is that since the slope doesn't increase,
+		we can find $\delta$ small enough that points are going to be
+		close enough together that $|f(x_1) - f(x_2)| < \ep$...
+		might use a little MVT.
 	\end{proof}
 \end{enumerate}
 \clearpage
@@ -285,16 +299,41 @@ Prove that $E$ is closed in $X$.}
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Since $f(x+y) = f(x) + f(y)$, we get that $f(2y) = 2f(y)$.
+		Now, we can prove that $f(ky) = kf(y)$ by induction,
+		since if $f(ky) = kf(y)$, we have $f((k+1)y) = f(ky)+f(y)=(k+1)f(y)$,
+		and our base case is done above.
+		Hence $f(ky) = kf(y)$ for all $k \in \N$ and $y \in \R$.
+
+		Now, when $x = y = 0$, we have that $f(0) = 2f(0)$,
+		so $f(0) = 0$ is the only value that satisfies this.
+		So $0 = f(0) = f(ky +(-ky)) = f(ky) + f(-ky)$
+		so $f(-ky) = -kf(y) \implies f(ky) = kf(y)$ is true for any $k \in \Z$ as well.
+
+		Now since $f(y) = qf(y/q)$, we get that $\frac{1}{q}f(y)=f(y/q)$
+		when $q \in \Z \setminus \{0\}$.
+		Soo $f(\frac{p}{q}y) = \frac{p}{q}f(y)$ for any $a \in \Z$ and $b \in \Z\setminus \{0\}$.
+		So $f(ky) = kf(y)$ when $k \in \Q$ as well.
+
+		Now let $y \in \R$ be fixed.
+		We have that two functions, $f(ky)$ and $kf(y)$
+		are fixed for all $k \in \Q$.
+		Since $f$ is continuous, and $\Q$ is dense in $\R$,
+		by the theorem in class,
+		this gives us that $f(ky) = kf(y)$ when $k \in \R$ as well.
+		Since $y \in \R$ is arbitrary, this means that $f(ky) = kf(y)$
+		for all $k,y \in \R$.
+
+		It is clear then that for $t \in \R$,
+		we have $f(t) = tf(1)$.
+		So if $f(1) = m \in \R$, we recover $f(t) = mt$, as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
-	\end{proof}
-	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Sorry ran out of time...
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 6}
 {\it Here's a key fact every math student should know:
@@ -319,14 +358,18 @@ Prove this, referring to a given open set $U \neq \emptyset$, by following these
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Sorry ran out of time...
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Sorry ran out of time...
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		The basic argument would go somethng like,
+		our $I(x)$ will cover any open set in $\R$ by (a),
+		and there are at most countable many of them by,
+		and so by (b), they are disjoint.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 \end{document}
