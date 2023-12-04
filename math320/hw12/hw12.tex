@@ -35,7 +35,54 @@ for every set $E \subseteq X$.
 Show, by an example, that $f(\overline{E})$ can be a proper subset of $\overline{f(E)}$.}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	Let $y \in f(\overline{E})$,
+	then there is some $x \in \overline{E}$ such that $f(x) = y$.
+	If $x \in E$, we have that $y \in f(E)$ hence $y \in \overline{f(E)}$.
+	If $x \not\in E$, we must have that $x \in E'$ (since $\overline{E} = E \cup E'$).
+	
+	So now assume that $x \in E'$.
+	If $y \in f(E)$, we have $y \in \overline{f(E)}$ as well.
+	So now also assume that $y \not\in f(E)$.
+	Consider some arbitrary open set $W$ containing $y$.
+	Since $f$ is continuous, $U = f^{-1}(W)$ is open,
+	and furthermore, $x \in U$.
+	Since $x \in E'$, we have that $U \setminus\{x\} \cap E \neq \emptyset$.
+	So there is some $x_1 \in U\setminus\{x\}$ and $x_1 \in E$.
+	So $f(x_1) \in f(E)$ and
+	$f(x_1) \in f(U \setminus \{x\}) \subseteq f(U) = W$.
+	Hence, we have that $f(x_1) \in f(E) \cap W \neq \emptyset$,
+	and since $y \not\in f(E)$, we have $f(x_1) \in f(E) \cap (W \setminus \{y\})$.
+	Hence, $f(E) \cap (W \setminus \{y\}) \neq \emptyset$.
+	But since $W$ was an arbitrary open set containing $y$,
+	this gives us that $y \in f(E)'$.
+	Thus, $y \in \overline{f(E)}$.
+
+	In each case, whether $x \in E$,
+	$x \not\in E$ and $y \in f(E)$,
+	or $x \not\in E$ and $y \not \in f(E)$,
+	we have shown that $y \in \overline{f(E)}$.
+	Since $y$ was an arbitrary point in $f(\overline{E})$,
+	this shows that $f(\overline{E}) \subseteq \overline{f(E)}$ as deired.
+
+	To show that $f(\overline{E})$ can be a proper subset of $\overline{f(E)}$,
+	we give the following example:
+	let $X$ be $\R$ with the discrete topology,
+	and $Y$ be $\R$ with the usual topology (from the metric).
+	As we have mentioned in class, these are both Hausdorff.
+	Recall that, by definition, every set in $X$ is open,
+	which implies that for any $U \subseteq X$, $U^c$ is open as well,
+	so every set in $X$ is closed as well.
+	Hence, if we let $E \subseteq X$ be the interval $(a,b)$,
+	since $E$ is closed, we have $E = \overline{E} = (a,b)$.
+	Now let $f$ be the identity map.
+	This is obviously continuous, since the pre-image of every
+	open set in $Y$ is a set in $X$, which is open.
+	So we have $f(\overline{E}) = f((a,b)) = (a,b)$.
+	Note though that $\overline{f(E)} = \overline{(a,b)} = [a,b]$.
+	So $f(\overline{E}) = (a,b) \subsetneq [a,b] = \overline{f(E)}$.
+	Hence, we have some continuous $f$ that maps
+	between two Hausdorff spaces,
+	and there is some $E \subseteq X$ such that $f(\overline{E}) \subsetneq \overline{f(E)}$.
 \end{proof}
 \clearpage
 ~\clearpage
@@ -58,7 +105,45 @@ Show, by an example, that $f(\overline{E})$ can be a proper subset of $\overline
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		We first prove $(a) \implies (b)$.
+		So assume that $f$ is uniformly continuous on $X$.
+		Let $(x_n)$, $(x'_n)$ be arbitrary sequences in $X$
+		such that $d_X(x_n,x'_n) \to 0$.
+		Let $\ep > 0$ be arbitrary.
+		Since $f$ is uniformly continuous on $X$,
+		we get some $\delta > 0$ such that
+		$\forall t \in \mathbb{B}_X[x_n;\delta)$,
+		$d_Y(f(x_n),f(t)) < \ep$.
+		Now using the definition of $d_X(x_n,x'_n) \to 0$,
+		we have that for some $N$, $d(x_n,x'_n) < \delta$
+		for all $n \geq N$.
+		Hence, $x'_n \in \mathbb{B}_X[x_n;\delta)$,
+		thus $d_Y(f(x_n),f(x'_n)) < \ep$ for all $n \geq N$.
+		But then if $y_n = f(x_n)$, $y'_n = f(x'_n)$,
+		since $\ep$ was arbitrary,
+		this is the definition for $d_Y(y_n,y'_n) \to 0$.
+
+		Now, to prove $(b) \implies (a)$,
+		we use contraposition,
+		so assume that $f$ is not uniformly continuous on $X$.
+		Then there is some $\ep' > 0$ such that for any $\delta > 0$,
+		there is some $s \in X$ where for some $t \in \mathbb{B}_X[s;\delta)$,
+		we have $d(f(s),f(t)) \geq \ep'$.
+		Consider $\delta_n = \frac{1}{n}$.
+		For each $\delta_n$, from above, we can get $s,t$ where
+		$t \in \mathbb{B}_X[s;\delta_n)$, but $d(f(s),f(t))\geq \ep'$;
+		so for each $\delta_n$, we let $x_n = s$ and $x'_n = t$.
+		See that $d_X(x_n,x'_n) \to 0$,
+		since for any $\ep > 0$, using the Archimedean property,
+		we can find $N > \frac{1}{\ep} > 0$ so $\frac{1}{N} = \delta_N < \ep$
+		and $\forall n \geq N$, $\delta_n \leq \delta_N < \ep$,
+		so for all $n \geq N$, $x'_n \in \mathbb{B}_X[x_n;\delta_n)
+		\implies d_X(x_n,x'_n) < \delta_n < \ep$.
+		However, notice that if $y_n = f(x_n)$ and $y'_n = f(x'_n)$,
+		we have $d_Y(y_n,y'_n) \not\to 0$,
+		since regardless of $n$, we have $d_Y(y_n,y'_n) \geq \ep'$,
+		hence $d_Y(y_n,y'_n)$ cannot converge to $0$.
+		This shows that $(a) \iff (b)$, as desired.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff
@@ -88,16 +173,78 @@ Show, by an example, that $f(\overline{E})$ can be a proper subset of $\overline
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		So normally, triangle inequality gives us $d(x,z) \leq d(x,y) + d(y,z)$.
+		
+		By a corollary from class, it is sufficient to show that
+		$\mathbb{B}[x;r)' \subseteq \mathbb{B}[x;r)$.
+		If $\mathbb{B}[x;r)' = \emptyset$, we are done.
+		So assume that there exists some $y \in \mathbb{B}[x;r)'$.
+		So for any $r \geq r_1 > 0$, we have
+		$\mathbb{B}[x;r) \cap (\mathbb{B}[y;r_1)\setminus\{y\}) \neq \emptyset$.
+		So there is some $z \in \mathbb{B}[x;r)$ and $z \in \mathbb{B}[y;r_1) \setminus \{y\}$.
+		Hence $d(x,z) < r$ and $0 < d(y,z) < r_1$.
+		Using the inequality, we then get that $d(x,y) < \max\{r,r_1\}$.
+		Since $r \geq r_1$, we have $d(x,y) < r \implies y \in \mathbb{B}[x,r)$.
+		Since $y \in \mathbb{B}[x;r)'$ was arbitrary,
+		this shows that $\mathbb{B}[x;r)' \subseteq \mathbb{B}[x;r)$,
+		so $\mathbb{B}[x;r)$ is closed.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+			Assume that $y \in \mathbb{B}[x;r)$.
+			So $d(x,y) < r$.
+			Let $z \in \mathbb{B}[y;r)$,
+			so $d(y,z) < r$.
+			Thus, $d(x,z) \leq \max\{d(x,y),d(y,z)\} < r$.
+			Hence, $z \in \mathbb{B}[x;r)$,
+			and since $z$ was arbitrary, we get $\mathbb{B}[y;r) \subseteq \mathbb{B}[x;r)$.
+			Now let $z \in \mathbb{B}[x;r)$,
+			so $d(x,z) < r$.
+			Thus, $d(y,z) \leq \max\{d(x,y),d(x,z)\} < r$.
+			Hence, $z \in \mathbb{B}[y;r)$,
+			and since $z$ was arbitrary, we get $\mathbb{B}[y;r) \subseteq \mathbb{B}[x;r)$.
+			Therefore, we get that $\mathbb{B}[x;r) = \mathbb{B}[y;r)$.
+
+			Now assume that $\mathbb{B}[y;r) = \mathbb{B}[x;r)$.
+			Since $y \in \mathbb{B}[y;r)$, we must then have that
+			$y \in \mathbb{B}[x;r)$ by equality.
+			Thus, we have $y \in \mathbb{B}[x;r)$ if and
+			only if $\mathbb{B}[x;r) = \mathbb{B}[y;r)$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+			If $\mathbb{B}[x;r_1) \cap \mathbb{B}[y;r_2) \neq \emptyset$,
+			then $\mathbb{B}[x;r_1) \neq \emptyset \neq \mathbb{B}[y;r_2)$,
+			and there exists some $z \in \mathbb{B}[x;r_1)$
+			and $z \in \mathbb{B}[y;r_2)$.
+			So $d(x,z) < r_1$ and $d(y,z) < r_2$.
+			Assume that $\mathbb{B}[x;r_1) \not\supseteq \mathbb{B}[y;r_2)$.
+			Then there is some point $y_1 \in \mathbb{B}[y;r_2)$ such that
+			$y_1 \not\in \mathbb{B}[x;r_1)$.
+			So $d(y,y_1) < r_2$ but $d(x,y_1) \geq r_1$.
+
+			We now show that this gives us $r_2 \geq r_1$.
+			Note that $d(y_1,z) \leq \max\{d(y_1,y),d(z,y)\} \leq r_2$.
+			Now we have that $\max\{d(y_1,z),d(x,z)\} \geq d(y_1,x) \geq r_1$.
+			However, $d(x,z) < r_1$, so to have our left hand side $\geq$ than the right,
+			we must have that $d(y_1,z) \geq r_1 > d(x,z)$.
+			Thus, $r_1 \leq d(y_1,z) \leq r_2$ so by transitivity of order in the reals,
+			we get that $r_1 \leq r_2$ as well.
+
+			Now take any $x_1 \in \mathbb{B}[x;r_1) \neq \emptyset$,
+			We know that $d(x_1,z) \leq \max\{d(x_1,x),d(x,z)\} < r_1$.
+			Furthermore, we know that $d(y,z) < r_2$,
+			so $d(x_1,y) \leq \max\{d(x_1,z),d(z,y)\} < \max\{r_1,r_2\} = r_2$.
+			So $x_1 \in \mathbb{B}[y;r_2)$.
+			But since $x_1 \in \mathbb{B}[x_1;r_1)$ was arbitrary,
+			this gives us that $\mathbb{B}[x;r_1) \subseteq \mathbb{B}[y;r_2)$.
+			Therefore we must have $\mathbb{B}[y;r_2) \subseteq \mathbb{B}[x;r_1)$,
+			or if this is not true, we have proven that we must then have
+			$\mathbb{B}[x;r_1) \subseteq \mathbb{B}[y;r_2)$.
+			Furthermore, we stated our balls are not $\emptyset$ at the start,
+			and so we have proven what is desired.
 	\end{proof}
 \end{enumerate}
 \clearpage
+~\clearpage
 
 \subsection*{Problem 4}
 {\it Given Hausdorff Topological Spaces $(X,\mathcal{T}_X)$ and $(Y,\mathcal{T}_Y)$,
@@ -108,7 +255,17 @@ and continuous functions $f,g \colon X \to Y$, consider the \emph{equalizer}:
 Prove that $E$ is closed in $X$.}
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	For the sake of contradiction, assume that $E$ is not closed in $X$.
+	Then $E \subsetneq \overline{E}$.
+	So there is some $x_1 \in \overline{E}$ but $x_1 \not\in E$.
+	Recall the following theorem from class:
+	for continuous function $f_1,f_2$ and $Q \subseteq X$,
+	if $f_1(q)=f_2(q)$ for all $q \in Q$, then $f_1(x) = f_2(x)$ for all $x \in \overline{Q}$.
+	Using the theorem with the definition of $E$ then, we must have that $f(x)=g(x)$
+	for all $x \in \overline{E}$, which includes $x_1$,
+	so $f(x_1) = g(x_1)$.
+	But then $x_1 \in E$, a contradiction, since we assumed that $x_1 \not\in E$.
+	Hence, we must have that $E = \overline{E}$ and so $E$ is closed.
 \end{proof}
 \clearpage
 ~\clearpage
