@@ -1357,4 +1357,157 @@ Examples
 	\item Discrete topology: $\mathcal{T} = \mathcal{P}(X)$
 		(``every set is open.")
 \end{itemize}
+
+\section{December 4}
+So normally in this last week, we do Calculus.
+To do Calculus, we need derivatives.
+To do derivatives, we need limits.
+
+\subsection{Limits}
+Limits are near the idea of continuity.
+\begin{definition}[Metric Space Limit]
+	Suppose $X<Y$ are metric spaces with $f \colon X \to Y$ and $x_0 \in X$.
+	We will say
+	\[
+		\lim_{x \to x_0} f(x) = y
+	\]
+	exactly when
+	\begin{enumerate}
+		\item[(i)] $x_0 \in X'$
+		\item[(ii)] $\phi(x) = \begin{cases} f(x), &\text{if }x\neq x_0\\
+			y_0, &\text{if }x_0=x\end{cases}$
+			is continuous at $x_0$.
+	\end{enumerate}
+\end{definition}
+Intuition: $y_0$ is the ``best constant approximation for $f(x)$-values when $x$ is near $x_0$."
+The function doesn't even need to be defined at $x_0$,
+just crucially, we never look at $f(x_0)$.
+And then Loewen draws the canonical picture of a graph with a hole.
+Equivalently, we can write the conditions out explicitly:
+\begin{enumerate}
+	\item[(i)] $x_0 \in X'$
+	\item[(ii)] $\forall \ep > 0$, $\exists \delta > 0 \colon
+		\forall x \in \mathbb{B}(x_0;\delta), d_Y(f(x),y_0) < \ep$
+		(note the parantheses in the ball!).
+\end{enumerate}
+For (ii),  a sequential alternative exists, namely,
+$f(x_n) \to y_0$ for any sequence $x_n \to x_0$ along which $x_n \neq x_0$ $\forall n$.
+
+Now that we have that, we can move on to the star of the show.
+
+\subsection{Derivatives}
+\subsubsection{Basics}
+We've all seen this before, just now limit means a little more when we say it.
+Really, he just wants to show us cool functions for the next two days.
+\begin{definition}[Derivative]
+	Given interval $[a,b] \subseteq \R$ and point $c \in [a,b]$,
+	and $f \colon [a,b] \to \R$, let
+	\[
+		f'(c) = \lim_{x \to c}\frac{f(x)-f(c)}{x-c}
+	\]
+	if the limit exists.
+\end{definition}
+This is ``the derivative of $f$ at $c$" when the RHS conerges.
+Say ``$f$ is differentiable at $c$" when this happens,
+``non-differentiable" when it doesn't.
+Now he draws the canonical picture of a slope of a graph.
+
+Bro is complaining about Goldilocks.
+``Goldilocks is the story of a juvenile deliqiuent who goes and invades
+some peoples homes when they are out on a walk,
+and then goes and complains about things!
+Too hot! Too hard! Too hoo-haa!"
+He couldn't decide no the next lemma, between Goldilocks and butterfly,
+but butterfly requires less cultural context.
+
+Instantenous Slope:
+When $f'(c)$ exists, it tells the slope of the ``best linear approximation"
+for $f(x)$ near $x = c$.
+Compare with
+\[
+	l(x) = f(c) + m(x-c)
+\]
+for generic constant $m$.
+
+\begin{lemma}[Goldilocks/Butterfly Lemma]
+	In the setup from above:
+	\begin{enumerate}
+		\item[(i)] If $m < f'(c)$ then $\exists \delta > 0$ such that
+			$l(x) > f(x)$ $\forall x \in (c-\delta, c)$ and
+			$l(x) < f(x)$ $\forall x \in (c,c+\delta)$.
+		\item[(ii)] If $m > f'(c)$ then $\exists \delta > 0$ such that
+			$l(x) < f(x)$ $\forall x \in (c-\delta, c)$ and
+			$l(x) > f(x)$ $\forall x \in (c,c+\delta)$.
+	\end{enumerate}
+\end{lemma}
+Someone from Caltech wrote a book that basically invented the tangent line using this.
+And then draws a picture of a concave down graph...
+and looks like a butterfly.
+Butterfly shape captures $y = f(x)$ on some interval $(c-\delta,c+\delta)$.
+
+\begin{proof}
+	\begin{enumerate}
+		\item[(i)] Suppose $m < f'(c)$.
+			Define $\ep = \frac12[f'(c)-m] > 0$.
+			Use the limit definition to get $\delta > 0$ such that
+			\[
+				\left\lvert \frac{f(x) - f(c)}{x-c} - f'(c)\right\rvert < \ep,
+				\forall x \in \mathbb{B}(c;\delta)
+			\]
+			\[
+				-\ep|x-c| < f(x) - f(c) - f'(c)(x-c) < \ep |x-c|
+			\]
+			\[
+				-\ep|x-c| < f(x) - [l(x) + (f'(c) - m)(x-c)] < \ep|x-c|
+			\]
+			\[
+				\underbrace{(f'(c) - m)}_{2\ep}[x-c] - \ep|x-c|
+				< f(x) - l(x) < \underbrace{(f'(c) - m)}_{2\ep}[x-c] + \ep|x-c|
+			\]
+			Now if $x > c$, $|x-c| = (x-c)$, and the left inequality says
+			\[
+				0 < \ep(x-c) < f(x) - l(x), \; \forall x \in (c,c+\delta)
+			\]
+			And for $x < c$, $|x-c| = -(x-c)$, so the right inequality says
+			\[
+				f(x) - l(x) < -2\ep|x-c|+\ep|x-c| = -\ep|x-c|,
+				\; \forall x \in (c-\delta,c)
+			\]
+		\item[(ii)] Similar.
+	\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+	If $f$ is differentiable at $c$, then $f$ must be continuous at $c$
+\end{corollary}
+
+\begin{proof}
+	Use Butterfly Lemma + Squeeze Theorem (more in Canvas).
+\end{proof}
+
+\begin{remark}
+	Converse is false: consider $f(x) = |x|$ and $c = 0$.
+	The function is continuous at $c$, but $f'(c)$ does not exist.
+\end{remark}
+Our $f'(x)$ is a jump function, and there is no way to define a value at $c=0$.
+Some derivatives are discontinuous -- but in ways more interesting than this. E.g.
+\[
+	f(x) = \begin{cases}
+		x^2 \sin\frac{1}{x}, &x \neq 0\\
+		0, &x=0
+	\end{cases}
+\]
+`` Everyone's favourite really.
+No one came for the chain rule."
+Here, $f'9x) = 2x\sin{\frac{1}{x}} + x^2\cos{\frac{1}{x}} \left[\frac{-1}{x^2}\right]
+= - \cos{\frac{1}{x}} + 2x\sin{\frac{1}{x}}$ for $x \neq 0$,
+and $f'(0) = \lim_{x\to0} \frac{f(x) - f(0)}{x-0} = \lim_{x \to 0} x \sin{\frac{1}{x}}$.
+So $f'(x)$ exists for all $x \in \R$ and it is NOT CONTINUOUS at $0$.
+Then he drew the pictures...
+121 looking function.
+
+He'll show us more weird functions next time.
+
+Q from after class: we can just assume our math 100 derivative rules on the final.
+
 \end{document}
