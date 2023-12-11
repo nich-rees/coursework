@@ -1,0 +1,50 @@
+#lang plai
+
+;; Can you give this types? If so, what types could you give this?
+'{{fixFun {f : _} {x} x} {fixFun {f : _} {x} x}}
+
+'{{fixFun {f : (X -> X) -> (X -> X)} {x} x} {fixFun {f : X -> X} {x} x}}
+;;Type must be a function, because fixFun... but also first one is operator
+;; and then returning itself
+
+'{{fixFun {f : (number -> number) -> (number -> number)} {x} x}
+  {fixFun {f : number -> number} {x} x}}
+;; in TEMU (explicit), we must have a type... the whole point of today's
+;; lecture is fixing this
+
+;; Wouldn't it be nice to not have to commit?
+
+
+
+;; Can you give tthis types? If so, what types could you give this?
+'{with {g {fixFun {f : _} {x} x}}
+       {g g}}
+
+'{with {g {fixFun {f : X -> X} {x} x}}
+       {g g}}
+;; but we must chooose... just like No Country for Old Men gas station
+;; but we can't find any choice that will work...
+;; in our iTEMU language, we can't solve this problem
+;; frustrating, because we could in FWAE, our type system is too strict
+;; "Those darn lisp programmers can solve this problem!"
+;; ANSWER: No
+
+
+;; We are going to add a new feature to the language
+'{subst-with {g {fixFun {f : _} {x} x}}
+             {g g}}
+
+;; expands at compile time to:
+'{{fixFun {f : _} {x} x} {fixFun {f : _} {x} x}}
+;; like call by name with every with... almost like with is a macro,
+;; not a feature of our langauge
+
+;; it will get rid of all of our withs, capture-avoiding substitution
+
+;; will call this poly-with
+
+
+'{subst-with {g {+ "yo dawg!" 7}}
+             9}
+;; expands to
+'9

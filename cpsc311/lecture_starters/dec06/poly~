@@ -1,0 +1,15 @@
+#lang plai
+
+;; Can you give this types? If so, what types could you give this?
+'{{fixFun {f : _} {x} x} {fixFun {f : _} {x} x}}
+
+'{{fixFun {f : (X -> X) -> (X -> X)} {x} x} {fixFun {f : X -> X} {x} x}}
+;;Type must be a function, because fixFun... but also first one is operator
+;; and then returning itself
+
+'{{fixFun {f : (number -> number) -> (number -> number)} {x} x}
+  {fixFun {f : number -> number} {x} x}}
+;; in TEMU (explicit), we must have a type... the whole point of today's
+;; lecture is fixing this
+
+;; Wouldn't it be nice to not have to commit?
