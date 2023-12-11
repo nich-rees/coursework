@@ -1,0 +1,741 @@
+#lang plai
+(print-only-errors #t)
+(define (... . args) (cons '... args)) ; for templates
+(require "datatype-311.rkt") ; define-type with side-conditions
+(require rackunit) ; for check-exn
+
+;; Detect errors during construction of a type derivation
+(define-syntax-rule (test/data-exn try)
+  (check-exn exn:fail? (λ () try)))
+
+
+;; (OPTIONAL) Assignment 7: In Lieu of Type Cash, We'll Accept A Type Check
+
+
+
+;; Problem 1: Use the given Inductive Definition of Well-Typed TFWAE
+;;    To complete the design of the tfwae/wt data definition.
+
+;; Problem 2: Complete the design of the three "smart" selectors for tfwae/wt
+
+;; Problem 3: Complete the design of tfwae->tfwae/wt
+
+
+;;
+;; TFWAE - a statically typed language with functions, identifiers and
+;;         arithmetic expressions.
+;;
+
+(define-type Type
+  [numType]
+  [funType (arg Type?) (result Type?)])
+;; interp. the type of a TFWAE expression
+
+#;
+(define (fn-for-type t)
+  (type-case Type t
+    [numType () (...)]
+    [funType (arg result) (... (fn-for-type arg)
+                               (fn-for-type result))]))
+
+
+
+;; TFID is Symbol
+;; interp.  identifier in the TFWAE language
+;; INVARIANT: a tfid cannot be a TFWAE keyword
+(define (tfid? x)
+  (and (symbol? x)
+       (not (member x '(number -> + - with : if fun)))))
+
+
+
+(define-type TFWAE
+  [num (n number?)]
+  [add (lhs TFWAE?) (rhs TFWAE?)]
+  [sub (lhs TFWAE?) (rhs TFWAE?)]
+  [with (name symbol?) (type Type?) (named TFWAE?) (body TFWAE?)]
+  [id (name symbol?)]
+  [app (rator TFWAE?) (rand TFWAE?)]
+  [fun (x symbol?)
+       (ptype Type?)
+       (rtype Type?)
+       (body TFWAE?)])
+;; interp. expressions in a typed language with first-class functions,
+;; arithmetic, and identifiers
+;; Its syntax is defined by the following EBNF:
+;; <TFWAE> ::=
+;; (ARITHMETIC)
+;;             <num>
+;;           | {+ <TFWAE> <TFWAE>}
+;;           | {- <TFWAE> <TFWAE>}
+;; (IDENTIFIERS)
+;;           | {with {<id> : <TYPE> <TFWAE>} <TFWAE>}
+;;           | <id>
+;; (FUNCTIONS)
+;;           | {<TFWAE> <TFWAE>}
+;;           | {fun {<id> : {-> <TYPE> <Type>}} : <TYPE> <TFWAE>}
+
+
+;; <TYPE> ::= number
+;;          | {-> <TYPE> <TYPE>}
+
+#;
+(define (fn-for-tfwae tfwae)
+  (type-case TFWAE tfwae
+    [num (n) (... n)]
+    [add (lhs rhs) (... (fn-for-tfwae lhs)
+                        (fn-for-tfwae rhs))]
+    [sub (lhs rhs) (... (fn-for-tfwae lhs)
+                        (fn-for-tfwae rhs))]
+    [with (name type named body) (... name
+                                      (fn-for-type type)
+                                      (fn-for-tfwae named)
+                                      (fn-for-tfwae body))]
+    [id (name) (... name)]
+    [app (rator rand) (... (fn-for-tfwae rator)
+                           (fn-for-tfwae rand))]
+    [fun (x ptype rtype body)
+         (... x
+              (fn-for-type ptype)
+              (fn-for-type rtype)
+              (fn-for-tfwae body))]))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Environments
+
+;; (envof X) is (listof (list Symbol X))
+
+;; Any -> Boolean
+;; produce true if the given object is an (envof X)
+(define ((envof? X?) x)
+  (match x
+    [(list `(,x ,v) ...) #:when (and (andmap symbol? x)
+                                     (andmap X? v)) #t]
+    [else #f]))
+
+
+;; (listof Symbol) -> Boolean
+;; produce true if each symbol in x* appears only once
+(define (unique? lox)
+  (cond
+    [(empty? lox) #t]
+    [else ;; (cons? lox)
+     (and (not (member (first lox) (rest lox)))
+          (unique? (rest lox)))]))
+
+(test (unique? '()) #t)
+(test (unique? '(a)) #t)
+(test (unique? '(a b c d)) #t)
+(test (unique? '(a b c b)) #f)
+(test (unique? '(a a c d)) #f)
+
+
+;; empty-env : Env
+(define empty-env '())
+
+
+;; (envof X) (listof Symbol) (listof X) -> (envof X)
+;; Produce an environment that binds distinct symbols in x* to values in v*.
+;; ASSUME: (= (length x*) (length v*))
+;; ASSUME: (unique? x*)
+
+(define (extend-env* env x* v*)
+  (append (map list x* v*) env))
+
+(test (extend-env* empty-env '(x y z) '(5 6 7)) '((x 5)
+                                                  (y 6)
+                                                  (z 7)))
+(test (extend-env*
+       (extend-env* empty-env '(x y z) '(5 6 7))
+       '(a x c) '(5 6 7))
+      '((a 5)
+        (x 6)
+        (c 7)
+        (x 5)
+        (y 6)
+        (z 7)))
+
+
+;; (envof X) Symbol X -> (envof X)
+;; extend the given environment to bind x0 to v0
+(define (extend-env env x v)
+  (extend-env* env (list x) (list v)))
+
+
+;; (envof X) (listof Symbol) -> (envof X)
+;; remove the initial bindings of env indicated by loid
+;; Effect: Signal an error in case of binding mismatch
+(define (shrink-env env loid)
+  (cond
+    [(empty? loid) env]
+    [else ; (cons? loid)
+     (cond
+       [(empty? env) (error 'shrink-env "Insufficient bindings")]
+       [(symbol=? (caar env) (first loid))
+        (shrink-env (rest env) (rest loid))]
+       [else
+        (error 'shrink-env "Binding mismatch: ~a ∈ ~a"  (first loid) env)])]))
+
+
+(test (shrink-env empty-env empty) empty-env)
+
+(test (shrink-env (extend-env* empty-env (list 'x 'y) (list 7 8))
+                  (list 'x))
+      (extend-env* empty-env (list 'y) (list 8)))
+
+(test (shrink-env (extend-env* empty-env (list 'x 'y) (list 7 8))
+                  (list 'x 'y)) empty-env)
+
+(test/exn (shrink-env (extend-env* empty-env (list 'x 'y) (list 7 8))
+                      (list 'y)) "mismatch")
+
+
+;; (envof X) Symbol -> X
+;; Produce the binding for the given symbol.
+;; Effect: Signals an error if no binding is found.
+(define (lookup-env env x)
+  (cond [(empty? env) (error 'lookup-env "unbound identifier: ~a" x)]
+        [else (if (symbol=? x (car (first env)))
+                  (cadr (first env))
+                  (lookup-env (rest env) x))]))
+
+(test (lookup-env (extend-env*
+                   (extend-env* empty-env '(x y z) '(5 6 7))
+                   '(a x c) '(5 6 7))
+                  'z)
+      7)
+
+;; (envof X) Symbol -> Boolean
+;; produce true if the environment binds x, otherwise false
+(define (in-env? env x)
+  (cond [(empty? env) #f]
+        [else (if (symbol=? x (car (first env)))
+                  #t
+                  (in-env? (rest env) x))]))
+
+(test (in-env? (extend-env*
+                (extend-env* empty-env '(x y z) '(5 6 7))
+                '(a x c) '(5 6 7))
+               'z)
+      #t)
+
+(test (in-env? (extend-env*
+                (extend-env* empty-env '(x y z) '(5 6 7))
+                '(a x c) '(5 6 7))
+               'q)
+      #f)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
+;; Parsing
+;;
+
+
+
+;; S-expression -> Type
+;; produce the type specified by the s-expression
+;; Effect: raises an error if the given s-exp does not represent a type
+(define (parse/type s-exp)
+  (match s-exp
+    [`number
+     (numType)]
+    [`{-> ,arg ,result}
+     (funType (parse/type arg)
+              (parse/type result))]
+    [_ (error 'parse-type "Invalid type: ~a" s-exp)]))
+
+(test (parse/type 'number) (numType))
+(test (parse/type '{-> number number})
+      (funType (numType) (numType)))
+(test (parse/type '{-> {-> number number} {-> number number}})
+      (funType (funType (numType) (numType))
+               (funType (numType) (numType))))
+(test/exn (parse/type 'nonsense) "Invalid type")
+
+
+
+;; S-expression -> TFWAE
+;; produce the TFWAE corresponding to the s-expression
+;; Effect: raises an error if s-exp does not represent a TFWAE
+(define (parse/tfwae s-exp)
+  (match s-exp
+    [`,n
+     #:when (number? n)
+     (num n)]
+    [`{+ ,l ,r}
+     (add (parse/tfwae l) (parse/tfwae r))]
+    [`{- ,l ,r}
+     (sub (parse/tfwae l) (parse/tfwae r))]
+    [`{with {,id : ,type ,named} ,body}
+     #:when (tfid? id)
+     (with id (parse/type type) (parse/tfwae named) (parse/tfwae body))]
+    [`,x
+     #:when (tfid? x)
+     (id x)]
+    [`{fun {,x : ,ptype} : ,rtype ,body}
+     (fun x
+          (parse/type ptype)
+          (parse/type rtype)
+          (parse/tfwae body))]
+    [`{,rator ,rand}
+     (app (parse/tfwae rator)
+          (parse/tfwae rand))]
+    [_ (error 'parse-tfwae "Invalid tfwae: ~a" s-exp)]))
+
+(test (parse/tfwae '5) (num 5))
+(test (parse/tfwae '{+ 1 2}) (add (num 1) (num 2)))
+(test (parse/tfwae '{- 1 2}) (sub (num 1) (num 2)))
+(test (parse/tfwae '{with {x : number 5} x})
+      (with 'x (numType) (num 5) (id 'x)))
+(test (parse/tfwae 'x) (id 'x))
+(test/exn (parse/tfwae '{+ nonsense}) "Invalid tfwae")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
+;; Type checking
+;;
+
+
+;; Tenv is (envof Type)
+;; interp. The type associated to each identifier in the surrounding context
+(define Tenv? (envof? Type?))
+
+
+
+
+;; Problem 1: Use the given Inductive Definition of Well-Typed TFWAE
+;;    To complete the design of the tfwae/wt data definition.
+
+
+;; Well-typed (wt) TFWAE expressions
+
+;; tenv ⊢ tfwae : type
+;; interp. in a context where tenv assigns types to some identifiers,
+;;         tfwae has type "type".
+
+(define-type TFWAE/wt
+  ;; [num/wt]
+  ;; ----------------------
+  ;;    tenv ⊢ n : number
+  [num/wt (tenv Tenv?) (n number?)]
+
+  ;; [add/wt]  tenv1 ⊢ tfwae1 : type1   tenv2 ⊢ tfwae2 : type2
+  ;; ------------------------------------------------------------
+  ;;            tenv1 ⊢ {+ tfwae1 tfwae2} : number
+  ;; CHECK: type1 = type2 = number
+  ;; CHECK: tenv1 = tenv2
+  [add/wt (tfwae/wt1 TFWAE/wt?) (tfwae/wt2 TFWAE/wt?)
+          #:when (and (equal? (tfwae/wt-type tfwae/wt1) (numType))
+                      (equal? (tfwae/wt-type tfwae/wt2) (numType))
+                      (equal? (tfwae/wt-tenv tfwae/wt1)
+                              (tfwae/wt-tenv tfwae/wt2)))]
+
+  ;; [sub/wt]  tenv1 ⊢ tfwae1 : type1   tenv2 ⊢ tfwae2 : type2
+  ;; ------------------------------------------------------------
+  ;;            tenv ⊢ {- tfwae1 tfwae2} : number
+  ;; CHECK: type1 = type2 = number
+  ;; CHECK: tenv1 = tenv2
+  [sub/wt (tfwae/wt1 TFWAE/wt?) (tfwae/wt2 TFWAE/wt?)
+          #:when (and (equal? (tfwae/wt-type tfwae/wt1) (numType))
+                      (equal? (tfwae/wt-type tfwae/wt2) (numType))
+                      (equal? (tfwae/wt-tenv tfwae/wt1)
+                              (tfwae/wt-tenv tfwae/wt2)))]
+  
+  ;; [id/wt]
+  ;; ------------------------
+  ;;     tenv ⊢ x : type1
+  ;; CHECK: (lookup-env tenv x) = type1
+  [id/wt (tenv Tenv?) (x tfid?)
+         #:when (in-env? tenv x)]
+
+  ;; [with/wt]  tenv1 ⊢ tfwae1 : type1    tenv2 ⊢ tfwae2 : type2
+  ;; --------------------------------------------------------------------
+  ;;                  tenv1 ⊢ {with {x : type3 tfwae1} tfwae2} : type2
+  ;; CHECK: type1 = type3
+  ;; CHECK: tenv2 = (extend-env tenv1 x type3)
+  [with/wt (x tfid?) (xtype Type?)
+           (tfwae/wt1 TFWAE/wt?)
+           (tfwae/wt2 TFWAE/wt?)
+           #:when (and (equal? (tfwae/wt-type tfwae/wt1) xtype)
+                       (equal? (tfwae/wt-tenv tfwae/wt2)
+                               (extend-env (tfwae/wt-tenv tfwae/wt1)
+                                           x
+                                           xtype)))]
+
+  ;;             tenv1 ⊢ tfwae1 : type1
+  ;; [app/wt]    tenv2 ⊢ tfwae2 : type2
+  ;; ---------------------------------------------------------------
+  ;;             tenv3 ⊢ {tfwae1 tfwae2} : type3
+  ;; CHECK: tenv3 = tenv1 = tenv2
+  ;; CHECK: type1 = {type2 -> type3}
+  [app/wt (tfwae/wt1 TFWAE/wt?) (tfwae/wt2 TFWAE/wt?)
+          #:when (and (equal? (tfwae/wt-tenv tfwae/wt1)
+                              (tfwae/wt-tenv tfwae/wt2))
+                      (funType? (tfwae/wt-type tfwae/wt1))
+                      (match-let ([(funType param-type result-type)
+                                   (tfwae/wt-type tfwae/wt1)])
+                        (equal? (tfwae/wt-type tfwae/wt2) param-type)))]
+
+  ;;  [fun/wt]  tenv0 ⊢ tfwae0 : type0
+  ;; ----------------------------------------------------------------------
+  ;;   tenv ⊢ {fun {x : type1} : type2  tfwae0}
+  ;;                                       : {type1 -> type2}
+  ;; CHECK: type2 = type0
+  ;; CHECK: tenv0 = (extend-env tenv x type1)
+  [fun/wt (x tfid?) (ptype Type?) (rtype Type?) (tfwae/wt TFWAE/wt?)
+          #:when (and (equal? (tfwae/wt-type tfwae/wt) rtype)
+                      (equal? (lookup-env (tfwae/wt-tenv tfwae/wt) x) ptype))])
+
+
+(define (fn-for-tfwae/wt tfwae/wt)
+  (type-case TFWAE/wt tfwae/wt
+    [num/wt (tenv n) (... tenv n)]
+    [add/wt (tfwae/wt1 tfwae/wt2)
+            (... (fn-for-tfwae/wt tfwae/wt1)
+                 (fn-for-tfwae/wt tfwae/wt2))]
+    [sub/wt (tfwae/wt1 tfwae/wt2)
+            (... (fn-for-tfwae/wt tfwae/wt1)
+                 (fn-for-tfwae/wt tfwae/wt2))]
+    [id/wt (tenv x) (... tenv x)]
+    [with/wt (x xtype tfwae/wt1 tfwae/wt2)
+             (... x
+                  (fn-for-tfwae/wt tfwae/wt1)
+                  (fn-for-tfwae/wt tfwae/wt2))]
+    [app/wt (tfwae/wt1 tfwae/wt2)
+            (... (fn-for-tfwae/wt tfwae/wt1)
+                 (fn-for-tfwae/wt tfwae/wt2))]
+    [fun/wt (x ptype rtype tfwae/wt)
+            (... x ptype rtype (fn-for-tfwae/wt tfwae/wt))]))
+
+
+
+;; Selectors
+
+;; Problem 2: Complete the design of the three "smart" selectors for tfwae/wt
+
+;; TFWAE/wt -> Tenv
+;; produce the type environment about which the derivation's judgment holds
+
+(define (tfwae/wt-tenv tfwae/wt)
+  (type-case TFWAE/wt tfwae/wt
+    [num/wt (tenv n) tenv]
+    [add/wt (tfwae/wt1 tfwae/wt2) (tfwae/wt-tenv tfwae/wt1)]
+    [sub/wt (tfwae/wt1 tfwae/wt2) (tfwae/wt-tenv tfwae/wt1)]
+    [id/wt (tenv x) tenv]
+    [with/wt (x xtype tfwae/wt1 tfwae/wt2) (tfwae/wt-tenv tfwae/wt1)]
+    [app/wt (tfwae/wt1 tfwae/wt2) (tfwae/wt-tenv tfwae/wt1)]
+    [fun/wt (x ptype rtype tfwae/wt)
+            (let ([tenv (tfwae/wt-tenv tfwae/wt)])
+              (shrink-env tenv (list x)))]))
+
+
+;; TFWAE/wt -> TFWAE
+;; produce the tfwae about which the derivation's judgment holds
+
+(define (tfwae/wt-tfwae tfwae/wt)
+  (type-case TFWAE/wt tfwae/wt
+    [num/wt (tenv n) (num n)]
+    [add/wt (tfwae/wt1 tfwae/wt2)
+            (add (tfwae/wt-tfwae tfwae/wt1)
+                 (tfwae/wt-tfwae tfwae/wt2))]
+    [sub/wt (tfwae/wt1 tfwae/wt2)
+            (sub (tfwae/wt-tfwae tfwae/wt1)
+                 (tfwae/wt-tfwae tfwae/wt2))]
+    [id/wt (tenv x) (id x)]
+    [with/wt (x xtype tfwae/wt1 tfwae/wt2)
+             (with x
+                   xtype
+                   (tfwae/wt-tfwae tfwae/wt1)
+                   (tfwae/wt-tfwae tfwae/wt2))]
+    [app/wt (tfwae/wt1 tfwae/wt2)
+            (app (tfwae/wt-tfwae tfwae/wt1)
+                 (tfwae/wt-tfwae tfwae/wt2))]
+    [fun/wt (x ptype rtype tfwae/wt)
+            (fun x ptype rtype (tfwae/wt-tfwae tfwae/wt))]))
+
+
+;; TFWAE/wt -> Type
+;; produce the type about which the derivation's judgment holds
+
+(define (tfwae/wt-type tfwae/wt)
+  (type-case TFWAE/wt tfwae/wt
+    [num/wt (tenv n) (numType)]
+    [add/wt (tfwae/wt1 tfwae/wt2)
+            (numType)]
+    [sub/wt (tfwae/wt1 tfwae/wt2)
+            (numType)]
+    [id/wt (tenv x) (lookup-env tenv x)]
+    [with/wt (x xtype tfwae/wt1 tfwae/wt2)
+             (tfwae/wt-type tfwae/wt2)]
+    [app/wt (tfwae/wt1 tfwae/wt2)
+            (funType-result (tfwae/wt-type tfwae/wt1))]
+    [fun/wt (x ptype rtype tfwae/wt)
+            (funType ptype rtype)]))
+
+
+
+
+;; Problem 3: Complete the design of tfwae->tfwae/wt.
+;; You should also adapt your examples (and maybe others) as examples for
+;; certify-tfwae and typecheck-tfwae
+
+;; TFWAE Tenv -> TFWAE/wt
+;; produce a TFWAE/wt derivation of tenv ⊢ tfwae : type for some type
+;; Effect: signal an error if no such derivation exists.
+;(define (tfwae->tfwae/wt tfwae tenv) (num/wt '() 0)) ; stub
+(define (tfwae->tfwae/wt tfwae tenv)
+  (local [(define (synth&check tfwae tenv type)
+            (let ([tfwae/wt (tfwae->tfwae/wt tfwae tenv)])
+              (begin
+                (unless (equal? (tfwae/wt-type tfwae/wt) type)
+                  (error 'tfwae->tfwae/wt "type mismatch"))
+                tfwae/wt)))
+
+          (define (tfwae->tfwae/wt tfwae tenv)
+            (type-case TFWAE tfwae
+              [num (n) (num/wt tenv n)]
+              [add (lhs rhs)
+                   (let ([lhs/wt (synth&check lhs tenv (numType))]
+                         [rhs/wt (synth&check rhs tenv (numType))])
+                     (add/wt lhs/wt rhs/wt))]
+              [sub (lhs rhs)
+                   (let ([lhs/wt (synth&check lhs tenv (numType))]
+                         [rhs/wt (synth&check rhs tenv (numType))])
+                     (sub/wt lhs/wt rhs/wt))]
+              [id (x)
+                  (begin
+                    (unless (in-env? tenv x)
+                      (error 'tfwae->tfwae/wt "~s ∉ ~s" x tenv))
+                    (id/wt tenv x))]
+              [with (x xtype named body)
+                    (let* ([name/wt (tfwae->tfwae/wt named tenv)]
+                           [body-tenv (extend-env tenv x xtype)]
+                           [body/wt (tfwae->tfwae/wt body body-tenv)])
+                      (begin
+                        (unless (equal? xtype (tfwae/wt-type name/wt))
+                          (error 'tfwae->tfwae/wt "type mistmatch"))
+                        (with/wt x
+                                 xtype
+                                 name/wt
+                                 body/wt)))]
+              [app (rator rand)
+                   (let* ([rand/wt (tfwae->tfwae/wt rand tenv)]
+                          [rator/wt (tfwae->tfwae/wt rator tenv)]
+                          [ratortype (tfwae/wt-type rator/wt)])
+                     (begin
+                       (unless (funType? ratortype)
+                         (error 'tfwae->tfwae/wt "type mismatch"))
+                       (unless (equal? (funType-arg ratortype)
+                                       (tfwae/wt-type rand/wt))
+                         (error 'tfwae->tfwae/wt "type mismatch"))
+                       (app/wt rator/wt rand/wt)))]
+              [fun (x ptype rtype body)
+                   (let ([body/wt
+                          (tfwae->tfwae/wt body (extend-env tenv x ptype))])
+                     (begin
+                       (unless (equal? (tfwae/wt-type body/wt) rtype)
+                         (error 'tfwae->tfwae/wt "type mismatch"))
+                       (fun/wt x ptype rtype body/wt)))]))]
+    (tfwae->tfwae/wt tfwae tenv)))
+
+
+(test (tfwae->tfwae/wt (num 7) '()) (num/wt '() 7))
+(test (tfwae->tfwae/wt (add (num 3) (num 4)) '())
+      (add/wt (num/wt '() 3) (num/wt '() 4)))
+(test (tfwae->tfwae/wt (sub (num 4) (num 3)) '())
+      (sub/wt (num/wt '() 4) (num/wt '() 3)))
+(test (tfwae->tfwae/wt
+       (with 'x (numType) (num 7) (id 'x)) '())
+      (with/wt 'x (numType) (num/wt '() 7)
+               (id/wt (list (list 'x (numType))) 'x)))
+(test (tfwae->tfwae/wt
+       (with 'x (numType) (sub (num 5) (num 3)) (add (id 'x) (num 5))) '())
+      (with/wt 'x (numType)
+               (sub/wt (num/wt '() 5) (num/wt '() 3))
+               (add/wt (id/wt (list (list 'x (numType))) 'x)
+                       (num/wt (list (list 'x (numType))) 5))))
+(test (tfwae->tfwae/wt
+       (app (fun 'x (numType) (numType) (add (id 'x) (num 1)))
+            (num 6)) '())
+      (app/wt (fun/wt 'x (numType) (numType)
+                      (add/wt (id/wt (list (list 'x (numType))) 'x)
+                              (num/wt (list (list 'x (numType))) 1)))
+              (num/wt '() 6)))
+;; Apologizes for the example below... I came up with it,
+;; thinking it would be a good show of how functions are first class,
+;; but the tenvs made the tfwae/wt version very long, but when I realized this
+;; I was already in too deep
+(test (tfwae->tfwae/wt
+       (app (with 'f
+                  (funType (funType (numType) (numType))
+                           (funType (numType) (numType)))
+                  (fun 'f^
+                       (funType (numType) (numType))
+                       (funType (numType) (numType))
+                       (fun 'x
+                            (numType)
+                            (numType)
+                            (add (num 1) (app (id 'f^) (id 'x)))))
+                  (app (id 'f)
+                       (fun 'x (numType) (numType) (sub (num 14) (id 'x)))))
+            (add (num 6) (num 2))) '())
+      (app/wt
+       (with/wt
+        'f (funType (funType (numType) (numType))
+                    (funType (numType) (numType)))
+        (fun/wt 'f^
+                (funType (numType) (numType))
+                (funType (numType) (numType))
+                (fun/wt 'x
+                        (numType)
+                        (numType)
+                        (add/wt (num/wt
+                                 (list (list 'x (numType))
+                                       (list 'f^
+                                             (funType (numType)
+                                                      (numType))))
+                                 1)
+                                (app/wt (id/wt
+                                         (list (list 'x (numType))
+                                               (list 'f^ (funType (numType)
+                                                                  (numType))))
+                                         'f^)
+                                        (id/wt
+                                         (list (list 'x (numType))
+                                               (list 'f^ (funType (numType)
+                                                                  (numType))))
+                                         'x)))))
+        (app/wt
+         (id/wt (list (list 'f (funType (funType (numType) (numType))
+                                        (funType (numType) (numType)))))
+                'f)
+         (fun/wt 'x
+                 (numType)
+                 (numType)
+                 (sub/wt (num/wt (list (list 'x (numType))
+                                       (list 'f (funType (funType (numType)
+                                                                  (numType))
+                                                         (funType (numType)
+                                                                  (numType)))))
+                                 14)
+                         (id/wt (list (list 'x (numType))
+                                      (list 'f (funType (funType (numType)
+                                                                 (numType))
+                                                        (funType (numType)
+                                                                 (numType)))))
+                                'x)))))
+       (add/wt (num/wt '() 6) (num/wt '() 2))))
+
+(test/exn (tfwae->tfwae/wt
+           (add (fun 'x (numType) (numType) (id 'x)) (num 5)) '()) "")
+(test/exn (tfwae->tfwae/wt
+           (add (num 4) (fun 'x (numType) (numType) (id 'x))) '()) "")
+(test/exn (tfwae->tfwae/wt
+           (sub (fun 'x (numType) (numType) (id 'x)) (num 3)) '()) "")
+(test/exn (tfwae->tfwae/wt
+           (sub (num 2) (fun 'x (numType) (numType) (id 'x))) '()) "")
+;; some other exception if there is a type mismatch !!! delete later
+
+
+;; TFWAE/wt TFWAE -> Void
+;; produce void
+;; Effect: signal an error if tfwae/wt does not certify that '() ⊢ tfwae : type 
+(define (certify-tfwae tfwae/wt tfwae)
+  (begin
+    (let ([tenv (tfwae/wt-tenv tfwae/wt)]
+          [tfwae^ (tfwae/wt-tfwae tfwae/wt)])
+      (begin
+        (unless (equal? '() tenv)
+          (error 'check-tfwae/wt "Bad program environent: ~s" tenv)))
+      (unless (equal? tfwae tfwae^)
+        (error 'check-tfwae/wt "Program mismatch: ~s ≠ ~s" tfwae tfwae^))))) 
+
+
+;; TFWAE -> TFWAE
+;; produce tfwae if tfwae is a well-typed program (i.e. '() ⊢ tfwae : type)
+;; Effect: signal an error if not
+(define (typecheck-tfwae tfwae)
+  (let ([tfwae/wt (tfwae->tfwae/wt tfwae '())])
+    (begin
+      (certify-tfwae tfwae/wt tfwae) ; just in case!
+      tfwae)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;
+;; Interpreter values
+;;
+
+(define-type Value
+  [numV (n number?)]
+  [funV (x tfid?) (body TFWAE?) (env (envof? Value?))])
+
+(define (fn-for-value v)
+  (type-case Value v
+    [numV (n) (... n)]
+    [funV (x body env) (... x body env)]))
+
+
+
+;;
+;; Interpreter
+;;
+
+;; TFWAE -> Value
+;; produce the result of interpreting tfwae
+(define (interp/tfwae tfwae)
+  ;; Accumulator: env is (envof Value)
+  ;; Invariant: env represents the bindings of identifiers to values
+  (define (interp/tfwae-env tfwae env)
+    (type-case TFWAE tfwae
+      [num (n) (numV n)]
+      [add (lhs rhs)
+           (numV (+ (numV-n (interp/tfwae-env lhs env))
+                    (numV-n (interp/tfwae-env rhs env))))]
+      [sub (lhs rhs)
+           (numV (- (numV-n (interp/tfwae-env lhs env))
+                    (numV-n (interp/tfwae-env rhs env))))]
+      [with (x type named body)
+            (interp/tfwae-env body
+                              (extend-env env x
+                                          (interp/tfwae-env named env)))]
+      [id (name) (lookup-env env name)]
+      [app (rator rand)
+           (match-let ([(funV x body env^) (interp/tfwae-env rator env)]
+                       [randV (interp/tfwae-env rand env)])
+             (interp/tfwae-env body (extend-env env^ x randV)))]
+      [fun (x param-type return-type body)
+           (funV x body env)]))
+  (interp/tfwae-env tfwae empty-env))
+
+(test (interp/tfwae (parse/tfwae '1)) (numV 1))
+(test (interp/tfwae (parse/tfwae '{+ 1 2})) (numV 3))
+(test (interp/tfwae (parse/tfwae '{- 1 2})) (numV -1))
+(test (interp/tfwae (parse/tfwae
+                     '{with {x : number 5} {+ x 1}}))
+      (numV 6))
+(test (interp/tfwae (parse/tfwae
+                     '{with {add1 : {-> number number}
+                                  {fun {x : number} : number
+                                       {+ 1 x}}}
+                            {add1 1}}))
+      (numV 2))
+(test (interp/tfwae (parse/tfwae
+                     '{fun {x : number} : number {+ x 1}}))
+      (funV 'x (add (id 'x) (num 1)) empty-env))
+
+;; Static Scoping Example
+(test (interp/tfwae
+       (parse/tfwae
+        '{with {y : number 5}
+               {with {function : {-> number number}
+                               {fun {x : number} : number {+ y x}}}
+                     {with {y : number 3}
+                           {function 1}}}}))
+      (numV 6))
+
