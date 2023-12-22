@@ -1,0 +1,174 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 322}
+\chead{Homework 11}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 4 (page 108)}
+{\it Let $G$ be a group and let $T = G \times G$.
+\begin{enumerate}
+	\item Show that $D = \{(g,g)\in G\times G \mid g \in G\}$ is a group isomorphic to $G$.
+	\item Prove that $D$ is normal in $T$ if and only if $G$ is abelian.
+\end{enumerate}}
+\begin{proof}[Solution]\let\qed\relax
+	Let $G,T,D$ be defined as above.
+	\begin{enumerate}
+		\item We provide the map $\phi \colon D \to G$ by $(g,g) \mapsto g$.
+			This map is clearly well-defined.
+			It is also clearly surjective,
+			since for $g \in G$, $\phi((g,g)) = g$.
+			Finally, to show injectivity,
+			let $\phi((g_1,g_1)) = \phi((g_2,g_2))$.
+			Then $g_1 = g_2 \implies (g_1,g_1) = (g_2,g_2)$.
+			Hence $\phi$ is bijective.
+
+			To see that $\phi$ respects the group operation, we have
+			\[
+				\phi((g_1,g_1)(g_2,g_2)) = \phi(g_1g_2,g_1g_2) = g_1g_2
+				= \phi((g_1,g_1))\phi((g_2,g_2))
+			\]
+			Thus, $\phi$ is an isomorphism between $D$ and $G$.
+		\item Let $G$ be abelian.
+			If $(g_1,g_2) \in T$ is arbitrary and $(g,g) \in D$,
+			we have
+			\[
+				(g_1,g_2)(g,g)(g_1,g_2)^{-1} = (g_1g,g_2g)(g_1,g_2)^{-1}
+				= (gg_1,gg_2)(g_1,g_2)^{-1} = (g,g)(g_1,g_2)(g_1,g_2)^{-1} = (g,g) \in D
+			\]
+			so $D$ is normal in $T$.
+
+			Now assume that $D$ is normal in $T$.
+			Let $g_1,g_2 \in G$ be arbitrary, so $(g_1,g_2) \in T$.
+			Note $(g_1,g_1) \in D$,
+			so we have $(g_1,g_2)(g_1,g_1)(g_1,g_2)^{-1} = (g_1g_1g_1^{-1},g_2g_1g_2^{-1}) = (g_1,g_2g_1g_2^{-1}) \in D$.
+			So $g_1 = g_2g_1g_2^{-1} \implies g_1g_2 = g_2g_1$.
+			Since this is true for any $g_1,g_2 \in G$,
+			this shows that $G$ is abelian.
+	\end{enumerate}
+\end{proof}
+
+\subsection*{Problem 5 (page 108)}
+{\it Let $G$ be a finite abelian group.
+Prove that $G$ is isomorphic to the direct product of its Sylow subgroups.}
+\begin{proof}[Solution]\let\qed\relax
+	By Theorem 2.13.1 in Herstein,
+	it is sufficient to how that $G$ is the internal direct product
+	of the Sylow subgroups.
+	First, note that all of our Sylow p subgroups ar normal,
+	since this is an abelian group and all subgroups are normal.
+	Thus there is only one Sylow of each kind, since the Sylow subgroups are conjugate to each other.
+	Furthermore, Sylow subgroups are disjoint, since they have coprime order.
+	Thus, we can decompose $G$ as the product of Sylow subgroups,
+	which satisfy our desired property for an inner directt product.
+\end{proof}
+
+\subsection*{Problem 6 (page 108)}
+{\it Let $A,B$ be cyclic groups of order $m$ and $n$, respectively.
+Prove that $A \times B$ is cyclic if and only if $m$ and $n$ are relatively prime.}
+\begin{proof}[Solution]\let\qed\relax
+	Let $A \times B$ be cyclic.
+	Then there is some $a \in A$ and $b \in B$ such that $\langle (a,b) \rangle = A \times B$.
+	There are $|A||B| = mn$ elements in $A \times B$,
+	hence $o((a,b)) = mn$ in order to generate the whole group.
+	For the sake of contradiction, assume that $\gcd(a,b) \neq 1$.
+	Let $\mathrm{lcm}(m,n) = l$.
+	Then for any $(a_1,b_1) \in A \times B$, we have
+	$(a_1,b_1)^l = (a_1^l,b_1^l) = (1,1)$,
+	but since we have that $\gcd \neq 1$, we have $c < mn$.
+	Hence, no element in $A \times B$ has order $mn$.
+	But then $(a,b)$ doesn't have order $mn$, so a contradiction.
+
+	Then, for any $ 1 \leq r < mn$, $(a,b)^r \neq (1,1)$.
+	That is, $(a^r,b^r) \neq (1,1)$.
+	Hence, for any $1 \leq r < mn$, $m \nmid r$ or $n \nmid r$,
+	otherwise $($.
+
+	Let $(m,n) = 1$.
+	For some $(a,b) \in A \times B$, we require that $(a,b)^{\mathrm{lcm}(m,n)} = (1,1)$,
+	thus the order of $(a,b)$ must divide $\mathrm{lcm}(m,n)$, call this $k$.
+	We must have $a^k = b^k = 1$, so $m \mid k$ and $n \mid k$,
+	thus $\mathrm{lcm}(m,n) \mid k$.
+	Hence, $k = \mathrm{lcm}(m,n) = mn$ since the $\gcd = 1$.
+	Thus, since there are $mn$ elements in $A \times B$,
+	and there is an element with order $mn$,
+	we have that $A \times B = \langle (a,b) \rangle$, which is cyclic.
+\end{proof}
+
+\subsection*{Problem 8 (page 108)}
+{\it Give an example of a group $G$ and normal subgroups $N_1, \dots, N_n$
+such that $G = N_1N_2\cdots N_n$ and $N_i \cap N_j = \langle e \rangle$
+for $i \neq j$ and yet $G$ is \emph{not} the internal direct product of $N_1,\dots,N_n$.}
+\begin{proof}[Solution]\let\qed\relax
+	We provide the Klein four-group $G$: let $1,a,b \in G$,
+	and define $ab = ba \neq 1,a,b$.
+	Furthermore, $a^2 = b^2 = 1$ (and clearly then $(ab)^2 = abba = 1$ as well).
+	Thus $G$ has four elements.
+	Furthermore, it is possible to check that $G$ is abelian as well.
+	We provide the subgroups $N_1 = \{1,a\}$, $N_2 = \{1,b\}$, and $N_3 = \{1,ab\}$.
+	Since $G$ is abelian, these subgruops are all normal.
+	Furthermore, $G = N_1N_2N_3$, since
+	\begin{align*}
+		1 &= 1\cdot 1 \cdot 1\\
+		a &= a \cdot 1 \cdot 1\\
+		b &= 1 \cdot b \cdot 1\\
+		ab &= 1 \cdot 1 \cdot ab
+	\end{align*}
+	which are all the elements in $G$.
+	Additionally, clearly $N_i \cap N_j = \langle 1 \rangle$ when $i \neq j$
+	($1 \leq i,j \leq 3$).
+	
+	We now show that $G$ is the internal direct product of $N_1,N_2,N_3$.
+	Notice that $ab = a \cdot b \cdot 1$ as well as $ab = 1 \cdot 1 \cdot ab$,
+	hence, not all $g \in G$ are represented as a unique product
+	of elements from $N_1,N_2,N_3$, which violates a requirement
+	for $G$ to be the internal direct product of $N_1,N_2,N_3$.
+\end{proof}
+
+\subsection*{Problem 11 (page 108)}
+{\it Let $G$ be a finite abelian group such that it contains a subgroup
+$H_0 \neq \langle e \rangle$ which lies in \emph{every} subgroup $H \neq \langle e \rangle$.
+Prove that $G$ must be cyclic.
+What can you say about $o(G)$.}
+\begin{proof}[Solution]\let\qed\relax
+	We prove the contrapositive. That is, assume that $G$ is not cyclic.
+	Then, since $G$ is finite,
+	there exists a minimal set of generators such that
+	$G = \langle a_1,\dots,a_r \rangle$ and $r > 1$.
+	We now consider $\langle a_1 \rangle \cap \langle a_2 \rangle$.
+	Let $o(a_1) = m, o(a_2) = n$.
+	We claim that $\langle a_1 \rangle \cap \langle a_2 \rangle = \{1\}$.
+	If $(m,n) = 1$, by problem 6 from section 1.5 of Jacobson
+	(we proved in homework 4),
+	we have that $\langle a_1 \rangle \cap \langle a_2 \rangle = 1$.
+	Now let $(m,n) = d > 1$.
+	For the sake of contradiction, assume that $\langle a_1 \rangle \cap \langle a_2 \rangle \neq \{1\}$.
+	Then there exists $j,k$ such that $a_1^j = a_2^k$.
+	I can't figure this out, but I want to say something like $a_1^j = a_2$,
+	and so $\langle a_2 \rangle \subseteq \langle a_1 \rangle$,
+	and so $\langle a_1, a_3, \dots ,a_r \rangle$ generates the set.
+	But this contradicts our assumption that $a_1,a_2,\dots,a_r$ was minimal.
+	Thus, $\langle a_1 \rangle \cap \langle a_2 \rangle = \{1\}$.
+	In either case, we have $langle a_1 \rangle \cap \langle a_2 \rangle = \{1\}$,
+	but then there is no subgruop $H_0 \neq \langle 1 \rangle$
+	that is contained in each subgroup, completing the proof.
+\end{proof}
+\end{document}

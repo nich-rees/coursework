@@ -1,0 +1,443 @@
+#lang plai
+(require "parsing.rkt")
+
+(print-only-errors)
+(define (... . args) (cons '... args)) ;; enables us to use ... in templates
+
+;; F1WAE - Expressions for a language with first-order (second-class) functions
+;; Augmented with "if zero" operator
+
+
+(define-type F1WAE    
+  [num (n number?)] 
+  [add (lhs F1WAE?) (rhs F1WAE?)]
+  [sub (lhs F1WAE?) (rhs F1WAE?)]
+  [with (name symbol?) (named-expr F1WAE?) (body F1WAE?)]
+  [id (name symbol?)]
+  [app (fun-name symbol?) (arg F1WAE?)]
+  [if0 (predicate F1WAE?) (consequent F1WAE?) (alternative F1WAE?)])
+;; interp. expressions in a language that supports applying first-order
+;; functions. Its syntax is defined by the following BNF:
+;; <F1WAE> ::= <num>
+;;           | {+ <F1WAE> <F1WAE>}
+;;           | {- <F1WAE> <F1WAE>}
+;;           | {with {<id> <F1WAE>} <F1WAE>}
+;;           | <id>
+;;           | {<id> <F1WAE>}
+;;           | {if0 <F1WAE> <F1WAE> <F1WAE>}
+;; Every AE program is an F1WAE program
+(define FOUR (num 4))
+(define FOURPLUS5 (add FOUR (num 5)))
+(define SIXMINUSTHREE (sub (num 6) (num 3)))
+
+;; Every WAE program is an F1WAE program
+(define FOUR-X (with 'x (num 4) (id 'x)))
+(define EIGHT (with 'x (num 4) (add (id 'x) (id 'x))))
+
+(define WAE1-sexp'{with {x {+ 5 5}} {+ x x}})
+(define WAE1 (with 'x (add (num 5) (num 5))
+                   (add (id 'x) (id 'x))))
+
+(define WAE2-sexp '{with {x {+ 5 5}} {with {y {- x 3}} {+ y y}}})
+(define WAE2 (with 'x (add (num 5) (num 5))
+                   (with 'y (sub (id 'x) (num 3))
+                         (add (id 'y) (id 'y)))))
+
+(define WAE3-sexp '{with {x 5} {+ x {with {x 3} 10}}})
+(define WAE3 (with 'x (num 5)
+                   (add (id 'x)
+                        (with 'x (num 3)
+                              (num 10)))))
+
+(define WAE4-sexp '{with {x 5} {+ x {with {x 3} x}}})
+(define WAE4 (with 'x (num 5)
+                   (add (id 'x)
+                        (with 'x (num 3)
+                              (id 'x)))))
+
+(define WAE5-sexp '{with {x 5} {+ x {with {y 3} x}}})
+(define WAE5 (with 'x (num 5)
+                   (add (id 'x)
+                        (with 'y (num 3)
+                              (id 'x)))))
+
+;; F1WAE expressions waiting for function definitions
+
+(define F1WAE1-sexp '{with {x 5} {double x}})
+(define F1WAE1 (with 'x (num 5) (app 'double (id 'x))))
+(define F1WAE2-sexp '{with {x 5} {one-plus x}})
+(define F1WAE2 (with 'x (num 5) (app 'one-plus (id 'x))))
+
+#;
+(define (fn-for-f1wae f)
+  (type-case F1WAE f
+    [num (n) (... n)]
+    [add (l r) (... (fn-for-f1wae l)
+                    (fn-for-f1wae r))]
+    [sub (l r) (... (fn-for-f1wae l)
+                    (fn-for-f1wae r))]
+    [with (id named body)
+          (... id
+               (fn-for-f1wae named)
+               (fn-for-f1wae body))]
+    [id (x) (... x)]
+    [app (fun-name arg) (... fun-name (fn-for-f1wae arg))]
+    [if0 (p c a)
+         (... (fn-for-f1wae p)
+              (fn-for-f1wae c)
+              (fn-for-f1wae a))]))
+
+(define-type FunDef
+  [fundef (fun-name symbol?)
+          (arg-name symbol?)
+          (body F1WAE?)])
+;; interp. a first-order function definition with a name, formal parameter,
+;;         and body.  Its syntax is defined by following BNF:
+;; <FunDef> ::= {define-fn {<id> <id>} <F1WAE> }
+
+(define FD1-sexpr '{define-fn {double x} {+ x x}})
+(define FD1 (fundef 'double 'x (add (id 'x) (id 'x))))
+(define FD2-sexpr '{define-fn {one-plus x} {+ x 1}})
+(define FD2 (fundef 'one-plus 'x (add (id 'x) (num 1))))
+(define FD3-sexpr '{define-fn {freevar x} {+ x y}})
+(define FD3 ...)
+
+(define EVEN-sexp '{define-fn {even x} {if0 x 0 {odd x}}})
+(define EVEN (fundef 'even 'x (if0 (id 'x) (num 0) (app 'odd (id 'x)))))
+(define ODD-sexp '{define-fn {odd x} {if0 x 1 {even x}}})
+(define ODD (fundef 'odd 'x (if0 (id 'x) (num 1) (app 'even (id 'x)))))
+
+
+;; Prog is (cons (listof FunDef) F1WAE)
+;; interp.  A full program in the F1WAE language.  Its syntax is defined by
+;;          the following BNF:
+;; <Prog> ::= <F1WAE>
+;;          | <FunDef> <Prog>
+;; NOTE: The concrete (on-disk) syntax for <Prog> is NOT wrapped in
+;; outermost brackets, so does not read as a single s-expression,
+;; but rather a sequence of them.  Our internal syntax
+;; representation will still be a list of s-expressions.
+(define IS-SEVEN-EVEN? (cons (list EVEN ODD) (app 'even (num 7))))
+(define IS-SEVEN-ODD? (cons (list EVEN ODD) (app 'even (num 7))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Interpretation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; identifier (listof FunDef) -> Fundef
+;; produce the named FunDef from the given list
+;; Effect: signal an error on failure.
+(define (lookup-fundef f fundefs)
+  (let ([result (findf (λ (fd) (symbol=? f (fundef-fun-name fd))) fundefs)])
+    (if result
+        result
+        (error "No such function: ~a" f))))
+
+(test/exn (lookup-fundef 'double (list)) "")
+(test (lookup-fundef 'double (list FD1 FD2)) FD1)
+(test (lookup-fundef 'double (list FD2 FD1)) FD1)
+
+
+
+;;;;;;;;;;;;;; TUTORIAL 2 ;;;;;;;;;;;;;;;;;;;;;
+;; We can use different data structures for environments
+;; The important thing is the *interface* they provide
+;; We need the ability to
+;;   * define an empty environment
+;;   * add a variable/value pair to an environment
+;;   * lookup the most recent value associated with a variable
+
+;;;;;;; In-class version: Env as functions ;;;;
+
+;; Env is symbol -> number
+;; interp.  A collection of deferred substitutions
+
+;; Env
+;; the empty environment
+#;
+(define empty-env
+  (λ (x) (error 'lookup-env "Unbound variable: ~a" x)))
+
+;; Env Symbol Number -> Env
+;; extend env with a binding from x0 to v
+#;
+(define (extend-env env x0 v)
+  (λ (x)
+    (if (symbol=? x x0)
+        v
+        (env x))))
+
+;; Env Symbol -> Number
+;; look up the identifier x in the environment env
+;; Effect: Signals an error if variable is not present
+#;
+(define (lookup-env env x) (env x))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variation 1: Env as a list (comment out previous definitions)
+
+;; Problem 1: Redefine the Env type using lists
+
+;; Env is (listof (cons Symbol Number))
+;; interp.  A collection of deferred substitutions
+
+;; Problem 2: Redesign empty-env, extend-env, and lookup-env to use this Env 
+
+;; Env
+;; the empty environment
+#;
+(define empty-env '())
+
+;; Env Symbol Number -> Env
+;; extend env with a binding from x0 to v
+#;
+(define (extend-env old-env x value)
+  (cons (cons x value) old-env))
+
+;; Env Symbol -> Number
+;; look up the identifier x in the environment env
+;; Effect: Signals an error if variable is not present
+#;
+(define (lookup-env env x)
+  (match env
+    ['() (error 'lookup-env "Unbound variable: ~a" x)]
+    [`( ( ,y . ,value) . ,rest ) #:when (equal? x y) value]
+    [else (lookup-env (rest env) x)]))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Variation 2: define-type version (comment out previous definitions)
+
+;; Problem 3: Redefine the Env type using define-type
+(define-type Env
+  [an-empty-env]
+  [extend-env (old-env Env?) (x symbol?) (value number?)])
+
+;; Problem 4: Redesign empty-env, extend-env, and lookup-env to use this Env 
+
+;; Env
+;; the empty environment
+(define empty-env (an-empty-env))
+
+
+;; Env Symbol Number -> Env
+;; extend env with a binding from x0 to v
+;; IMPLEMENTED AS PART OF Env
+
+;; Env Symbol -> Number
+;; look up the identifier x in the environment env
+;; Effect: Signals an error if variable is not present
+(define (lookup-env env x)
+  (type-case Env env
+    [an-empty-env () (error 'lookup-env "Unbound variable: ~a" x)]
+    [extend-env (old x2 value)
+       (if (symbol=? x x2) value (lookup-env old x))]))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; F1WAE (listof FunDef) -> number
+;; interpret the expression f1wae in the context of the fundefs
+
+(define (interp-f1wae f1wae fundefs)
+  (local
+    ;; Accumulator: env is Env
+    ;; Invariant: env represents the bindings (in inside-out order)
+    ;;            of identifiers to values due to pending substitutions
+    [(define (interp-f1wae f1wae fundefs env)
+       (type-case F1WAE f1wae
+         [num (n) n]
+         [add (l r) (+ (interp-f1wae l fundefs env)
+                       (interp-f1wae r fundefs env))]
+         [sub (l r) (- (interp-f1wae l fundefs env)
+                       (interp-f1wae r fundefs env))]
+         [with (x named body)
+               (let ([val (interp-f1wae named fundefs env)])
+                 (interp-f1wae body fundefs (extend-env env x val)))]
+         [id (x) (lookup-env env x)]
+         [app (fun-name arg)
+              (let ([fundef (lookup-fundef fun-name fundefs)])
+                (let ([val (interp-f1wae arg fundefs env)])
+                  (let ([fun-body (fundef-body fundef)]
+                        [fun-arg-name (fundef-arg-name fundef)])
+                    (interp-f1wae fun-body fundefs
+                                  (extend-env empty-env ; !!!
+                                              fun-arg-name val)))))]
+         [if0 (p c a)
+              (if (zero? (interp-f1wae p fundefs env))
+                  (interp-f1wae c fundefs env)
+                  (interp-f1wae a fundefs env))]))]
+    (interp-f1wae f1wae fundefs empty-env)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Parsing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; f1wae-focused-sexp (f1waefs) is one of:
+;; - number
+;; - `(+ ,f1waefs ,f1waefs)
+;; - `(- ,f1waefs ,f1waefs)
+;; - `(with ,identifier ,f1waefs ,f1waefs
+;; -  identifier
+;; - `(,identifier ,f1waefs)
+;; - "any other s-expression"
+;; where identifier is any symbol except +, -, with, if0, or define-fn
+;; interp.  any s-expression, but with a focus on those that represent
+;; WAE expressions.
+
+(define (identifier? x)
+  (and (symbol? x)
+       (not (member x '(+ - with if0 define-fn)))))
+
+#;
+(define (fn-for-f1wae-focused-sexp sexp)
+  (match sexp
+    [`,n
+     #:when (number? n)
+     (... n)]
+    [`(+ ,sexp1 ,sexp2)
+     (... (fn-for-f1wae-focused-sexp sexp1)
+          (fn-for-f1wae-focused-sexp sexp2))]
+    [`(- ,sexp1 ,sexp2)
+     (... (fn-for-f1wae-focused-sexp sexp1)
+          (fn-for-f1wae-focused-sexp sexp2))]
+    [`(with (,x ,sexp1) ,sexp2)
+     #:when (identifier? x)
+     (... x
+          (fn-for-f1wae-focused-sexp sexp1)
+          (fn-for-f1wae-focused-sexp sexp2))]
+    [`,x
+     #:when (identifier? x)
+     (... x)]
+    [`(,f ,sexp1)
+     #:when (identifier? f)
+     (... f (fn-for-f1wae-focused-sexp sexp1))]
+    [`(if0 ,sexp1 ,sexp2 ,sexp3)
+     (... (fn-for-f1wae-focused-sexp sexp1)
+          (fn-for-f1wae-focused-sexp sexp2)
+          (fn-for-f1wae-focused-sexp sexp3))]
+    [else (... sexp)] ))
+
+;; MISSING: TEMPLATE!
+(define (fn-for-fundef-focused-sexp sexp) (... sexp))
+
+
+
+;; parse-expr : s-expression -> F1WAE
+;; parse the given s-expression into a F1WAE expression
+;; EFFECT: signals an error on failure
+(define (parse-expr sexp)
+  (match sexp
+    [`,n #:when (number? n) (num n)]
+    ; we're accepting ANY symbol as an ID reference, unlike our usual
+    ; it's worth thinking what impact that will have on the language!
+    [`{+ ,lhs ,rhs} (add (parse-expr lhs) (parse-expr rhs))]
+    [`{- ,lhs ,rhs} (sub (parse-expr lhs) (parse-expr rhs))]
+    [`{with {,id ,named-exp} ,body}
+     #:when (symbol? id)
+     (with id (parse-expr named-exp)
+           (parse-expr body))]
+    [`,x #:when (identifier? x) (id x)]
+    [`{,fun-name ,arg-exp} #:when (symbol? fun-name)
+                           (app fun-name (parse-expr arg-exp))]
+    [`{if0 ,pred ,conseq ,altern}
+     (if0 (parse-expr pred) (parse-expr conseq) (parse-expr altern))]
+    [_ (error 'parse "bad expression ~a" sexp)]))
+
+
+;; parse-fundef: s-expression -> FunDef
+;; parse the given s-expression into an internal function representation
+;; EFFECTS: signals an error on failure
+(define (parse-fundef sexp)
+  (match sexp
+    [`{define-fn {,fun-name ,arg-name} ,body}
+     (fundef fun-name arg-name (parse-expr body))]
+    [_ (error 'parse-fundef "bad function definition: ~a" sexp)]))
+
+
+(test (parse-fundef '{define-fn {foo x} y}) (fundef 'foo 'x (id 'y)))
+(test (parse-fundef '{define-fn {bar z} {+ z 1}})
+      (fundef 'bar 'z (add (id 'z) (num 1))))
+(test/exn (parse-fundef '{broken {x y} 1}) "bad function") 
+
+
+;; <FProg> ::= <F1WAE>
+;;           | <FunDef> <FProg>
+
+;; FProg is one of:
+;; - (cons F1WAE empty)
+;; - (cons FunDef FProg)
+
+#;
+(define (fn-for-fprog fp)
+  (cond [(empty? (rest fp)) (... (fn-for-f1wae (first fp)))]
+        [else (... (fn-for-fundef (first fp))
+                   (fn-for-fprog (rest fp)))]))
+
+
+;; Exercise: Design parse-fprog
+
+;; Fprog -> (cons F1WAE (listof FunDef))
+;; parse the F1WAE Program into an expression and list of functions
+;; Effect: signals an erro upon bad parse
+(define (parse-fprog initial-fp)
+  (local
+    ;; Accumulator fundefs is (listof FunDef)
+    ;; Invariant: contains the FunDef representions of surrounding function defs
+    [(define (parse-fprog--acc fp fundefs)
+       (cond [(empty? (rest fp)) (cons (parse-expr (first fp))
+                                       fundefs)]
+             [else (parse-fprog--acc (rest fp)
+                                     (cons (parse-fundef (first fp))
+                                           fundefs))]))]
+    (parse-fprog--acc initial-fp empty)))
+
+
+(test (parse-fprog (list '{define-fn {double x} {+ x x}}
+                         '{with {x 5} {double x}}))
+      (cons F1WAE1 (list FD1)))
+
+
+;;
+;; PUTTING IT ALL TOGETHER  - an interpreter of files on disk
+;;
+
+;; string -> number
+;; produce the result of interpreting the AE stored in the file fname
+;; EFFECT: signals an error if no file fname contains an AE representation
+(define (interp-file fname)
+  (match-let ([`(,f1wae . ,fundefs) (parse-fprog (read-from-file* fname))])
+    (interp-f1wae f1wae fundefs)))
+
+(test (with-temporary-data-file "{+ 3 7}\n"
+        (λ (fname) (interp-file fname)))
+      10)
+
+(test (with-temporary-data-file "{+ {- 3 4} 7}\n"
+        (λ (fname) (interp-file fname)))
+      6)
+
+(test (with-temporary-data-file "{with {x 5} {+ x {with {y 3} x}}}"
+        (λ (fname) (interp-file fname)))
+      10)
+
+(test (with-temporary-data-file
+          "{define-fn {double x} {+ x x}}\n{with {x 5} {double x}}"
+        (λ (fname) (interp-file fname)))
+      10)
+
+(define pgm
+  "{define-fn {even x} {if0 x 1 {odd {- x 1}}}}
+     {define-fn {odd x} {if0 x 0 {even {- x 1}}}}
+     {even 9}")
+
+(test (with-temporary-data-file pgm
+        (λ (fname) (interp-file fname)))
+      0)      
+

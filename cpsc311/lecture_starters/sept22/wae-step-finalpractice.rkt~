@@ -1,0 +1,51 @@
+#lang plai
+
+;;
+;; Hand-Stepping WAE programs
+;;
+
+
+
+'x  ;; x occurs free in this WAE expression
+
+'{with {y 7} x} ;; x occurs free in this WAE expression
+
+'{with {y x} y} ;; x occurs free in this WAE expression
+
+'{with {x 7} {with {y x} z}} ;; x occurs bound, z occurs free, y is bound
+;; but does not occur
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES1 '{with {x 4} x})
+'{with {x 4} x}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES2 '{with {x 4} {+ x x}})
+'{with {x 4} {+ x x}}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES3 '{with {x {+ 5 5}} {+ x x}})
+'{with {x {+ 5 5}} {+ x x}}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES4 '{with {x {+ 5 5}} {with {y {- x 3}} {+ y y}}})
+'{with {x {+ 5 5}} {with {y {- x 3}} {+ y y}}}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES5 '{with {x 5} {+ x {with {x 3} 10}}})
+'{with {x 5} {+ x {with {x 3} 10}}}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES6 '{with {x 5} {+ x {with {x 3} x}}})
+'{with {x 5} {+ x {with {x 3} x}}}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(define WAES7 '{with {x 5} {+ x {with {y 3} x}}})
+'{with {x 5} {+ x {with {y 3} x}}}

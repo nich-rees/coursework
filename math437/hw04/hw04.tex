@@ -1,0 +1,151 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry, hyperref}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 437}
+\chead{Homework 4}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\section*{Problem 1}
+{\it Find all positive integers $n$ for which there exist $a,b \in \N$ such that
+	\[
+		n^2 = 2^a + 2^b
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	Let $n$ be a positive integer such that
+	there are $a,b \in \N$ such that $n^2 = 2^a + 2^b$.
+
+	First, consider when $a = b$.
+	Then $n^2 = 2^{a+1}$.
+	Obviously, if $a,b$ is odd, i.e. $a = 2k-1$ for some $k \in \N$,
+	then $2^{a+1} = 2^{2k} = (2^{k})^2$ which is a perfect square,
+	so $n = 2^{k}$.
+	We claim that we cannot have $a,b$ even.
+	Otherwise, we would have $a = 2k$, and so $n^2 = 2^{a+1} = 2^{2k+1} = 2\cdot (2^k)^2$,
+	but note that if $x^2 = zy^2$, $x,y,z \in \Z$,
+	then $x = \sqrt{z}y \implies \sqrt{z} \in \Q$,
+	hence $n^2 = 2(2^k)^2 \implies \sqrt{2} \in \Q$, which we know is not true.
+	Thus, we have our first possible form of $n$,
+	that is $n = 2^k$ for any $k \in \N$.
+
+	Now we let $a \neq b$.
+	WLOG let $a > b$.
+	Then we can write
+	\[
+		n^2 = 2^b(2^{a-b} + 1)
+	\]
+	Note that $b$ must be even,
+	since $2^b, (2^{a-b}+1)$ are coprime, so both factors must be perfect squares.
+	Let $c = a - b$.
+	Since $2^c + 1$ is a perfect square,
+	there exists $m \in \N$ such that $m^2 = 2^c + 1
+	\implies 2^c = (m+1)(m-1)$.
+	Since the only prime that divides $2^c$ is $2$,
+	only $2$ divides the right hand side,
+	so we must have that $m+1$ and $m-1$ are powers of $2$ as well.
+	So there are $i,j \in \N$ such that $m+1 = 2^i$ and $m-1 = 2^j$.
+	Note $i > j$.
+	But
+	\[
+		2 = m + 1 - (m - 1) = 2^i - 2^j = 2^j(2^{i-j}-1)
+	\]
+	We must then have $j = 1$,
+	otherwise if $j > 1$, we have $2^j > 2$ and $2^{i-j} - 1 > 2^1 - 1 = 1$,
+	so the right hand side would be greater than $2$.
+	But if $j = 1$, we must then also get that $i = 2$.
+	So $2^{a-b} + 1 = 2^2\cdot 2^1 + 1 = 3$.
+	So $n$ must be of the form $3\cdot 2^{2k}$ where $k \in \N$.
+
+	Therefore, our $n$ is of the form $n=2^k$ or $n = 3\cdot 2^{2k}$ where $k \in \N$.
+\end{proof}
+\clearpage
+
+\section*{Problem 2}
+{\it Find all integers $x$ and $y$ for which
+	\[
+		x^3 - y^2 = 9
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	Since $x^3 - y^2$ is odd, if there is a solution, either $x^3$ is odd and $y^2$ is even,
+	or $x^3$ is even and $y^2$ is odd.
+	Since taking the $n$th power of a number does not change
+	whether it is even or odd, our cases are equivalent to
+	when $x$ is odd and $y$ is even, and when $x$ is even and $y$ is odd.
+
+	First, consider when $x$ is even and $y$ is odd.
+	Then we can rewrite $x = 2n$ and $y = 2m+1$ where $n,m \in \Z$.
+	Then $(2n)^3 - (2m+1)^2 = 8n^3 - 4m^2 - 4m - 1 = 9 \implies 8n^3 - 4m^2 - 4m = 10$.
+	But the left hand side is congruent to $0$ modulo $4$
+	and the right hand side is congruent to $2$ modulo $4$,
+	hence our left sides does not equal our right, for any $m,n$.
+	Thus, there does not exist even $x$ and odd $y$ that solves $x^3 - y^2 = 9$.
+
+	Now consider when $x$ is odd and $y$ is even.
+	Note that $x \equiv 1\,(\mathrm{mod}\,4)$,
+	for if $x \not \equiv 1\,(\mathrm{mod}\,4) \implies x \equiv -1$
+	then $x^3 \equiv -1\cdot -1 \cdot -1 \equiv -1\,(\mathrm{mod}\,4)$
+	so $x^3 - 8 \equiv -1\,(\mathrm{mod}\,4)$,
+	however, since $\exists k \in \Z$ such that $y = 2k$ because its even,
+	we have $(2k)^2 + 1 = 4k^2 + 1\equiv 1 \,(\mathrm{mod}\,4)$,
+	but then $x^3 - 8 \neq y^2 + 1$,
+	so no solutions exist when $x \equiv -1 \,(\mathrm{mod}\,4)$.
+	Note that we can't have $x = 1$ since then $x^3 - y^2 < 0 < 9$.
+	Then, since $x \equiv 1 \,(\mathrm{mod}\,4)$, $x \geq 5 \implies x-2 \geq 3$.
+	Since $2 \nmid x - 2$, then there exists at least one odd prime that divides $x-2$.
+	Let $p$ be any prime that divides $x-2$.
+	Then since $(x-2)(x^2+2x+4) = x^3 - 8 = y^2 + 1$,
+	we get that $p \mid y^2 + 1$,
+	hence $y^2 \equiv -1 \,(\mathrm{mod}\,p)$.
+	Then by the definition of the Legendre symbol,
+	$\left(\frac{-1}{p}\right) = 1$.
+	Then by Proposition 19.3, since $p$ is odd, $p \equiv \, 1(\mathrm{mod}\,r)$.
+	Now, since this is true for every prime in the prime decomposition of $x-2$,
+	we have that $x-2 \equiv 1\cdot 1 \cdots 1 \equiv 1 \,(\mathrm{mod}\,4)$,
+	thus $x \equiv -1\, (\mathrm{mod}\, 4)$.
+	But this contradicts our assumption that $x \equiv 1\,(\mathrm{mod}\,4)$.
+
+	This covers all of our possible cases for $x,y$,
+	so we cannot have a solution $x,y \in \Z$.
+\end{proof}
+
+\clearpage
+
+\section*{Problem 3}
+{\it Prove that for each positive integers $x$ and $y$,
+	if the fractional part $\{\sqrt[3]{y}\}$ equals the fractional part $\{\sqrt{x}\}$,
+	then we must have that $x$ is a perfect square, while $y$ is a perfect cube.
+}
+\begin{proof}[Solution]\let\qed\relax
+	We have that $\{\sqrt{x}\} - \{\sqrt[3]{y}\} = 0$,
+	and since $\{z\} = z - \lfloor z \rfloor$, we have that
+	$\sqrt{x} - \lfloor \sqrt{x} \rfloor - \sqrt[3]{y} + \lfloor \sqrt[3]{y} \rfloor = 0$,
+	so $\sqrt{x} - \sqrt[3]{y} = \lfloor \sqrt{x} \rfloor - \lfloor \sqrt[3]{y} \rfloor =: n \in \Z$.
+	Then $\sqrt[3]{y} = \sqrt{x} - n$.
+	So $y = (\sqrt{x} - n)^3 = x\sqrt{x} - xn + \sqrt{x}n^2 - n^3$.
+	Since $(y + xn + n^3)/(x+n^2) \in \Q$ (we can divide by $x$ since it is positive),
+	$\sqrt{x} \in \Q$.
+	Then Proposition 24.1 implies that $\sqrt{x}\in\N$, so $x$ is a perfect square.
+	But then the fractional part $\{\sqrt{x}\}$ is zero,
+	and by assumption, the fractional part of $\{\sqrt[3]{y}\}$ is zero,
+	so $y$ is a perfect cube.
+\end{proof}
+\end{document}

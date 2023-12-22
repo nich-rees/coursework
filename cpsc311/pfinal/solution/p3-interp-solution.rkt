@@ -1,0 +1,238 @@
+#lang plai
+(define (... . args) (cons '... args))
+(print-only-errors)
+
+(require "appendix/datatype-311.rkt")
+(require "appendix/ittl-typing.rkt")
+
+;;
+;; p3-interp-solution.rkt:  In Lieu of an Interpretive Dance, We Bring You...
+;;
+
+
+;; Problem 3: Implement an interpreter for the statically-typed ITTL Language
+;; (line 182)
+
+;;
+;; Implicitly Typed Tupley Language (ITTL)
+;;
+
+;; The word "tuple" is a generalization of "couple, triple, quadruple, etc."
+;; It's a language feature that lets you create unnamed compound data.  You
+;; can think of it as a generalization of pairs, including even "zero-uples"
+
+;; Rather than introduce selectors like "first" and "second", we introduce
+;; a version of Racket's match-let mechanism.
+;; NOTE THAT THE SYNTAX FOLLOWS match-let, NOT match.  Hence, we call this
+;; feature match-with.
+
+;; ITTL is statically typed:  Problems 4-5 will (independently) have you write
+;; a type checker for the language.  In this problem we write an interpreter
+;; which assumes that it is given statically-typed programs, so need make fewer
+;; checks than in a dynamic language.
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Syntax
+;;
+
+;; identifier? : Any -> Boolean
+;; produce true if the given object is an identifier, otherwise false
+
+#;
+(define-type TL
+  [num (n number?)]
+  [add (lhs TL?) (rhs TL?)]
+  [id (x symbol?)]
+  [fixFun (f symbol?) (x symbol?) (body TL?)]
+  [app (rator TL?) (rand TL?)]
+  [tuple (args (listof TL?))]
+  [match-with (ids (listof identifier?)) (named TL?)
+              (body TL?)])
+;; interp. An AST for TL
+;; <TL> ::= <number>
+;;         | {+ <TL> <TL>}
+;;         | <id>
+;;         | {fixFun <id> {<id>} <TL>}
+;;         | {<TL> <TL>}
+;;         | {mt}
+;;         | {tuple <TL>*}
+;;         | {match-with {{tuple <id>*} <TL>}
+;;             <TL>}
+;;            where ids in <id*> are unique
+
+;; Examples
+#;(define TL1 (num 7))
+;; Unbound identifier
+#;(define TL2 (add (num 6) (id 'g)))
+#;(define TL3 (tuple (list)))
+#;(define TL4 (fixFun 'f 'x (id 'x)))
+#;(define TL5 (app (fixFun 'add1 'x (add (id 'x) (num 1)))
+                   (num 2)))
+#;(define TL6 (tuple (list (add (num 1) (num 2)) (num 3))))
+
+#;(define TL7 (tuple (list (num 1) (num 2) (num 3))))
+
+;; {match-with {{tuple x y} {tuple 5 6}}
+;;    {+ x y}}
+;; produces 11
+#;(define TL8
+    (match-with (list 'x 'y) (tuple (list (num 5) (num 6)))
+                (add (id 'x) (id 'y))))
+
+;; {match-with {{tuple} {tuple}}
+;;    {+ 2 3}}
+;; produces 5
+#;(define TL9
+    (match-with (list) (tuple (list))
+                (add (num 2) (num 3))))
+
+;; Unbound identifier
+#;(define TL10
+    (match-with (list) (tuple (list (num 5) (num 6)))
+                (add (id 'x) (id 'y))))
+
+#;(define TL11
+    (app (fixFun 'two-args 'args
+                 (match-with '(x y) (id 'args)
+                             (add (id 'x) (id 'y))))
+         (tuple (list (num 9) (num 7)))))
+
+;; {match-with {{tuple x} {tuple 5 6}}
+;;    {+ x 7}}
+;; static type error
+#;(define TL1e
+    (match-with (list 'x) (tuple (list (num 5) (num 6)))
+                (add (id 'x) (num 7))))
+
+
+#;
+(define (fn-for-tl tl)
+  (type-case TL tl
+    [num (n) (... n)]
+    [add (lhs rhs) (... (fn-for-tl lhs) (fn-for-tl rhs))]
+    [id (x) (... x)]
+    [fixFun (f x body) (... f x (fn-for-tl body))]
+    [app (rator rand) (... (fn-for-tl rator) (fn-for-tl rand))]
+    [tuple (args) (... (fn-for-lotl args))] ;; fn-for-lotl is for lists of tl
+    [match-with (ids named body)
+                (... ids (fn-for-tl named) (fn-for-tl body))]))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Values
+
+;; Value data type needs two new constructors: fixFunV and tupleV
+(define-type _CompoundValue 
+  [fixFunV (f identifier?) (x identifier?) (body TL?) (env (envof? Value?))]
+  [tupleV (args (listof Value?))])
+;; Value is one of:
+;; - Number
+;; - (fixFunV Identifier Identifier TL Env)
+;; - (tupleV (listof Value)
+;; interp.  runtime ITTL values
+
+(define (Value? v)
+  (match v
+    [`,n #:when (number? n) #t]
+    [(fixFunV f x TL env) #t]
+    [(tupleV args) (andmap Value? args)]))
+
+(define V1 7)
+(define V2 (fixFunV 'f 'x (id 'x) empty-env))
+(define V3 (tupleV (list V1 V2)))
+
+;; Template for Value intentionally omitted (YOU DON'T WANT IT!)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Environments
+
+;; (envof X) is (listof (list symbol X))
+
+;; unique? : (listof Symbol) -> Boolean
+;; produce true if each symbol in x* appears only once
+
+;; empty-env : (envof X)
+;; an empty environment
+
+;; extend-env : (envof X) (listof symbol) (listof X) -> (envof X)
+;; Produce an environment that binds distinct symbols in x* to values in v*.
+;; ASSUME: (= (length x*) (length v*))
+;; ASSUME: (unique? x*)
+
+;; lookup-env : (envof X) symbol -> X
+;; Produce the binding for the given symbol.
+;; Effect: Signals an error if no binding is found.
+
+
+;; Env is (envof Value)
+;; interp. runtime environments
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Identifier Identifier TL Env Value -> Env
+;; produce an environment with a self-reference for f and value for x
+(define (make-app-env f x body env v)
+  (extend-env env
+              (list f x)
+              (list (fixFunV f x body env)
+                    v)))
+
+;; Problem 3: implement an environment-passing interpreter for ITTL. Your
+;; interpreter must exploit the static typing invariants (you can consult
+;; p4-typecheck.rkt for the details of the type system, but that may not be
+;; necessary).  Our solution fits on one screen (about 20 lines).
+;; HINT: Use make-app-env in the function application case.
+;; We HIGHLY recommend writing examples: the provided set is not nearly enough!
+
+;; ITTL -> Value
+;; produce the result of interpreting the given TL
+;; INVARIANT: '() ⊢ tl : type for some type
+;; INVARIANT: if '() ⊢ tl : number, result is a number
+;; INVARIANT: if '() ⊢ tl : type1 -> type2, result is a function that
+;;   produces values of type type2 when applied to values of type type1
+;; INVARIANT: if '() ⊢ tl : (tuple type1 ... typeN), result is a tuple of N
+;;   values, (tuple v1 ... vN) where  '() ⊢ vi : typei
+;; Effect: none (thanks to static type checking)
+#;
+(define (interp/ittl tl0)
+  (... tl0))
+
+(define (interp/ittl tl0)
+  (local
+    [(define (interp/ittl--env tl env)
+       (type-case TL tl
+         [num (n) n]
+         [add (lhs rhs) (+ (interp/ittl--env lhs env)
+                           (interp/ittl--env rhs env))]
+         [id (x) (lookup-env env x)]
+         [fixFun (f x body) (fixFunV f x body env)]
+         [app
+          (rator rand)
+          (match-let ([(fixFunV f x body fenv) (interp/ittl--env rator env)]
+                      [vrand (interp/ittl--env rand env)]) 
+            (interp/ittl--env body (make-app-env f x body fenv vrand)))]
+         [tuple (args)
+                (tupleV (map (λ (arg) interp/ittl--env arg env) args))]
+         [match-with
+          (ids named body)
+          (match-let ([(tupleV vargs) (interp/ittl--env named env)])
+            (interp/ittl--env
+             body
+             (extend-env env ids vargs)))]))]
+    (interp/ittl--env tl0 empty-env)))
+
+(test (interp/ittl (num 1)) 1)
+(test (interp/ittl (add (num 1) (num 2))) 3)
+(test (interp/ittl (fixFun 'f 'x (id 'x))) (fixFunV 'f 'x (id 'x) empty-env))
+(test (interp/ittl (app (fixFun 'add1 'x (add (id 'x) (num 1)))
+                        (num 2)))
+      3)
+(test
+ (interp/ittl
+  (app (app (fixFun 'f 'x (fixFun 'g 'y (id 'x))) (num 7)) (num 2)))
+ 7)

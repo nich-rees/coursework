@@ -1510,4 +1510,94 @@ He'll show us more weird functions next time.
 
 Q from after class: we can just assume our math 100 derivative rules on the final.
 
+\section{December 6}
+He does the butterfly lemma again.
+Maybe instead of making a statement about what happens
+when we chose the slope just right,
+we describe what happens if we choose wrong.
+
+Wrong ideas:
+The tangent line touches the graph at one point only. No!
+Tangent line touches the curve but it doesn't cross it. No!
+If $f'(c)>0$ then $f$ is increasing on some open interval with mid-point $c$. No!
+The thing that breaks evrything: $f(x) = \begin{cases} \frac12 x + x^2\sin(\frac{1}{x}) & x\neq 0 \\ 0 & x=0\end{cases}$.
+$f'(x) = \frac12 - \cos{\frac{1}{x}} + 2x\sin{\frac{1}{x}}$ has values
+positive and negative in every interval interval $(-\delta,\delta)$.
+
+\subsection{Optimization}
+\begin{theorem}
+	Suppose $f \colon (a,b) \to \R$ has a minimum
+	at some point $c \in (a,b)$ i.e. $f(c) \leq f(x)$ $\forall x \in (a,b)$.
+	Then $f'(c) = 0$.
+\end{theorem}
+\begin{proof}
+	Contrapositive and use the Butterfly.
+	Suppose $f'(c) \neq 0$. WLOG assume $f'(c) > 0$.
+	Pick $m = 0$ and use Butterfly Lemma to get $\delta > 0$ such that
+	\[
+		f(x) < f(c) + m(x-c), \forall x \in (c-\delta, c)
+	\]
+	Thus $f(c)$ is NOT a minimizer on $(a,b)$.
+\end{proof}
+``This is simple enough that they show you this in first year calculus,
+and then they give you two weeks of problems."
+The typical story is finding critical points, etc.
+but very unlikely he will test us on it.
+
+\begin{theorem}[Darboux]
+	Derivatives have the intermediate value property,
+	i.e., if $f$ is differentiable at all points of ff
+\end{theorem}
+\begin{proof}
+	Result is obvious if $\mu = f'(a)$ or $\mu = f'(b)$.
+	So suppose $f'(a) < \mu < f'(b)$ WLOG.
+	Consder few function $g(x) = f(x) - \mu x$:
+	this is continuous on $[a,b]$ with $g'(a) = f'(a) - \mu < 0$
+	and $g'(b) = f'(b) - \mu > 0$.
+
+	So (butterfly lemma) tho absolute minimum of $g$
+	on set $[a,b]$ can't occur at either end.
+	So it must be ff
+\end{proof}
+
+\begin{theorem}[Mean Value Theorem -- MVT]
+	Given $f \colon [a,b] \to \R$ continuous,
+	suppose $f'(x)$ exists $\forall x \in (a,b)$.
+	Then $\exists c \in (a,b)$ such that
+	\[
+		\frac{f(b) - f(a)}{b-a} = f'(c)
+	\]
+\end{theorem}
+Insert image.
+``I think MVT is my favourite theorem."
+``My g".
+\begin{proof}
+	Define $m = \frac{f(b) - f(a)}{b-a}$.
+	$g(x) = f(x) - mx$.
+	Evaluate: $g(a) = f(a) - ma$ and $g(b) = f(b) - mb$.
+	Note $g(b) - g(a) = [f(b) - f(a)] - m(b-a) = 0$.
+	Now $g$ is continuous with compact domain,
+	so it has absolute max and absolute min in $[a,b]$.
+	If $g$ is CONSTANT those are equal but $0 = g'(c) = f'(c) - m$ $\forall c \in (a,b)$.
+	If $g$ is NOT CONSTANT then some $c \in (a,b)$
+	will provide a local extremum and give $0 = g'(c) = f'(c) - m$.
+\end{proof}
+This gives what seems like is given in first-year calculus:
+If a function is increasing, the derivative is going to be greater than or equal to zero.
+But also, nontrivial, if the derivative is increasing, then so is the function.
+\begin{corollary}
+	If $f'(x) > 0$ $\forall x \in (a,b)$ then $f$ is increasing on $(a,b)$
+\end{corollary}
+\begin{proof}
+	If $a' < b'$ lie in $(a,b)$, MVT says
+	\[
+		\frac{f(b') - f(a')}{b'-a'} = f'(c) > 0
+	\]
+	for some $c \in (a',b')$, so $f(b') > f(a')$.
+	``Job done."
+\end{proof}
+``Review is for the weak." (I think he meant the day).
+``The final exam, it's worth a lot, 50\%, so you probably want to study."
+Only spend 20\% of your time reviewing. Do problems.
+Think about 6 questions each day and write up 3, every day from now to the exam.
 \end{document}

@@ -141,24 +141,27 @@
 ;; tenv ⊢ tmu : type judgment.  Call it TMU/wt.
 
 
-
+(define-type TMU/wt
 
 ;; [num/wt]
 ;; ----------------------
 ;;    tenv ⊢ n : number
-
+  [num/wt (tenv Tenv?) (n number?)]
 
 ;; [add/wt]  tenv1 ⊢ tmu1 : number   tenv2 ⊢ tmu2 : number
 ;; ------------------------------------------------------------
 ;;            tenv1 ⊢ {+ tmu1 tmu2} : number
 ;; CHECK: tenv1 = tenv2
-  
+  [add/wt (tmu/wt1 TMU/wt?) (tmu/wt2 TMU/wt?)
+          #:when (equal? (tmu/wt-tenv tmu/wt1)
+                         (tmu/wt-tenv tmu/wt2))]
 
 ;; [id/wt]
 ;; ------------------------
 ;;     tenv ⊢ x : type 
 ;; CHECK: (lookup-env tenv x) = type
-
+  [id/wt (tenv Tenv?) (x identifier?)
+         #:when (member x tenv)]
 
 ;; [fixFun/wt]  tenv2 ⊢ tmu : type1  
 ;; ------------------------------------------------------------
@@ -167,6 +170,9 @@
 ;;                            (list f x)
 ;;                            (list type3 type0))
 ;; CHECK: type3 = type0 -> type1
+  #;[fixFun/wt (f symbol?) (f-type Type?) (x symbol?) (tmu/wt TMU/wt?)
+             #:when (and (funType? f-type)
+                         ())];; I will study other things
 
 ;; * Notice that x has type type0 in the above rule, which matches the domain
 ;;   type of the function (type3).
@@ -179,7 +185,7 @@
 ;;            tenv1 ⊢ {tmu1 tmu2} : type3
 ;; CHECK: tenv1 = tenv2
 ;; CHECK: type1 = type2 -> type3
-
+)
 
 ;; PROBLEM 2: Define selector functions for the TMU/wt datatype.
 
