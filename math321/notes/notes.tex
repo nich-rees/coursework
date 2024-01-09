@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Notes}
+\rhead{Nicholas Rees}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\section{January 8}
+``Sometimes MVT stands for `most-valuable theorem'."
+\subsection{Logistics}
+\begin{itemize}
+	\item Homework: Due on Fridays at the start of class (Canvas), posted on Thursday or Friday.
+		List name of people you worked with at the top
+		\begin{itemize}
+			\item Homework 0 is due this Friday, not due marks,
+				but he is using to test automated test system to hand back
+			\item Some help: watch Monty Python Holy Grail
+		\end{itemize}
+	\item Office hours: Zahl Wed. 1-2; TA TBD; TA2 TBD
+	\item Weighting:
+		\begin{itemize}
+			\item HW 30\%
+			\item MT 30\% Feb 14
+			\item Final 40\%
+		\end{itemize}
+\end{itemize}
+
+\subsection*{320 Addendum}
+Typically, 321 picks up at integration after finishing with differentiation in 320.
+But we will pick up some missed material at the end of 320.
+
+Recall
+\begin{definition}
+	$f \colon [a,b] \to \R$, $c \in [a,b]$, we say that $f$
+	is \emph{differentiable at $c$} if
+	$\lim_{x \to c} \frac{f(x) - f(c)}{x-c}$ exists (as a real number).
+	We denote this by $f'(c)$.
+\end{definition}
+This is nice, but could even do in high school.
+But we can go up many levels of abstraction with our limit.
+\begin{itemize}
+	\item $c$ is a limit point in $[a,b]$
+		(for every $\ep$, a point not $c$ exists inside the open ball)
+	\item $g(x) = \frac{f(x) - f(c)}{x-c}$ is a function with
+		domain $[a,b] \setminus \{c\}$ (thankfully, $c$ is still a limit point of this).
+	\item If $c \in (a,b)$, the high school definition of the limit works.
+		If $c = a,b$, then one-sided limit.
+\end{itemize}
+\begin{definition}
+	If $f \colon [a,b] \to \R$ is differentiable at every point $c \in [a,b]$,
+	then we say that $f$ is \emph{differentiable on $[a,b]$}
+	and this gives us a new function $f' \colon [a,b] \to \R$.
+\end{definition}
+\begin{definition}
+	If $f'$ is differentiable at $c \in [a,b]$, write $f''(c) = (f')'(c)$.
+	Alternate notations:
+	\[
+		\begin{matrix}
+			f(c), & f'(c), & f''(c), & f'''(c)\\
+			f^{(0)}(c), & f^{(1)}(c), & f^{(2)}(c), & f^{(3)}(c), &
+			\dots f^{(k)}(c) = \frac{d^k}{dx^k} f(x) |_{x=c}
+		\end{matrix}
+	\]
+\end{definition}
+
+Some questions to consider:
+\begin{itemize}
+	\item Why have codomain $\R$? Why not $\C$? Field $F$? General set / metric space?
+	\item Why make domain a closed interval?? More general subset of $\R$? $\C$? Set / metric space?
+\end{itemize}
+The derivative is one of the most important concepts,
+and so makes sense people have thought about making it more general.
+Sometimes it works, sometimes it doesn't.
+
+We've used the field structure of $\R$ in an important way
+(not necessarily the order structure)...
+more than just a metric space.
+Seems ambitiuous to have a topological definition of a derivative,
+because a derivative is a quantitative rate of change,
+and we don't get that in a topology.
+You can probably find people who have constructed a topological derivative,
+but will have needed to give up desired properties.
+
+\subsection{Taylor's Theorem}
+Recall the special case to MVT that is used to prove MVT:
+\begin{theorem}[Roll'es Theorem]
+	Let $f \colon [a,b] \to \R$ be differentiable, with $f(a) = f(b)$.
+	Then $\exists c \in (a,b)$ such that $f'(c) = 0$.
+\end{theorem}
+If you don't remember how to prove this, good exercise to go through
+that uses a lot of material from Math 320.
+
+We will use this to prove Taylor's theorem,
+which seems really strong and handles most of our everyday functions,
+but easy to step on landmines
+(slightly rewording a true statement gives a really wrong one).
+We are going to give sufficient hypotheses, could technically weaken, but not as clear.
+\begin{theorem}[Taylor's Theorem (5.15 in Rudin)]
+	Let $f \colon [a,b] \to \R$, let $n \geq 0$ be an integer.
+	Suppose that $f$ is $(n+1)$ times differentiable on $[a,b]$.
+	Let $x_0$ and $x$ be points in $[a,b]$ with $x_0 \neq x$.
+	Then there exists a point $c$ strictly between $x_0$ and $x$ such that
+	\begin{equation}
+		f(x) = \sum_{k = 0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k
+		+ \frac{f^{(n+1)}(c)}{(n+1)!}(x-x_0)^{n+1}
+	\end{equation}
+\end{theorem}
+We hope the error term is small so we can control it.
+We won't prove this today because of the time.
+But we will say $P_n(x) = \sum_{k = 0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k$
+is the ``degree n Taylor expansion of $f$ around $x_0$".
+When you are choosing notation, there are competing goals:
+don't want it to be flowery so that it becomes more complicated $P_n^{f,x_0}(x)$,
+but will have to remember what we are hiding.
+And also because what is of interest might be when we fix $f,x_0$,
+and sending $n$ to infinity.
+
+Is this equation helpful? Will depend on how small the ``error term" gets (could dominate!).
+But polynomial if $x$ is close to $x_0$ is going to zero geometrically,
+and factorial is going to zero faster than geometric,
+so actually for most functions, we get to say something nice.
+
+Question: let $f \colon \R \to \R$, infinitely differentiable.
+Suppose $f^{(k)}(0) = 0$.
+Is it true that $f$ must be the zero function?
+Because then the function is just the error term, and so Taylor's theorem fails in the worst way.
+\end{document}
