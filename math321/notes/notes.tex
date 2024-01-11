@@ -29,7 +29,7 @@
 \newcommand{\ep}{{\varepsilon}}
 \newcommand{\SR}{{\mathcal R}}
 
-\renewcommand{\theenumi}{(\alph{enumi})}
+%\renewcommand{\theenumi}{(\alph{enumi})}
 
 \begin{document}
 \section{January 8}
@@ -127,7 +127,7 @@ We are going to give sufficient hypotheses, could technically weaken, but not as
 	Suppose that $f$ is $(n+1)$ times differentiable on $[a,b]$.
 	Let $x_0$ and $x$ be points in $[a,b]$ with $x_0 \neq x$.
 	Then there exists a point $c$ strictly between $x_0$ and $x$ such that
-	\begin{equation}
+	\begin{equation}\label{Taylor}
 		f(x) = \sum_{k = 0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k
 		+ \frac{f^{(n+1)}(c)}{(n+1)!}(x-x_0)^{n+1}
 	\end{equation}
@@ -151,4 +151,97 @@ Question: let $f \colon \R \to \R$, infinitely differentiable.
 Suppose $f^{(k)}(0) = 0$.
 Is it true that $f$ must be the zero function?
 Because then the function is just the error term, and so Taylor's theorem fails in the worst way.
+
+\section{January 10}
+\subsection{Proof of Taylor's Theorem}
+How do we go about proving statement's like this?
+There are many different proofs of this result.
+One thing to do when confronted by these statements is to consider special cases.
+
+Warm-up ($n = 0$): (\ref{Taylor}) becomes $f(x) = f(x_0) + f'(c)(x-x_0)$.
+This is just MVT, which we have already proved.
+So in some sense, more general than MVT.
+We can write this in a clever way to make the proof use Rolle's instead.
+
+\begin{proof}
+	Define $A \in \R$ by
+	\[
+		f(x) - P_n(x) = \frac{A}{(n+1)!}(x-x_0)^{n+1}
+	\]
+	This $A$ exists, since we can just bring the other factors
+	on the right to the left and get $A$ explictly.
+	Our goal is to show there exists $c$ between $x_0$ and $x$ such that $f^{(n+1)}(c) = A$.
+
+	Define $g(t) = f(t) - P_n(t) - \frac{A}{(n+1)!}(t-x_0)^{n+1}$.
+	Note to use Rolle's theorem,
+	we have the freedom to shrink our endpoints so that they are equal to each other
+	(you might have seen this trick to prove MVT from Rolle's).
+	Common to construct a new function that meets the hypotheses of a theorem we want,
+	and use that to inform us about our original function.
+	We claim that we can shrink it to $x$ and $x_0$.
+	Observe $g(x_0) = f(x_0) - P_n(x_0) - 0 = f(x_0) - f(x_0) = 0$ and
+	$g(x) = 0$ by the definition of $A$.
+
+	For $j = 0, \dots, n$, then
+	$g^{(j)}(x_0) = f^{(j)}(x_0) - P_n^{(j)}(x_0) -
+	\underbrace{\frac{d^j}{dt^j}\frac{A}{(n+1)!}(t-x_0)^{n+1}\big\vert_{t=x_0}}_0$.
+	But also $P_n^{(j)}(x_0) = f^{(j)}(x_0)$,
+	since if $k < j$, then the derivatives kill the term,
+	and if $j > k$, then we have a $(x_0 - x_0) = 0$ as a factor.
+	Hence, $g^{(j)}(x_0) = f^{(j)}(x_0) - f^{(j)}(x_0) = 0$.
+	We also have $g^{(n+1)}(t) = f^{(n+1)}(t) - 0 - A$.
+	So we could reword our goal to be to find $c$ such that $g^{(n+1)}(c) = 0$.
+
+	Now it is time to start using Rolle's.
+	We have $g(x_0) = 0$ and $g(x) = 0$.
+	Then by Rolle's, there exists $c_1$ between $x$ and $x_0$ such that
+	$g'(c_1) = 0$.
+	But we can apply Rolle's theorem again,
+	since $g'(x_0) = 0$ and $g'(c_1) = 0$.
+	So there exists $c_2$ between $c_1$ and $x_0$ such that $g''(c_2) = 0$.
+	We can repeat this $n$ times to get $g^{(n)}(x_0) = g^({n)}(c_n) = 0$.
+	Hence, there exists $c_{n+1}$ between $x_0$ and $c_{n+1}$ such that $g^{(n+1)}(c_{n+1}) = 0$.
+	Let $c = c_{n+1}$, and so we have achieved our goal.
+\end{proof}
+Now this seems a bit magic.
+You had to cook up a magic function $g$ and it solves it for you.
+But Zahl would do this by looking at $n=1$, maybe $n=2$ and $n=3$,
+find something that makes the derivative vanish.
+How do we remember how to prove this?
+You really want to chunk things into a small number of ideas:
+you want to use Rolle's theorem (many times),
+want to cook up an axuilliary function $g$ that satisfies Rolle's theorem hypothesis each time,
+and given 20 minutes, you could do it.
+
+Given random people and chess grandmasters and random chessboards,
+did equally bad in recreating the board by memory.
+But given a chessboard that was halfway into a game,
+chess grandmasters did significantly better.
+The takeaway: the grandmasters weren't remembering the exact location of every piece,
+they were remembering by chunking and creating a narrative.
+
+\noindent Examples ($x_0 = 0$):
+\begin{enumerate}
+	\item $f$ a polynomial of degree $D$.
+		$P_n(t)$ is the first terms of $f$, up to degree $n$.
+		So the Taylor expansion eventually becomes the polynomial.
+	\item $f(t) = e^t$.
+		$P_n(t) = \frac{1}{0!} + \frac{t}{1!} + \frac{t^2}{2!} + \cdots + \frac{t^n}{n!}$.
+	\item $f(t) = \sin{t}$.
+		$P_n(t) = 0 + t + 0 - \frac{t^3}{3!} - 0 + \frac{t^5}{5!}$.
+\end{enumerate}
+
+We have talked about convergence in metric spaces.
+$P_n$ is a sequence, so how do we talk about $P_n$ converging to $f$?
+When does it? What metric space are we in?
+We could let our metric space be infinitely differentiable real functions,
+with the metric $d(f,g) = \sup_{x\in D}|f(x) - g(x)|$.
+The first example converges, since it is eventually $0$.
+What about $e^t$?
+Well, if we take $n$ before $x$, not true,
+exponential vs polynomial.
+But if fix a closed interval, then we do get an $n$.
+This is the difference between pointwise and uniform convergence.
+Our metric was normally used for bounded functions, so this is necessary.
+We will pick up this discussion next time.
 \end{document}

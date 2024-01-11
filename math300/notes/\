@@ -1,0 +1,139 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Notes}
+\rhead{Nicholas Rees}
+\cfoot{Page \thepage}
+
+\newtheorem*{problem}{Problem}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{remark}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+\newcommand{\SR}{{\mathcal R}}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\section{January 9}
+\subsection{Complex Numbers}
+Starts with $\N = \{1, 2, 3, \dots\}$.
+We can solve $x + 2 = 5$ ($x = 3$), but we cannot solve $x + 5 = 2$.
+So we introduce $\Z = \{ \dots, -2 , -1, 0 , 1 , 2, \dots\}$.
+Now $x + a = b$ is always solvable in $\Z$ ($a,b \in \Z$), namely $x = b - a \in \Z$.
+So consider $2x = 8$. This has the solution $x = 4 \in \Z$.
+But it's easy to come up with equations like this that aren't solvable in $\Z$,
+namely $8x = 2$.
+So we enlarge our system of numbers to $\Q = \{\frac{p}{q} \mid p,q \in \Z, q \neq 0\}$.
+Now we can solve $ax=b$ for $a,b \in \Q$ as long as $a \neq 0$.
+\begin{remark}
+	If we tried to add another number $\infty$ to $\Q$
+	so that $\infty$ is a solution to $0x = 1$,
+	this would lead to a breakdown of the rules of arithmetic because
+	$0 \cdot a = 0$ for all $a$ by distributive law
+	($0 \cdot a + 0 \cdot a = (0 + 0)\cdot a = 0\cdot a = 0 + 0\cdot a \implies 0\cdot a = 0$).
+\end{remark}
+We can now do linear algebra: in $\Q$, we can solve all linear equations and systems of linear equations.
+
+From $\Q$ to $\R$: we want to do calculus.
+Put in all limits of monotone increasing bounded sequences, e.g.
+\[
+	\lim_{n\to\infty} (1 + \frac{1}{n})^n = e \not\in \Q
+\]
+\[
+	\lim_{n\to\infty} \sum_{i=1}^n \frac{1}{i^2}
+	= \sum_{i=1}^\infty \frac{1}{i^2} = 1 + \frac{1}{4} + \frac{1}{9} + \cdots
+	= \frac{pi^2}{6} \not\in \Q
+\]
+Actually, calculating the above limit is a highlight of this course.
+
+As a consequence, we get the intermediate value theorem:
+$f \colon [a,b] \to \R$ continuous, $f(a) < 0$, $f(b) > 0$,
+then $\exists x \in (a,b)$ such that $f(x) = 0$.
+Also the extremal value theorem:
+$f \colon [a,b] \to \R$ continuous, then $\exists x \in [a,b]$ such that
+$\forall y \in [a,b]$, $f(x) \geq f(y)$.
+In particuluar, say $a > 0$, then $f(x) = x^2 - a$ on the interval $[0,1+a]$,
+$f(0) = -a < 0$ and $f(1+a) = (1+a)^2 - a = 1+ a + a^2 > 2$,
+so by the IVT: $\exists x \in \R$ such that $f(x) = 0$.
+So $x^2 - a = 0$ has a solution in $\R$.
+So we have a solution to this quadratic equation in $\R$.
+The notation we use is $\sqrt{a}$.
+Positive real numbers have square roots in $\R$.
+So we can sole all quadratic equations $x^2 + bx + c = 0$ if $b^2 - 4c \geq 0$,
+namely $x = -\frac{b}{2} \pm \frac{\sqrt{b^2 - 4c}}{2}$.
+
+Now we go from $\R$ to $\C$: if $b^2 - 4c < 0$, we cannot solve $x^2+bx+c$ in $\R$.
+\[
+	x = -\frac{b}{2} \pm \frac{\sqrt{b^2 - 4c}}{2}
+	= -\frac{b}{2} \pm \frac12 \sqrt{-1}\sqrt{4c-b^2}
+\]
+where $\sqrt{4c-b^2} \in \R$.
+So we need to make sense of $\sqrt{-1}$,
+and then we can solve all quadratic equations $x^2+bx+c=0$ where $b,c \in \R$.
+We simply add the symbol $i := \sqrt{-1}$ to $\R$.
+We then get the solutions $x = \alpha \pm i\beta$ where $\alpha = -\frac{b}{2}$
+and $\beta = \frac12 \sqrt{4c - b^2}$ where $\alpha,\beta \in \R$.
+We call $i$ the ``imaginary unit" and write numbers as $\alpha + i\beta$
+where $\alpha,\beta \in \R$.
+We do our calculations the usual way using the extra rule $i^2 = -1$.
+
+Miracle: this leads to a coherent system of numbers $\C$,
+the complex numbers,
+where all quadratic equations can be solved, and we can do calculus (the contents of this course).
+
+Some definitions of the operations:
+\begin{align*}
+	+ &\colon (a + ib) + (c + id) = (a+c) + i(b + d)\\
+	\times &\colon (a+ib)(c+id) = (ac - bd) + i(ad + bc)
+\end{align*}
+
+Now, this was somewhat informal.
+So formally, we define $\C = \R^2$ (assuming $\R$ is given).
+Addition is the same as vector addition.
+The multiplication is $(a,b)(c,d) = (ac-bd,ad+bc)$.
+One can check that this multiplication is commutative, associative,
+satisifies the distributive law,
+there is a multiplicative unit $(1,0)$,
+and every nonzero complex number has a multiplicative inverse:
+$(a,b)^{-1} = \left(\frac{a}{a^2+b^2}, \frac{-b}{a^2+b^2}\right)$.
+Hence, we can freely divide (multiplying by the multiplcative inverse)
+by nonzero complex numbers.
+So $\C$ is a field (see [BMPS]).
+
+We can map $\R$ to $\C$ by $a \mapsto (a,0)$.
+So geometrically, $\C$ is the plane and $\R$ is the $x$-axis.
+This is a ``field morphism",
+i.e. it respects addition and multiplication and sends the multiplication unit
+to the multiplication unit
+(so $(a\cdot b, 0) = (a,0)\cdot (b,0)$
+and $(a+b,0) = (a,0) + (b,0)$).
+We have $\alpha \in \R$, $(a,b) \in \C$,
+scalar multiplication: $\alpha(a,b) = (\alpha a, \alpha b)$
+and complex multiplication: $(\alpha,0)\cdot(a,b) = (\alpha a, \alpha \beta)$.
+So we identify $\R$ with its image in $\C$.
+Standard basis of $\C = \R^2$: $(1,0), (0,1)$.
+We can abbreviat $1 = (1,0)$ and $i = (0,1)$.
+Write $(a,b) = a(1,0) + b(0,1) = a1 + bi = a + ib$.
+We can check that $i^2 = -1$: $(0,1)\cdot(0,1) = (-1,0) = -1$.
+
+We write $z \in \C$ as $z = a+ib$, $a,b \in \R$.
+We call $a$ the real part and $b$ the imaginary part.
+\end{document}
