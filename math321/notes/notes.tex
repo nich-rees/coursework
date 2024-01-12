@@ -148,7 +148,7 @@ and factorial is going to zero faster than geometric,
 so actually for most functions, we get to say something nice.
 
 Question: let $f \colon \R \to \R$, infinitely differentiable.
-Suppose $f^{(k)}(0) = 0$.
+Suppose $f^{(k)}(0) = 0$ for all $k$.
 Is it true that $f$ must be the zero function?
 Because then the function is just the error term, and so Taylor's theorem fails in the worst way.
 
@@ -244,4 +244,140 @@ But if fix a closed interval, then we do get an $n$.
 This is the difference between pointwise and uniform convergence.
 Our metric was normally used for bounded functions, so this is necessary.
 We will pick up this discussion next time.
+
+\section{January 12}
+We ended last class with some discussion of convergence of functions.
+This is something he wants to defer until later in the term,
+but we get some of this on the homework.
+
+Recall he asked two lectures ago if $f \colon \R \to \R$ (or $[-1,1] \to \R$),
+and $f(0) = 0, f'(0) = 0, \dots, f^{(k)}(0) = 0$ for all $k$,
+must it be true that $f(t) = 0$ for all $t$.
+Taylor's theorem makes us think this is true:
+otherwise, $f(x)$ is wholly its error term always.
+But consider
+\[
+	f(x) = \begin{cases} 0, & \text{if }x \leq 0\\ e^{-1/x} & \text{if } x > 0 \end{cases}
+\]
+We can see that this is infinitely differentiable on all of $\R$
+(consider the domains seperately).
+For $x \leq 0$, $f^{(k)}(x) = 0$ and for $x > 0$, $f^{(k)}(x) = Q(x)e^{-1/x}$
+where $Q(x)$ is a rational function.
+And exponential will shrink always faster than $Q(x)$,
+so goes to $0$ at origin as well.
+Proving this is something he's given in homework, but it eats a whole week,
+and so probably not this year.
+
+It is valuable in analysis (or all math) to have a large bank of
+interesting examples at your finger tips
+that exemplify the weird behaviour of how functions behave (or things behave).
+Some theorems say this is what happens with these four examples,
+and then everything else can be derived from these interesting examples.
+
+\subsection{The Riemann and Riemann-Stieltjes Integral}
+\subsubsection{The Riemann Integral}
+\begin{definition}[Rudin 6.1]
+	A \emph{partition} of $[a,b]$ is a finite set
+	\[
+		P = \{x_0, x_1, x_2, \dots, x_n\}
+	\]
+	with $a = x_0 < x_1 < x_2 < \cdots < x_n = b$.
+\end{definition}
+For $i = 1, \dots, n$, let $\Delta x_i = x_i - x_{i-1}$.
+For $f \colon [a,b] \to \R$ bounded, define
+\begin{align*}
+	M_i &= \sup\{f(x) \colon x \in [x_{i-1}, x_i]\}\\
+	m_i &= \inf\{f(x) \colon x \in [x_{i-1}, x_i]\}
+\end{align*}
+And these will always exist in $\R$, since the interval is nonempty
+and $f(x)$ is bounded.
+Define the upper and lower Reimann sums of the partition $P$ and function $f(x)$:
+\begin{align*}
+	U(P,f) &= \sum_{i=1}^n M_i \Delta x_i\\
+	L(P,f) &= \sum_{i=1}^n m_i \Delta x_i\\
+\end{align*}
+Intuition: drawing boxes for each $\Delta x_i$ whose height is
+$M_i$ or $m_i$.
+As we take smaller widths of the boxes, we would like to see these two values converge.
+
+We define the upper Riemann integral
+\[
+	\overline{\int_a^b}fdx = \inf_P U(P,f)
+\]
+and the lower Riemann integral
+\[
+	\underline{\int_a^b}fdx = \sup_P L(P,f)
+\]
+where the supremum and infinum is taken voer all partitions of $[a,b]$. 
+
+\begin{definition}
+	We say $f \colon [a,b] \to \R$ is \emph{Riemann integrable}	if
+	\[
+		\overline{\int_a^b}fdx = \underline{\int_a^b}fdx
+	\]
+	(both should always exist),
+	in which case we denote this number by
+	\[
+		\int_a^b fdx
+	\]
+	and we say $f \in \mathcal{R}[a,b]$
+	(the set of Riemann integrable functions on $[a,b]$).
+\end{definition}
+Example: $[a,b] = [0,1]$, $f(x) = x$.
+If $P = \{x_0,\dots,x_n\}$ is a partition,
+$M_i = x_i$ and $m_i = x_{i-1}$.
+For the sake of concreteness, consider the evenly-spaced partition
+$\{0, \frac1n, \frac2n, \dots, \frac{n}{n}\}$.
+Then
+\[
+	U(P,f) = \sum_{i=1}^n \frac{i}{n}\frac{1}{n}
+	= \frac{1}{n^2}\sum_{i=1}^n i = \frac{1}{n^2}\frac12 n(n+1)
+	= \frac12 + \frac{1}{2n}
+\]
+In particular, $\overline{\int_a^b}fdx
+\leq \inf\{\frac12+\frac{1}{2n} \colon n \in \N\} = \frac12$.
+Also
+\[
+	L(P,f) = \sum_{i=1}^n \frac{i-1}{n}\frac{1}{n}
+	= \frac{1}{n^2}\frac{1}{2}n(n-1)
+	= \frac12 - \frac{1}{2n}
+\]
+In particular, $\underline{\int_a^b}fdx
+\geq \sup\{\frac12-\frac{1}{2n} \colon n \in \N\} = \frac12$.
+Can we now conclude that $f \in \mathcal{R}[0,1]$
+and $\int_a^b fdx = \frac12$?
+Well, we need that $\underline{\int_a^b}fdx \leq \overline{\int_a^b}fdx$
+always, which we don't have yet.
+[Is this not a result of the $\liminf \leq \limsup$ inequality?]
+We will prove this actually for a more general class of itnegrals.
+
+\subsubsection{The Riemann-Stieltjes Integral}
+\begin{definition}[Rudin 6.2]
+	Let $\alpha \colon [a,b] \to \R$ be (weakly) monotone increasing,
+	let $P = \{x_0, \dots, x_n\}$ be a partition of $[a,b]$.
+\end{definition}
+For $i = 1,\dots, n$, let $\Delta \alpha_i = \alpha(x_i) - \alpha(x_{i-1})$
+(if $\alpha(x) = x$, then $\Delta \alpha_i = \Delta x_i$).
+
+For $f \colon [a,b] \to \R$ bounded define
+\begin{align*}
+	U(P,f,\alpha) &= \sum_{i=1}^n M_i \Delta \alpha_i\\
+	L(P,f,\alpha) &= \sum_{i=1}^n m_i \Delta \alpha_i\\
+\end{align*}
+(where $M_i,m_i$ are the same as before).
+As before, we define
+\begin{align*}
+	\overline{\int_a^b}fd\alpha &= \inf_P U(P,f,\alpha)\\
+	\underline{\int_a^b}fd\alpha &= \sup_P L(P,f,\alpha)\\
+\end{align*}
+If
+\[
+	\overline{\int_a^b}fd\alpha = \underline{\int_a^b}fd\alpha
+\]
+then we denote the common value by $\int_a^b fd\alpha$
+and we say $f \in \mathcal{R}_\alpha[a,b]$.
+When $\alpha(x) = x$, we get the Riemann integral from before.
+But consider $\alpha(x) =\begin{cases} 0, & x \leq 0\\ 1, & x > 0\end{cases}$.
+What does $\int_0^1 fd\alpha$ look like ($f$ continuous).
+This actually evalues to $f(0)$ (Dirac delta from physics).
 \end{document}

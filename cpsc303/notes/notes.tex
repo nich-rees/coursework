@@ -218,4 +218,76 @@ So when $A$ is big enough (greater than $0$),
 we have exponential growth.
 
 Is this solution unique? Can we simply guess and it provides the only solution? More on Friday.
+
+\section{January 12}
+Today:
+\begin{itemize}
+	\item ODE: $y' = y$ ``isoclines"
+	\item ODE's of the form $y' = f(y)$
+	\item Later $\vec{y}' = \vec{f}(t,\vec{y})$, system of $m$ ODE's where
+	$\vec{y} = \vec{y}(t) \colon \R \to \R^m$
+	and $\vec{f}(t,y) \colon \R \times \R^m \to \R^m$.
+	\item Examples; $y' = y^2$, $y' = |y|^{1/2}$.
+\end{itemize}
+Question, what could possibly go wrong?
+
+Solve $y' = f(y)$, $y(t_0) = y_0$. Then
+\begin{enumerate}
+	\item If $f$ continuous near $y = y_0$ then a solution exists locally
+	\item Moreover, if $f$ is Lipschitz (or differentiable) near $y = y_0$,
+		the local solution is unique
+	\item If $f$ is analytic near $y = y_0$, the unique local solution is analytic
+	\item If $|f(y)| \leq Ky$ for some $K$ constant, then there is a global solution
+\end{enumerate}
+
+We will start looking at Matlab next week: we will specifically be looking for how it breaks.
+He doesn't cover as much content as other people do in 303, but more in depth.
+``I just became a grandfather last week, so I get to say back in my day
+we always had to make our own software."
+So we always knew how it broke.
+Now we have to figure out why other people's code breaks.
+
+Recall last time, we were looking at $y' = Ay$, $y(t_0) = y_0$
+where $y \colon \R \to \R$.
+Isocline picture: slopes at unit points in the $y-t$ plane.
+And then we guessed an answer last time: $y(t) = e^{A(t-t_0)}y_0$.
+Now, if we had a theorem that said this was unique, we'd be done.
+
+We can solve this with integration:
+$y' = y \implies \frac{dy}{y} = dt \implies \int\frac{1}{y}dy = \int dt$,
+and so $\ln(y) + c_1 = t + c_2$ hence $y = e^{t+c}$.
+Now with $t_0,y_0$, we can determine our constant to get $y(t) = e^{t-t_0}y$.
+However, this method is not foolproof.
+Our solution could blow up to infinity.
+Consider $y' = y^2$ and $y(1) = 1$.
+And then $\frac{1}{y^2}dy = dt \implies \frac{-1}{y} = t+c$.
+Then, $y= \frac{-1}{t+c}$, and plugging in the initial conditions, we get
+$c = -2$.
+So $y = \frac{1}{2-t}$.
+Singularities can happen, as $y(t) \to \infty$ as $t \to 2$.
+
+What about $y' = |y|^{1/2}$? What could possible go wrong?
+When $y > 0$ we have $y' = y^{1/2}$.
+Solving in the way we did before, we can get
+$y^{1/2} = \frac12(t+C)$
+so $y(t) = \frac{1}{4}(t+C)^2$.
+Note $y(-C) = 0$... but our slope should always be increasing,
+yet is $0$ at a point? ff idk
+Now when $y < 0$, we can find (with the method as before)
+that $y= -\frac14(t+C)^2$.
+So we have piecewise function of $y$ depending on if $y > 0$ or $y < 0$.
+
+Is this a unique solution?
+Actually, let $a < b$. Then
+\[
+	y(t) = \begin{cases}
+		\frac14(t-b)^2 & b \leq t\\
+		0 & a \leq t \leq b\\
+	-\frac14(t-a)^2 & t \leq a \end{cases}
+\]
+is also a solution.
+The bad situation occurs when $y = 0$.
+We could stay ``arbitrarily" long at $y = 0$,
+even if to the right and left are parabola!
+We will continue looking at $y' = |y|^{1/2}$ next time.
 \end{document}

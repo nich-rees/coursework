@@ -240,4 +240,150 @@ Note we haven't done anything for the inverse, but we have just looked at the de
 
 This stuff is discussed somewhat in the book, 2.3.
 But Nike will say more about this stuff next time.
+
+\section{January 11}
+\subsection{Determinants}
+Three determinant properties ff (check overleaf and get notes from Sushrut)
+
+Claim: these 3 properties determine $\det$ uniquely.
+Observation: if $2$ rows are the same, then $\det = 0$.
+Let $v_i = \begin{pmatrix} a_{i1} & a_{i2} & \cdots & a_{in} \end{pmatrix}$,
+and $e_i$ be the $i$-th coordinate vector $\begin{pmatrix} a_{i1} & \cdots & 1 & \cdots 0 \end{pmatrix}$.
+We note that $v_i = \sum{j=1}^n a_{ij}e_j$.
+Then $\det(A) = \det(\sum a_{ij} e_j) = \det\begin{pmatrix} v_1 \\ \vdots \\ v_n \end{pmatrix}$.
+Using the linear property (?)
+\begin{equation}\label{funky det}
+	\det\begin{pmatrix} a_{11}e_1 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}
+	+ \det\begin{pmatrix} a_{12}e_2 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}
+	+ \cdots +
+	\det\begin{pmatrix} a_{1n}e_n \\ v_2 \\ \vdots \\ v_n \end{pmatrix}
+\end{equation}
+And then repeat in the second row, and third row, etc.
+The only terms that will survive have the formula
+$\det\begin{pmatrix} e_{\sigma(1)} \\ e_{\sigma(2)} \\ \vdots \\ e_{\sigma(n)} \end{pmatrix}$
+where $\sigma \in S_n$ and the coefficient (??) is the product of the a's.
+We have
+\begin{align*}
+	\det\binom{ae_1 + be_2}{ce_1+de_2}
+	&= \det\binom{ae_1}{ce_1 + de_2} + \det\binom{be_2}{ce_1+de_2}\\
+	&= \det\binom{ae_1}{ce_1} + \det\binom{ae_1}{de_2}
+	+ \det\binom{be_2}{ce_1} + \det\binom{be_2}{de_2}\\
+	&= ad\det\binom{e_1}{e_2} - bc\det\binom{e_1}{e_2}\\
+	&= ad-bc
+\end{align*}
+
+Expansion of $\det$ in rows and columns follows from (\ref{funky det}) (check).
+Formula for inverse, adjugate etc. similar proof (check),
+so $AA^* = \det(A)I$ is always true,
+where $A^*$ (cofactor/adjugate) is made from minors.
+If $\det{A}$ has an inverse in $R^*$,
+then $A^{-1}$ exists in $M_n(R)$.
+It is also true that $\det(AB) = \det(A)\det(B)$ in general,
+and also follows from the three properties of the $\det$.
+
+These basic facts are summarized on page 95 and 96 (but probably don't do this expansion).
+
+\subsection{Ideals, quotients, and homomorphisms}
+\begin{definition}[Ring homomorphism]
+	If $R$ and $S$ are rings, a map $f \colon R \to S$ is
+	called a proper \emph{homomorphism}
+	if $f \colon (R,+) \to (S,+)$ is a homomorphism of gruops,
+	$f(xy) = f(x)f(y)$,
+	and $f(1_R) = 1_S$.
+\end{definition}
+Note the last condition: it is not free (monoid homomorphism).
+Basically, as before, this lets us do algebra in $S$ the same as in $R$.
+Not $f(ax + ay) = f(ax) = f(ay) = f(a)f(x) + f(a)f(y) = f(a)(f(x) + f(y))$.
+\begin{definition}[Kernel of ring homomorphism]
+	$\ker(f) := \{x \in R \mid f(x) = 0_S\}$.
+\end{definition}
+So $\ker(f)$ is an additive subgroup.
+But multiplicatively, this is a little weird, not a monoid.
+Let $I = \ker(f)$.
+Note if $y\in R$, $x \in I$, then $yx, xy \in I$
+since $f(yx) = f(y)f(x) = f(y)\cdot 0 = 0$.
+So $I$ is closed under multiplication by $R$.
+Note, if $1_R \in I$, then $y \cdot 1_R \in I$ and so $y \in I \forall y$,
+which means $f(y) = 0 \forall y \implies f(1_R) = 0$ which
+is not allowed for a proper homomorphism.
+So $1_R \not\in I$ always.
+Hence, $I$ is \emph{not} a subring of $R$: there is no multiplicative identity.
+
+Note: we almost never consider the trivial ring in our statements.
+We want $1 \neq 0$, so $1$ is invertible, and a lot of other nice things.
+Without excluding, a lot of our statements about rings become trivially false.
+
+\begin{definition}[Ideal]
+	A (proper) \emph{ideal} in a ring is a subgroup $I \subsetneq (R,+)$
+	such that $\forall y \in R, \forall x \in I$, $yx,xy \in I$.
+\end{definition}
+\begin{definition}[Quotient ring]
+	Let $R$ be a ring and $I \subset R$ be a proper ideal.
+	The \emph{quotient ring} is the set of coset $R/I$ (under $+$)
+	where multiplication is $(x+I)(y+I) = xy + I$
+	(identity is $1 + I$).
+\end{definition}
+Let us check that this is well-defined:
+representatives for $x + I$ and $y + I$ are $x + i_1$,$y+i_2$ where $i_1,i_2\in I$.
+Then $(x + i_1)\cdot(y + i_2) = xy + xi_2 + i_1y + i_1i_2 \in xy + I$.
+So the multiplication is well-defined (?? check later... do we need
+set inclusion the other direction? but definition?)
+
+Example: Let $S$ be any ring, and $R = \Z$.
+Define $f \colon \Z \to S$ by $f(1) = 1_S$, $f(n) = (1_S + \cdots + 1_S) = n1$,
+and $f(-n) = -(1_S + \cdots + 1_S)$.
+It is obvious this is a homomorphism (exercise).
+This is called the \emph{canonical} homomorphism $f \colon \Z \to R$.
+(Note this is the only way to map $\Z$ to $R$.)
+There are 2 kinds of rings:
+\begin{itemize}
+	\item $f$ injective, then $f(\Z) \subseteq R$ and is isomorphic to $\Z$.
+		We say that it has $\mathrm{char}(R) = 0$.
+	\item $f$ is not injective, then $f$ contains a quotient of $\Z$
+		so $R$ contains $\Z/n\Z$ for some $\min{n}>1$ characteristic in $\ker$.
+\end{itemize}
+So either $R \supseteq \Z$ (via $f$) or $R \supseteq \Z/n\Z$ for some $\min{n} > 1$ (via $f$).
+
+In $\mathrm{char}(n)$,
+$f(n) = (1_S + \cdots + 1_S) = 0$ be definition.
+Then $nx = x + \cdots  x - x(1 + \cdots 1) = x\cdot0 = 0$.
+So ``multiplication by $n$" means $0$ in rings of characteristic $n$.
+
+Note that if we have $\mathrm{char}(2)$, then $1_S + 1_S = 0$,
+so $x + x = 0 \forall x$, and so $x = -x$ (even when $x \neq 0$).
+This is not nice, we don't like $1$ being its own inverse:
+this is why a lot of things in number theory say ``consider all odd primes".
+
+If $n = p =$ prime and $x,y$ commutative, then
+\[
+	(x+y)^p = \sum\binom{p}{i}x^iy^{p-i} = x^p + y^p
+\]
+since $\binom{p}{i}$ is divibisible by $p$ if $0 < i < p$.
+Frobenius transform (??) $f \colon R \to R$, $x \mapsto x^p$ is a homomorphism
+for commutative $R$ for $\mathrm{char}(p)$;
+important in number theory.
+
+\begin{definition}[Ideal generated by a set]
+	Let $R$ be a ring and $\{x_j\}_{j \in J}$ be a collection of elements in $R$.
+	The ideal generated by $J$ is the set of combinations of the form
+	\[
+		\sum Rx_jR
+	\]
+	which are combinations of $\alpha x_j \beta$, $\alpha,\beta\in R$
+	(might be $R$ and not proper).
+\end{definition}
+Note proper ideals don't contain units (invertible elements).
+
+If $I,J$ are ideals, then $I \cap J$ is an ideal,
+$I + J = \{ i + j \mid i \in I, j \in J\}$ is an ideal (not neccesarily proper).
+$I \cap J \supseteq IJ = \{ij \mid i \in I, j \in J\}$ is an ideal.
+
+In general, if he gives us some random ring,
+a hard problem to find the ideals in it.
+Will usually study more simple properties in this class.
+There is work in classyfing rings and their ideals.
+
+All in section 2.5 and 2.6.
+Will continue next time and briefly touch on homomorphism theorems,
+same as before (read it).
 \end{document}

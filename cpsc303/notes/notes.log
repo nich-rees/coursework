@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2024.1.8)  10 JAN 2024 14:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2024.1.8)  12 JAN 2024 14:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -330,21 +330,21 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ] [2] [3] (./notes.aux)
 Package rerunfilecheck Info: File `notes.out' has not changed.
-(rerunfilecheck)             Checksum: E2B245747D68037B2FC5D26B58C85B25;935.
+(rerunfilecheck)             Checksum: CFCD37A5C08EAB2A94A04C7A275968F5;1031.
  ) 
 Here is how much of TeX's memory you used:
- 9322 strings out of 477985
- 143109 string characters out of 5840059
+ 9328 strings out of 477985
+ 143153 string characters out of 5840059
  1872388 words of memory out of 5000000
- 29423 multiletter control sequences out of 15000+600000
+ 29424 multiletter control sequences out of 15000+600000
  516185 words of font info for 47 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,12n,76p,295b,448s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/nich/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on notes.pdf (3 pages, 161582 bytes).
+Output written on notes.pdf (3 pages, 169180 bytes).
 PDF statistics:
- 127 PDF objects out of 1000 (max. 8388607)
- 94 compressed objects within 1 object stream
- 14 named destinations out of 1000 (max. 500000)
- 57 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 137 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
+ 19 named destinations out of 1000 (max. 500000)
+ 65 words of extra memory for PDF output out of 10000 (max. 10000000)
 
