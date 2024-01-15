@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm,epsf, graphics,enumerate,fancyhdr}
+
+\pagestyle{fancy}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\addtolength{\textheight}{1in}
+
+\renewcommand\theenumi{\alph{enumi}}
+\renewcommand\labelenumi{(\theenumi)}
+
+
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\RR}{\mathbb{R}}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{}
+\newtheorem{solution}{}
+
+\begin{document}
+\fancyhf{} % sets both header and footer to nothing
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{Copyright 2024 The University of British Columbia}
+
+%\pagestyle{empty}
+
+\begin{center} 
+{\bf{Math 321 Assignment 1}} \\ 
+{\bf{Due Friday, January 19 at 9 am}} 
+\end{center}  
+\bigskip
+\hrule
+\begin{center}
+{\underline{Instructions}} 
+\end{center} 
+\begin{enumerate}[(i)] 
+\item Homework should be submitted using Canvas. Include your name and SID.
+%
+\item Solutions should be well-crafted, legible and written in complete English sentences. You will be graded both on accuracy as well as the quality of exposition.
+%
+\item Theorems stated in the text or proved in lecture do not need to be reproved. Any other statement should be justified rigorously.
+% 
+\end{enumerate} 
+\hrule
+\bigskip
+
+In this homework, we will need several definitions. Let $I=[a,b]$ be an interval and $k\geq 0$ be an integer. If $f\colon I\to\RR$ is a function that is $k$-times differentiable on $I$, then we define
+\[
+\Vert f \Vert_{C^k(I)}=\sum_{j=0}^k \sup_{x\in I} |f^{(j)}(x)|.
+\]
+This quantity is called the ``$C^k$ norm of $f$.'' We define $C^k(I)$ to be the set of functions $f\colon I\to\RR$ that satisfy the following two properties. (i): $f$ is $k$-times differentiable on $I$, and (ii): $f^{(k)}$ is continuous on $I$. We define a metric on $C^k(I)$ as follows: $d(f,g)=\Vert f-g \Vert_{C^k(I)}$, i.e.
+\begin{equation}\label{CkNorm}
+d(f,g) = \sum_{j=0}^k \sup_{x\in I} |f^{(j)}(x)-g^{(j)}(x)|.
+\end{equation}
+It is straightforward to verify that this is indeed a metric, but you do not have to do so for this homework.
+
+
+
+%%%
+%%%
+
+\begin{problem}
+Let $f(t) = e^t$; recall that $f$ is monotone increasing, $f'(t) = f(t)$, and $f(0)=1$. Let $P_n(t)$ be the $n$-th order Taylor polynomial of $f$ at the point $x_0=0$, as discussed in lecture. Let $I=[-1,1]$ and let $k\geq 1$ be an integer. 
+
+Using Taylor's theorem, prove that the sequence $\{P_n\}$ converges to $f$ in the metric space $C^k(I)$. 
+\end{problem}
+
+%%%
+%%%
+\medskip
+
+%%%
+%%%
+
+\noindent\emph{Hints} (i) Compute the Taylor polynomial $P_n(t)$. (ii) What is the derivative of $P_n$? (iii) What are the higher derivatives of $P_n$? (iv) How can you estimate each term in \eqref{CkNorm}?
+
+%%%
+%%%
+
+\medskip
+
+\begin{problem}
+Let $f(t) = e^t$. Let $P_n(t)$ be the $n$-th order Taylor polynomial of $f$ at the point $x_0=0$.
+
+\medskip
+
+\noindent a) Let $n\geq 1$. Prove that $n!P_n(1)$ is an integer.
+
+\medskip
+
+\noindent b) Using part a) and Taylor's theorem, prove that Euler's number $e$ is irrational. You may use the fact that $e^t$ is strictly monotone increasing, and $0<e<3$.\\
+\emph{Hint}: if $e$ were rational, then we could write $e=m/n$....
+\end{problem}
+
+
+%%%
+%%%
+
+
+\medskip
+The next problem concerns monotone increasing functions, and will help prepare us for the Riemann–Stieltjes integral. Let $\alpha\colon [0,1]\to\RR$ be increasing. Recall from last term that for every $c\in[0,1]$, $\lim_{x\searrow c}\alpha(x)$ and $\lim_{x\nearrow c}\alpha(x)$ always exist. Thus $\alpha$ is continuous at $c$ if and only if $\lim_{x\searrow c}\alpha(x)=\lim_{x\nearrow c}\alpha(x)$. If $\alpha$ is not continuous at $c$, then $\lim_{x\nearrow c}\alpha(x) < \lim_{x\searrow c}\alpha(x)$, and we say $\alpha$ has a \emph{jump discontinuity} at $c$.
+
+\begin{problem}
+Let $\alpha\colon [0,1]\to\RR$ be montone increasing. Prove that the set of points $c\in [0,1]$ where $\alpha$ is not continuous is either finite (possibly empty), or countably infinite.
+\end{problem}
+
+\end{document}

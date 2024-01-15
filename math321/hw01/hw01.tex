@@ -1,0 +1,128 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 1}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 1}
+\end{center}
+
+In this homework, we will need several definitions. Let $I=[a,b]$ be an interval and $k\geq 0$ be an integer. If $f\colon I\to\R$ is a function that is $k$-times differentiable on $I$, then we define
+\[
+\Vert f \Vert_{C^k(I)}=\sum_{j=0}^k \sup_{x\in I} |f^{(j)}(x)|.
+\]
+This quantity is called the ``$C^k$ norm of $f$.''
+We define $C^k(I)$ to be the set of functions $f\colon I\to\R$ that satisfy the following two properties.
+(i): $f$ is $k$-times differentiable on $I$, and
+(ii): $f^{(k)}$ is continuous on $I$.
+We define a metric on $C^k(I)$ as follows: $d(f,g)=\Vert f-g \Vert_{C^k(I)}$, i.e.
+\begin{equation}\label{CkNorm}
+	d(f,g) = \sum_{j=0}^k \sup_{x\in I} |f^{(j)}(x)-g^{(j)}(x)|.
+\end{equation}
+It is straightforward to verify that this is indeed a metric, but you do not have to do so for this homework.
+
+\subsection*{Problem 1}
+\problem{
+Let $f(t) = e^t$; recall that $f$ is monotone increasing, $f'(t) = f(t)$, and $f(0)=1$.
+Let $P_n(t)$ be the $n$-th order Taylor polynomial of $f$ at the point $x_0=0$,
+as discussed in lecture.
+Let $I=[-1,1]$ and let $k\geq 1$ be an integer.
+
+Using Taylor's theorem, prove that the sequence $\{P_n\}$ converges to
+$f$ in the metric space $C^k(I)$. 
+
+\emph{Hints} (i) Compute the Taylor polynomial $P_n(t)$. (ii) What is the derivative of $P_n$? (iii) What are the higher derivatives of $P_n$? (iv) How can you estimate each term in \eqref{CkNorm}?
+}
+\begin{proof}[Solution]\let\qed\relax
+	Recall that for $f(t)$, the $n$-th ordered Taylor polynomial at $x_0 = 0$ is
+	\[
+		P_n(t) = \sum_{i=0}^n \frac{x^i}{i!}
+	\]
+	Furthermore, note that the $j$-th derivative of $P_n(t)$
+	is $0$ if $j > n$ and
+	\[
+		\frac{d^j}{dx^j}P_n(t) =
+		\frac{d^j}{dx^j}\sum_{i=0}^{j-1}\frac{x^i}{i!}
+		+ \sum_{i=j}^n\frac{d^j}{dx^j}\frac{x^i}{i!}
+		= 0 + \sum_{i=j}^n \frac{1}{i!}\frac{i!}{(i-j)!}x^{i-j}
+		= \sum_{i=j}^n \frac{x^{i-j}}{(i-j)!}
+		= \sum_{i=0}^{n-j}\frac{x^i}{i!} = P_{n-j}(t)
+	\]
+	when $j \geq n$.
+
+	Recall from Taylor's theorem that there exists $c$ between $t$ and $0$ such that
+	\[
+		e^t = P_n(t) + \frac{f^{(n+1)}(c)}{(n+1)!}t^{n+1}
+		= P_n(t) + \frac{e^c}{(n+1)!}t^{n+1}
+	\]
+
+	Then we make some argument about how $e^c$ is maximal at $1$ in $I$,
+	but this will decrease arbitrarily, so $\{P_n\} \to f$. ff
+\end{proof}
+
+
+\subsection*{Problem 2}
+\problem{
+Let $f(t) = e^t$. Let $P_n(t)$ be the $n$-th order Taylor polynomial of $f$ at the point $x_0=0$.
+\begin{enumerate}
+	\item Let $n\geq 1$. Prove that $n!P_n(1)$ is an integer.
+	\item Using part (a) and Taylor's theorem, prove that Euler's number $e$ is irrational.
+		You may use the fact that $e^t$ is strictly monotone increasing, and $0<e<3$.
+\end{enumerate}
+\emph{Hint}: if $e$ were rational, then we could write $e=m/n$....
+}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 3}
+The next problem concerns monotone increasing functions,
+and will help prepare us for the Riemann–Stieltjes integral.
+Let $\alpha\colon [0,1]\to\R$ be increasing.
+Recall from last term that for every $c\in[0,1]$,
+$\lim_{x\searrow c}\alpha(x)$ and $\lim_{x\nearrow c}\alpha(x)$ always exist.
+Thus $\alpha$ is continuous at $c$ if and only if
+$\lim_{x\searrow c}\alpha(x)=\lim_{x\nearrow c}\alpha(x)$.
+If $\alpha$ is not continuous at $c$,
+then $\lim_{x\nearrow c}\alpha(x) < \lim_{x\searrow c}\alpha(x)$,
+and we say $\alpha$ has a \emph{jump discontinuity} at $c$.
+\problem{
+Let $\alpha\colon [0,1]\to\R$ be montone increasing.
+Prove that the set of points $c\in [0,1]$ where $\alpha$ is not continuous is
+either finite (possibly empty), or countably infinite.
+}
+
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\end{document}
