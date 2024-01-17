@@ -100,9 +100,41 @@ Let $f(t) = e^t$. Let $P_n(t)$ be the $n$-th order Taylor polynomial of $f$ at t
 \emph{Hint}: if $e$ were rational, then we could write $e=m/n$....
 }
 
-\begin{proof}[Solution]\let\qed\relax
-	ff
-\end{proof}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+			See
+			\[
+				n!P_n(t) = n!\sum_{i=0}^n\frac{x^i}{i!}
+				= \sum_{i=0}(n-i)!x^i
+			\]
+			Now when $x = 1$, each term is an integer,
+			and the integers are closed under addition,
+			so $n!P_n(1)$ is an integer as well.
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			Assume, for the sake of contradiction, that $e \in \Q$,
+			that is to say,
+			$e = m/n$, for some $m \in \Z, n \in \N$.
+			Note $n!e = m(n-1)! \in \Z$.
+			Also recall by Taylor's theorem that
+			\[
+				e = P_n(1) + \frac{f^{(n+1)}(x)}{(n+1)!}
+				= P_n(1) + \frac{e^x}{(n+1)!}
+			\]
+			for some $x \in (0,1)$.
+			Then
+			\[
+				n!e = n!P_n(t) + \frac{e^x}{n+1}
+			\]
+			Let $n \geq 2$.
+			Since $0 < e < 3$ and $0 < x < 1$,
+			we have $0 < e^x < 3$, and so when $n \geq 2$,
+			$n+1 > e^x \implies \frac{e^x}{n+1} \not\in \Z$.
+			However, by part (a), we know that $n!P_n(t) \in \Z$
+			and so $\frac{e^x}{n+1} = n!e - n!P_n(t) \in \Z$,
+			which is a contradiction.
+		\end{proof}
+\end{enumerate}
 
 
 \subsection*{Problem 3}
@@ -123,6 +155,13 @@ either finite (possibly empty), or countably infinite.
 }
 
 \begin{proof}[Solution]\let\qed\relax
+	For the sake of contradiction, assume that the set of discontinuous
+	points is uncountably infinite.
 	ff
+	Recall that $\lim_{x\searrow c}\alpha(x) = a$ when
+	for all $\ep > 0$, there exists some $\delta > 0$
+	such that for all $x \in (c,c+\delta)$, $|\alpha(x) - a| < \ep$.
+	Sequences: if $\alpha(x_n) \to a$ as $n \to \infty$
+	for all sequences $\{x_n\}$ in $(c,1]$ such that $x_n \to c$.
 \end{proof}
 \end{document}

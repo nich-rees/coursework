@@ -290,4 +290,83 @@ The bad situation occurs when $y = 0$.
 We could stay ``arbitrarily" long at $y = 0$,
 even if to the right and left are parabola!
 We will continue looking at $y' = |y|^{1/2}$ next time.
+
+\section{January 17}
+Today's outline:
+\begin{itemize}
+	\item Euler's method
+	\item MATLAB and Euler's method
+	\item Plugging in $y' = Ay, y(t_0) = y_0$
+\end{itemize}
+
+\subsection{Euler's Method}
+Say we are given $y' = f(t,y)$
+(or $y' = f(y)$, or $\vec{y}' = \vec{f}(t,\vec{y})$, etc.)
+where $f$ is a function,
+and we have) initial value $y(t_0) = y_0$, $y_0,t_0 \in \R$.
+We have the approximation
+\[
+	y'(t) \approx \frac{y(t+h) - y(t)}{h}
+\]
+for small $h$, since $y'(t) = \lim_{h\to0}\frac{y(t+h) - y(t)}{h}$.
+But
+\[
+	y'(t) \approx \frac{y(t+h) - y(t-h)}{2h}
+\]
+is a much better approximation (usually).
+Rearranging gives $y(t+h) \approx y(t) + hy'(t)$;
+in fact, by Taylor's theorem, $y(t+h) = y(t) + hy'(t) + \frac{h^2}{2}y''(\xi)$
+for some $\xi$ between $t$ and $t+h$.
+Substituting $f$, we have
+\[
+	y(t+h) = y(t) + hf(t,y) + \frac{h^2}{2}y''(\xi)
+\]
+So for small $h$,
+\[
+	y(t+h) \approx y(t) + hf(t,y)
+\]
+(we will ignore the final term for now, but will be useful later for calculating error).
+This last approximation is the essence of Euler's method.
+
+So given $t_0 = $ initial time and $y_0 = $ initial value,
+\begin{enumerate}
+	\item[Step 1.] Start with $y(t_0) = y_0$.
+		[Pick a value of $h$, smaller the better (usually)]
+	\item[Step 2.] $y(t_0 + h) = y_0 + hf(t_0,y(t_0)) := y_1$
+	\item[Step 3.] $y(t_0+2h) = y_1 + hf(t_1,y_1) := y_2$
+		where $t_i = t_{i-1} + h = ih+t_0$.
+	\item[Step $n$.] Repeat
+\end{enumerate}
+
+Actual ODE solvers (like in MATLAB) change $h$ based off of $f$
+(especially makes $h$ small when $f$ is very large or $f$ is changing quickly).
+When we saw the three body problem, we had error when two bodies got close
+because the gravitational force got so big it couldn't make $h$ small enough
+to figure out what was going on.
+
+If $y' = 2y$ and given $y_0,t_0$,
+recall that the exact solution was $y(t) = e^{2(t-t_0)}$.
+With the numerical approximation, we get
+$y_1 = y_0 + h(2y_0) = y_0(1+2h)$
+and $y_2 = y-1 + h(2y_1) = (1+2h)y_1$.
+So $y(t_i) = y(t_0 + ih) = (1+2h)^iy_0$.
+Now say we fix a $t_{\text{end}}$, perhaps $N$ steps
+and so $t_{\text{end}} = t_0 + Nh$.
+Then $h = \frac{t_{\text{end}} - t_0}{N}$.
+So
+\[
+	y(t_{\text{end}}) = (1+2h)^Ny_0
+	= \left(1+\frac{2(t_{\text{end}} - t_0)}{N}\right)^Ny_0
+	= \left(1+\frac{\text{something}}{N}\right)^Ny_0
+\]
+Hmm... this looks a lot like a defition of $e$.
+As $N \to \infty$, we have $e^{\text{something}}y_0 = e^{2(t_{\text{end}}-t_0}y_0$.
+We will see this in MATLAB.
+On the homework, we will see MATLAB not working too well for $y' = \lvert y \rvert^{1/2}$.
+
+And then he shows us his MATLAB for Euler's method.
+MATLAB is quirky.
+The first function you define in a file will always be run
+when you call the file,
+and it will assume the other functions in the file are not meant to be run globally.
 \end{document}

@@ -380,4 +380,197 @@ When $\alpha(x) = x$, we get the Riemann integral from before.
 But consider $\alpha(x) =\begin{cases} 0, & x \leq 0\\ 1, & x > 0\end{cases}$.
 What does $\int_0^1 fd\alpha$ look like ($f$ continuous).
 This actually evalues to $f(0)$ (Dirac delta from physics).
+
+\section{January 15}
+\begin{definition}[Rudin 6.3]
+	Let $P$ and $P^*$ be partitions of $[a,b]$.
+	We say $P^*$ is a \emph{refinement} of $P$ if $P \subset P^*$.
+	If $P_1$ and $P_2$ are partitions of $[a,b]$, the \emph{common refinement}
+	is the partition $P_1 \cup P_2$.
+\end{definition}
+\begin{theorem}[Rudin 6.4]
+	Let $P^*$ be a refinement of $P$.
+	Then $L(P,f\alpha) \leq L(P^*,f\alpha) \leq U(P^*,f,\alpha) \leq U(P,f,\alpha)$.
+\end{theorem}
+\begin{proof}
+	The middle inequality, we have already seen.
+
+	Since partitions are finnite, it sufficies to prove the inequality
+	when $P^*$ has one additional point
+	(i.e. $x_i < x^* < x_{i+1}$ and $P^* = P \cup \{x^*\}$).
+	
+	Lets compare $L(P,f,\alpha)$ vs $L(P^*,f,\alpha$.
+	Recall $m_j = \in\{f(x) \colon x \in[x_{j-1},x_j]\}$. See
+	\[
+		L(P,f,\alpha) = \sum_{j=1}^n m_j \Delta \alpha
+	\]
+	\begin{align*}
+		L(P^*,f,\alpha) = \sum_{j=1}^i m_j\Delta \alpha_j
+		&+ (\inf\{f(x) \colon x \in [x_i,x^*]\})(\alpha(x^*) - \alpha(x_i))\\
+		&+ (\inf\{f(x) \colon x \in [x^*,x_{i+1}]\})(\alpha(x_{i+1}) - \alpha(x^*))\\
+		&+ \sum_{j=i+2}^n m_j \Delta \alpha_j
+	\end{align*}
+	Then
+	\begin{align*}
+		L(P^*,f,\alpha) - L(P,f,\alpha)
+		&= \left(\inf_{x\in[x_i,x^*]} f(x) \right)(\alpha(x^*)-\alpha(x_i))
+		+ \left(\inf_{x\in[x^*,x_{i+1}]} f(x) \right)(\alpha(x_{i+1})-\alpha(x^*))
+		- m_{i+1}\Delta \alpha_{i+1}\\
+		&\geq \left(\inf_{x\in[x_i,x_{i+1}]} f(x) \right)(\alpha(x^*)-\alpha(x_i))
+		+ \left(\inf_{x\in[x_i,x_{i+1}]} f(x) \right)(\alpha(x_{i+1})-\alpha(x^*))
+		- m_{i+1}\Delta \alpha_{i+1}\\
+		&= m_{i+1}(\alpha(x^*) - \alpha(x_i) + \alpha(x_{i+1} - \alpha(x^*))
+		- m_{i+1} \Delta \alpha_{i+1}\\
+		&= m_{i+1}\Delta \alpha_{i+1} - m_{i+1}\Delta \alpha_{i+1} = 0
+	\end{align*}
+	where we are using the fact that adding points to a set
+	can only decrease its infinum.
+	Lastly, the final inequality is proven similarly.
+\end{proof}
+
+Recall we wanted to prove something before we moved to the Riemann-Stieltjes integral.
+\begin{theorem}[Rudin 6.5]
+	Let $f \colon [a,b] \to \R$ bounded,
+	$\alpha \colon [a,b] \to \R$ monotone increasing. Then
+	\[
+		\underline{\int_a^b} fd\alpha \leq \overline{\int_a^b}fd\alpha
+	\]
+\end{theorem}
+\begin{proof}
+	Let $P_1$ and $P_2$ be partitions of $[a,b]$, leet $P^* = P_1 \cup P_2$.
+	By Theorem 6.4, $L(P_1,f,\alpha) \leq U(P_2,f,\alpha)$, jhence
+	\[
+		\underline{\int_a^b}fd\alpha = \sup_{P_1} L(P_1,f,\alpha)
+		\leq U(P_2,f,\alpha)
+	\]
+	See that this is true for every $P_2$.
+	\[
+		\underline{\int_a^b}fd\alpha \leq \inf_{P_2} U(P_2,f,\alpha)
+		= \overline{\int_a^b}fd\alpha
+	\]
+\end{proof}
+This was the missing piece to show $\int xdx = \frac12$.
+
+Now we are going to look at some facts about the Riemann-Stieltjes integral,
+and they will slowly get less intuitive.
+\begin{theorem}[Rudin 6.6]
+	Let $f \colon [a,b] \to \R$ bounded and
+	$\alpha \colon [a,b] \to \R$ monotonically increasing. Then
+	\[
+		f \in \mathcal{R}_\alpha[a,b] \iff
+		\forall \ep, \exists P \text{ such that }U(P,f,\alpha) - L(P,f\alpha) < \ep
+	\]
+\end{theorem}
+\begin{proof}
+	Forward direction: by hypothesis
+	\[
+		\sup_P L(P,f,\alpha) = \int_a^b fd\alpha = \inf_P U(P,f,\alpha)
+	\]
+	Let $\ep > 0$. Then $\exists$ a partition $P_1$ such that
+	\[
+		L(P_1,f,\alpha) > \int_a^b fd\alpha - \ep/2
+	\]
+	$\exists P_2$ such that $U(P_2,f,\alpha < \int_a^b fd\alpha + \ep/2$.
+	Let $P = P_1 \cup P_2$.
+	By theorem 6.4
+	\[
+		L(P_1,f,\alpha) \leq L(P,f,\alpha)
+		\leq U(P,f,\alpha) \leq U(P_2,f,\alpha)
+	\]
+	Hence $U(P,f,\alpha) - L(P,f,\alpha) < \ep$.
+
+	Backwards direction follows from definition.
+\end{proof}
+
+\section{January 17}
+We are going to continue understanding the Riemann-Stieltjes integral.
+We showed when it existed (upper and lower Riemann-Stieltjes integral agrees),
+but we don't know a lot about functions that are Riemann-Stieltjes integrable.
+We show this now for a large class of functions.
+\begin{theorem}[Rudin 6.8]
+	Let $\alpha \colon [a,b] \to \R$ be monotonically increasing.
+	Let $f \colon [a,b] \to \R$ be continuous.
+	Then $f \in \mathcal{R}_\alpha[a,b]$,
+	i.e. $C([a,b]) \subset \mathcal{R}_\alpha[a,b]$.
+\end{theorem}
+\begin{proof}
+	Let $f$ be continuous, and $[a,b]$ compact.
+	Hence, $f$ is uniformly continuous.
+	Hence, for all $\ep_1 > 0$, $\exists \delta > 0$ such that
+	$|f(x) - f(y)| < \ep_1$ for all $x,y$ with $|x-y|<\delta$.
+	Thus, if $P$ is a partition with $\Delta x_i < \delta$ for all $i$,
+	then $M_i - m_i < \ep_1$ for all $i$
+	(hmm might be important here for the strict inequality that $f$
+	attain max/min because compact set... closed subset of compact).
+	Hence $U(P,f,\alpha) - L(P,f,\alpha) =
+	\sum_i M_i\Delta\alpha_i - \sum_i m_i \Delta\alpha_i
+	\leq \sum_{i=1}^n \ep_1\Delta \alpha_i = \ep_1(\alpha(b) - \alpha(a))$.
+	Given $\ep > 0$, select $\ep_1$ sufficiently small so that
+	$\ep_1(\alpha(b) - \alpha(a)) < \ep$.
+	Choose $P$ as above for the corresponding $\ep_1$.
+	We have shown:
+	for $\ep > 0$, $\exists$ a partition $P$ such that
+	$U(P,f,\alpha) - L(P,f,\alpha) < \ep$.
+	So by Theorem 6.6, $f \in \mathcal{R}_\alpha[a,b]$.
+\end{proof}
+
+Question: Can we describe/characterze $\mathcal{R}_\alpha[a,b]$ or $\mathcal{R}[a,b]$?
+We will pick this up later.
+
+For now, we will expand the functions that are Riemann integrable.
+\begin{theorem}[Rudin 6.9]
+	Let $f \colon [a,b] \to \R$ be monotone (increasing or decreasing)
+	and $\alpha \colon [a,b] \to \R$ monotone (weakly) increasing and continuous.
+	Then $f \in \mathcal{R}_\alpha[a,b]$.
+\end{theorem}
+\begin{remark}
+	This theorem neither implies or is implied by the previous theorem.
+\end{remark}
+\begin{proof}
+	Let $n \in \N$. By the intermediate value theorem,
+	$\exists$ a partition $P$ such that
+	$\Delta \alpha_i = \frac{\alpha(b) - \alpha(a)}{n}$ for all $i=1,\dots,n$.
+	\begin{align*}
+		U(P,f,\alpha) - L(P,f,\alpha)
+		&= \sum_{i=1}^n (M_i - m_i)\Delta \alpha_i\\
+		&= \frac{\alpha(b) - \alpha(a)}{n}\sum_{i=1}^n (M_i - m_i)
+	\end{align*}
+	Suppose, WLOG, that $f$ is monotone increasing,
+	then $M_i = f(x_i), m_i = f(x_{i-1})$.
+	So our value from before becomes
+	\begin{align*}
+		U(P,f,\alpha) - L(P,f,\alpha)
+		&= \frac{\alpha(b) - \alpha(a)}{n} \sum_{i=1}^n\left(f(x_i) - f(x_{i-1})\right)\\
+		&= \frac{\alpha(b) - \alpha(a)}{n}
+		\left(f(x_1) - f(x_0) +f(x_2) - f(x_1) +- \cdots +f(x_n) - f(x_{n-1})\right)\\
+		&= \frac{\alpha(b) - \alpha(a)}{n}\left(f(x_n) - f(x_0)\right)\\
+		&= \frac{\alpha(b) - \alpha(a)}{n}\left(f(b) - f(a)\right)\\
+		&= \frac{1}{n}\underbrace{\left(\alpha(b) - \alpha(a)\right)
+	\left(f(b) - f(a)\right)}_{\in\R}
+	\end{align*}
+	Given $\ep > 0$, select $n \in \N$ such that
+	\[
+		\left\lvert \left(\alpha(b) - \alpha(a)\right)\left(f(b) - f(a)\right)\right\rvert < \ep
+	\]
+	For such a partition $P$, $U(P,f,\alpha) - L(P,f,\alpha) < \ep$.
+	By Theorem 6.6, $f \in \mathcal{R}_\alpha[a,b]$.
+	If $f$ is monotonically decreasing, an identical proof works.
+\end{proof}
+
+\begin{theorem}[Rudin 6.10]
+	Let $f \colon [a,b] \to \R$ be bounded and continuous at all
+	but finitely many points.
+	Let $\alpha \colon [a,b] \to \R$ be monotone increasing
+	and must be continuous at every point where $f$ is not continuous.
+	Then $f \in \mathcal{R}_\alpha[a,b]$.
+\end{theorem}
+Probably won't prove today, but some examples.
+ff
+
+And then tangent into monotonically increasing functions with countably many discontinuitys.
+Can show that the Devil's staircase $\alpha \colon [0,1] \to [0,1]$
+is monotonically increasing and discontinuous.
+Remember he mentioned that it is useful to have examples in your head.
+For Riemann-Stieltjes integral, $\alpha(x) = x$ is a good one (Riemann integral),
+but also this Cantor-Lebesgue function.
 \end{document}
