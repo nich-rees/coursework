@@ -1,0 +1,190 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 1}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+\subsection*{Problem 2}
+\begin{enumerate}
+	\item Show that the linear system
+		\[
+			\begin{bmatrix}
+				1 & 1 & 1\\
+				0 & 1 & 2\\
+				0 & 1 & 4
+			\end{bmatrix}
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \end{bmatrix}
+			= \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}
+		\]
+		has the unique solution
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \end{bmatrix}
+			= \begin{bmatrix} -3/2 \\ 4/2 \\ -1/2 \end{bmatrix}
+		\]
+	\item Say that $f \colon \R \to \R$ has $f'''(x)$ existing for all $x$.
+		Say that $x_0,h \in \R$, and that $\lvert f'''(\xi)\rvert \leq M_3$
+		for all $\xi$ between $x_0$ and $x_0 + 2h$.
+		Use the fact that
+		\begin{align*}
+			f(x_0) &= f(x_0)\\
+			f(x_0+h) &= f(x_0) + hf'(x_0) + \frac{h^2}{2}f''(x_0) + O(h^3)M_3\\
+			f(x_0+2h) &= f(x_0) + 2hf'(x_0) + \frac{(2h)^2}{2}f''(x_0) + O(h^3)M_3
+		\end{align*}
+		to find a value of $c_0,c_1,c_2$ such that
+		\[
+			c_0f(x_0) + c_1f(x_0 + h) + c_2f(x_0 + 2h)
+			= hf'(x_0) + O(h^3)M_3
+		\]
+	\item To which formula on page 411 (Section 14.1) of [A\&G]
+		are parts (a) and (b) related? Explain.
+	\item What is the significance of the solution of
+		\[
+			\begin{bmatrix}
+				1 & 1 & 1 & 1\\
+				0 & 1 & 2 & 3\\
+				0 & 1 & 4 & 9\\
+				0 & 1 & 8 & 27
+			\end{bmatrix}
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \\ c_3 \end{bmatrix}
+			= \begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \end{bmatrix}
+		\]
+		to approximating $f'(x_0)$?
+		[You don't have to solve this system, just state what you can do
+		with the solution $c_0,c_1,c_2,c_3$.]
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $A = \begin{bmatrix}
+				1 & 1 & 1\\
+				0 & 1 & 2\\
+				0 & 1 & 4
+			\end{bmatrix}$.
+		Note that $\det(A) = 1(4-2) - 0 + 0 = 2 \neq 0$ so $A^{-1}$ exists.
+		One can compute $A^{-1}$ by finding the adjoint matrix and dividing by $\det(A)$,
+		which gives $A^{-1} = \begin{bmatrix}
+				1 & -3/2 & 1/2\\
+				0 & 2 & -1\\
+				0 & -1/2 & 1/2
+			\end{bmatrix}$
+		(and one can check $AA^{-1} = A^{-1}A = I$).
+		Thus, multiplying by $A^{-1}$ on both sides, we get
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \end{bmatrix}
+			= \begin{bmatrix}
+				1 & -3/2 & 1/2\\
+				0 & 2 & -1\\
+				0 & -1/2 & 1/2
+			\end{bmatrix}
+			\begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}
+			= \begin{bmatrix} -3/2 \\ 2 \\ -1/2 \end{bmatrix}
+		\]
+		hence $c_0,c_1,c_2$ must be $-3/2,4/2,-1/2$, respectively,
+		thus uniquely determining our solution to be the desired one.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We seek to find a linear combination of $f(x_0),f(x_0 + h), f(x_0 + 2h)$
+		that adds up to only being $hf'(x_0) + O(h^3)M_3$.
+		But this actually corresponds exactly to our linear transformation
+		$A$ from part (a),
+		where we are changing bases from $f(x_0),f(x_0+h),f(x_0+2h)$
+		to $f(x_0),hf'(x_0),\frac{h^2}{2}f''(x_0) + O(h^3)M_3$,
+		and our equations that dictate this equivalence is represented in $A$.
+		Hence, our coefficients are the solution to part (a),
+		namely, $c_0 = -3/2$, $c_1 = 4/2$, $c_2 = -1/2$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+\end{enumerate}
+
+\subsection*{Problem 3}
+Consider an ODE $y' = f(t,y)$, where as in [A\&G], $y = y(t)$,
+and $y'$ refers to $dy/dt$.
+Say that $f(t,y)$ is of the special form $f(t,y) = h(t)g(y)$,
+where $g$ is a differentiable function and $h$ is continuous.
+Then the ODE
+\[
+	y' = dy/dt = h(t)g(y)
+\]
+is called a \emph{separable differential equation}, and it can be solved by writing
+\[
+	\frac{dy}{g(y)} = h(t)dt
+\]
+and taking indefinite integrals of both sides.
+See Section 2.4 (Separable ODE's) of UBC's Calculus 2 Textbook for details,
+including Example 2.4.2 there, where they solve the equation $y' = y^2$
+(in this textbook, $y'$ refers to $dy/dx$, as is common in math books).
+\begin{enumerate}
+	\item Solve the ODE $y' = y^3$
+		(here $y = y(t)$ and $y'$ refers to $dy/dt$) in the same manner
+		as $y' = y^2$ is solved in general form.
+	\item Solve $y' = y^3$ for the initial condition $y(1) = 1$.
+	\item Solve $y' - y^4$ for the initial condition $y(1) = 1$.
+	\item Let $y(t)$ be as in part (b); for $t \geq 1$,
+		when does $y(t)$ fail to exist, i.e.,
+		for what $T > 1$ does $y(t) \to \infty$ as $t \to T$?
+	\item Same question for part (c).
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Nicholas Rees
+	\end{proof}
+\end{enumerate}
+
+\subsection*{Problem 4}
+Let $y(t) = (3-2t)^{-1/2}, z(t) = (4-3t)^{-1/3}$.
+\begin{enumerate}
+	\item Examine a plot of $y(t)$ and $z(t)$ for $1 \leq t < 4/3$.
+		Is one of these functions larger than the other in the entire interval
+		9as far as the plot shows)?
+		(Here a simple answer will do.
+		You might type \newline \verb|plot (3-2t)^(-1/2) and (4-3t)^(-1/3)|
+		into Google, or something like that.)
+	\item Show that $y' = y^3$ and $z' = z^4$ and that $y(1) = z(1) = 1$.
+	\item Show that $y'(1) = z'(1) = 1$.
+	\item Show that $y''(1) = 3$ and $z''(1) = 4$.
+		[Hint: differentiate both sides of $y' = y^3$; similarly for $z$.]
+	\item Show that for $h > 0$ and $h$ sufficiently small we have $y(1+h) < z(1+h)$.
+		[Hint: let $u(t) = z(t) - y(t)$; what are the values of $u(1),u'(1),u''(1)$?]
+\end{enumerate}
+\end{document}
