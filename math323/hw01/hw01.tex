@@ -96,13 +96,36 @@ Show that $I$ is a subring of $\C$.}
 	Note that the multiplicative identity in $\C$,
 	$1 + 0\sqrt{-3}$, is in $I$ as well (both $m,n \in \Z$).
 	Finally, we show that $I$ is closed under multiplication.
-	Note $(m + n\sqrt{-3})\cdot(m' + n'\sqrt{3})
-	= (mm' - 3nn') + (mn' + nm')\sqrt{-3}$.
+	Note
+	\[
+		(m + n\sqrt{-3})\cdot(m' + n'\sqrt{3})
+		= (mm' - 3nn') + (mn' + nm')\sqrt{-3}
+	\]
 	When $m,n,m',n' \in \Z$, then $mm'-3nn'$ and $mn'+nm'$
 	are in $\Z$ as well.
-	If one of the two, say WLOG $m,n\in\Z$ while $m',n'$ are halves of odd integers,
+	If one of the two, say WLOG $m,n\in\Z$, while $m',n'$ are halves of odd integers,
 	then let $l = 2m'$, $k = 2n'$ where $l,k$ are odd,
-	and we have $mm' - 3nn' = (ml - 3nk)/2$ and ff even or odd istg
+	and we have $mm' - 3nn' = (ml - 3nk)/2$ which is an integer
+	when $ml - 3nk$ is even and half an odd integer when $ml - 3nk$ is odd
+	(and one of the two always happens, since $ml - 3nk \in \Z$);
+	we also have $mn' + nm' = (mk + nl)/2$ which is an integer
+	when $mk+nl$ is even and half an odd integer when $mk + nl$ is odd;
+	it remains to show that $ml - 3nk$ and $mk + nl$ have the same parity:
+	since $l,k,3$ are odd, $ml \equiv mk \equiv m \,(\mathrm{mod}\,2)$
+	and $3nk \equiv nl \equiv n \,(\mathrm{mod}\,2)$,
+	so
+	\[
+		ml-3nk \equiv m - n \equiv m - n + 2n \equiv m + n
+		\equiv mk + nl\,(\mathrm{mod}\,2)
+	\]
+	which confirms that they have the same parity.
+	We now can turn to the final case, which is when $m,n,m',n'$
+	are all halves of odd integers.
+	Then denote $a = 2m, b = 2n, l = 2m', k = 2n'$ all of which are odd.
+	See $mm'-3nn' = \frac{al-3bk}{2}$ and $al-3bk$ is even so $mm'-3nn'$ is an integer,
+	and $mn' + nm' = \frac{ak + bl}{2}$ and $ak + bl$ is even so $mn' + nm'$ is an integer.
+	This exhausts all possible cases of $m,n,m',n'$,
+	showing that $I$ is closed under multiplication.
 
 	It now remains to show the distributive laws hold.
 	See
@@ -132,22 +155,40 @@ Show that $I$ is a subring of $\C$.}
 \subsection*{Problem 1 (Ch. 2.2)}
 {\it Show that any finite domain is a division ring.}
 \begin{proof}[Solution]\let\qed\relax
-	A domain is that $R^*$ is a monoid (no zero divisors),
-	while a division ring is where $R^*$ is a group (everything invertible).
+	For the sake of contradiction, assume that $R$ is a finite domain that is not a division ring.
+	Then, there exists some element $a \in R$, $a\neq 0$ that is not invertible.
+	Let $n$ denote the finite number of elements in $R^* = R \setminus \{0\}$.
+
+	We claim that for every $x,y' \in R$, if $xa = x'a$, then $x=x'$,
+	since $xa = x'a \implies xa - x'a = 0 \implies (x-x')a = 0$,
+	and since $R$ is a domain and $a \neq 0$, $x - x' = 0 \implies x = x'$.
+	Hence, $\{x_1a,x_2a,\dots,x_na\}$ are distinct, non-zero elements,
+	where $x_i$ ranges over all the elements of $R^*$
+	(the non-zeroness is because $x_i,a \neq 0 \implies x_ia\neq0$ in a domain).
+	Since all of $x_ia \in R^*$
+	(by the fact that $(R^*,\cdot)$ is a monoid when $R$ is a domain)
+	so $\{x_1a,x_2a,\dots,x_na\} \subset R^*$,
+	and there are the same number of elements ($n$)
+	in both $\{x_1a,x_2a,\dots,x_na\}$ and $R^*$, we have
+	$\{x_1a,x_2a,\dots,x_na\} = R^*$.
+	Hence, there exists some $1 \leq j \leq n$ such that $x_ja = 1$.
+	Thus, $a$ has a left inverse.
+	From now on, denote $l = x_j$.
 	
-	Let $n$ be the number of elements in $R^*$.
-	Since there are no zero divisors,
-	$a,a^2,\dots,a^n \neq 0$, and by pigeonhole principle,
-	there exists $j, 1 \leq j \leq n$ such that $a^j = a^{n+1}$.
-	Then does $a^{n+1-j} = 1$?
+	We now do everything for right multiplication.
+	So $ay = ay' \implies y = y'$ since
+	$ay - ay' = 0 \implies a(y-y') = 0 \implies y - y' = 0 \implies y = y'$
+	as before.
+	Hence, $\{ay_1,ay_2,\dots,ay_n\}$ are distinct, non-zero elements,
+	where $y_i$ rangers over all the elements of $R^*$.
+	Since $ay_i \in R^*$ and there are $n$ elements in the set and $R^*$,
+	we again have that there exists $1 \leq k \leq n$ such that $ay_k = 1$.
+	Thus $a$ has a right inverse, denoted $r = y_k$.
 
-	$a(1+0) = a$.
-
-	$1 + 1 + \cdots + 1 = 0$ eventually because additive group.
-	Hmm... I think exploit something about how we can
-	get back to $0$ with adding
-	(gauranteed with finite group, perhaps not with infinite)
-	but we can't get to $0$ with multiplying.
+	Now since we have $la = 1$, $ar = 1 \implies lar = l \implies r = l$.
+	Hence, $l$ is an inverse of $a$, contradicting our assumption that
+	$a$ was not invertible.
+	Therefore, we have shown that any finite domain is also a division ring.
 \end{proof}
 
 \subsection*{Problem 4 (Ch. 2.2)}
@@ -185,7 +226,7 @@ Prove that the following conditions on $u$ are equivalent:
 	Then $uv' = 1$, so
 	then $(vu)v' = v(uv') \implies v' = v$.
 	Hence, any right inverse of $u$ is just $v$,
-	so there cnanot be more than one right inverse.
+	so there cannot be more than one right inverse.
 
 	Now we show (2) $\implies$ (3).
 	Let $v$ be the right inverse of $u$.
@@ -211,6 +252,32 @@ Prove that the following conditions on $u$ are equivalent:
 right inverse then it has infinitely many.
 Construct a counterexample to show that this does not hold for monoids.}
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	Let $u$ be an element of a ring $R$ that has more than one right inverse.
+	So there is some $v \in R$ such that $uv = 1$.
+	From Problem 6 above, $u$ is not a unit, so $vu \neq 1$.
+	This also means that $u^n \neq 1$ when $n > 0$,
+	otherwise $uu^{n-1} = u^{n-1}u = 1$ making $u$ a unit.
+	Now, for all $n \in \N_0$, define $v_n = (1-vu)u^n + v$.
+	Note that $v_n \in R$.
+	These $v_n$ are all right inverses of $u$:
+	$uv_n = u\left(1-vu)u^n + v\right) = u(1-vu)u^n + uv = (u - uvu)u^n + 1
+	= (u - u)u^n + 1 = 0 + 1 = 1$.
+	Furthermore, we claim that the map $\phi \colon \N_0 \to \{v_i\}_{i\in\N_0}$
+	defined by $\phi \colon n \mapsto v_n$ is injective.
+	So assume that $n \neq m$ and we will show that $\phi(n) \neq \phi(m)$,
+	i.e. $v_n \neq v_m$.
+	WLOG assume that $n > m$.
+	Since $n-m-1 \geq 0$, $n-m-1 \in \N_0$
+	so $uv_{n-m-1} = 1 \implies v_{n-m-1}u \neq 1$ (otherwise it would be a unit),
+	hence $(1-vu)u^{n-m} + vu \neq 1 \implies (1-vu)u^{n-m}\neq 1-vu$.
+	Thus $(1-vu)u^n \neq (1-vu)u^m$, i.e. $v_n \neq v_m$ i.e. $\phi(n) \neq \phi(m)$.
+	So $\{v_i\}_{i\in\N_0}$ is at least countable in size.
+	Thus, there are infinitely many right inverses of $u$.
+
+	Counterexample: define the free monoid $M = \langle a,b,c\rangle$
+	such that $ab = ac = 1$
+	(operation is concatenation, $1$ is the unit, where $1a = a1 = a$, etc.).
+	Both $b,c$ are right inverses of $a$,
+	but by definition, no other distinct elements are right inverses of $a$.
 \end{proof}
 \end{document}
