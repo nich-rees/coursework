@@ -68,24 +68,70 @@ $f$ in the metric space $C^k(I)$.
 	\]
 	Furthermore, note that the $j$-th derivative of $P_n(t)$
 	is $0$ if $j > n$ and
-	\[
+	\begin{equation}\label{deriv}
 		\frac{d^j}{dx^j}P_n(t) =
 		\frac{d^j}{dx^j}\sum_{i=0}^{j-1}\frac{x^i}{i!}
 		+ \sum_{i=j}^n\frac{d^j}{dx^j}\frac{x^i}{i!}
 		= 0 + \sum_{i=j}^n \frac{1}{i!}\frac{i!}{(i-j)!}x^{i-j}
 		= \sum_{i=j}^n \frac{x^{i-j}}{(i-j)!}
 		= \sum_{i=0}^{n-j}\frac{x^i}{i!} = P_{n-j}(t)
-	\]
-	when $j \geq n$.
+	\end{equation}
+	when $j \leq n$.
 
-	Recall from Taylor's theorem that there exists $c$ between $t$ and $0$ such that
+	Recall from Taylor's theorem that,
+	since $e^t$ is continuous and it's $(n+1)$ derivative always exists
+	(simple induction, since $f'(t) = f(t)$),
+	there exists $c_n$ between $t$ and $0$ such that
+	\begin{equation}\label{eappx}
+		e^t = P_n(t) + \frac{f^{(n+1)}(c_n)}{(n+1)!}t^{n+1}
+		= P_n(t) + \frac{e^{c_n}}{(n+1)!}t^{n+1}
+	\end{equation}
+
+	We remark that since $e^t$ is $k$-times differentiable for any $k$,
+	$e^t \in C^k(I)$.
+	So we now only need to show $d(e^t,P_n) < \ep$ for arbitrary $\ep > 0$.
+	Consider $d(e^t,P_n)$ in $C^k(I)$ when we fix $n \geq k$.
+	\begin{align*}
+		d(e^t,P_n)
+		&= \sum_{j=0}^k \sup_{t \in I} \lvert e^t - P_n^{(j)}(t)\rvert\\
+		&= \sum_{j=0}^k \sup_{t \in I}\lvert e^t - P_{n-j}(t)\rvert
+		& \text{applying (\ref{deriv})}\\
+		&= \sum_{j=0}^k \sup_{t \in I}
+		\left\lvert P_{n-j}(t) + \frac{e^{c_{n-j}}}{(n-j+1)!}t^{n-j+1} - P_{n-j}(t)\right\rvert
+		& \text{applying (\ref{eappx})}\\
+		&= \sum_{j=0}^k \sup_{t \in I}
+		\left\lvert \frac{e^{c_{n-j}}}{(n-j+1)!}t^{n-j+1}\right\rvert\\
+		&= \sum_{j=0}^k \frac{1}{(n-j+1)!}
+		\sup_{t \in I}\left\lvert e^{c_{n-j}}t^{n-j+1}\right\rvert\\
+		&\leq \sum_{j=0}^k \frac{e}{(n-j+1)!}\\
+		&\leq \frac{ke}{(n-k+1)!}\\
+		&\leq \frac{ke}{n-k}
+	\end{align*}
+	where the 6th line is done by the following reasoning:
+	since $c_{n-j} \leq 1$ always,
+	and since $e^t$ is monotonically increasing,
+	$e^{c_{n-j}} \leq e^1$ and so
+	$|e^{c_{n-j}}t^{n-j+1}| \leq |et^{n-j+1}|$
+	and taking the supremum of both sides preserves weak inequalities, giving
 	\[
-		e^t = P_n(t) + \frac{f^{(n+1)}(c)}{(n+1)!}t^{n+1}
-		= P_n(t) + \frac{e^c}{(n+1)!}t^{n+1}
+		\sup_{t\in I}|e^{c_{n-j}}t^{n-j+1}|
+		\leq \sup_{t\in I}|et^{n-j+1}|
 	\]
+	Now, since the maximum value $|t^x|$ can obtain when $t \in I$
+	(and $x>0$, since $n-j+1 \geq n-k+1 \geq 1$) is $1$, we have
+	\[
+		|et^{n-j+1}| = |e||t^{n-j+1}| < e
+		\implies \sup_{t\in I}|et^{n-j+1}| \leq e
+	\]
+	giving us the desired inequality.
 
-	Then we make some argument about how $e^c$ is maximal at $1$ in $I$,
-	but this will decrease arbitrarily, so $\{P_n\} \to f$. ff
+	Let $\ep > 0$. Let $N = \mathrm{max}\{k,\lceil 2ke/\ep + k\rceil\}$.
+	Then for all $n \geq N$, we have
+	\[
+		d(e^t,P_n) \leq \frac{ke}{n-k} \leq \frac{ke}{N-k}
+		\leq \frac{ke}{2ke/\ep + k - k} = \frac{\ep}{2} < \ep
+	\]
+	Hence, $\{P_n\}$ converges to $f = e^t$ in $C^k(I)$.
 \end{proof}
 
 
@@ -104,34 +150,39 @@ Let $f(t) = e^t$. Let $P_n(t)$ be the $n$-th order Taylor polynomial of $f$ at t
 	\item \begin{proof}[Solution]\let\qed\relax
 			See
 			\[
-				n!P_n(t) = n!\sum_{i=0}^n\frac{x^i}{i!}
-				= \sum_{i=0}(n-i)!x^i
+				n!P_n(t) = n!\sum_{i=0}^n\frac{t^i}{i!}
+				= \sum^n_{i=0}\left(n(n-1)\cdots(i+1)t^i\right)
 			\]
-			Now when $x = 1$, each term is an integer,
-			and the integers are closed under addition,
+			Now when $t = 1$, each term is an integer
+			since the integers are closed under multiplication.
+			The sum will also be an integer since integers are closed under addition,
 			so $n!P_n(1)$ is an integer as well.
 		\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 			Assume, for the sake of contradiction, that $e \in \Q$,
 			that is to say,
 			$e = m/n$, for some $m \in \Z, n \in \N$.
-			Note $n!e = m(n-1)! \in \Z$.
+			Note then $n!e = m(n-1)! \in \Z$.
+			Let $n' = \max\{2,n\}$.
+			We also have $n'!e \in \Z$
+			(if $n' \neq n$ then $2 > n$, which means $n = 1 \implies e = m$,
+			and $2e = 2m \in \Z$).
 			Also recall by Taylor's theorem that
 			\[
-				e = P_n(1) + \frac{f^{(n+1)}(x)}{(n+1)!}
-				= P_n(1) + \frac{e^x}{(n+1)!}
+				e = P_{n'}(1) + \frac{f^{(n'+1)}(x)}{(n'+1)!}
+				= P_{n'}(1) + \frac{e^x}{(n'+1)!}
 			\]
 			for some $x \in (0,1)$.
 			Then
 			\[
-				n!e = n!P_n(t) + \frac{e^x}{n+1}
+				n'!e = n'!P_{n'}(t) + \frac{e^x}{n'+1}
 			\]
-			Let $n \geq 2$.
 			Since $0 < e < 3$ and $0 < x < 1$,
-			we have $0 < e^x < 3$, and so when $n \geq 2$,
-			$n+1 > e^x \implies \frac{e^x}{n+1} \not\in \Z$.
-			However, by part (a), we know that $n!P_n(t) \in \Z$
-			and so $\frac{e^x}{n+1} = n!e - n!P_n(t) \in \Z$,
+			we have $0 < e^x < 3$, and so since $n' \geq 2$,
+			$n'+1 > e^x \implies \frac{e^x}{n'+1} \not\in \Z$.
+			However, by part (a), we know that $n'!P_{n'}(t) \in \Z$
+			and so $\frac{e^x}{n'+1} = n'!e - n'!P_{n'}(t) \in \Z$
+			(since this is the difference of two integers),
 			which is a contradiction.
 		\end{proof}
 \end{enumerate}
@@ -155,13 +206,35 @@ either finite (possibly empty), or countably infinite.
 }
 
 \begin{proof}[Solution]\let\qed\relax
-	For the sake of contradiction, assume that the set of discontinuous
-	points is uncountably infinite.
-	ff
-	Recall that $\lim_{x\searrow c}\alpha(x) = a$ when
-	for all $\ep > 0$, there exists some $\delta > 0$
-	such that for all $x \in (c,c+\delta)$, $|\alpha(x) - a| < \ep$.
-	Sequences: if $\alpha(x_n) \to a$ as $n \to \infty$
-	for all sequences $\{x_n\}$ in $(c,1]$ such that $x_n \to c$.
+	Consider the set $D\subset [0,1]$ where
+	$D = \{c \mid \alpha \text{ has a jump discontinuity at }c\}$.
+	We seek to show there exists a injective map from $D$ to $\Q$,
+	and so the cardinality of $D$ is at most the cardinality of $\Q$,
+	hence $D$ is at most countable.
+	By the density of the rationals, since 
+	$\lim_{x\nearrow c}\alpha(x) < \lim_{x\searrow c}\alpha(x)$ when $c \in D$,
+	there is some rational $q$ such that
+	$\lim_{x\nearrow c}\alpha(x) < q < \lim_{x\searrow c}\alpha(x)$.
+	Let $\phi \colon D \to \Q$ be defined by $c \mapsto q_c$
+	where $q_c$ is one such rational such that 
+	$\lim_{x\nearrow c}\alpha(x) < q_c < \lim_{x\searrow c}\alpha(x)$.
+
+	We now prove injectivity of $\phi$.
+	Let $c_1,c_2 \in D$ such that $c_1 \neq c_2$.
+	WLOG let $c_1 < c_2$.
+	Let $m = \frac{c_1+c_2}{2}$.
+	Since $\alpha$ is monotonically increasing, we have
+	$\alpha(c_1) \leq \alpha(m) \leq \alpha(c_2)$.
+	Clearly $\inf_{c_1<x<m}\alpha(x) \leq \alpha(m)$
+	and $\sup_{m<x<c_2}\alpha(x) \geq \alpha(m)$,
+	and $\lim_{x\searrow c_1}\alpha(x) = \inf_{c_1<x<m}\alpha(x)$
+	and $\lim_{x\nearrow c_2}\alpha(x) = \sup_{m<x<c_2}\alpha(x)$ by Rudin Theorem 4.29,
+	so
+	\[
+		q_{c_1} < \lim_{x\searrow c_1}\alpha(x) \leq \alpha(m) \leq \lim_{x\nearrow c_2}\alpha(x) < q_{c_2}
+	\]
+	Hence, $q_{c_1} \neq q_{c_2}$ which implies $\phi(c_1) \neq \phi(c_2)$,
+	which shows the injectivity of the map.
+	Hence, $D$ is at most countable (either finite or countably infinite).
 \end{proof}
 \end{document}

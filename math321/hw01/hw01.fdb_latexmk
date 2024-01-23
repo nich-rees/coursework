@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1705379926 "hw01.tex" "hw01.pdf" "hw01" 1705379926 0
+["pdflatex"] 1705670158 "hw01.tex" "hw01.pdf" "hw01" 1705670158 0
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1704400182 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1704400182 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1704400182 924 9904cf1d39e9767e7a3622f2a125a565 ""
@@ -18,8 +18,10 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb" 1704400182 37912 77d683123f92148345f3fc36a38d9ab1 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1704400182 36281 c355509802a035cadc5f15869451dcee ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1704400182 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb" 1704400182 31809 8670ca339bf94e56da1fc21c80635e2a ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1704400182 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1704400182 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1704400182 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1704400182 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1704400182 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1704400182 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
@@ -44,8 +46,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1704400182 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1704708773 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1704708772 6768069 adcaa2aa97bd89f699fb30a712d5bc7d ""
-  "hw01.aux" 1705379926 58 eba5381b986db777fb4d1c977e17b32d "pdflatex"
-  "hw01.tex" 1705379924 5793 7eb50726d7f305efc1fda00387ac5531 ""
+  "hw01.aux" 1705670158 108 afe36266557e85a02315ce885310e3ba "pdflatex"
+  "hw01.tex" 1705670157 9015 2a174ff82616bc6858fe7233f929c1b5 ""
   (generated)
   "hw01.aux"
   "hw01.log"

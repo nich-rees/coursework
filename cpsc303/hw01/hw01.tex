@@ -108,20 +108,63 @@ Who are your group members?
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		We seek to find a linear combination of $f(x_0),f(x_0 + h), f(x_0 + 2h)$
-		that adds up to only being $hf'(x_0) + O(h^3)M_3$.
+		that adds up to only being $hf'(x_0) + O(h^3)M_3$,
+		using the given equalities.
 		But this actually corresponds exactly to our linear transformation
 		$A$ from part (a),
 		where we are changing bases from $f(x_0),f(x_0+h),f(x_0+2h)$
 		to $f(x_0),hf'(x_0),\frac{h^2}{2}f''(x_0) + O(h^3)M_3$,
-		and our equations that dictate this equivalence is represented in $A$.
+		and our equations that dictate this transformation is represented in $A$
+		(i.e. the coefficients of $f$, $hf'$, and
+		$\frac{h^2}{2}f''$ are the entries of $A$).
 		Hence, our coefficients are the solution to part (a),
 		namely, $c_0 = -3/2$, $c_1 = 4/2$, $c_2 = -1/2$.
+		This gives us
+		\[
+			-\frac32f(x_0) + \frac{4}{2}f(x_0+h) - \frac{1}{2}f(x_0+2h)
+			= hf'(x_0) + O(h^3)M_3
+		\]
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		This corresponds to the three-point, second order, one-sided formula for $f'(x_0)$,
+		which was in section 2(b) of 14.1 in [A\&G], written there as
+		\[
+			f'(x_0) = \frac{1}{2h}\left(-3f(x_0)+4f(x_0+h)-f(x_0+2h)\right)
+				+ \frac{h^2}{3}f'''(\xi)
+		\]
+		where $\xi \in [x_0, x_0 + 2h]$.
+		To get the formula we derived from parts (a) and (b),
+		we bring in the $\frac12$, multiply everything by $h$,
+		and bring the third order term to the other side
+		($M_3$ let's ignore the specific $\xi$,
+		and $O(h^3)$ let's ignore the specific coefficient of this term).
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		This gives us a third order approximation of $f'(x_0)$.
+		Recall by Taylor's theorem that if $f \colon \R \to \R$ has
+		$f^{(4)}(x)$ existing for all $x$,
+		and for $x_0,h \in \R$ that $|f^{(4)}(\xi)|\leq M_4$ for all $\xi$
+		between $x_0$ and $x_0 + 3h$, we have
+		\begin{align*}
+			f(x_0) &= f(x_0)\\
+			f(x_0 + h) &= f(x_0) + hf'(x_0) + \frac{h^2}{2}f''(x_0)
+			\frac{h^3}{6}f'''(x_0) + O(h^4)M_4\\
+			f(x_0 + 2h) &= f(x_0) + 2hf'(x_0) + \frac{(2h)^2}{2}f''(x_0)
+			\frac{(2h)^3}{6}f'''(x_0) + O(h^4)M_4\\
+			f(x_0 + 3h) &= f(x_0) + 3hf'(x_0) + \frac{(3h)^2}{2}f''(x_0)
+			\frac{(3h)^3}{6}f'''(x_0) + O(h^4)M_4\\
+		\end{align*}
+		The coefficients of these equations correspond to the ones in our matrix,
+		thus, solving the system for $c_0,c_1,c_2,c_3$ would give us the
+		coefficients for the equation
+		\[
+			c_0f(x_0) + c_1f(x_0 + h) + c_2f(x_0 + 2h) + c_3f(x_0 + 3h)
+			= hf'(x_0) + O(h^4)M_4
+		\]
+		Since the error term is higher order,
+		this should decrease our error for small $h$,
+		making this a more accurate approximation of $f'(x_0)$
+		(dividing everything by $h$ shows it is third order).
 	\end{proof}
 \end{enumerate}
 
@@ -147,7 +190,7 @@ including Example 2.4.2 there, where they solve the equation $y' = y^2$
 		(here $y = y(t)$ and $y'$ refers to $dy/dt$) in the same manner
 		as $y' = y^2$ is solved in general form.
 	\item Solve $y' = y^3$ for the initial condition $y(1) = 1$.
-	\item Solve $y' - y^4$ for the initial condition $y(1) = 1$.
+	\item Solve $y' = y^4$ for the initial condition $y(1) = 1$.
 	\item Let $y(t)$ be as in part (b); for $t \geq 1$,
 		when does $y(t)$ fail to exist, i.e.,
 		for what $T > 1$ does $y(t) \to \infty$ as $t \to T$?
@@ -155,19 +198,69 @@ including Example 2.4.2 there, where they solve the equation $y' = y^2$
 \end{enumerate}
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		When $y \neq 0$
+		\[
+			\frac{dy}{dt} = y^3
+			\implies \frac{dy}{y^3} = dt
+			\underbrace{\implies}_{\int} \frac{y^{-2}}{-2} = t + C_1
+			\implies y^2 = \frac{1}{C - 2t}
+		\]
+		Presumebly, we are restricting ourselves to real-valued solutions,
+		so when $C - 2t > 0 \implies t < C/2$ we have
+		$y(t) = \sqrt{(C-2t)^{-1}}$ or $y(t) = -\sqrt{(C-2t)^{-1}}$.
+
+		Now when $y = 0$, we have $y' = 0$ and $y^3 = 0$,
+		hence the zero function also satisfies the ODE, giving our solutions
+		\[
+			y = 0, (C-2t)^{-1/2}, -(C-2t)^{-1/2}
+		\]
+		where the last two are only defined for $t < C/2$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		Only one of our general forms has positive values,
+		namely $y(t) = (C-2t)^{-1/2}$.
+		Solving, we get
+		\[
+			1 = (C-2(1))^{-1/2} \implies 1 = C-2 \implies 3 = C
+		\]
+		So our solution to the IVP is $y(t) = (3-2t)^{-1/2}$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		We may assume that $y$ is not the zero function, by the initial values.
+		Then solving the general form gives
+		\[
+			\frac{dy}{dt} = y^4 \implies \frac{dy}{y^4} = dt
+			\underbrace{\implies}_{\int} \frac{y^{-3}}{-3} = t + C_1
+			\implies y^3 = \frac{1}{C-3t} \implies y = (C-3t)^{-1/3}
+		\]
+		Plugging in the initial values, we get
+		\[
+			1 = (C - 3(1))^{-1/3} \implies 1 = C - 3 \implies 4 = C
+		\]
+		So our solution to the IVP is $y(t) = (4 - 3t)^{-1/3}$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		I have already made some coments on this in part (a),
+		but I claim that $y(t)$ will fail to exist when $t \geq C/2 = 3/2$.
+		So let $T = 3/2$.
+		When $t > T$, we have the square root of a negative,
+		which is not defined in the reals.
+		Now consider $y(t)$ as $t \to T$ (from the left).
+		The denominator is going to $0$ and the numerator is a fixed constant.
+		Since both the denominator and numerator are positive,
+		this gives that $y(t) \to \infty$ as $t \to T$.
+		Hence, $y(t)$ from (b) fails to exist for $t \geq 3/2$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Nicholas Rees
+		I claim that $y(t)$ will fail to exist when $4 - 3t = 0 \implies t = 4/3$.
+		Consider $y(t)$ as $t \to 4/3$.
+		From either direction, we have a denominator going to $0$
+		and a numerator that is a fixed constant.
+		From the left, the denominator is positive so it blows up to $\infty$,
+		and from the right, the denominator is negative so it blows up to $-\infty$.
+		Either way, the value does not exist.
+		Other than that point, the function is well-defined,
+		so $y(t)$ from (c) only fails to exist at $t = 4/3$.
 	\end{proof}
 \end{enumerate}
 
@@ -176,7 +269,7 @@ Let $y(t) = (3-2t)^{-1/2}, z(t) = (4-3t)^{-1/3}$.
 \begin{enumerate}
 	\item Examine a plot of $y(t)$ and $z(t)$ for $1 \leq t < 4/3$.
 		Is one of these functions larger than the other in the entire interval
-		9as far as the plot shows)?
+		(as far as the plot shows)?
 		(Here a simple answer will do.
 		You might type \newline \verb|plot (3-2t)^(-1/2) and (4-3t)^(-1/3)|
 		into Google, or something like that.)
@@ -186,5 +279,77 @@ Let $y(t) = (3-2t)^{-1/2}, z(t) = (4-3t)^{-1/3}$.
 		[Hint: differentiate both sides of $y' = y^3$; similarly for $z$.]
 	\item Show that for $h > 0$ and $h$ sufficiently small we have $y(1+h) < z(1+h)$.
 		[Hint: let $u(t) = z(t) - y(t)$; what are the values of $u(1),u'(1),u''(1)$?]
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Yes, $z(t) \geq y(t)$ on $1 \leq t < 4/3$ with equality
+		only at $t = 1$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute
+		\[
+			\frac{dy}{dt} = \left(-\frac{1}{2}\right)(3-2t)^{-3/2}(-2)
+			= (3-2t)^{-3/2} = y^3
+		\]
+		and also
+		\[
+			\frac{dz}{dt} = \left(-\frac{1}{3}\right)(4-3t)^{-4/3}(-3)
+			= (4-3t)^{-4/3} = z^4
+		\]
+		Furthermore, one can calculate $y(1) = (3-2)^{-1/2} = 1$
+		and $z(1) = (4-3)^{-1/3} = 1$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using the results shown in part (b), we can compute
+		\[
+			y'(1) = y(1)^3 = 1^3 = 1
+		\]
+		\[
+			z'(1) = z(1)^4 = 1^4 = 1
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We first compute $y''$. We start by differentiating $y' = y^3$ to get
+		\[
+			y'' = 3y^2y' = 3y^2y^3 = 3y^5
+		\]
+		Then
+		\[
+			y''(1) = 3y(1)^5 = 3\cdot 1^5 = 3
+		\]
+		Similarly for $z$, we differentiate $z' = z^4$ to get
+		\[
+			z'' = 4z^3z' = 4z^3z^4 = 4z^7
+		\]
+		Then
+		\[
+			z''(1) = 4z(1)^7 = 4\cdot 1^7 = 4
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $u(t) = z(t) - y(t)$.
+		Note $u'(t) = z'(t) - y'(t)$ and $u''(t) = z''(t) - y''(t)$.
+		Then
+		\begin{align*}
+			u(1) &= z(1) - y(1) = 1-1 = 0\\
+			u'(1) &= z'(1) - y'(1) = 1-1 = 0\\
+			u''(1) &= z''(1) - y''(1) = 4 - 3 = 1
+		\end{align*}
+		By Taylor's theorem, if $h \in \R$,
+		since $u'''(1+h) = z'''(1+h) - y'''(1+h)$ exists for all
+		$h$ sufficiently small,
+		there is some $\xi$ between $1$ and $1+h$ such that
+		\[
+			u(1 + h) = u(1) + hu'(1) + \frac{h^2}{2}u''(1) + \frac{h^3}{6}u'''(\xi)
+			= \frac{h^2}{2} + \frac{h^3}{6}u'''(\xi)
+		\]
+		Hence $z(1+h) - y(1+h) = \frac{h^2}{2}+\frac{h^3}{6}u'''(\xi)$
+		or $z(1+h) = y(1+h) + \frac{h^2}{2} + \frac{h^3}{6}u'''(\xi)$.
+		When $h$ is sufficiently small, our trailing term is negligible
+		compared to our $h^2$ term,
+		thus $z(1+h) \approx y(1+h) + \frac{h^2}{2}$.
+		Note that $h^2/2 > 0$ for all $h$, and so we have that
+		$z(1+h) > y(1+h)$ for $h$ sufficiently small.
+	\end{proof}
 \end{enumerate}
 \end{document}
