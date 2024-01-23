@@ -583,4 +583,165 @@ This is the universal property that defines the ring of fractions.
 Thursday quiz will be up until ideals.
 Review linear algebra: matrices will be on the quiz.
 Quiz will probably be the second half of the class.
+
+\section{January 23}
+Because of the snow and bus strikes, quiz is just gonna be the same
+day as quiz 2, unfortunately after add/drop deadline;
+it will be the full class.
+
+\subsection{Fractions over a commutative domain}
+Recall we were look at fractions last time.
+Let $R$ be a commutative, integral domain.
+Want to embed $R$ into the smallest possible field $S$.
+Start with $R \times R$, consider pairs $(a,b)$, $b\neq 0$
+modulo the relation $(a,b) \sim (c,d) \iff ad = bc$
+(motivation: $\frac{a}{b} = \frac{c}{d}$).
+It is easy to check this is an equivalence relation.
+Then $S = R' \times R' /\sim$ (second coord nonzero subset),
+which are the pairs $(a,b)$, $(0,0)$ is the class of $(0,b)$??? I thought we excluded.
+Case work is exactly like fractions:
+$(a,b) + (c,d) = (ad+bc,bd)$ etc.
+$\frac{a}{b}\cdot\frac{c}{d} = \frac{ac}{bd}$, $1 = (1,1)$, $0 = (0,0)$.
+
+Ex. $(a,b) \sim (p,q) \iff aq = bp$ and $(c,d) \sim (r,s) \iff cs = dr$.
+$(a,b) + (c,d) = \frac{ad+bc}{bd} = (ad+bc,bd)$
+and $(p,q) + (r,s) = \frac{ps+rq}{qs} = (ps+rq,qs)$... are these equal?
+$ff$ computing.
+
+Note each nonzero elemenet is invertible, namely $(a,b)^{-1} = (b,a)$.
+So $R \hookrightarrow S$ via $(a,1) \leftrightarrow a \in R$
+thus we have found a field $S$ plus an injective map $R \hookrightarrow S$.
+Claim: if $\phi \colon R \hookrightarrow T$ is an injective map,
+$T$ a field, then there exists a unique $\psi \colon S \to T$ such that the diagram
+ff ($R$ to $S$ via $\iota$, $S$ to $T$ via $\psi$, $R$ to $T$ via $\phi$)
+commutes.
+\begin{proof}
+	It is clear that if $\psi$ exists then $\psi(a,1) = \phi(a)$.
+	What about $\psi(a,b)$?
+	Note $(a,b) = (a,1)\cdot(1,g) \implies \psi(a,b)$ has to satisfy
+	$\psi(a,b) = \psi(a,1)\cdot\psi(1,b) = \phi(a)\phi(b)^{-1}$
+	since this is an element that satisfies the multiplicative relation
+	$(b,1)(1,b) = (b,b) = (1,1)$, the multiplicative identity.
+	So $\psi(1,1) = 1 \iff \psi(b,1)\psi(1,b) 1$,
+	hence $psi$ is defined uniquely by $\psi(a,1) = \phi(a)$,
+	$\psi(1,b) = \phi(b)^{-1}$ (which exists since $T$ is a field).
+	We have to check this is a well-defined homomorphism, but it is an easy calculation.
+\end{proof}
+Thus, $S$ is the smallest field containing $R$.
+
+If $R = \Z$, then $S \cong \Q$.
+If $R = \Z + \Z[i]$, $S \cong \Q[i]$,
+where $(a+bi)^{-1} = \frac{a-bi}{a^2+b^2} \in \Q[i]$.
+\begin{remark}
+	$S$ is an abstract field, not necessarily subfield of $\C$
+	just because we think of $R$ as a subfield of $\C$.
+	But since there is some $\phi$ from $R \hookrightarrow \C$
+	(so $R$ lives inside $\C$),
+	then the commutative diagram says that $S$ lives inside $\C$.
+\end{remark}
+$\psi$ need not be injective (?),
+but $\phi$ is minimal because it comes from $\psi \circ \iota$...
+the existence and uniqueness requires $\psi$ or $\phi$??? to be injective...
+worth pondering.
+But anyway, we get for free that these are injective because mapping into fields,
+and any homomorphism into fields is injective.
+
+\subsection{Polynomial rings}
+What is a polynomial, e.g. with real coefficients?
+In calculus, we think of it as a function $f \colon \R \to \R$ where
+\[
+	f(X) = \sum_{n=1}^m a_nX^n = a_mX^n + \cdots + a_0, \, a_i \in \R
+\]
+We pick some $X \in \R$, we get value $f(X) \in \R$ and can get a graph.
+
+This is \emph{not} what a polynomial is in algebra!
+Polynomials are not functions.
+Let $R = \Z/3\Z$.
+Think of the function $X^2 \colon R \to R$.
+Then $0 \mapsto 0$, $1 \mapsto 1$, $2 \mapsto 1$.
+What about $X^3$?
+then $0 \mapsto 0$, $1 \mapsto 1$, $2 \mapsto 2$.
+So as a function, $X^3$ and $X$ are the same!
+This does not look like a good thing:
+we want the notion of the degree of a polynomial to be somewhat sensible,
+but if we just think of this as a function, we don't really get this.
+So we \emph{cannot} think of polynomials as functions.
+
+$X$ is not a variable, with some domain.
+For us $X$ is just a placeholder.
+So if $R$ is commutative, we define
+\begin{definition}[Polynomial with coefficients in $R$]
+	A polynomial with coefficients in $R$ (commutative) of degree $m$
+	is a sequence $(a_0,a_1,\dots,a_m) \in R \times R \times \cdots \times R$
+	($m+1$ times) with $a_m \neq 0$.
+	Morally: $a_mX^m + \cdots + a_0 = f(X)$
+	(we use the $X$ notation, with the provision that $X$ is a symbol).
+\end{definition}
+The space of polynomials with coefficients in $R$ is the set
+of bounded sequences $(a_0,a_1,\dots)$ meaning $a_r = 0$
+for all $r$ sufficiently large (only finitely many nonzero terms).
+
+We have to make this into a ring.
+We do addition via coordinates: $\sum a_iX^i = \sum b_iX^I = \sum(a_i+b_i)X^i$.
+Our multiplication is done how we would expect:
+$(a_0,\dots)(b_0,\dots) = (c_0,\dots)$ or
+$(\sum a_iX^i)(\sum b_i X^i) = \sum c_iX^i$
+which is obtained by multiplying LHS and collecting powers of $X$,
+$c_n = \sum_{p+q=n} a_p b_q$.
+This defines the multiplicative identity $1 = (1,0,\dots) = 1X^0$.
+We can check distributive, but it is routine.
+This comes with an injective map $\iota \colon R \to $ Polynomials
+$ = R[X]$ by $r \mapsto (r,0,\dots)$.
+So $R =$ constant polynomials ($R$ is a ring of constants).
+
+The fundamental property of $R[X]$:
+suppose we are given a homomorphism $\phi \colon R \to S$ for
+some ring $S$ ($S$ is unrestricted).
+We can think of $\phi(r) \in S$; this means constants are moved inside $S$
+($\phi$ may not be injective).
+Now, if $s \in S$ is any element, $f(X) \in R[x]$ is a polynomial,
+we can define the value of $f$ at $X = s$ via
+$a_0 + a_1X + \cdots + a_mX^m \mapsto f(s) = \sum\phi(a_i)s^i \in S$.
+We get a homomorphism (!) $R[X] \to S$, $X \mapsto s \in S$
+(! is both surprising and unique).
+
+We are allowing the domain of our function to really be anything that
+can be mapped to from $R$ via a homomorphism (otherwise we don't end with a homomorphism);
+unlike calculus, which normally restricts by what the coefficients were.
+Now domain is very dependant on $\phi \colon R \to S$.
+By not specifying what $X$ is, it represents any ring.
+
+The fundamental example is $R = \Z$, $f(X) \in \Z[X]$.
+Let $S$ be any commutative ring that comes with a homomorphism $\Z \to S$,
+thus for any $s \in S$, we have an evaluation map $\Z[X] \to S$
+by $X \mapsto s \in S$.
+In particular, this applies when $S = \Q, \Z/p\Z$ for $p$ prime.
+So a polynomial with integer coefficients can be evaluated at rational numbers,
+we well as any $x \in \Z/p\Z$ for any $p$.
+This is weird: we don't normally think of polynomials like this,
+normally evalue at $\R$.
+The study of these polynomials is algebraic geometry.
+Big themes in modern number theory is if we think of a polynomial with these extended values,
+we can patch together the values on $\Z/p\Z$, we can say something about the values in $\Q$.
+This is a subject called arithmetic geometry.
+
+Last time, we saw examples of this when $f(X) \in \Q[X]$,
+and we can evaluate this at $\alpha \in \C$,
+and we get a homomorphism $\Q[X] \to \C$ where $X \mapsto \alpha$.
+If it was injective, then $\alpha$ is transcendental,
+if it had a nonzero kernel, then it was algebraic,
+i.e. there exists some $f(X)$ in $\Q[x]$ with $f(\alpha) = 0$ ($f \in \ker$)
+and $\alpha$ satisfies some algebraic equation $f(X) = 0$.
+
+Ex. $R = \Q[X]/(f(X))$ where $I = f(X) =$ multiples of $f(X)$.
+If $R$ a field, then $\exists \phi \colon R \to T \iff
+\exists t \in T$ such that $f(t) = 0$.
+Reason: $f(X) = \sum a_nX^n \in I$.
+In $R/I$ have $\sum a_n \overline{X}^n = 0$
+($\overline{X}$ is the image of $X$ in $R$).
+So if there's a homomorphism $\psi \colon R \to T$
+then $t = \psi(\overline{X})$ has to satisfy $\sum \psi(a_n)t^n = 0$.
+Think about this a little, says something about roots of polynomials.
+Near the guts of Galois theory.
+Read up in the textbook, and we will talk about it next time.
 \end{document}

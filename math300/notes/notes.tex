@@ -137,7 +137,7 @@ We can check that $i^2 = -1$: $(0,1)\cdot(0,1) = (-1,0) = -1$.
 We write $z \in \C$ as $z = a+ib$, $a,b \in \R$.
 We call $a$ the real part and $b$ the imaginary part,
 and write $a = \mathrm{Re}(z), b = \mathrm{Im}(z)$.
-$|a+ib| = \sqrt{a^2 = b^2}$ as the norm / absolute valuue / modulus of $z = a + ib$.
+$|a+ib| = \sqrt{a^2 = b^2}$ as the norm / absolute value / modulus of $z = a + ib$.
 
 \subsubsection{Polar form}
 It is often convenient to write complex numbers in a different form.
@@ -297,4 +297,254 @@ The complex exponential function ha speriod $2\pi i$:
 \[
 	e^{z + 2\pi i} = e^ze^{2\pi i} = e^z\cdot 1 = e^z
 \]
+
+We can also introduce the complex $\sin$ and $\cos$ functions by their power series:
+\begin{align*}
+	\cos(z) &= 1 - \frac{1}{2}z^2 + \frac{1}{4!}z^4 -+ \cdots\\
+	\sin(z) &= z - \frac{1}{3!}z^3 +- \cdots
+\end{align*}
+Then $e^{iz} = \cos{z} + i\sin{z}$.
+
+Also $\overline{e^z} = \overline{sum_{n=0}^\infty \frac{1}{n!}z^n}
+= \sum_{n=0}^\infty \frac{1}{n!}\overline{z}^n = e^{\overline{z}}$
+so $e^{-iz} = \cos{z} - i\sin{z}$.
+From these, we get
+\begin{align*}
+	\cos(z) &= \frac12\left(e^{iz} + e^{-iz}\right)\\
+	\sin(z) &= \frac{1}{2i}\left(e^{iz} - e^{-iz}\right)
+\end{align*}
+
+\section{January 16}
+\subsection{$n$th roots of unity}
+The $n$th roots of the unity are the $n$ complex numbers $\omega_0,\dots,\omega_{n-1}$
+such that $\omega_0^n = 1, \dots, \omega_{n-1}^n = 1$ are the $n$th roots of unity.
+We let $\omega_0 = 1$. $\omega_0,\dots,\omega_{n-1}$ form a regular $n$-gon
+with vertices on the unit circle.
+For example, when $n = 3$, we have
+$\omega_1 = e^{2\pi i/2}, \omega_2 = e^{4\pi i/2}, \omega_0 = 1$.
+
+If $z$ is a complex number and $w_0^n = z$ so $w_0$ is one $n$th root of $z$,
+then the others are $w_1 = \omega_1w_0, \dots, w_{n-1} = \omega_{n-1}w_0$,
+obtained by multiplying $w_0$ by the $n$th roots of unity.
+
+Example:
+\[
+	\sum_{n=0}^{100} i^n =  i^0 + i^1 + \cdots _ i^{100}
+	= 1 + i + (-1) + (-i) + \cdots + 1
+	= 26\cdot 1 + 25\cdot i + 25(-1) + 25(-i)
+	= 26 - 25 = 1
+\]
+or we can use the geometric series formula
+$1 + z + z^2 + \cdots + z^n = \frac{1-z^{n+1}}{1-z}$ to get
+$\sum_{n=0}^{100}i^n = \frac{1-i^{101}}{1-i} = 1$.
+
+Example: Write $-1 + 2i$ in polar form (with principle value of $\theta$).
+Compute $r = \lvert -1 + 2i \rvert = \sqrt{1 + 4} = \sqrt{5}$.
+So $-1 + 2i = \sqrt{5}\left(\cos\theta + i\sin\theta\right)$
+so $-1 = \sqrt{5}\cos\theta$ and $2 = \sqrt{5}\sin\theta$.
+So $\tan \theta = \frac{\sin\theta}{\cos\theta} = -2$,
+which gives $\theta = \tan^{-1}(-2) + \pi$
+(since $\tan^{-1}$ gives angles between $-\frac{\pi}{2}$ and $\frac{\pi}{2}$
+and $-1 + 2i$ is in the second quadrant).
+If it had been in thee third quadrant, we would subtract $\pi$.
+This because the principle argument of a complex number is between $\pi$ and $-\pi$.
+
+\subsection{Complex Functions}
+There are two types:
+\begin{enumerate}
+	\item[(1).] Domain $[a,b] \subset \R$ is an interval in $\R$
+		(codomain is $\C$).
+		``A path in $\C$".
+		$\gamma \colon [a,b] \to \C$, or $t \mapsto \gamma(t)$.
+		Example: $\gamma \colon [0,1] \to \C$ by $t \mapsto 1 + it^2$.
+	\item[(2).] Complex functions: the domain is a subset of $\C$,
+		so $f \colon D \to \C$ where $D \subset \C$, or $z \mapsto f(z)$
+		(and codomain is $\C$).
+		Example: $\sin \colon \C \to \C$ by $z \mapsto \sin{z} = z - \frac{1}{3!}z^3 +- \cdots$.
+\end{enumerate}
+Visualising complex functions $f \colon \C \to \C$: analytic landscapes.
+Consider the absolute value function $|f| \colon \C \to \R_{\geq 0}$
+by $z \mapsto |f(z)|$ which we can draw with a $3$-dimensional graph;
+then we colour by the phase/argument of $f(z)$.
+Example: $f(z) = z^2$ where $z = x + iy$.
+Then $|f(z)| = |z|^2 = x^2 + y^2$.
+Then paraboloid $z = x^2 + y^2$ is the analytic landscape of $f(z) = z^2$.
+As $z$ goes around the origin once, the phase of $f(z) = z^2$ goes around the origin twice:
+so there is a double rainbow in the phase portrait of $f(z) = z^2$.
+This is the phase portrait:
+for $f \colon \C \to \C$, colour each $z \in \C$ with the phase of $f(z)$
+(so $\frac{f(z)}{|f(z)|} \leftrightarrow$ colour).
+
+\subsection{Limits}
+We want to make sense of $\lim_{z\to z_0}f(z) + L$
+($f\colon D \to \C$ is a complex function and $D \subset \C$)
+where $z_0 \in \C$ but not necessarily in $D$, and $L \in \C$.
+\begin{definition}
+	$\lim_{z\to z_0} f(z) = L$ means that for all $\ep > 0$,
+	there exists a $\delta > 0$ such that
+	\[
+		0 < |z - z_0| < \delta \implies |f(z) - L| < \ep
+	\]
+\end{definition}
+So for every disc $D(L,\ep)$ with centre $L$, there exists a disc $D(z_0,\delta)$
+with centre $z_0$ such that $f$ maps the punctured disc $D'(z_0,\delta)$ into $D(L,\ep)$.
+
+\begin{definition}
+	If $z_0 \in D$ and $\lim_{z\to z_0}f(z) = f(z_0)$ then $f$ is \emph{continuous} at $z_0$.
+\end{definition}
+
+Example: $\lim_{z\to 0}\frac{\overline{z}}{z}$ does not exist.
+In this case, our $D = \C \setminus \{0\}$.
+If $z \neq 0$ is real, $\overline{z} = z$ so $f(z) = 1$.
+If $z$ is purely imaginary, $z = iy, y\in\R$, $\overline{z} = -iy$
+so $\frac{\overline{z}}{z} = \frac{-iy}{iy} = -1$.
+For example, $\lim_{z\to0}\overline{z}/z \neq 0$,
+since no $\delta$ exists: if $\ep = \frac12$,
+will always have $f(z)$ when $z$ is real outside of $D(0,\delta)$.
+
+\section{January 23}
+Recall we were looking at complex functions $f \colon \C \to \C$
+or $f \colon D \to \C$ where $D \subset \C$
+(both inputs and outputs are complex numbers).
+We can write the input and output in terms of real and imaginary parts:
+$f(z) = w = u + iv$ where $z = x + iy$.
+We can define $u,v \colon \R^2 \to \R$ to be functions
+that give the real and imaginary parts of $f$, respectively,
+i.e. $f(x+iy) = u + iv = u(x+iy) + iv(x+iy) = u(x,y) + iv(x,y)$.
+Then $f(z) = \langle u(x,y), v(x,y) \rangle$ can be viewed as a planar vector field.
+
+Example: $f(z) = \sin{z}$.
+When dealgin with complex trig. functions, it is good to convert to exponentials.
+\begin{align*}
+	\sin{z} &= \frac{1}{2i}\left(e^{iz} - e^{-iz}\right)\\
+			&= \frac{1}{2i} \left(e^{i(x+iy)} - e^{-i(x+iy)}\right)\\
+			&= \frac{1}{2i}\left(e^{ix - y} - e^{-ix + y}\right)\\
+			&= \frac{1}{2i}\left(e^{ix}e^{-y} - e^{-ix}e^y\right)\\
+			&= \frac{1}{2i}\left(e^{-y}(\cos{x}+i\sin{x})
+				- e^y(\cos{x} - i\sin{x})\right)\\
+			&= \frac{1}{2i}\left(\left(e^{-y}-e^y\right)\cos{x}
+				+ i\left(e^{-y}+e^y\right)\sin{x}\right)\\
+			&= \frac{-i}{2}\left(\left(e^{-y}-e^y\right)\cos{x}
+				+ i \left(e^{-y}+e^y\right)\sin{x}\right)\\
+			&= \frac{e^y + e^{-y}}{2}\sin{x} + i\frac{e^y-e^{-y}}{2}\cos{x}
+\end{align*}
+So we have $u(x,y) = \frac{e^y + e^{-y}}{2}\sin{x} = \cosh{y}\sin{x}$
+and $v(x,y) = \frac{e^y-e^{-y}}{2}\cos{x} = \sinh{y}\cos{x}$
+(we won't ever use these function names in this class).
+As a vector field, $\sin(z) =
+\langle \frac{e^y+e^{-y}}{2}\sin{x}, \frac{e^y-e^{-y}}{2}\cos{x}\rangle$.
+
+\subsection{Infinite Limits}
+Recall $\lim_{z\to z_0}f(z) = L$ means that
+$\forall \ep > 0$, $\exists \delta > 0$ such that
+$0 < \lvert z-z_0\rvert < \delta \implies \lvert f(z) - L \rvert < \ep$.
+What does this condition mean for sequences:
+ suppose we have a sequence of complex numbers $z_1,z_2,z_3,\dots$
+ converging to $z_0$ (but avoiding $z_0$).
+ it will eventually have to be within $\delta$ of $z_0$, say from $N$ onward.
+ So $0 < \lvert z_n - z_0 \rvert < \delta$ for all $n \geq N$,
+ then we must have $\lvert f(z_n) - L \rvert < \ep$ for all $n \geq N$.
+ But this is true for all $\ep > 0$, no matter how small,
+ so the sequence $f(z_1),f(z_2),\dots$ converges to $L$.
+ \emph{This is true no matter in wchi direction $z_n \to z_0$.}
+
+ The \emph{extended complex plane} is $\C \cup \{\infty\}$,
+ usually denoted $\hat{\C}$.
+ It can be identified with the Riemann sphere by stereograhpic pojection:
+ for every point on the sphere, we have a $1$-$1$ correspondance
+ with a point on the complex plane by taking the place where
+ the ray from the top of the sphere that intersects the desired point of the sphere
+ intersects the complex plan
+ (his sphere has $0$ as its origin; so the points inside the unit circle
+ correspond to points in the southern hemisphere).
+ The only point on the sphere that doesn't have a corresponding point in $\C$
+ is the north pole $N$, but points ``very close" to $N$ on the sphere
+ correspond to points outside a circle of large radius in $\C$.
+ This leads to the following definitions:
+ $\lim_{z \to z_0}f(z) = \infty$ means $\forall M > 0$, $\exists \delta > 0$
+ such that $0 < \lvert z - z_0 \rvert < \delta \implies \lvert f(z) \rvert > M$.
+
+ Example: $\lim_{z \to 0}\frac{1}{z} = \infty$ where
+ $z = re^{i\theta}$ so $\frac{1}{z} = \frac{1}{r}e^{-i\theta}$.
+ Algebraic proof: given $M > 0$, let $\delta = \frac{1}{M} > 0$.
+ Then $0 < \lvert z \rvert < \delta \implies 0 < \lvert z \rvert < M
+ \implies \frac{1}{|z|} > M \implies \left\lvert \frac{1}{z} \right\rvert > M$.
+
+ Some other definitions:
+ $\lim_{z \to \infty} f(z) = L$ means $\forall \ep > 0$, $\exists M > 0$
+ such that $\lvert z \rvert > M \implies \lvert f(z) - L \rvert < \ep$;
+ and $\lim_{z \to \infty} f(z) = \infty$ means $\forall M > )$, $\exists N > 0$
+ such that $\lvert z \rvert > N \implies \lvert f(z) \rvert > M$.
+
+\begin{remark}
+	All the rules for computing limits of sums, products, quotients remain true
+	if we stipulate:
+	$\infty + a = \infty$ for all $a \in \C$ ($\infty+\infty$ is not defined),
+	$\infty \cdot a = \infty$ for all $a \in \C\setminus\{0\}$
+	($\infty\cdot0$ is not defined),
+	$\frac{a}{\infty} = 0, \frac{a}{0} = \infty$ for ff,
+	and $\frac{\infty}{0} = \infty$, $\frac{0}{\infty}=0$, $\infty\infty = \infty$.
+\end{remark}
+
+Example 1: $\frac{0}{\infty} = 0$ means if $\lim_{z \to z_0}f(z) = 0$ and
+$\lim_{z\to z_0}g(z) = \infty$,
+then $\lim_{z\to z_0}\frac{f(z)}{g(z)} =
+\frac{\lim_{z\to z_0}f(z)}{\lim_{z\to z_0}g(z)} = \frac{0}{\infty} = 0$.
+
+Example 2: $f(z) = \frac{1}{z}, g(z) = -\frac{1}{z}$.
+$\lim_{z \to 0} f(z) = \lim_{z \to 0} \frac{1}{z}
+= \frac{\lim_{z \to 0} 1}{\lim_{z \to 0} z} = \frac{1}{0} = \infty$.
+Similarly, $\lim_{z \to 0} g(z) = \lim_{z \to 0} -\frac{1}{z}
+= \frac{-1}{0} = \infty$.
+And then
+\[
+	0 = \lim_{z \to 0}0 = \lim_{z \to 0}\left(\frac{1}{z}-\frac{1}{z}\right)
+	\lim_{z\to0}\left(f(z) + g(z)\right) =
+	\lim_{z \to 0}f(z) + \lim_{z \to 0}g(z) = \infty + \infty = \text{ not defined}
+\]
+which is why $\infty + \infty$ is not defined,
+because $\infty + \infty = \lim_{z\to\infty}\left(f(z) + f(z)\right) = \infty$ as well.
+
+\subsection{M\"{o}bius transformations}
+\begin{definition}[M\"{o}bius transformation]
+	A \emph{M\"{o}bius transformation} is a linear fractional transformation
+	$f \colon \hat{\C} \to \hat{\C}$
+	\[
+		f(z) = \frac{az + b}{cz + d}
+	\]
+	$a,b,c,d \in \C$, $ad - bc \neq 0$.
+\end{definition}
+Why do we require $ad - bc \neq 0$?
+Well, if $ad = bc$, then
+$c \neq 0$ implies $b = \frac{ad}{c}$ and
+$\frac{az+b}{cz+d} = \frac{caz + ad}{c^2z+cd} = \frac{a}{c}\frac{cz+d}{cz+d} = \frac{a}{c}$
+so $f(z)$ is constant;
+$c = 0$ implies that if $d \neq 0$ then $a = 0$ and so
+$f(z) = \frac{az+b}{cz+d} = \frac{b}{d}$ a constant again,
+or if $d = 0$ then $f(z) = \frac{az+b}{0}$ which is not defined (or constant $\infty$).
+So $ad - bc \neq 0$ assures that $f$ is not constant.
+
+Define $f(z) = \frac{az+b}{cz+d}$ as a function $\hat{\C} \to \hat{\C}$:
+\begin{enumerate}
+	\item $cz + d = 0$.
+		When $c \neq 0$ then the denominator vanishes at $z = -d/c$,
+		so
+		\[
+			\lim_{z \to -d/c} \frac{az+b}{cz+d}
+			= \frac{\displaystyle\lim_{z\to-d/c}(az+b)}{\displaystyle\lim_{z\to-d/c}(cz+d)}
+			= \frac{-\frac{ad}{c}+b}{0}
+			= \frac{\frac{-ad+bc}{c}}{0} = \infty
+		\]
+		since $\frac{-ad+bc}{c} \neq 0$.
+		When $c = 0$ then $f(z) = \frac{az+b}{d}$ with $d\neq0$ so no problem with denominator.
+	\item $f(\infty) =$ ?.
+\end{enumerate}
+ff I think I'm done for today, I will just fill in examples later.
+
+ff
+
+In fact, every rotation of the Riemann sphere is a M\"{o}bius transformation.
+We can iterate $f$ and draw trajectories.
+Here the trajectories are circles (the second picture in the assigned reading).
+But there are other classes of transformations than just iteration of one???
 \end{document}
