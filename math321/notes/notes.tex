@@ -573,4 +573,206 @@ is monotonically increasing and discontinuous.
 Remember he mentioned that it is useful to have examples in your head.
 For Riemann-Stieltjes integral, $\alpha(x) = x$ is a good one (Riemann integral),
 but also this Cantor-Lebesgue function.
+
+\section*{January 22}
+\subsection{Properties of the Riemann-Stieltjes Integral}
+Assume that $\alpha \colon [a,b] \to \R$ is monotonically increasing,
+and $f,f_1,f_2 \colon [a,b] \to \R$ are $f,f_1,f_2 \in \mathcal{R}_\alpha[a,b]$.
+Then we get some more functions that are integrable.
+\begin{enumerate}
+	\item[(a).] Linearity: $f_1 + f_2 \in \mathcal{R}_\alpha[a,b]$
+		and $\int_a^b(f_1+f_2)d\alpha = \int_a^b f_1d\alpha + \int_a^bf_2d\alpha$;
+		$c \in \R$ then $cf \in cf\in\mathcal{R}_\alpha[a,b]$
+		and $\int_a^b cfd\alpha = c\int_a^bfd\alpha$.
+	\item[(b).] Non-negativity: If $f(x) \geq 0$ for all $x \in [a,b]$
+		then $\int_a^b fd\alpha \geq 0$.
+		This then implies if $f_1(x) \leq f_2(x)$ for all $x \in [a,b]$
+		then $\int f_1d\alpha \leq \int f_2d\alpha$
+	\item[(c).] For $c \in (a,b)$, then $f \in \mathcal{R}_\alpha[a,c]$
+		and $f \in \mathcal{R}_\alpha[c,b]$
+		and $\int_a^c fd\alpha + \int_c^b fd\alpha = \int_a^bfd\alpha$
+	\item[(d).] Boundedness: If $|f| \leq M$ then
+		$\left\lvert \int_a^b fd\alpha\right\rvert \leq M(\alpha(b) - \alpha(a))$.
+	\item[(e).] Let $\alpha_1,\alpha_2 \colon [a,b] \to \R$ and they're monotone increasing,
+		and $f \colon [a,b] \to \R$ where $f \in \mathcal{R}_{\alpha_1}[a,b]$
+		and $f \in \mathcal{R}_{\alpha_2}[a,b]$.
+		Then $f \in \mathcal{R}_{\alpha_1+\alpha_2}[a,b]$
+		and $\int_a^b fd(\alpha_1 + \alpha_2) = \int_a^b fd\alpha_1 +
+		\int_a^b fd\alpha_2$.
+		If $c \in \R$, then $f \in \mathcal{R}_{c\alpha_1}[a,b]$
+		and $\int_a^b fd(c\alpha_1) = c\int_a^bfd\alpha_1$.
+\end{enumerate}
+Proof: See Rudin; this is theorem 6.12.
+
+Now we will have an informal discussion about what this all tells us.
+Why bother with a more complicated version of an integral,
+and why this specific setup?
+Recall from 320 $C([a,b])$, the space of continuous functions $f \colon [a,b] \to \R$.
+We define $\lVert f \rVert_{C([a,b])} = \sup_{x\in[a,b]}\lvert f(x)\rvert$
+and so $d(f,g) = \lVert f - g \rVert_{C([a,b])}$
+(also called the $C_0$ norm).
+This space is a vector space, infinite dimensional
+(field is reals for now, but can extend to complex).
+Thus, $(C([a,b]), \lVert \cdot \rVert_{C([a,b])})$ is a normed vector space.
+In linear algebra, we are often interested in linear functions from vector spaces,
+or here, linear transforms between normed vector spaces.
+Property (a) from theorem 6.12 says:
+If $\alpha \colon [a,b] \to \R$ is monotone increasing,
+then the function $T(f) = \int_a^b fd\alpha$ is a linear function
+from the vector space $C([a,b])$ to $\R$ (for now, we will restrict our domain),
+i.e. $T(f+g) = T(f) + T(g), T(cf) = cT(f)$.
+Property (d) says that $T$ is bounded,
+i.e. $|Tf| \leq A\lVert f \rVert_{C([a,b])}$,
+or more specifically, $|Tf| \leq (\alpha(b) - \alpha(a)\lVert f \rVert_{C([a,b])}$
+(since $|f| \leq M$ when $f \in C([a,b])$ means $\lVert f \rVert_{C([a,b])} \leq M$).
+Notation: people sometimes write $Tf$ instead of $T(f)$
+(in linear algebra, we write $Mv$).
+Property (b) says that $T$ is non-negative, i.e.
+if $f \in C([a,b])$ with $f(x) \geq 0$ for all $x \in [a,b]$, then $Tf \geq 0$.
+
+Why have we changed our wording from theorem 6.12 to this?
+In functional analysis (Math 421) and more generally in physics,
+we want to study linear functions whose domain is $C([a,b])$ (or more general)
+and whose codomain is often $\R$ or $\C$.
+Functions of this type are called ``(linear) operators" or ``(linear) functionals".
+Can't say too much right now about why this is an interesting area of study,
+but a starting point in modern quantum mechanics is,
+instead of thinking of particles as points, we think of it as a function.
+In classic mechanics, a particle might be described with $6$ numbers
+($x,y,z,v_x,v_y,v_z$),
+and if you were to ask what the position of this particle, we just take the first three
+(and likewise with the velocity/momentum).
+Instead, we now consider transformations on the function.
+
+\begin{theorem}[Riesz Representation Theorem V1]
+	Let $T \colon C([a,b]) \to \R$ be linear, bounded, and non-negative.
+	Then, there exists $\alpha \colon [a,b] \to \R$ monotonically increasing
+	such that $Tf = \int_a^b fd\alpha$.
+\end{theorem}
+The whole point of this theorem is that you can go in the other direction.
+$f$ and $\alpha$ uniquely define a linear bounded non-negative operator $T \colon [a,b] \to \R$,
+and $T$ uniquely determines $f,\alpha$.
+
+This non-negative condition seems a little weird...
+what happens when our codomain is $\C$?
+\begin{theorem}[Riesz Representation Theorem V2]
+	Let $T \colon C([a,b]) \to \R$ be linear and bounded.
+	``Let $T$ be a real-valued linear functional on $C([a,b])$."
+	Then there exists $\alpha,\beta \colon [a,b] \to \R$ monotone increasing such that
+	\[
+		T(f) = \int_a^b fd\alpha - \int_a^b fd\beta = ``\int_a^bfd(\alpha-\beta)"
+	\]
+	(but careful, because $\alpha - \beta$ is not necessarily monotone increasing,
+	but can just define difference of monotone increasing functions;
+	call these ``functions of bounded variation").
+\end{theorem}
+How would we go about proving this?
+Comes from Hanh-Banach Theorem from functional analysis.
+Banach spaces are complete normed vector spaces.
+If you have a linear function from a dense subspace to the reals,
+can extend this to the entire space to the reals.
+Won't prove this... requires axiom of choice
+(even though Riesz Representation doesn't require it).
+And then we're in good shape...
+get $T$ is the integral with various test functions on dense subspace.
+
+\section{January 24}
+
+\begin{theorem}[Rudin 6.13]
+	Let $f,g \in \mathcal{R}_\alpha[a,b]$.
+	\begin{enumerate}
+		\item[(a).] Then $fg \in \mathcal{R}_\alpha[a,b]$.
+		\item[(b).] Then $\lvert f \rvert \in \mathcal{R}_\alpha[a,b]$
+			and $\lvert \int_a^bfd\alpha \rvert \leq \int_a^b \lvert f \rvert \alpha$
+	\end{enumerate}
+\end{theorem}
+\begin{proof}
+	First proof of (a).
+	By theorem 6.11, $\alpha(x)=x^2$, $(f+g)^2,(f-g)^2 \in \mathcal{R}_\alpha[a,b]$.
+	By theorem 6.12a, $(f+g)^2-(f-g)^2 = 4fg \in \mathcal{R}_\alpha[a,b]$.
+	By theorem 6.12a, ($c = \frac14$) $fg \in \mathcal{R}_\alpha[a,b]$.
+
+	Now proof of (b).
+	By theorem 6.11 $\alpha(x) = \lvert x \rvert$, $\lvert f \rvert \in \mathcal{R}_\alpha[a,b]$.
+	Let $c = \mathrm{sgn}\int_a^b fd\alpha$ so
+	$\lvert \int_a^b fd\alpha = c\int_a^bfd\alpha = \int_a^bcfd\alpha
+	\leq \int_a^b \lvert f \rvert d\alpha$ (by theorem 6.12a).
+\end{proof}
+
+\begin{theorem}[Rudin 6.15]
+	Let $f \colon [a,b] \to \R$ be bounded.
+	Let $s \in (a,b)$ and suppose $f$ is continuous at $s$.
+	Let $\alpha(x) = \begin{cases} 0 & x \leq s \\ 1 & x > s\end{cases}$.
+	Then $f \in \mathcal{R}_\alpha[a,b]$ and $\int_a^b fd\alpha = f(s)$.
+\end{theorem}
+\begin{proof}
+	Let $P = \{x_0,x_1,x_2,x_3\}$ where $a = x_0, s = x_1, b = x_3$.
+	Then $U(P,f,\alpha) = \sum_{i=1}^3 M_i \Delta \alpha_i = M_2 = \sup_{x\in[x_1,x_2]}f(x)$
+	and $L(P,f,\alpha) = \sum_{i=1}^3 m_i \Delta \alpha_i = m_2 = \inf_{x\in[x_1,x_2]}f(x)$.
+	Since $f$ is continuous at $s$, $\forall \ep > 0$, $\exists \delta$
+	such that if $|x-y| < \delta$, then $|f(x) - f(y)| < \frac{\ep}{2}$,
+	so let $x_2 \in (x_1,x_1+\delta)$.
+	Then,
+	\[
+		\sup_{x\in[x_1,x_2]}f(x) \leq f(x_1) + \ep/2 \implies M_2 \leq f(x_1) + \ep/2
+	\]
+	\[
+		\inf_{x\in[x_1,x_2]}f(x) \geq f(x_1) - \ep/2 \implies m_2 \geq f(x_1 - \ep/2
+	\]
+	Hence, $M_2 - m_2 \leq \ep$.
+\end{proof}
+How would we change proof if $f(x) = 1$ for $x \geq s$?
+We would get the same result, but would need to change which switch $x_1,x_2$ roles.
+If defined at neither, then probably $s \in [x_1,x_2]$.
+
+This step function is actually quite important in electrical engineering.
+Even has a special name:
+\begin{definition}[Heavyside step function]
+	\[
+		I(x) = \begin{cases} 0, & x \leq 0\\ 1, & x > 0\end{cases}
+	\]
+\end{definition}
+
+\begin{theorem}[Rudin 6.16]
+	Let $\{c_n\}_{n=1}^\infty$ be positive real numbers, with $\sum_{n=1}^\infty c_n < \infty$.
+	Let $[a,b]$ be an interval, and let $\{s_n\}_{n=1}^\infty \subset (a,b)$
+	be distinct points.
+	Let $\alpha(x) = \sum_{n=1}^\infty c_nI(x-s_n)$
+	(a bunch of steps at $s_n$ by $c_n$).
+	Let $f \colon [a,b] \to \R$ be continuous,
+	so $f \in \mathcal{R}_\alpha[a,b]$
+	(always true, $f$ is continuous and $\alpha$ monotone increasing).
+	Then
+	\[
+		\int_a^b fd\alpha = \sum_{n=1}^\infty cf(s_n)
+	\]
+\end{theorem}
+(We know the integral exists,
+and the sum exists because $\sum c_n < \infty$ and $f$ is bounded.)
+``I love nitpicking, because math is meant to be precise."
+\begin{proof}
+	Let $R_N = \int_a^bfd\alpha - \sum_{n=1}^N c_nf(s_n)$.
+	Goal: $\forall \ep > 0$, $\exists N_0$ such that
+	$\forall N \geq N_0$m $\lvert R_N \rvert < \ep$.
+	So fix $N$, let $\alpha_1 = \sum_{n=1}^N c_nI(x-s_n)$,
+	$\alpha_2 = \sum_{n=N+1}^\infty c_n I(x-s_n)$.
+	By Theorem 6.12e, $\int_a^b fd\alpha = \int_a^b fd\alpha_1 + \int_a^bfd\alpha_2$
+	(we meet the hypothesis that $f \in \mathcal{R}_{\alpha_1},\mathcal{R}_{\alpha_2}$,
+	since $f$ is continuous).
+	\[
+		\int_a^b fd\alpha_1 = \sum_{n=1}^N \int_a^b f(x) d[c_nI(x-s_n)]
+		= \sum_{n=1}^N c_n f(s_n)
+	\]
+	(by Theorem 6.15).
+	So $R_N = \int_a^b fd\alpha_2$.
+	Let $K = \sup_{x \in [a,b]} \lvert f \rvert$.
+	By 6.12b, $\int_a^b fd\alpha_2 \leq K \int_a^B 1 d\alpha_2
+	= K(\alpha_2(b) - \alpha_2(a)) = K\sum_{n=N+1}^\infty c_n \to 0$ as $N \to \infty$.
+	Overview: we wrote our difference in terms of a main term and tail.
+	And we showed the tail goes to zero
+	(we can make our proof more formal with $\ep$, etc., but out of time).
+\end{proof}
+
+\section{January 26}
+ff
 \end{document}

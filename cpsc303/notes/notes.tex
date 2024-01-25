@@ -369,4 +369,154 @@ MATLAB is quirky.
 The first function you define in a file will always be run
 when you call the file,
 and it will assume the other functions in the file are not meant to be run globally.
+
+\section{January 24}
+Topics to finish:
+\begin{itemize}
+	\item Look at MATLAB for a bit (Solutions to HW2 and HW1-ish)
+	\item Vandermonde matrices and linear algebra without linear algebra
+	\item Exponentiation and eigenpairs and norms
+	\item Higher ordeer versions of Euler's method
+	\item More celestial mechanics
+\end{itemize}
+
+Some quirky MATLAB:
+Something good to know is putting a \verb|;| at the end of a line
+to supress the output (so we don't see giant vector).
+\verb|1e-200| is defined as its own thing, but \verb|1e-400| is considered \verb|0|.
+\verb|1/0| gives \verb|Inf| and \verb|-1/0| gives \verb|-Inf|.
+But \verb|-Inf + Inf| gives \verb|NaN| (not a number).
+But all this follows the IEEE standard.
+MATLAB also calls the first function in a file
+as the name of a file when called elsewhere.
+We will look more at MATLAB later when we try to break it.
+
+\subsection{Vandermonde matrices}
+Given
+\[
+	A = \begin{bmatrix} 1 & x_0 & x_0^2 & \cdots & x_0^n\\
+		1 & x_1 & x_1^2 & \cdots & x_1^n \\
+		\vdots & \vdots & \ddots & \vdots\\
+	1 & x_n & x_n^2 & \cdots & x_n^n\end{bmatrix}
+\]
+Does this have a unique solution?
+
+The following are equivalent:
+\begin{enumerate}
+	\item[1.] $A\begin{bmatrix} c_0 \\ \vdots \\ c_n \end{bmatrix}
+		= \begin{bmatrix} y_0 \\ \vdots \\ y_n \end{bmatrix}$
+		has a unique solution for all $y_0,\dots,y_n$.
+	\item[2.] $A$ is invertible
+	\item[3.] $\det(A) \neq 0$
+	\item[4.] $A$ is of rank $n+1$
+\end{enumerate}
+
+We have actually seen Vandermonde matrices in HW1, just disguised.
+We were looking at $3$ point schemes.
+We took a bunch of these formulas:
+\[
+	\begin{cases}
+		f(x_0 + L) = \cdots\\
+		f(x_0) = \cdots\\
+		f(x_0 - h) = \cdots\\
+		f(x_0 + 2h) = \cdots\\
+		f(x_0 + \sqrt{2}h) = \cdots\\
+		f(x_0 + rh) = \cdots
+	\end{cases}
+\]
+(where $r$ is a real number, often an integer, often $0,1,2,-1,-2,\dots$),
+and used the formula
+\begin{align*}
+	c_0\cdot f(x_0 + r_0h) &= c_0\left(f(x_0) + r_0jf'(x_0) + r_0^2\frac{h^2}{2}f''(x_0)
+	+ r_0^3\frac{h^3}{3!}f'''(x_0) + O(h^4)\right)\\
+		c_1 \cdot f(x_0 + r_1h) &= c_1(\dots)\\
+		c_2 \cdot f(x_0 + r_1h) &= c_2(\dots)\\
+		c_3 \cdot f(x_0 + r_1h) &= c_3(\dots)
+\end{align*}
+and we try to rearrange and change $c_i$ and derive a scheme to get
+$0f(x_0) + 1hf'(x_0) + 0\frac{h^2}{2}f''(x_0) + 0\frac{h^3}{3!}f'''(x_0)$.
+I.e., we are looking for $c_0,c_1,c_2,c_3$ such that
+\begin{align*}
+	0 &= c_0 + c_1 + c_2 + c_3\\
+	1 &= r_0c_0 + r_1c_1 + r_2c_2 + r_2c_3\\
+	0 &= r_0^2c_0 + r_1^2c_1 + r_2^2c_2 + r_2^2c_3\\
+	0 &= r_0^3c_0 + r_1^3c_1 + r_2^3c_2 + r_2^3c_3
+\end{align*}
+In homework 1, we saw this was solving a vandermonde matrix
+(anything that is of the form of the matrix below):
+\[
+	\begin{bmatrix}
+		1 & 1 & 1 & 1\\
+		r_0 & r_1 & r_2 & r_3\\
+		r_0^2 & r_1^2 & r_2^2 & r_3^2\\
+		r_0^3 & r_1^3 & r_2^3 & r_3^3
+	\end{bmatrix}
+	\begin{bmatrix} c_0 \\ c_1 \\ c_2 \\ c_3 \end{bmatrix}
+	= \begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \end{bmatrix}
+\]
+(Observation: this looks like interpolation.)
+
+\begin{theorem}
+	The above system has a unique solution.
+\end{theorem}
+\begin{lemma}
+	Say that $p \colon \R \to \R$, $p = p(x)$ is a polynomial and $p$
+	has $n+1$ distincr roots, $x_0,\dots,x_n$.
+	Then
+	\begin{enumerate}
+		\item[1.] $p(x) = (x - x_0)(x-x_1)\dots(x-x_n)q(x)$ where $q(x)$ is a polynomial.
+			(Bruh people in this class are actually so stupid,
+			none of them recognize factoring).
+		\item[2.] $p'(x)$ has $n$ distinct roots between $x_0$ and $x_n$
+			(assuming $x_0 < x_1 < \cdots < x_n$).
+		\item $p''(x)$ has $n-1$ distinct roots between $x_0$ and $x_n$
+		\item $p'''(x)$ has $n-2$ distinct roots between $x_0$ and $x_n$
+	\end{enumerate}
+\end{lemma}
+
+To prove all of these, just done by Rolle's theorem
+\begin{theorem}[Rolle's Theorem]
+	If $f \in C^{0}[a,b]$ (continuous on $[a,b]$), $f(a) = f(b) = 0$, and
+	$f$ is differentiable on $(a,b)$, then $f'(\xi) = 0$ for some $a < \xi < b$.
+\end{theorem}
+(Bro why is no one putting up their hand to haveing SEEN Rolle's theorem before,
+I swear there are too many bums in this course.)
+``How many people have seen a proof of this? Yeah, you would do this in Math 320."
+(Loewen could never)
+But this is quite intuitive anyway.
+
+We do get a useful fact from the lemma:
+\begin{corollary}
+	If $p = p(x)$ is a polynomial of degree $\leq n$,
+	$p(x) = c_0 + c_1x + \cdots + c_nx^n$ and $p$ has $n+1$ distinct roots,
+	then $p = 0$
+\end{corollary}
+
+\begin{remark}
+	$p(x) = x^2 + 1$, then $p$ has no real roots.
+	But $p'(x) = 2x$ has a real root, so the lemma doesn't go the other way
+	(i.e. $q(x) = 0$ from bullet point 1.).
+\end{remark}
+
+Claim: the system
+\[
+	\begin{bmatrix} 1 & x_0 & x_0^2 & \cdots & x_0^n\\
+		1 & x_1 & x_1^2 & \cdots & x_1^n \\
+		\vdots & \vdots & \ddots & \vdots\\
+	1 & x_n & x_n^2 & \cdots & x_n^n\end{bmatrix}
+	\begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix} = 0
+\]
+has $c_1 = c_2 = \cdots = c_n = 0$ as its unique solution.
+Why? This just says $p(x) = c_0 + c_1x + c_2x^2 + \cdots + c_nx^n$
+satisfies $p(x_0) = 0, p(x_1) = 0, \dots, p(x_n) = 0$,
+so $p$ has $n+1$ distinct roots,
+hence by our corollary, $p = 0$.
+(Important in the definition of a Vandermonde matrix is that
+$x_0,x_1,\dots,x_n$ are distinct, otherwise not invertible).
+
+Homework: $e^{\begin{bmatrix}0 & -1 \\ 1 & 0 \end{bmatrix}t}
+= \begin{bmatrix} \cos{t} & -\sin{t} \\ \sin{t} & \cos{t}\end{bmatrix}$
+and $e^{\begin{bmatrix}0 & 1 \\ 1 & 0 \end{bmatrix}t}
+= \begin{bmatrix} \cosh{t} & \sinh{t} \\ \sinh{t} & \cosh{t}\end{bmatrix}$
+(meant to get to this today).
 \end{document}
