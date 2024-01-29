@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1706118916 "notes.tex" "notes.pdf" "notes" 1706118916 0
+["pdflatex"] 1706550796 "notes.tex" "notes.pdf" "notes" 1706550796 0
   "/home/nich/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1695159989 11524 a545fe7b6db104cbf3b60e865f10efb5 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1704400182 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1704400182 1004 54797486969f23fa377b128694d548df ""
@@ -27,6 +27,7 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb" 1704400182 32915 7bf7720c61a5b3a7ff25b0964421c9b6 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1704400182 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1704400182 37944 359e864bd06cde3b1cf57bb20757fb06 ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1704400182 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1704400182 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb" 1704400182 35309 940e81a5b9e04201a07e8b33a3ae6e64 ""
   "/usr/share/texmf-dist/tex/generic/iftex/iftex.sty" 1704400182 7237 bdd120a32c8fdb4b433cf9ca2e7cd98a ""
@@ -48,10 +49,10 @@
   "/usr/share/texmf-dist/tex/latex/graphics/keyval.sty" 1704400182 2671 7e67d78d9b88c845599a85b2d41f2e39 ""
   "/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1704400182 30429 213676d4c7327a21d91ddaed900e7b81 ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1704400182 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
-  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1704708773 27758 38728abbce47239bb9c148cdc8c9e373 ""
-  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1704708772 6768069 adcaa2aa97bd89f699fb30a712d5bc7d ""
-  "notes.aux" 1706118916 1592 fd7670645d239822da8c0a6a52c2e472 "pdflatex"
-  "notes.tex" 1706118916 32241 ab13c78b6467c7d2a5fe53b1d1b6bf0a ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1706180302 27758 38728abbce47239bb9c148cdc8c9e373 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1706180302 6768053 23d65275ad9c0910048d43d14c4070e3 ""
+  "notes.aux" 1706550796 1821 7793ab55c85623ce2567b926dd0fd755 "pdflatex"
+  "notes.tex" 1706550796 40648 542632342a0583afc0b682c4bafb7a90 ""
   (generated)
   "notes.aux"
   "notes.log"

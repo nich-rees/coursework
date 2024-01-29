@@ -519,4 +519,290 @@ Homework: $e^{\begin{bmatrix}0 & -1 \\ 1 & 0 \end{bmatrix}t}
 and $e^{\begin{bmatrix}0 & 1 \\ 1 & 0 \end{bmatrix}t}
 = \begin{bmatrix} \cosh{t} & \sinh{t} \\ \sinh{t} & \cosh{t}\end{bmatrix}$
 (meant to get to this today).
+
+\section{January 26}
+Coming soon (later, we're putting a pin in it):
+\begin{itemize}
+	\item More ODE's:
+		\begin{itemize}
+			\item Central force: $m\vec{x}'' = -\frac{\vec{x}}{|\vec{x}|}
+				g(|\vec{x}|)$,
+			\item Newton's law: $g(r) = \frac{1}{r^2}$
+			\item ff
+		\end{itemize}
+	\item ff
+\end{itemize}
+
+Today:
+\begin{itemize}
+	\item Higher Order ODE solvers. For now, Euler's method and Explicit trapezoidal
+	\item More on $e^{At}$, norms, convergence, etc.s
+	\item Where do non-diagnolizable matrices ceom from? One place: recurrences
+\end{itemize}
+
+If $y' = f(t,y), y(t_0) = y_0$,
+we can rewrite this as
+\[
+	y(t) - y_0 = \int_{s=t_0}^{s=t} f(s,y) ds
+\]
+This is the integral form of ``$y' = f(t,y)$".
+This is actually a perferred form for many applications,
+since we don't know if $y$ is differentiable so we don't assume it.
+Rename: $f(s) = f(s,y)$ (or are we assuming??)
+Then $y' - f(t), y(t_0) = y_0$,
+then $y(t) - y(t_0) = \int_{s=t_0}^{s=t} f(s)ds$.
+We want to use a trapezoid to approximate the area under the curve,
+since it is a better approximation than a rectangle.
+
+We have $y(t_0 + h) = y(t_0) + hy'(t_0) + O(h^2)$.
+Let $t_i = t_0 + ih$.
+We want $y_1$ to approximation $y(t_1)$.
+$y(t_1) = y(t_0 + h) \approx y(t_0) + hy'(t_0) + O(h^2)$.
+So $y_{i+1} = y_i + hf(t_0,y_0)$.
+So $y_{i+1}$ approximates $y(t_{i+1})$
+(uses $y_i$, approximates $y(t_i)$).
+
+How do we improve?
+$y(t+h) = y(t) + h\frac{y'(t)+y'(t+h)}{2}$,
+which is a better approximation for $y'$.
+Trapezoidal:
+$\frac{y(t+h)-y(t)}{2}$ to $y'(t+\frac{h}{2})$.
+(I have no clue what he is doing.)
+
+So first, we have $y(t_0), h$.
+Using Euler, we get $y(t_1) = y(t_0+h)
+\approx y(t_0) + hy'(t_0) = y(t_0) + hf(t_0,y_0)$.
+$y_1 \leftarrow y(t_0) + hf(t_0,y_0)$.
+
+Trapezoidal (Explicit) Scheme:
+Let $Y = y(t_0) + hf(t_0,y_0)$.
+And $y(t_0+h) \approx y(t_0) + h\left(\frac{f(t_0,y_0) + f(t_1,Y)}{2}\right)$.
+The $Y$ is like the otherside of the trapezoid.
+
+\subsection{Pre-interpolation}
+Before we get to interpolation, we need to get back at matrices,
+and what norms of matrices are.
+
+\subsubsection{Matrix exponential}
+Question: What do we mean by
+\[
+	e^A = I + A + \frac{A^2}{2} + \cdots
+\]
+If $\vec{x} \in \R^n$, then $\lVert \vec{x}\rVert_2$ or $\lVert \vec{x}\rVert_{L^2}$ is
+$\sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}$
+(I feel like this should be $\ell^2$).
+\begin{definition}[Matrix norm $L^2$]
+	If $M \in \R^{n\times n}$, i.e. an $n \times n$ matrix, real entries,
+	then we define
+	\[
+		\lVert m \rVert_{L^2} = \max_{\vec{x} \neq \vec{0}}
+		\frac{\lVert M\vec{x} \rVert_2}{\lVert \vec{x} \rVert_2}
+	\]
+\end{definition}
+So $\lVert M \rVert_{L^2}$ is the smallest real $B$ such that
+$\lVert M \vec{x} \rVert_{L^2} \leq \lVert \vec{x} \rVert_{L^2}B$.
+
+Example: $\vec{x} \in \R^n$, $n = 1$, $\vec{x} = x_1 \in \R^1$ so $A \in \R^1$.
+Say $A = \begin{bmatrix} 3 \end{bmatrix}$.
+$\max\left(\frac{\lVert A\vec{x} \rVert_{L^2}}{\lVert \vec{x} \rVert_{L^2}}\right)$.
+In this case, $\vec{x} = (x_1)$, so $\lVert \vec{x} \rVert_{L^2} = \sqrt{x_1^2} = |x_1|$.
+So $A \in \R^{|x|}$ ??? what is this notation, $A = \begin{bmatrix} a \end{bmatrix}$,
+so $\lVert A \rVert_{L^2} = |a|$.
+ff
+
+We also have other norms: $\lVert \vec{x} \rVert_{\mathrm{max}}
+= \lVert \vec{x} \rVert_\infty = \max(|x_1|,|x_2|,\dots,|x_n|)$.
+$\lVert A \rVert_{L^\infty} = \max_{\vec{x} \neq 0}\frac{\lVert Ax\rVert_\infty}
+{\lVert x \rVert_\infty}$.
+
+Now look at $2 \times 2$ matrices. Say
+\[
+	A = \begin{bmatrix} a_{11} & a_{12}\\ a_{21} & a_{22} \end{bmatrix}
+\]
+$\mathrm{size}(A) = \max(|a_{11}|, |a_{12}|, |a_{21}|, |a_{22}|)$.
+Claim: $\lVert A \rVert_\infty = \lVert A \rVert_2 = \mathrm{size}(A)$,
+and so it doesn't matter what norm we pick.
+
+What is $I +A +\frac{A^2}{2} + \frac{A^3}{3!} + \cdots$.
+What does convergence mean?
+The $r$th term is $I + A + \frac{A^2}{2} + \cdots + \frac{A^r}{r!}$.
+So we want to measure convergence:
+\[
+	\lim_{s,r\to\infty, s>r} \left(\frac{A^{r+1}}{(r+1)!} + \cdots + \frac{A^s}{s!}\right)
+	\to 0
+\]
+(I'm assuming this is Cauchy).
+With a given metric, say $2$, this means
+\[
+	\lim_{s,r\to\infty, s>r} \left\lVert\frac{A^{r+1}}{(r+1)!} +
+	\cdots + \frac{A^s}{s!}\right\rVert_2
+	\to 0
+\]
+(but it is the same with the other metrics).
+(I'm curious, how many of our properties from $\R^n$
+carry over to these matrix spaces,
+like we always have equivalence of these $L^2,L^\infty$ norms?).
+We have $e^{At}$ where $A = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$.
+Then computing our terms,
+\begin{align*}
+	I &= \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\\
+	A &= \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}\\
+	A^2 &= \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}\\
+	A^3 &= A^2A = IA = A
+\end{align*}
+So for every powers, it is $I$, and if it is an odd power, it is $A$.
+Then we have
+\[
+	e^{At} = I +At + \frac{(At)^2}{2!} + \frac{(At)^3}{3!} + \cdots
+	= \begin{bmatrix} 1 + \frac{t^2}{2} + \frac{t^4}{4!} + \cdots
+		& t + \frac{t^3}{3!} + \frac{t^5}{5!} + \cdots\\
+		t + \frac{t^3}{3!} + \frac{t^5}{5!} + \cdots
+		& 1 + \frac{t^2}{2} + \frac{t^4}{4!} + \cdots\end{bmatrix}
+	= \begin{bmatrix} \cosh(x) & \sinh(x) \\ \sinh(x) & \cosh(x) \end{bmatrix}
+\]
+We'll do more diagonalization things next time.
+
+\section{January 29}
+Today:
+\begin{itemize}
+	\item $e^{At}$ where $A = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$
+	\item Other reasons to write $A =
+		S\begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2\end{bmatrix}S^{-1}$
+		other than $e^{At}$, namely recurrences and $A^n, n=0,1,\dots$.
+	\item Examples of
+		\begin{enumerate}
+			\item Diagonlizable $A$
+			\item Defective $A$ (in recurrences) (``not enough eigenvectors")...
+				(not diagonlizable, because it does not have a
+				complete basis of eigenvectors, some duplicates)
+		\end{enumerate}
+\end{itemize}
+
+What is a $2 \times 2$ defective matrix?
+Means a (real) matrix that is not diagonliazble over $\C$.
+Diagonalizable:
+\[
+	A = S\begin{bmatrix} \lambda_1 & 0 & \cdots & 0\\
+		0 & \lambda_2 & \cdots & 0\\
+		\vdots & \vdots & \ddots & \vdots\\
+	0 & 0 & \cdots & \lambda_n\end{bmatrix}
+	S^{-1}
+\]
+hence
+\[
+	f(A) = S\begin{bmatrix} f(\lambda_1) & 0 & \cdots & 0\\
+		0 & f(\lambda_2) & \cdots & 0\\
+		\vdots & \vdots & \ddots & \vdots\\
+	0 & 0 & \cdots & f(\lambda_n)\end{bmatrix}
+\]
+
+The rotation matrix will have real entries,
+but complex (unit length) eigenvalues.
+So it isn't defective.
+
+While with projection onto $2$-dimensional plane,
+you'll have eigenvalue $1$ with multiplicitiy $2$.
+
+So we have gotten some intuition of eigenvalues.
+Greater than $1$, it is stretching it along the corresponding eigenvector,
+and less than $1$, it is shrinking it.
+So iterated powers either make it go to infinity, or to $0$.
+
+\subsection{Recurrence Relations and Finite Precision}
+
+\subsubsection{Fibonacci numbers:}
+The Fibonacci numbers are defined as $F_{n+2} = F_{n+1} + F_n$
+with the initial conditions $F_1 = F_2 = 1$.
+So our sequence is $1,1,2,3,5,8,13,21,34,\dots$.
+We can also extend this backwards for $F_0, F_{-1}, F_{-2},\dots$
+with the recurrence relation $\dots, -8, 5, -3, 2, -1, 1, 0, 1, 1, \dots$;
+as you can see, backwards follows a similar pattern.
+
+We can use some linear algebra here.
+Since, we have $F_{n+2} = F_{n+1} + F_n$ and $F_{n+1} = F_{n+1}$,
+we can write
+\[
+	\begin{bmatrix} F_{n+2} \\ F_{n+1} \end{bmatrix}
+	= \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}
+	\begin{bmatrix} F_{n+1} \\ F_n \end{bmatrix}
+\]
+We can iterate backwards until we get to our initial conditions,
+$\begin{bmatrix} F_2 \\ F_1 \end{bmatrix} = \begin{bmatrix} 1\\1\end{bmatrix}$
+and $\begin{bmatrix} F_2 \\ F_1 \end{bmatrix} = \begin{bmatrix} 1\\1\end{bmatrix}$, so
+\begin{align*}
+	\begin{bmatrix} F_{n+1} \\ F_n \end{bmatrix}
+	&= A \begin{bmatrix} F_n \\ F_{n-1} \end{bmatrix}\\
+	&= A\cdot A \cdot \begin{bmatrix} F_{n-1} \\ F_{n-2} \end{bmatrix}\\
+	&\vdots\\
+	&= A^n \begin{bmatrix} F_1 \\ F_0 \end{bmatrix}
+\end{align*}
+See how this is similar to what we did with Euler's method,
+except the ``dyanmics" dictate that we take the power instead.
+There is a strong connection to Euler's method,
+$\vec{y}' = A\vec{y}$.
+We have
+\[
+	\begin{bmatrix} F_{n+1} \\ F_n \end{bmatrix}
+	= A^n \begin{bmatrix} F_1 \\ F_0 \end{bmatrix}
+\]
+How to diagonlize, at $2\times 2$ matrix?
+Recipe: look for $\vec{v}$ such that there is some $\lambda$
+where $A\vec{v} = \lambda\vec{v} = \lambda \cdot I \vec{v}$.
+So $(A - \lambda I)\vec{v} = 0$.
+So we look for $\lambda$s such that $A - \lambda I$:
+\begin{enumerate}
+	\item has non-zero vector in its nullspace
+	\item $\det = 0$
+	\item rank $< n$ (for $n\times n$)
+	\item not invertible
+	\item etc. (your favourite condition)
+\end{enumerate}
+
+We can solve (obviously not the move for higher dimensions):
+\[
+	\det\left(\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}
+		- \begin{bmatrix} \lambda & 0 \\ 0 & \lambda \end{bmatrix}\right) = 0
+	\implies \det\begin{bmatrix} 1 - \lambda & 1 \\ 1 & - \lambda \end{bmatrix} = 0
+\]
+So we are solving $(1 - \lambda)(-\lambda) - (1)(1) = 0$,
+or $\lambda^2 - \lambda - 1 = 0$.
+The solutions to this are the golden ratio and its ``conjugate":
+$\lambda = \frac{1 \pm \sqrt{5}}{2}$.
+So given that $\lambda = \frac{1+\sqrt{5}}{2}$, $\vec{v}$ such that
+\[
+	\begin{bmatrix} 1 - \frac{1+\sqrt{5}}{2} & 1\\
+		1 & -\frac{1+\sqrt{5}}{2}\end{bmatrix} \begin{bmatrix} v_1 \\ v_2 \end{bmatrix}
+		= 0
+\]
+So we want $(1 - \frac{1+\sqrt{5}}{2})v_1 + v_2 = 0$.
+If we take $v_2 = 1$, then $\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}
+\begin{bmatrix} ? \\ 1 \end{bmatrix}
+= \frac{1 + \sqrt{5}}{2}\begin{bmatrix} ? \\ 1 \end{bmatrix}$.
+
+Let's look at a simpler recurrence.
+$F_{n+1} = 10 F_n$.
+Then $F_n = 10^n F_0$.
+Just like an ODE, if we have an inital condition,
+reduces to $e^{At}$ where $A$ is a number.
+In the second order, our $A$ is a matrix.
+
+In our Fibonacci case, we can find
+$F_n = \left(\frac{1+\sqrt{5}}{2}\right)^nF_0$
+and $F_n = \left(\frac{1-\sqrt{5}}{2}\right)^nF_0$.
+So we have
+$\begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}
+\begin{bmatrix} \lambda \\ 1 \end{bmatrix}
+= \begin{bmatrix} \lambda^2 \\ 1 \end{bmatrix}$.
+So one solution is $F_n = c_1\left(\frac{1+\sqrt{5}}{2}\right)^n
++ c_2\left(\frac{1-\sqrt{5}}{2}\right)^n$.
+
+This is more general than Fibonacci.
+If
+\[
+	\begin{bmatrix} F_1 \\ F_1 \end{bmatrix}
+	= A \begin{bmatrix} \lambda \\ 1 \end{bmatrix} =
+	A \begin{bmatrix} F_1 \\ F_0 \end{bmatrix}
+\]
+ff
+(I think using the fact that $F_1 = \lambda F_0$ or something.)
 \end{document}

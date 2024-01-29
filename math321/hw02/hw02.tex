@@ -1,0 +1,447 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 2}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 2}\\
+	(Completed with collaboration with Matthew Bull-Weizel)
+\end{center}
+
+\subsection*{Problem 1}
+\problem{
+	Let $\mathcal{C} \subset [0,1]$ be the middle-third Cantor set.
+	Let $\alpha \colon [0,1] \to [0,1]$ be the Cantor-Lebesgue function.
+	In particular, $\alpha$ is (weakly) monotone increasing with $\alpha(0)= 0$,
+	$\alpha(1) = 1$, and $\alpha$ is constant on every open interval
+	$I \subset [0,1]$ with $I \cap \mathcal{C} = \emptyset$. Let
+	\[
+		f(x) = \begin{cases} 1 & x\in\mathcal{C}\\ 0 & x \in [0,1]\setminus\mathcal{C}\end{cases}
+	\]
+	Prove that
+	\[
+		\overline{\int_0^1}fd\alpha = 1, \quad\text{ and }\quad
+		\underline{\int_0^1}fd\alpha = 0
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	We first prove the upper integral case.
+	Let $P$ be an arbitrary partition, $\{x_0,\dots,x_n\}$.
+	Recall that $U(P,f,\alpha) = \sum_{i=1}^n M_i\Delta\alpha_i$
+	where $\Delta\alpha_i = (\alpha(x_i) - \alpha(x_{i-1}))$
+	and $M_i = \sup\{f(x) \colon x \in [x_{i-1},x_i]\}$.
+	Note that this is a finite sum, so we may rearrange our summation.
+	We split $U(P,f,\alpha)$ up into a sum of the terms for the intervals
+	that intersect $\mathcal{C}$, and the intervals that do not intersect $\mathcal{C}$:
+	\[
+		U(P,f,\alpha)
+		= \sum_{\mathcal{C} \cap [x_{i-1},x_i]=\emptyset}M_i\Delta\alpha_i
+		+ \sum_{\mathcal{C} \cap [x_{i-1},x_i]\neq\emptyset}M_i\Delta\alpha_i
+	\]
+	For the sum on the left, $\alpha$ is constant on these intervals,
+	so $\Delta\alpha_i = 0$, giving us
+	\[
+		U(P,f,\alpha) + \sum_{\mathcal{C} \cap [x_{i-1},x_i]\neq\emptyset}M_i\Delta\alpha_i
+	\]
+	For the remaining sum, note that on these intervals,
+	since they intersect $\mathcal{C}$, there is some $c \in \mathcal{C} \cap [x_{i-1},x_i]$,
+	so $f(c) = 1$,
+	thus $M_i = \sup\{f(x) \colon x \in [x_{i-1},x_i]\} = 1$
+	(the max value of this function is $1$, so the supremum cannot be greater than $1$).
+	This is true for all the intervals in this sum, thus
+	\begin{align*}
+		U(P,f,\alpha)
+		&= \sum_{\mathcal{C}\cap[x_{i-1},x_i]\neq \emptyset}(\alpha(x_i) - \alpha(x_{i-1}))\\
+		&= \sum_{\mathcal{C}\cap[x_{i-1},x_i]\neq \emptyset}(\alpha(x_i) - \alpha(x_{i-1}))
+		+ \sum_{\mathcal{C}\cap[x_{i-1},x_i] = \emptyset}(\alpha(x_i) - \alpha(x_{i-1}))\\
+		&= \sum_{i=1}^n(\alpha(x_i) - \alpha(x_{i-1}))\\
+		&= \alpha(x_n) - \alpha(x_0)\\
+		&= 1
+	\end{align*}
+	where we add the extra summation on the second line since,
+	as we mentioned before, all of these terms are $0$
+	(and so we are just adding $0$ multiple times),
+	and we can cancel all the terms in the fourth line
+	because this is a telescoping series.
+	
+	Hence, for any partition, $U(P,f,\alpha) = 1$.
+	It is then clear that
+	\[
+		\overline{\int_0^1}fd\alpha = \inf_P U(P,f,\alpha) = 1
+	\]
+
+	We now turn to the lower integral case.
+	We make the remark that for any interval $[a,b] \subset [0,1]$,
+	where $b > a$,
+	we have $\mathcal{C}^c \cap [a,b] \neq \emptyset$.
+	To prove, this we assume, for the sake of contradiction,
+	that it is false,
+	i.e. there is some interval $[a,b] \subset [0,1]$ such that
+	$\mathcal{C}^c \cap [a,b] = \emptyset$,
+	which is equivalent to saying that $[a,b] \subset \mathcal{C}$
+	(and now we proceed with a standard proof).
+	Recall the definition of the Cantor set:
+	$C_0 = [0,1]$, $C_{n+1} = C_n \setminus \{\text{the middle third interval
+	of all intervals of }C_n\}$,
+	and $\mathcal{C} = \bigcap_{i=1}^n C_n$.
+	Recall that in the $i$th iteration of the Cantor set's construction,
+	we are removing the middle third of all current intervals;
+	hence, our largest interval is $\displaystyle\frac{1}{3^i}$.
+	And so, by the Archimedean property,
+	we can find $n \in \N$ such that $n > \frac{1}{b-a}$ so
+	$3^n > n > \frac{1}{b-a} > 0$,
+	so $\frac{1}{3^n} < b-a$.
+	And so $[a,b] \not\in C_n \implies [a,b] \not\in \mathcal{C}$,
+	a contradiction.
+	Hence, $\mathcal{C}^c\cap[a,b] \neq \emptyset$ for any interval
+	$[a,b] \subset [0,1]$ such that $b > a$.
+
+	Now, let $P$ be an arbitrary partition, $\{x_0,\dots,x_n\}$.
+	Then for any $[x_{i-1},x_i]$, we have $\mathcal{C}^c\cap[x_{i-1},x_i]\neq\emptyset$.
+	Let $a = \mathcal{C}^c\cap[x_{i-1},x_i]$.
+	By definition, $f(a) = 0$.
+	Hence,
+	\[
+		L(P,f,\alpha) = \sum_{i=1}^nm_i\Delta\alpha_i = \sum_{i=1}^n 0
+		= 0
+	\]
+	since $m_i = \inf\{f(x) \colon [x_{i-1},x_i]\} = 0$.
+	Hence, for any partition, $L(P,f,\alpha) = 0$.
+	It is then clear that
+	\[
+		\underline{\int_0^1}fd\alpha = \sup_P L(P,f,\alpha) = 0
+	\]
+\end{proof}
+
+
+\subsection*{Problem 2}
+\problem{
+	Given a rational number $r = \frac{p}{q} \in \Q$,
+	we say that $r$ has \emph{lowest form} $\frac{p}{q}$ if $p \in \Z$,
+	$q \in \N$ and $\gcd(p,q) = 1$ (.e., any possible cancellation has been performed). Let
+	\[
+		f(x) = \begin{cases} 0 & (x\not\in\Q)\\
+		\frac{1}{q} & (x \in \Q \text{ has lowest form }\frac{p}{q})\end{cases}
+	\]
+	Prove that $f \in \mathcal{R}[0,1]$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	Let $P$ be an arbitrary partition of $[0,1]$, $\{x_0,\dots,x_n\}$.
+	Note that since the irrationals are dense in the reals,
+	we have that every interval contains an irrational,
+	so $m_i = \inf\{f(x)\colon x \in [x_{i-1},x_i]\} = 0$ for all $1 \leq i \leq n$.
+	Hence, $L(P,f) = \sum_{i=1}^n0 = 0$ for any $P$.
+
+	Let $\ep > 0$ be arbitrary.
+	We will show that there exists some partition $P_\ep$
+	such that $U(P_\ep,f) < \ep$.
+	By the Archimidean property, there is some $N \in \N$
+	such that $N > 3\ep > 0 \implies \frac{3}{N} < \ep$.
+	Now consider the partition of $P_\ep$ that splits
+	$[0,1]$ into $N^3$ equally sized intervals,
+	each of length $\frac{1}{N^3}$.
+
+	Note that within $(0,1]$, $f(x) = \frac{1}{q}$
+	precisely when $x = \frac{p}{q}$ where $0 < p < q$,
+	and $\gcd(p,q) = 1$.
+	Technically, this is $\phi(q)$, however, we can get a good enough
+	upper bound on it, that is $\phi(q) < q$,
+	as there are only $q-1$ possible values for $p$.
+	Hence, if $A_q$ is the number of $x \in (0,1)$ such that $f(x) = \frac{1}{q}$,
+	then $A_q < q$.
+
+	Let us now consider the number of values of $x \in [0,1]$
+	such that $f(x) > \frac{1}{N}$.
+	Denote this value $B_N$.
+	Our left endpoint satisfy this, since $f(0) = 1$.
+	Any $x \in (0,1]$ such that $f(x) = \frac{1}{q}$ where $q \leq N-1$
+	also satisfies this,
+	so we get to use our $A_q$ from before.
+	See $B_N = 1 + \sum_{q=1}^{N-1}A_q \leq \sum_{q=1}^{N-1}q = 1 + \frac{N(N-1)}{2}$.
+	
+	Let $C_N < N^3$ be the number of partitions that contain all of the
+	points $x \in [0,1]$ such that $f(x) > \frac{1}{N}$.
+	Note that $C_N \leq B_N$, as at most, we have that all possible
+	$x$ are in distinct intervals.
+	Now consider $U(P_{\ep},f) = \sum_{i=1}^n M_i \Delta x_i$ where
+	$M_i = \sup\{f(x) \colon x \in [x_{i-1},x_i]\}$ and
+	$\Delta x_i = x_{i} - x_{i-1} = \frac{1}{N^3}$.
+	Since this is a finite sum, we can rearrange and split up our
+	sum into the intervals that contain some $x$ such that $f(x) > \frac{1}{N}$,
+	and those that don't.
+	Assuming that our $M_i$ take the upper bound for its possible value,
+	i.e. $1$ for the intervals that contain $x$ such that $f(x) > \frac{1}{N}$
+	and $\frac{1}{N}$ for the intervals that don't,
+	we get the upper bound:
+	\begin{align*}
+		U(P_{\ep},f) &\leq C_N(1)\frac{1}{N^3} +
+		(N^3-C_N)\left(\frac{1}{N}\right)\frac{1}{N^3}\\
+		&\leq \frac{1}{N^3}\left(B_N + (N^3-C_N)\left(\frac{1}{N}\right)\right)\\
+		&\leq \frac{1}{N^3}\left(B_N + \frac{N^3}{N}\right)\\
+		&\leq \frac{1}{N^3}\left(1 + \frac{N^2-N}{2} + N^2\right)\\
+		&\leq \frac{1}{N^3}\left(N^2 + N^2 + N^2\right)\\
+		&= \frac{3}{N}\\
+		&< \ep
+	\end{align*}
+
+	Hence, for any $\ep > 0$, there exists some partition,
+	namely $P_\ep$, such that
+	\[
+		U(P_\ep,f) - L(P_\ep,f) = U(P_\ep,f) < \ep
+	\]
+	and so by Rudin Theorem 6.6, $f \in \mathcal{R}[0,1]$.
+\end{proof}
+
+
+\subsection*{Problem 3}
+\problem{
+	Let $f \colon [0,1] \to \R$, and suppose $f$ is discontinuous
+	at each $c \in [0,1]$.
+	In this problem, we will prove that $f \not\in \mathcal{R}[0,1]$.
+	\begin{enumerate}
+		\item For each $c \in [0,1]$, define
+			\[
+				\omega_f(c) = \lim{\delta \searrow 0}\left(
+					\sup\{f(x) \colon x \in (c-\delta,c+\delta)\cap[0,1]\}
+					- \inf\{f(x) \colon x \in (c-\delta,c+\delta)\cap[0,1]\}\right)
+			\]
+			(note that in the above, $\lim_{\delta \searrow 0}$ could be
+			replaced by $\liminf$ or $\inf_{\delta>0}$,
+			since the limit is monotone decreasing as $\delta \searrow 0$.)
+			Prove that $\omega_f(c) > 0$ for each $c \in [0,1]$.
+		\item For $t > 0$, define
+			\[
+				\Omega_t = \{c \in [0,1] \colon \omega_f(c) \geq t \}
+			\]
+			Prove that $\Omega_t$ is closed.
+		\item Let $\{I_i\}_{i=1}^\infty$ be a set of open intervals (in $\R$),
+			each of finite length.
+			Syppose that $[0,1] \subset \bigcup_{i=1}^\infty I_i$.
+			Prove that $\sum_{i=1}^\infty \ell(I_i)\geq 1$,
+			where $\ell(I_i)$ is the length of the interval $I_i$
+			(i.e. if $I = (a,b)$ then $\ell(I) = b - a$).
+		\item Let $\{F_i\}_{i=1}^\infty$ be closed subsets of $[0,1]$,
+			and suppose $[0,1] = \bigcup_{i=1}^\infty F_i$.
+			Prove that there exists an index $i \in \N$ and a number $s > 0$
+			with the following property: 
+			If $I_1,\dots,I_n$ are open intervals in $\R$ and
+			$F_i \subset \bigcup_{j=1}^n I_j$, then $\sum_{j=1}^n \ell(I_j)\geq s$.
+		\item Let $f$ be as above. Prove that there is a number $\ep > 0$
+			so that for every partition $P$ of $[0,1]$ we have
+			\[
+				U(P,f) - L(P,f) \geq \ep
+			\]
+			and hence $f$ is \emph{not} Riemann integrable.
+			\emph{Hint}: $\ep$ might be a product of two numbers,
+			which are related to questions b) and d).
+	\end{enumerate}
+}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		By the definition of supremum and infinum,
+		we have $\sup\{f(x) \colon x \in (c - \delta, c+ \delta) \cap [0,1]\}
+		- \inf\{f(x) \colon x \in (c - \delta, c + \delta) \cap [0,1]\} \geq 0$,
+		and limits preserve non-strict inequalities, so
+		$w_f(c) \geq 0$.
+
+		Assume for the sake of contradiction that there is some $c \in [0,1]$
+		such that $\omega_f(c) = 0$.
+		Then for all $\ep$,
+		there is some $\Delta > 0$ such that
+		$0 < \delta < \Delta$ implies
+		$\sup\{f(x) \colon x \in (c - \delta, c+ \delta) \cap [0,1]\}
+		- \inf\{f(x) \colon x \in (c - \delta, c + \delta) \cap [0,1]\} < \ep$.
+		Remark that, by the definition of supremum and infinum,
+		for all $x \in (c-\delta, c+ \delta)$,
+		$\inf\{f(x) \colon x \in (c - \delta, c + \delta)\} \leq f(x)
+		\leq \sup\{f(x) \colon x \in (c - \delta, c + \delta)\}$.
+		This is also true for $x = c$:
+		$\inf\{f(x) \colon x \in (c - \delta, c + \delta)\} \leq f(c)
+		\leq \sup\{f(x) \colon x \in (c - \delta, c + \delta)\}$.
+		Thus, $|f(x) - f(c)| \leq
+		|\sup\{f(x) \colon x \in (c - \delta, c + \delta)\}
+		-\inf\{f(x) \colon x \in (c - \delta, c + \delta)\}| < \ep$.
+
+		Therefore, for any $0 < \delta < \Delta$,
+		$0 < |x - c| < \delta < \Delta$ (i.e. $x \in (c-\delta,c+\delta)$)
+		implies $|f(x) - f(c)| < \ep$.
+		$\ep > 0$ can be arbitrary, and so we get that $f$
+		is continuous at $c$, which is a contradiction
+		since we assume that $f$ was discontinuous for all $c \in [0,1]$.
+
+		Hence, $\omega_f(c) > 0$ for all $c \in [0,1]$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We show that $\partial \Omega_t \subset \Omega_t$,
+		which is equivalent to $\Omega_t$ being closed.
+		If $\partial\Omega_t = \emptyset$, the set inclusion is trivial,
+		and so we are done.
+		So assume $\partial \Omega_t \neq \emptyset$.
+		Then let $x \in \partial \Omega_t$.
+		Hence, for all $\delta > 0$, we have
+		\[
+			(x-\delta,x+\delta) \cap \Omega_t \neq \emptyset
+		\]
+		Let $c \in (x-\delta,x+\delta) \cap \Omega_t$.
+		By the definition of an open set,
+		there is some open neighbourhood of $c$ such that the neighbourhood is contained
+		inside of $(x - \delta, x + \delta)$.
+		Let us denote this $(c - \Delta, c + \Delta)$.
+		Hence, $(c - \Delta, c+ \Delta) \subset (x - \delta, x+ \delta)$, so
+		\[
+			\sup_{(x-\delta,x+\delta)}f(x) \geq \sup_{(c-\Delta,c+\Delta)}f(x)
+			\geq
+			\inf_{(c-\Delta,c+2\Delta)}f(x) \geq
+			\inf_{(x-\delta,x+\delta)}f(x)
+		\]
+		where the middle inequality is by the definition of $\sup,\inf$,
+		and the outer two is because the supremum on the super set is always larger
+		than the supremum on the sub set, and similarly for the infinum.
+		So we have
+		\[
+			\sup_{(x-\delta,x+\delta)}f(x) - \inf_{(x-\delta,c+\delta)}f(x)
+			\geq 
+			\sup_{(c-\Delta,c+\Delta)}f(x) - \inf_{(c-\Delta,c+\Delta)}f(x)
+			\geq t
+		\]
+		where the last inequality is due to the fact that $c \in \Omega_t$.
+		Hence, $x \in \Omega_t$.
+		Therefore, $\partial \Omega_t \subset \Omega_t$, as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Since $[0,1]$ is compact by Heine-Borel,
+		and $[0,1] \subset \bigcup_{i=1}^\infty I_i$
+		so $\{I_i\}_{i=1}^\infty$ is an open cover of $[0,1]$,
+		we can extract a finite subcover
+		$I_1,\dots,I_n$ such that $[0,1] \subset \bigcup_{i=1}^n I_i$.
+
+		We now prove that $\sum_{i=1}^n \ell(l_i) \geq 1$.
+		Note that if two open intervals intersect,
+		that is $J_1 = (a,b)$ and $J_2 = (c,d)$ and $c < b$
+		(but still $c > a$),
+		then the sum of their lengths is less than the
+		length of their union:
+		$\ell(J_1) + \ell(J_2) = (b-a) + (d - c)
+		> (c-a) + (d - c) = d - a = \ell(J_1 \cup J_2)$.
+		If $J_1$ and $J_2$ are disjoint, we get that
+		$\ell(J_1) + \ell(J_2) = \ell(J_1 \cup J_2)$,
+		hence in general,
+		$\ell(J_1) + \ell(J_2) \geq \ell(J_1 \cup J_2)$.
+		We can repeat for $J_3$ comparing to $J_1 \cup J_2$:
+		$\ell(J_1 \cup J_2 \cup J_3) \leq \ell(J_1 \cup J_2) + \ell(J_3)
+		\leq \ell(J_1) + \ell(J_2) + \ell(J_3)$.
+		It is clear now that we can do this $n$ times to get
+		that for $n$ open intervals, we have
+		$\sum_{i=1}^n \ell(J_i) \geq \ell(\bigcup_{i=1}^n J_i)$.
+
+		Note that if $J_1 = (a,b)$, $J_2 = (c,d)$ such that $J_1 \subset J_2$
+		then we have $c \leq a$ and $d \geq b$, so $\ell(J_2) \geq \ell(J_1)$.
+		So using this fact and $(0,1) \subset [0,1] \subset \bigcup_{i=1}^n I_i$,
+		and what we showed before, we have
+		\[
+			\sum_{i=1}^n \ell(I_i) \geq \ell\left(\bigcup_{i=1}^n I_i\right)
+			\geq \ell((0,1)) = 1
+		\]
+
+		Now, since $\ell(I_i) \geq 0$,
+		adding more terms to our sum will only increase it,
+		so $\sum_{i=1}^\infty \ell(I_i) \geq \sum_{i=1}^n \ell(I_i) \geq 1$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $\{F_i\}_{i=1}^\infty$ be closed subsets of $[0,1]$
+		such that $[0,1] = \bigcup_{i=1}^\infty F_i$.
+		Assume, for the sake of contradiction,
+		that for all $i \in \N$ and all $s > 0$,
+		if $I^{(i)}_1,\dots,I^{(i)}_{n_i}$ are open intervals in $\R$
+		such that $F_i \subset \bigcup_{j=1}^{n_i}I_j^{(i)}$,
+		then $\sum_{j=1}^n \ell(I^{(i)}_j) < s$.
+
+		Now let $1 > t > 0$.
+		If $s = t/2^i$, we have $\sum_{j=1}^{n_i} \ell(I^{(i)}_j) < \frac{t}{2^i}$.
+		We can sum over all $i \in \N$ to get
+		\[
+			\sum_{i=1}^\infty \sum_{j=1}^{n_i} \ell(I_j^{(i)})
+			< \sum_{i=1}^{\infty} \frac{t}{2^i}
+			= t < 1
+		\]
+		where we used the geometric sum formula.
+
+		Now, see that $[0,1] = \bigcup_{i=1}^\infty F_i
+		\subset \bigcup_{i=1}^\infty \bigcup_{j=1}^{n_i} I_j^{(i)}$,
+		and so part (c) from above implies that
+		$\sum_{i=1}^\infty \sum_{j=1}^{n_i} \ell(I_j^{(i)}) \geq 1$.
+		This contradicts what we have just above, hence
+		there does exist some $i \in \N$ and $s > 0$
+		such that if $I_1,\dots,I_n$ are open intervals in $\R$
+		and $F_i \subset \bigcup_{j=1}^n I_j$,
+		we have $\sum_{j=1}^n \ell(I_j) \geq s$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Define $F_i = \Omega_{1/i}$ for $1 \leq i \leq \infty$.
+		From part (b), our $F_i$ are closed.
+		Note that $\bigcup_{i=1}^\infty F_i = [0,1]$:
+		firstly, $\bigcup_{i=1}^\infty F_i \subset [0,1]$
+		since each $F_i \subset [0,1]$ by construction of $\Omega_{1/i}$.
+		Now let $c \in [0,1]$.
+		By part (a), $\omega_f(c) > 0$, so there is some $t > 0$
+		such that $\omega_f(c) = t$.
+		Then, by Archimedean principle, there is some $n \geq t > 0
+		\implies \frac{1}{n} \leq t$, so
+		$w_f(c) = t \geq \frac{1}{n} \implies c \in \Omega_{1/n} = F_n$,
+		thus, $c \in \bigcup_{i=1}^n F_i$.
+		Therefore $[0,1] \subset \bigcup_{i=1}^n F_i$,
+		hence $\bigcup_{i=1}^\infty F_i = [0,1]$.
+		Hence, by part (d) of the problem,
+		there exists some $t \in \N$ and $s > 0$ such that if $F_t \subset \bigcup_{j=1}^n I_j$,
+		then $\sum_{j=1}^n\ell(I_j) \geq s$.
+
+		Fix our partition $P$ of $[0,1]$, $\{x_0,\dots,x_n\}$.
+		Let our $I_i$ be the open sets $(x_{i-1},x_i)$
+		and $(x_i-\frac{s}{4(n+1)}, x_i + \frac{s}{4(n+1)})$.
+		Note then that $[0,1] \subset \bigcup_{i=1}^{2n+1}I_i$.
+		Thus, $F_a \subset \bigcup_{i=1}^{2n+1}I_i$ as well.
+		We can then compute:
+		\[
+			U(P,f) - L(P,f)
+			= \sum_{i=1}^{n}(M_i - m_i)\Delta_i
+			\geq \frac{1}{a}\left(\sum_{i=1}^{2n+1}\ell(I_i) - \sum_{i=1}^{n+1}\frac{s}{2(n+1)}\right)
+			\geq \frac{1}{a}(s - \frac{s}{2})
+			= \frac{s}{2a}
+		\]
+		where we got $M_i - m_i \geq \frac{1}{a}$
+		by the definition of $\Omega_{1/a}$,
+		and we ignore points off of this set as this is a lower bound.
+		Hence, by the contrapositive of Rudin Theorem 6.6,
+		this is not Riemann integrable.
+	\end{proof}
+\end{enumerate}
+\end{document}

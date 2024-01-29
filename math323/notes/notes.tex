@@ -744,4 +744,182 @@ then $t = \psi(\overline{X})$ has to satisfy $\sum \psi(a_n)t^n = 0$.
 Think about this a little, says something about roots of polynomials.
 Near the guts of Galois theory.
 Read up in the textbook, and we will talk about it next time.
+
+\section{January 25}
+\subsection{More polynomials}
+In all of this, $R$ is a commutative ring, and $R[x]$ are polynomials in $X$.
+Polynomials will be identified as a sequence of coefficients.
+This $X$ is not anything other than a symbol,
+just keeps track of multiplication and addition.
+
+The fundamental property we discussed last time:
+given some $\phi \colon R \to S$ which is a homomorphism,
+and some $s \in S$, then $\exists!$ extension of $\phi$ to $R[x] \to S$
+such that $X \mapsto s$.
+This is the evaluation homomorphism at $s \in S$.
+This is given by $\sum_i a_i X^i \mapsto \sum \phi(a_i)s^i$.
+
+This is not as weird as it looks.
+For example, $\phi \colon \Q \hookrightarrow \R$,
+think of rational coefficients as complex numbers.
+Can also take $\phi \colon \Z \to \Z/p\Z := \mathbb{F}_p$:
+in this case, if $p = 5$ and $f(X) = X^2$ and $s = [2]$,
+then $1 + X \mapsto 1 + [2] = [3]$ (wait, why did he say $f(X)$?).
+So we evaluate $f(X)$, then reduce mod $p$.
+Another example: $\phi \colon \C \to \C$ where $z \mapsto \bar{z}$.
+So $\sum a_i X^i \mapsto \sum \bar{a}_iX^2$.
+so $\phi$-evaluation at $s$ gives $\sum \bar{a}_i s^i$.
+
+You have to be careful you know what $\phi$ is in the background.
+Consider $R = \Q[X]/I$ where $I = (X^2+1)$.
+By long division, our ring is just $\Q + \Q x$ where $x = X + I$.
+Multiplication comes $0 = x^2 + 1 = (X+I)^2 + 1 = X^2 + 1 + I = I$
+(what is this showing??)
+To get $\phi$ from $R \to \C$ we have to send $x$ to some $s \in S$ such that $s^2 + 1 = 0$.
+We have $x^2 + 1 = 0 \in R$ so $\phi(x)^2 + \phi(1) = 0$ in $\C$,
+so we need $s \pm i$ (both are valid)...
+(something something about the ideal, I'm confused what he is showing again).
+We can also send $\Q[X] \hookrightarrow \C$ with $X \mapsto \pi$ or $X \mapsto e$;
+since these are transcendetal, not the root of any polynomial,
+so not in any ideal.
+So $\ker = 0$ in both cases.
+
+\subsubsection{More variables}
+
+We can extend this to more than $1$ variable.
+Start with $R$, form $R[X] = S$.
+From $S[Y] ``=" R[X,Y]$,
+because $S[Y] = \sum a_i Y^i$ where $a_i \in R[X]$.
+Expand out to get $\sum a_{ij} X^iY^j, a_{ij} \in R$.
+We an repeat to get $R[X_1,\dots,X_n]$.
+Fact: if $\sigma \in S_n$ is any permutation,
+then $\exists!$ $\phi \colon R[X_1,\dots,X_n] \to R[X_1,\dots,X_n]$
+where $X_i \mapsto X_{\sigma(i)}$, which is the identity on $R$ (constant terms don't change...
+or coefficients don't change???).
+Proof: in the text (symbole pushing + uniqueness of $1$ variable polynomial maps).
+
+Same universal property as before:
+given $\phi \colon R \to S$, $s_1,s_2,\dots,s_n \in S$, $\exists!$ extension
+$R[X_1,\dots,X_n] \to S$ which sends $X_i \mapsto s_i$.
+Same as before, just evaluating an $n$-tuple.
+
+Note the variables $X_i,X_j$ commute, in the definition (is it??).
+
+Multivariable polynomials look a little odd.
+The monomoial of (multi) degree $\vec{a}$ is
+$\sum c_{\vec{a}}\prod X_1^{a_1}X_2^{a_2}\cdots X_n^{a_n}$
+where $\vec{a} = (a_1,\dots,a_n)$ is an $n$-tuple of non-negative integers,
+and $c_{\vec{a}} \in R$.
+The (total) degree of $\vec{a}$ is $\sum a_i$.
+
+It is quite helpful to look at the proofs in the book to understand
+how proofs work with these polynomials.
+For example, $X^2 + 2XY + Y^2 = X^1(2Y) = X^0Y + X^21 \in R[Y][X]$.
+
+\subsubsection{Division of one variable polynomials}
+Let's stick to the case of one variable for now.
+\[
+	f(X) = \sum_{i=0}^n a_i X^i, \quad a_n \neq 0
+\]
+$a_n$ is called the leading coefficient.
+$f(X)$ is called \emph{monic} if $a_n = 1$.
+$n$ is called the degree of $f$,
+$\mathrm{deg} \colon R[X] \to $ non-negative integers.
+
+Fact: if $R$ is a domain, $\deg(f) + \deg(g) = \deg(fg)$,
+since $(a_nX_n + \cdots)(b_mX^m + \cdots) = a_nb_mX^{n+m} + \cdots$
+lower coefficient, and $a_nb_m \neq 0$ since it is a domain.
+\begin{corollary}
+	If $D$ is a domain, so is $D[X]$ and $D[X_1,\dots,X_n]$.
+\end{corollary}
+
+Now we come to long division in a ring.
+Assume that $R$ is a domain and commutative as always.
+Given $f(X), g(X)$ in $R[X]$, want to divide $f(x)$ by $g(x)$
+and get a remainder of degree less than $g$.
+We want  $f(X) = q(X)g(X) + r(X), \deg(r) < \deg(g)$.
+This is \emph{not} always possible.
+E.g. $R = \Z, f(X) = X^3 + X +1, g(X) = 2x + 1$.
+Then $q(X)g(X) = (2X+1)(a_mX^m+\cdots) = 2a_mX^{m+1} + \cdots$.
+$\deg(r) = 0$ is $r(X)$ is a constant.
+So $q(x)g(x) + r(x)$ has a leading cofficient greater than $1$,
+so not equal (Napkin does it again).
+It will be possible in a field.
+
+What is true in general is the following:
+\begin{theorem}[Long Division]
+	Let $R$ be a commutative ring, and $f,g \in R[x]$.
+	Let $g(X) = b_mX^{m} + \cdots + b_0, b_m \neq 0$.
+	Then $b^k_mf(X) = q(X)g(X) = r(X)$ where $\deg(r) < \deg(g)$
+	(not necessarily unique), for some $k$.
+\end{theorem}
+Don't need to be in a domain, but probably need it for uniqueness.
+
+Ex. $X^3 + X + 1 = f(X)$ and $g(X) = 2x + 1$.
+$2f(X) = 2X^3 + 2X + @$,
+find $q(X)$ that makes $q(X)g(X)$.
+We will start with the $2X^3$ term, so $q_1(X) = X^2$ works.
+Then $2X^3 + 2X + 2 = X^2(2X+1) + r_1(X)
+= 2X^3 + X^2 + (-X^2 + 2X + 2) = q_1(X)g(X) + (-X^2 + 2X + 2)$.
+Repeat with $-X^2+2X+2$.
+Divide by $g$ again, $2(-X^2 + 2X + 2) = q_2(X)(2X + 2) + r_2$
+works out what $r_2$ has to be
+(we had the multiply by $2$ again).
+
+That is the division algorithm, and it's kinda a pain,
+but we are going to need it.
+
+This is easier in the world of fields, we just divide out by the
+leading coefficient to make $g(X)$ monic.
+So let $R$ be a field.
+In this case, get $f(X) = q(X)g(X) + r(X)$ where $\deg(r)<\deg(g)$,
+and $q,r$ are unique.
+We can show uniqueness easily:
+$q(X)g(X) + r(X) = q_1(X)g(X) + r_1(X)
+\implies g(X)(q(X)-q_1(X)) = r_1(X) - r(X)$.
+The LHS has $\deg \geq \deg g$ and the RHS has $\deg < \deg g$,
+so both $r-r_1$ and $g-g_1$ are zero.
+Can see how this breaks: $\deg$ doesn't play nice.
+Now, there exists a division algorithm in $k[X]$, $k$ a field,
+reduce the degree by division.
+There are interesting work in doing multivarible division.
+The algorithms are very sensitive to what you consider the degree as.
+
+Consequence of long division:
+\begin{theorem}[Factor theorem]
+	Suppose $k$ is a field, $f(X) \in k[X]$.
+	Then if $\alpha \in k$ is a solution to $f(X) = 0$,
+	then $(X-\alpha)$ divides $f(X)$ (remainder $r = 0$),
+	and conversely, if $(X-\alpha)$ divides $f(X)$ then $\alpha$ solves $f(X) = 0$.
+\end{theorem}
+\begin{proof}
+	Backwards is obvious: $f(X) = (X-\alpha)g(X) \implies f(\alpha) = (\alpha-\alpha)g(\alpha) = 0$.
+	Conversely, suppose $f(\alpha) = 0$.
+	(Remark: $f(\alpha)$ by definition is the image of $X$ under $k[X] \to k$, $X \mapsto \alpha$,
+	what we began the class with.)
+	$f(X) = q(X)(X-\alpha) + \alpha_0$ and $\alpha_0$ is a constant in $k$.
+	Set $X = \alpha \implies 0 = 0 + \alpha_0 \implies \alpha_0 = 0$.
+\end{proof}
+
+For general $f(X), \alpha \in k$,
+have $f(X) = q(X)(X-\alpha) + \alpha_0$, $\alpha_0 \in k$.
+Pur $X = \alpha \implies f(\alpha) = 0 + \alpha_0$ then $\alpha_0 = f(\alpha)$
+(remainder of division of $f(X)$ by $(X-\alpha)$ is $f(\alpha)$).
+
+\begin{theorem}
+	$k$ a field, $R = k[X]$, $I \subseteq R$ any ideal.
+	Then $\exists$ a unique monic polynommial $f(X)$
+	such that $I = (f(X)) = $ principal ideal generated by $f$.
+\end{theorem}
+\begin{remark}
+	False for multivariable rings
+\end{remark}
+\begin{remark}
+	$k[X]$ is similar to $\Z$ in this sense.
+	Principle ideal domains: integral domain in which every ideal is principle.
+\end{remark}
+What is special about $k[X]$ that you can't do in every PID is that
+you can do long division, so we call it a Euclidean ring.
+
+Cutoff for quiz 2 is all of today.
 \end{document}

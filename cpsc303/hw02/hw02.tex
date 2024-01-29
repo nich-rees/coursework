@@ -1,0 +1,221 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 2}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+\subsection*{Problem 2}
+Familarize yourself with basic MATLAB syntax,
+and make sure you understand what each line in the file
+\newline\verb|start_here.txt| is doing,
+and what the commands in \verb|exponential_of_a_matrix.txt| are doing.
+Answer the following questions with MATLAB (but just write down the answer).
+\begin{enumerate}
+	\item Let
+		\[
+			A = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}
+		\]
+		What is the largest interger $n$ such that each entry of
+		$e^A - \sum_{i=0}^{15} A^i/i!$ is of absolute value at most $10^{-n}$?
+	\item Same question for
+		\[
+			A = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}
+		\]
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		$n = 13$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		$n = 13$.
+	\end{proof}
+\end{enumerate}
+
+\subsection*{Problem 3}
+Create the files \verb|apple.m|, \verb|apple_bad.m|, \verb|apple_worse.m|,
+\verb|apple_quiet.m| and see how they are implementing Euler's method
+to solve $y' = 2y$ subject to $y(1) = 3$, in order to find $y(2)$.
+(The files \verb|apple_bad.m|, \verb|apple_worse.m| will produce error messages;
+they are just there as a cautionary note.)
+You might also have a look at \verb|chaotic_sqrt.m|.
+\begin{enumerate}
+	\item Use Euler's method to solve $y' = \lvert y \rvert^{1/2}$
+		subject to $y(t_0) = y_0$ to find the value of $y(t_{\mathrm{end}})$,
+		where $t_0 = -2$, $y_0 = -1$, and $t_{\mathrm{end}} = 2$.
+		Use step size $h = (t_{\mathrm{end}} - t_0)/N$,
+		where $N = 1000$ and $N = 100000$.
+		What values do you get?
+	\item Same question, but with $y_0 = 0$, $t_0 = 0$, and $t_{\mathrm{end}} = 2$.
+		Use $N = 10000$.
+	\item Same question, but with $y_0 = 10^{-20}$.
+	\item Same question, but with $y_0 = 10^{-40}$.
+	\item How do you explain the difference between parts (c,d) and part (b)?
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		When $N = 1000$, we get $y(t_{\mathrm{end}}) = 1.0036$.
+		When $N = 100000$, we get $y(t_{\mathrm{end}}) = 1.0000$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We get $y(t_{\mathrm{end}}) = 0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We get $y(t_{\mathrm{end}}) = 0.9985$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We get $y(t_{\mathrm{end}}) = 0.9982$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		From an algorithmic point of view,
+		when $y_0 = 0$, Euler's formula, no matter how many iterations,
+		will always give $y(t+ih) = 0$,
+		since it computes $y_{i+1}(t_0+(i+1)h) = y_{i} + h|y_{i}|^{1/2}$
+		so $y_{i} = 0 \implies y_{i+1}$,
+		and $y_0 = 0$, so by induction, $y(t_{\mathrm{end}}) = y(t_N) = 0$.
+		If, instead, we had a nonzero value,
+		$y(t_N)$ will at least sum to a positive value.
+
+		From a theory point of view, it is because $y = 0$ is a solution to the differential equation,
+		and the unique solution to the initial value problem $y_0 = t_0 = 0$ is $y(t) = 0$.
+		On the other hand, we get a nontrivial solution when $y_0 > 0$,
+		so it approaches a similar value to what we had before in part (a).
+	\end{proof}
+\end{enumerate}
+
+\subsection*{Problem 4}
+If $y \colon \R \to \R$ is a function and $T \in \R$,
+then the \emph{translation of $y$ by $T$},
+denoted $\mathrm{Trans}_T(y)$, refers to the function $z$ given by
+\[
+	\forall t \in \R, \quad z(t) = y(t-T)
+\]
+(or, equivalently, $z(t+T) = y(t)$)
+(hence $z(T) = y(0)$, $z(T+1) = y(1)$, etc.).
+Similarly, the \emph{time reversal of $y$ at time $T$},
+denoted $\mathrm{Reverse}_T(y)$ refers to the function $z$ given by
+\[
+	\forall t \in \R, \quad z(t) = y(2T - t)
+\]
+(hence $z(T) = y(T)$, and $z(T+a) = y(T-a)$).
+\begin{enumerate}
+	\item If $T_1,T_2 \in \R$ and $y$ is any function, what is
+		\[
+			\mathrm{Trans}_{T_1}(\mathrm{Trans}_{T_2}(y))
+		\]
+		in simpler terms?
+	\item If $T \in \R$ and $y$ is any function, what is
+		\[
+			\mathrm{Reverse}_T(\mathrm{Reverse}_T(y))
+		\]
+		in simpler terms?
+	\item If $T_1,T_2 \in \R$ and $y$ is any function, what is
+		\[
+			\mathrm{Reverse}_{T_1}(\mathrm{Reverse}_{T_2}(y))
+		\]
+		in simpler terms?
+	\item Show that if for some function $f \colon \R \to \R$,
+		$y$ satisfies the ODE $y' = f(y)$ globally
+		(meaning $y'(t) = f(y(t))$ for all $t \in \R$),
+		then $z = \mathrm{Trans}_T(y)$ satisfies the same ODE,
+		i.e., $z' = f(z)$ (globally).
+	\item Show directly that if $y(t) = e^{At}$ for some $A \in \R$,
+		and if $z$ satisfies the ODE $z' = Az$ with $z(t) > 0$ for some $t \in \R$,
+		then $z$ is a translation of $y$, \textbf{PROVIDED THAT} $A \neq 0$.
+	\item If similarly $y' = f(y)$ globally,
+		then $z = \mathrm{Reverse}_T(y)$ satisfies the ODE $z' = -f(z)$.
+	\item If similarly $y'' = f(y)$ globally,
+		then $z = \mathrm{Reverse}_T(y)$ satisfies the ODE $z'' = f(z)$.
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute:
+		\begin{align*}
+			\mathrm{Trans}_{T_1}(\mathrm{Trans}_{T_2}(y))
+			&= \mathrm{Trans}_{T_1}(y(t-T_2))\\
+			&= y((t - T_1) - T_2)\\
+			&= y(t - T_1 - T_2)
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute:
+		\begin{align*}
+			\mathrm{Reverse}_{T}(\mathrm{Reverse}_{T}(y))
+			&= \mathrm{Reverse}_{T}(y(2T-t))\\
+			&= y(2T - (2T - t))\\
+			&= y(t)
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute:
+		\begin{align*}
+			\mathrm{Reverse}_{T_1}(\mathrm{Reverse}_{T_2}(y))
+			&= \mathrm{Reverse}_{T_1}(y(2T_2-t))\\
+			&= y(2T_2 - (2T_1 - t))\\
+			&= y(t + 2T_2 - 2T_1)
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Assume that $y'(t) = f(y(t))$ for all $t \in \R$.
+		Note $z(t) = \mathrm{Trans}_T(y) = y(t-T)$.
+		Hence, $z'(t) = y'(t-T)\cdot1 = f(y(t-T)) = f(z(t))$
+		for all $t \in \R$.
+		So we have shown $z' = f(z)$ globally.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $A \in \R$, and $z' = Az$.
+		Since $A \neq 0$ and $z(t) > 0$ for some $t \in \R$ so $z$ is not the zero function,
+		we can divide by $Az$ to get
+		\begin{align*}
+			\frac{dz}{dt} = Az
+			&\implies \frac{1}{Az}dz = dt\\
+			&\implies \int \frac{1}{Az}dz = \int dt\\
+			&\implies \frac{1}{A}\ln{z} = t + C\\
+			&\implies z = e^{A(t+C)}
+		\end{align*}
+		Hence, $z = y(t+C)$ and so $z$ is a translation of $y$ by $-C$,
+		i.e. $z = \mathrm{Trans}_{-C}(y)$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Assume that $y'(t) = f(y(t))$ for all $t \in \R$.
+		Note $z(t) = \mathrm{Reverse}_T(y) = y(2T-t)$.
+		Hence $z'(t) = y'(2T-t)\cdot(-1) = -y'(2T-t) = -f(y(2T-t) = -f(z(t))$
+		for all $t \in \R$.
+		So we have shown $z' = -f(z)$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Assume that $y''(t) = f(y(t))$ for all $t \in \R$.
+		Note $z(t) = \mathrm{Reverse}_T(y) = y(2T-t)$.
+		Hence $z'(t) = y'(2T-t)\cdot(-1) = -y'(2T-t)$
+		for all $t \in \R$.
+		We take another derivative to get
+		$z''(t) = -y''(2T-t)\cdot(-1) = y''(2T-t) = f(y(2T-t)) = f(z(t))$
+		for all $t \in \R$.
+		So we have shown $z'' = f(z)$.
+	\end{proof}
+\end{enumerate}
+\end{document}

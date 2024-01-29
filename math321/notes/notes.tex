@@ -774,5 +774,233 @@ and the sum exists because $\sum c_n < \infty$ and $f$ is bounded.)
 \end{proof}
 
 \section{January 26}
+\begin{theorem}[Rudin 6.17]
+	Let $f \colon [a,b] \to \R$ bounded, $\alpha \colon [a,b] \to \R$
+	differentiable and monotone increasing.
+	Suppose $\alpha' \in \mathcal{R}[a,b]$.
+	Then $f \in \mathcal{R}_\alpha[a,b] \iff f\alpha' \in \mathcal{R}[a,b]$
+	and if so
+	\[
+		\int_a^b fd\alpha = \int_a^b f\alpha' dx
+	\]
+\end{theorem}
+Step 1: it sufficies to show that
+\[
+	\overline{\int_a^b}fd\alpha = \overline{\int_a^b}f\alpha' xdx
+	\qquad \text{ and } \qquad
+	\underline{\int_a^b}fd\alpha = \underline{\int_a^b}f\alpha'xdx
+\]
+We will prove the first equality, second one is an exercise.
+
+Step 2: since $\alpha' \in \mathcal{R}[a,b]$
+for all $\ep > 0$, $P$ (of $[a,b]$) such that
+\[
+	U(P,\alpha') - L(P,\alpha') < \ep
+\]
+This inequality continues to hold for every refinement $P'$ of $P$.
+
+We have $U(P,\alpha') - L(P,\alpha') = \sum_{i=1}^n(A_i - a_i)\Delta x_i$,
+where $A_i = \sup\{\alpha'(x) \colon x \in [x_{i-1},x_i]\}$
+and likewise for $a_i$.
+By the mean value theorem for each $i = 1,\dots, n$
+$\exists t_i \in [x_{i-1},x_i]$ such that
+$\Delta \alpha_i = \alpha'(t_i)\Delta x_i$.
+Now this suggests $\overline{\int}fd\alpha = \overline{\int}f\alpha'dx$,
+but need to be careful.
+
+For every $s_i \in [x_{i-1},x_i]$, we have
+$|\alpha'(s_i) - \alpha'(t_i)| \leq A_i - a_i$
+(literally did this so many times on the homework lol)
+so $\sum_{i=1}^n |\alpha'(s_i) - \alpha'(t_i)|\Delta x_i
+\leq \sum_{i=1}^n (A_i - a_i)\Delta x_i$
+for \emph{every} choice of $s_i \in [x_{i-1},x_i]$, $i = 1,\dots,n$.
+Let $K = \sup_{x \in [a,b]}|f|$, then
+\begin{equation}\label{6.17 ineq}
+	\sum_{i=1}^n |f(s_i)\alpha'(s_i)\Delta x_i - f(s_i)\alpha'(t_i)\Delta x_i|
+	\leq K\ep
+\end{equation}
+Hence
+\[
+	\sum_{i=1}^n f(s_i)\Delta \alpha_i \leq \sum_{i=1}^n f(s_i)\alpha'(s_i)\Delta x_i + Ke
+	\leq U(P,f\alpha') + K\ep
+\]
+Recall triangle inequality:
+if $|a+b| \leq c$, then $a \leq b + c$ and $b \leq a + c$.
+
+When we have an inequality, might wonder where the inequality is
+``sharp" or ``tight":
+i.e. equality or the closest to equality as possible.
+Taking the supremum of $s_i \in [x_{i-1},x_i]$, $i = 1, \dots, n$,
+we conclude (if $M_i = \sup\{f(x) \colon x \in [x_{i-1},x_i]\}$)
+\[
+	U(P,f,\alpha) = \sum_{i=1}^n M_i \Delta \alpha_i \leq U(P,f\alpha') + K\ep
+\]
+Hence
+\[
+	\overline{\int_a^b}fd\alpha \leq U(P,f,\alpha) \leq U(P,f\alpha') + K\ep
+\]
+So for every $\ep$, we found some partition $P$ that makes the inequality hold.
+Recall that it also holds for every refinement $P'$ of $P$.
+
+How can we make this inequality be as close to equality as possible
+(how much strength can squeeze out of inequality).
+Taking the infinum over all refinements $P'$ of $P$, we have
+\[
+	\overline{\int_a^b}fd\alpha \leq \int_{P'} U(P',f\alpha) + K\ep
+\]
+We are taking a more restricted set of partitions,
+will this give us the infinum we want?
+Yes: for any non-refinement partition,
+just union it with $P$ to get a refinement,
+i.e. $\forall \ep > 0$, $\overline{\int_a^b}fd\alpha \leq \overline{\int_a^b}f\alpha'dx + KE
+\implies \overline{\int_{a}^b} fd\alpha \leq \int_a^b \alpha'dx$.
+
+Once you've seen this, can do the other three inequalities.
+Will just say a word or two about the reverse inequality, i.e.
+\[
+	\overline{\int_a^b}fd\alpha \geq \overline{\int_a^b}f\alpha'dx
+\]
+Taking (\ref{6.17 ineq}), get
+\[
+	\sum_{i=1}^n f(s_i) \alpha'(s_i)\Delta x_i \leq
+	\sum_{i=1}^n f(s_i)\Delta\alpha_i + K\ep
+\]
+Etc.
+
+\section{January 29}
+For the next theorem, note that a continuous bijective map
+must be strictly monotone (good exercise).
+\begin{theorem}[Change of Variables (Rudin 6.19)]
+	Let $\phi \colon [A,B] \to [a,b]$, strictly increasing,
+	onto (i.e. $1-1$), continuous.
+	Let $\alpha \colon [a,b] \to \R$ monotone increasing.
+	Let $f \in \mathcal{R}_\alpha[a,b]$.
+	Define $g = f \circ \phi \colon [A,B] \to \R$,
+	$\beta \colon \alpha \circ \phi \colon [A,B] \to \R$.
+	Then $g \in \mathcal{R}_\beta[A,B]$ and
+	\[
+		\int_A^B gd\beta = \int_a^b fd\alpha
+	\]
+\end{theorem}
+
+\begin{remark}
+	Let $\alpha(x) = x$, and $\phi$ is differentiable.
+	Then $d\beta = \phi'(x)dx$ (why???), i.e.
+	\[
+		\int_a^b fd\alpha = \int_{\phi^{-1}(a)}^{\phi^{-1}(b)}f(x)\phi'(x)dx
+	\]
+	And this lines up with our normal change of variables formula.
+\end{remark}
+\begin{proof}
+	Partitions $P = \{a=x_0, x_1,\dots,x_n = b\}$ of $[a,b]$
+	and partitions $Q$ of $[A,B]$
+	are in $1-1$ correspondace via $x_i = \phi(y_i)$.
+	We have $\alpha(x_i) = \alpha \circ \phi(y_i) = \beta(y_i)$
+	and $\{f(x) \colon x \in [x_{i-1},x_i]\} = \{g(y) \colon y \in [y_{i-1},y_i]\}$.
+	Then $U(P,f,\alpha) = U(Q,g,\beta)$ and $L(P,f,\alpha) = L(Q,g,\beta)$.
+
+	Let $\ep > 0$. Since $f \in \mathcal{R}_\alpha[a,b]$,
+	there exists a partition $P$ of $[a,b]$ such that
+	$U(P,f,\alpha) - L(P,f,\alpha) < \ep$,
+	hence $U(Q,g,\beta) - L(Q,g,\beta) < \ep$.
+	Then $g \in \mathcal{R}_\beta[A,B]$.
+	So first part of theorem done \checkmark
+
+	Finally,
+	\[
+		\int_A^B g d\beta = \inf_Q U(Q,g,\beta)
+		= \inf_P U(P,f,\alpha) = \int_a^b f d\alpha
+	\]
+\end{proof}
+
+Recall the hypotheses of this theorem:
+$\phi$ is continuous, $1-1$ and onto.
+Where did we use them?
+Where we got a $1-1$ correspondance between $P$ and $Q$,
+and makes the rest of the proof fall.
+
+Now we start inching towards the fundamental theorem of calculus.
+\begin{theorem}[Rudin 6.20]
+	Let $f \in \mathcal{R}[a,b]$.
+	For $x \in [a,b]$, define $F(x) = \int_a^x f(t)dt$, $F(a) = 0$.
+	Then: $F$ is continuous on $[a,b]$.
+	And if $c \in [a,b]$ and $f$ is continuous at $c$,
+	then $F$ is differentiable at $c$,
+	and $F'(c) = f(c)$.
+\end{theorem}
+\begin{proof}
+	Proving continuity: Let $K = \sup_{t\in[a,b]}\lvert f(t) \rvert$.
+	By theorem 6.12c (linear in the domain), for $a \leq x \leq y \leq b$
+	\[
+		F(y) - F(x) = \int_a^y f(t)dt - \int_a^y f(t)dt
+		= \int_x^y f(t)dt
+	\]
+	Essentially, the biggest this can be is $K$,
+	and so the largest the integral can be is $\in_a^b K dt$,
+	but have to do this carefully.
+	Thus
+	\[
+		\lvert F(y) - F(x) \rvert = \left\lvert \int_x^y f(t)dt \right\rvert
+		\leq \int_x^y \lvert f(t)\rvert dt \leq \int_x^y Kdt = K(y-x)
+	\]
+	(where we used theorem 6.13 for the first inequality, and 6.12b for the second).
+	Hence, for every $\ep > 0$, select $\delta = \ep/K$ (ro $\delta = \ep$ if $K=0$).
+	Then if $\lvert x - y \rvert < \delta$,
+	$\lvert F(x) - F(y) \rvert < \ep$.
+
+	Proving differentiability at $c$:
+	suppose $c \neq b$, i.e. $c \in [a,b)$.
+	Let us compute $\lim_{h \searrow 0} \frac{F(c+h) - F(c)}{h}$.
+	For $h > 0$, we have
+	\[
+		\left\lvert\frac{1}{h}[F(c+h) - F(c)] - f(c)\right\rvert
+		= \left\lvert\int_c^{c+h}f(t)dt - f(c) \right\rvert
+	\]
+	In analysis, we often want to exploit some cancellation between
+	two quantities we think of as close together.
+	We are sampling values of $f$ quite close to $c$,
+	and comparing them to $f(c)$.
+	How do we exploit cancellation?
+	One common technique when a quantity is not changing much over
+	a region is take its average and bring it inside an integral to cancel.
+	So, since $f(c) = \frac{1}{h}\int_c^{c+h} f(c)dt$, we get
+	\[
+		= \left\lvert \frac{1}{h} \int_c^{c+h} (f(t) - f(c))dt\right\rvert
+		\leq \frac{1}{h} \int_c^{c+h} \lvert f(t) - f(c) \rvert dt
+	\]
+	(triangle inequality for integrals?)
+	Since $f$ is continuous at $c$, $\forall \ep > 0$,
+	$\exists \delta > 0$ such that for all $y \in [a,b]$ with $|y-c| < \delta$,
+	we have $\lvert f(c) - f(y)\rvert < \ep$.
+	So for $h < \delta$, we have
+	\[
+		\frac{1}{h}\int_c^{c+h} \lvert f(t) - f(c) \rvert dt
+		< \frac{1}{h} \int_c^{c+h} \ep dt = \ep
+	\]
+	i.e. $\forall \ep > 0$, $\exists \delta > 0$ such that $\forall 0 < h < \delta$,
+	\[
+		\left\lvert \frac{1}{h} \left( F(c+h) - F(c)\right) - f(c) \right\rvert < \ep
+	\]
+	i.e. $\lim_{h \searrow 0} \frac{F(c+h) - F(c)}{h} = f(c)$.
+
+	If $c \neq a$, i.e. if $c \in (a,b]$,
+	an identical argument shows
+	$\lim_{h \nearrow 0}\frac{F(c+h)-F(c)}{h} = f(c)$.
+\end{proof}
+
+Question: If $f$ is not continuous at $c$,
+is $F$ never differentiable at $c$, maybe differentiable at $c$,
+or is always differentiable at $c$ (our trichotomy).
+\begin{remark}
+	If $f(x) = g(x)$ except at one point,
+	then $\int_a^b f(x) dx = \int_a^b g(x) dx$.
+	I.e. the Riemann integral does not see the value of the function
+	at one point (not true generally for Riemann-Stieltjes,
+	we saw $\alpha$ is Heaviside step function only cared about
+	the function at a single point).
+\end{remark}
+When we have a jump discontinuity, $F$ will never be continuous at a point.
+
+\section{January 31!}
 ff
 \end{document}
