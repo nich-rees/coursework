@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 300}
+\chead{Homework 1}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 300 Homework 1}
+\end{center}
+
+\subsection*{Problem 1}
+Find each of the following limits:
+\begin{enumerate}
+	\item $\displaystyle\lim_{z\to 2i} \frac{z^2+9}{2z^2+8}$
+	\item $\displaystyle\lim_{z\to \infty} \frac{3z^2-2z}{z^2-iz+8}$
+	\item $\displaystyle\lim_{z\to 5} \frac{3z}{z^2-(5-i)z-5i}$
+	\item $\displaystyle\lim_{z\to \infty} (8z^3 + 5z + 2)$
+	\item $\displaystyle\lim_{z\to \infty} e^z$
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+			\begin{align*}
+				\displaystyle\lim_{z\to 2i} \frac{z^2+9}{2z^2+8}
+				&= \frac{\lim_{z\to 2i} (z^2 + 9)}{\lim_{z\to 2i}(2z^2 + 8)}\\
+				&= \frac{-8 + 9}{-8+8}\\
+				&= \frac{1}{0}\\
+				&= \infty
+			\end{align*}
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			\begin{align*}
+				\displaystyle\lim_{z\to \infty} \frac{3z^2-2z}{z^2-iz+8}
+				&= \displaystyle\lim_{z\to \infty} \frac{3-\frac{2}{z}}{1-\frac{i}{z}+\frac{8}{z^2}}\\
+				&= \frac{\lim_{z\to \infty} (3-\frac{2}{z})}{\lim_{z\to \infty}(1-\frac{i}{z}+\frac{8}{z^2})}\\
+				&= \frac{3 - \frac{2}{\infty}}{1-\frac{i}{\infty}+\frac{8}{\infty}}\\
+				&= \frac{3}{1}\\
+				&= 3
+			\end{align*}
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			\begin{align*}
+				\displaystyle\lim_{z\to 5} \frac{3z}{z^2-(5-i)z-5i}
+				&= \displaystyle\lim_{z\to 5} \frac{3}{z-(5-i)-\frac{5i}{z}}\\
+				&= \frac{\lim_{z\to 5} 3}{\lim_{z\to 5}(z-(5-i)-\frac{5i}{z})}\\
+				&= \frac{3}{\infty - (5-i) - \frac{5i}{\infty}}\\
+				&= \frac{3}{\infty - 0}\\
+				&= 0
+			\end{align*}
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			\begin{align*}
+				\displaystyle\lim_{z\to \infty} (8z^3 + 5z + 2)
+				&= \displaystyle\lim_{z\to \infty} z^3(8 + \frac{5}{z^2} + \frac{2}{z^3})\\
+				&= (\lim_{z\to \infty} z^3)(\lim_{z\to\infty}(8 + \frac{5}{z^2} + \frac{2}{z^3}))\\
+				&= \infty \cdot (8 + \frac{5}{\infty} + \frac{2}{\infty}))\\
+				&= \infty \cdot (8 + 0 + 0)\\
+				&= \infty
+			\end{align*}
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			We claim that $\lim_{z\to\infty} e^z$ does not exist.
+			Let $z = a + bi$.
+			Then $e^z = e^ae^{ib} = e^a(\cos{b} + i\sin{b})$.
+			We note that if $b = 0$,
+			if $z \to \infty$, we can either have $a \to \infty$ or $a\to - \infty$.
+			It is a common result from first year calculus
+			that $\lim_{a \to \infty}e^a = \infty$ and $\lim_{a \to -\infty}e^a = 0$.
+			
+			For the sake of contradiction, assume that
+			$\lim_{z\to\infty} e^z = L$, $L \in \C$.
+			Then for $\ep > 0$, there exists $M > 0$
+			such that $|z| > M \implies |e^z - L| < \ep$.
+			We also know that there is some $N$ such that if $a > N$ where $a \in \R$,
+			then $e^a > L + \ep$.
+			Fix $\ep > 0$. This gives us an $M$ that satisfies our limit inequality,
+			and an $N$ that satisfies the inequaliity above.
+			So if $M_1 = \max\{N,M\}$,
+			then if $z \in \R$ such that $z > M_1\geq M$, then we have
+			$e^z > L + \ep \implies e^z - L > \ep$.
+			Now since $\ep > 0$, $e^z > L$, so $e^z - L > 0 \implies
+			e^z - L = |e^z - L|$
+			so $|e^z - L| > \ep$, which is a contradiction.
+
+			Now for the sake of contradiction, assume that
+			$\lim_{z\to\infty} e^z = \infty$.
+			Then for any $N > 0$, there exists $M > 0$ such that
+			$|z| > M \implies |e^z| > N$.
+			Note that for any $M > 0$, for any $a > M$ where $a \in \R$,
+			we have $0 < e^{-a} < e^{0} = 1$.
+			So if $N = 2$, 
+			for any $M > 0$, if $z \in (-\infty,0)$ such that $|z| > M$,
+			we still have $e^z \leq 2$, which is a contradiction.
+		\end{proof}
+\end{enumerate}
+\end{document}
