@@ -35,9 +35,30 @@
 	{\bf Math 321 Homework 3}
 \end{center}
 
+The goal of the next few problems is to understand which functions can
+be written as a difference of two increasing functions.
+We begin with several definitions.
+
+Let $f \colon [a,b] \to \R$ and let $P = \{x_0,\dots,x_n\}$ be a partition of $[a,b]$. Define
+\[
+	V(f,P) = \sum_{i=1}^n \lvert f(x_i) - f(x_{i-1})\rvert.
+\]
+This is called the \emph{variation of $f$ with respect to the partition $[a,b]$}. Define
+\[
+	TV\lvert f \rvert = \sup_P V(f,P),
+\]
+where the supremum is taken over all partitions of $[a,b]$.
+this is called the \emph{total variation of $f$ on $[a,b]$}.
+We say that $f$ has \emph{bounded variatoin on $[a,b]$} if $TV\lvert f \rvert < \infty$.
+For $c \in (a,b]$, define $TF\lvert f_{[a,c]}\rvert$ to be the
+total variation of $f \colon [a,c] \to \R$
+(i.e. $f$ is restricted to the interval $[a,c] \subset [a,b]$).
+We define $TV\lvert f_{[a,a]}\rvert = 0$.
+
 \subsection*{Problem 1}
 \problem{
-	Prove that there $f(x) = \alpha(x) - \beta(x)$ has bounded variation. ff
+	Let $\alpha,\beta \colon [a,b] \to \R$ be (weakly) monotone increasing.
+	Prove that $f(x) = \alpha(x) - \beta(x)$ has bounded variation on $[a,b]$.
 }
 \begin{proof}[Solution]\let\qed\relax
 	Basically, $f$ is bounded by $\alpha$ and $\beta$ (watch for negatives)
@@ -47,16 +68,93 @@
 
 \subsection*{Problem 2}
 \problem{
-	ff
+	Let $f \colon [a,b] \to \R$ have bounded variation on $[a,b]$.
+	\begin{enumerate}
+		\item For $x \in [a,b]$, define
+			\[
+				g(x) = TV \lvert f_{[a,x]}\rvert.
+			\]
+			Prove that $g$ is (weakly) monotone increasing.
+		\item For $x \in [a,b]$, define
+			\[
+				h(x) = f(x) + TV\lvert f_{[a,x]}\rvert.
+			\]
+			Prove that $h$ is (weakly) monotone increasing.
+		\item Prove that $f$ can be written as $f(x) = \alpha(x) - \beta(x)$,
+			where $\alpha,\beta \colon [a,b] \to \R$ are (weakly) monotone increasing.
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 3}
+\problem{
+	Suppose that $\alpha_1,\alpha_2,\beta_1,\beta_2 \colon [a,b] \to \R$
+	are (weakly) monotone increasing,
+	and $\alpha_1(x) - \beta_1(x) = \alpha_2(x) - \beta_2(x)$ for all $x \in [a,b]$.
+	Prove that for every continuous $f \colon [a,b] \to \R$, we have
+	\[
+		\int_a^b fd\alpha_1 - \int_a^bfd\beta_1
+		= \int_a^b fd\alpha_2 - \int_a^bfd\beta_2
+	\]
+	\emph{Remark.} You have just proven that if
+	$\gamma \colon [a,b] \to \R$ has bounded variation and
+	$f \colon [a,b] \to \R$ is continuous, then we can define
+	\[
+		\int_a^b fd\gamma = \int_a^b fd\alpha - \int_a^b fd\beta,
+	\]
+	where $\gamma = \alpha - \beta$ with $\alpha,\beta$ monotone increasing;
+	the RHS of this expression does not depend on the specific decomposition
+	$\gamma = \alpha - \beta$ that is chosen.
 }
 \begin{proof}[Solution]\let\qed\relax
 	ff
 \end{proof}
 
 
-\subsection*{Problem 3}
+\subsection*{Problem 4}
 \problem{
-	ff
+	\begin{enumerate}
+		\item Let $f \in \mathcal{R}[a,b]$.
+			For $n \geq 1$, let $P_n$ be the partition with
+			$n+1$ equally spaced points in $[a,b]$, i.e. if $b-a=d$, then
+			\begin{equation}\label{partition}
+				P_n = \left\{a, a+\frac{d}{n}, a+\frac{2d}{n},
+				\dots, a+\frac{nd}{n} = b\right\}
+			\end{equation}
+			Prove that
+			\[
+				\lim_{n\to\infty}\left(U(P_n,f) - L(P_n,f)\right) = 0.
+			\]
+		\item Let $\alpha \colon [a,b] \to \R$ be monotone increasing,
+			let $f \in \mathcal{R}_\alpha[a,b]$,
+			and let $P_n$ be as defined in (\ref{partition}).
+			Must it be true that
+			\begin{equation}\label{limit}
+				\lim_{n\to\infty}\left(U(P_n,f,\alpha) - L(P_n,f,\alpha)\right) = 0?
+			\end{equation}
+			If so, prove it. If not, give a counter-example
+			(i.e. a choice of interval $[a,b]$, a choice of monotone increasing $\alpha$,
+			and a choice of $f \in \mathcal{R}_\alpha[a,b]$ for which (\ref{limit} fails)
+			and show that your counter-example is correct.
+	\end{enumerate}
 }
-
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+			ff
+		\end{proof}
+\end{enumerate}
 \end{document}
