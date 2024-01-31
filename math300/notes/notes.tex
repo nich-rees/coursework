@@ -547,4 +547,136 @@ In fact, every rotation of the Riemann sphere is a M\"{o}bius transformation.
 We can iterate $f$ and draw trajectories.
 Here the trajectories are circles (the second picture in the assigned reading).
 But there are other classes of transformations than just iteration of one???
+
+
+\section{January 30}
+Fact: Every non-identity M\"{o}bius transformation has either 
+$1$ fixed point (the matrix as a repeated eignevalue and is not diagonliazble,
+e.g. $\begin{pmatrix} 1 & b \\ 0 & 1 \end{pmatrix}$, $z \mapsto z + b$,
+only fixed point is $\infty$), the parabolic case,
+or $2$ fixed points (the matrix has $2$ distinct eigenvalues
+and is therefore diagonlizable,
+e.g. $\begin{pmatrix} a & 0 \\ 0 & d \end{pmatrix}$, $z \mapsto \frac{a}{d}z$).
+If $\lambda_1,\lambda_2$ are the eigenvalues, then $\frac{\lambda_1}{\lambda_2}\in\R$
+means the transformation is hyperbolic,
+$\lvert \frac{\lambda_1}{\lambda_2}\rvert = 1$ means the transformation is elliptic,
+and otherwise poxochrome??? case ff.
+
+Fact: ff there exists a unique M\"{o}bius transformation
+$f \colon \hat{\C} \to \hat{\C}$ such that $f(A) = A'$
+and $f(B) = B'$ and $f(C) = C'$.
+Example: Find the M\"{o}bius transform such that
+$f(0) = 1, f(i) = i, f(\infty) = -1$.
+We have $f(z) = \frac{az+b}{cz+d}$.
+Then $f(0) = \frac{b}{d} = 1$,
+$f(i) = \frac{ai + b}{ci + d} = i$, and $f(\infty) = \frac{a}{c} = -1$.
+So we get three conditions: $b = d$, $ai + b = -c + id$, and $a = -c$.
+We get a homogenous system of linear equations with $3$ equations, $4$ indeterminants:
+\[
+	\begin{cases}
+		b - d = 0\\
+		ia + b + c -id = 0\\
+		a + c = 0
+	\end{cases}
+\]
+This will always have exactly $1$ free variable,
+hence we get exactly $1$ M\"{o}bius transformation
+(since the numerator and denomonator of $\frac{az+b}{cz+d}$ are
+homogenous for any of their variables,
+so fixing any will result in cancellation since the other variables
+will be a linear scalar multiple of the fixed variable, see below).
+Suppose $d$ is free, so we can let $d = 1 \implies b = 1$,
+then using $ai + 1 = -c + i$ and $a = -c$, we get $a = 1, c = -1$,
+so $f(z) = \frac{z+1}{-z+1}$ satisfies our conditions
+(could have also let $d = 2$ to get $f(z) = \frac{z+1}{-2z+2}$ which is the same as before...
+how do we gaurantee that this will happen, i.e. that we get unique transform?).
+
+Three distinct points in $\hat{\C}$ determine a circle or a line (circle through $\infty$).
+$0,i,\infty$ determine the imaginary axis:
+makes it into the unit circle, since it passes through $-1,i,1$.
+$f$ maps the imaginary axis to the unit circle.
+
+A common M\"{o}bius transform question would be to find a MT mapping
+a specific line to a specific circle.
+Do this as above.
+Could also be given a question that asks to find a MT mapping
+the upper half plane to the unit disc.
+Then, we have to map $-1,0,1$ ($\mathrm{Im}(z)\geq0$), to $-1,i,1$.
+The order of our points is important to determine
+if the transformation will map the upper half plane to the inside
+of the circle or the outside.
+If we walk from $-1$ to $0$ to $1$, the region we have is to our left.
+If we walk from $1$ to $i$ to $-1$, the region we want is also to our left.
+So we choose
+\[\begin{cases}
+	-1 \mapsto 1\\
+	0 \mapsto  i\\
+	1 \mapsto -1
+\end{cases}\]
+
+Example: Consider $z \mapsto \frac{1}{z}$, $f(z) = \frac{1}{z}$.
+What does this M.T. do to the veritcal lines in $\C$?
+Consider the vertical line $L$ that passes through $a \in \R$ ($a\neq0$).
+An equation for $L$ is $\mathrm{Re}(z) = a$.
+Using $\mathrm{Re}(z) = \frac{1}{2}(z+\bar{z})$, rewrite as
+$2a = z + \bar{z}$.
+We can now find an equation for $f(L)$.
+Write $w$ for $f(z)$, the image of $z$ under $f$.
+Want an equation for $w$ but we have one for $z$.
+$w = f(z), w = \frac{1}{z}$.
+Solve for $z$ in terms of $w$, i.e. $z = \frac{1}{w}$.
+Then plug into our equation for $z$ to get $(1/w) + \overline{(1/w)} = 2a$,
+or $1/w + 1/\bar{w} = 2a$, which is the equation for the image $f(L)$.
+Rewrite $\bar{w} + w = 2aw\bar{w}$.
+We have $\mathrm{Re}(w) = a|w|^2$.
+Since $a \in \R$, we can rewrite this as $|w|^2 - 2\mathrm{Re}(\frac{1}{2a}w) = 0$.
+We now complete the ``absolute value squared":
+a general formula for any $u,v \in \C$ is
+\begin{align*}
+	|u-v|^2
+	&= (u-v)(\bar{u}-\bar{v})\\
+	&= u\bar{u} - u\bar{v} - v\bar{u} + v\bar{v}\\
+	&= |u|^2 - (u\bar{v} + \overline{u\bar{v}}) + |v|^2\\
+	&= |u|^2 - 2\mathrm{Re}(u\bar{v}) + |v|^2
+\end{align*}
+(a formula in our formula sheet).
+Hence, $\left\lvert w - \frac{1}{2a}\right\rvert^2 = \left\lvert \frac{1}{2a}\right\rvert^2$.
+This is the equation for the circle of radius $\left\lvert \frac{1}{2a}\right\rvert$
+centered at $\frac{1}{2a}$ (this is a circle through $0$).
+
+\subsection{Complex Differentiation (follow Howie)}
+\begin{definition}
+	Let $f \colon D \to \C, D \subset \C$ be a complex function.
+	$f$ is (complex) differentiable at $c \in D$ if
+	\[
+		\lim_{z \to c} \frac{f(z) - f(c)}{z-c}
+	\]
+	exists.
+	This limit is called the derivative of $f$ at $c$,
+	notation is $f'(c)$.
+\end{definition}
+
+Standard results from calculus apply (sums, products, quotient, chain).
+Obviously, $f(z) = z$ is differentiable at all $c \in \C$:
+\[
+	\lim_{z\to c} \frac{z-c}{z-c} = 1
+\]
+so $f'(c) = 1$ for all $c \in \C$.
+So polynomials are differentiable: $f(z) = 2z^2 + 3iz + 1$
+gives $f'(z) = 4z + 3i$.
+
+Less simple: $g(z) = \frac{z^2 + i}{z-i}$ is differentiable for all $c \neq i$.
+ff (I zoned out) ah I'm done with class actually.
+
+ff
+
+So if $f$ is complex differentiable at $c = (a+ib) = (a,b)$, then
+\[
+	\frac{\partial u}{\partial x}\vert_{(a,b)} = \frac{\partial v}{\partial y}\vert_{(a,b)}
+	\qquad
+	\frac{\partial v}{\partial x}\vert_{(a,b)} = -\frac{\partial u}{\partial y}\vert_{(a,b)}
+\]
+(The Cauchy-Riemann equations).
+This is only from considering approaching along vertical and horizontal lines,
+so not a sufficient condition.
 \end{document}
