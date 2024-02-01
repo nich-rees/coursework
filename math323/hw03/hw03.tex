@@ -43,34 +43,25 @@
 	$F_2$ that is the identity map on $D$.
 }
 \begin{proof}[Solution]\let\qed\relax
-	ff
-	Use the universal property.
+	Note that $D$ commutative, since $D$ is in a field:
+	since $a,b \in D$, and so $a,b \in F$, and since $F$ is a field, $ab = ba$.
 
-	Theorem 2.9: Let $D$ be a commutative domain,
-	$F$ its field of fractions.
-	Then any monomorphism $\eta_D$ of $D$ into a field $F'$
-	has a unique extension to a monomorphism of $\eta_F$ of $F$ into $F'$.
+	Let $\eta_1\colon D \to F_1$ be the identity homomorphism into $F_1$,
+	which is a monomorphism since $D$ is embedded in $F_1$ by definition
+	of $D$ generating $F_1$.
+	Hence, if $K$ is the field of fractions of $D$,
+	we have that there is a unique monomorphism $\eta_1'$ from $K$ into $F_1$.
+	The image of $K$ in $F_1$ is a subring of $F_1$ that contains $D$,
+	but by definition of $D$ generating $F_1$,
+	$F_1$ contains no proper subring that contains $D$,
+	hence since $\eta_1'$ must be surjective, so $\eta_1'$ is a bijection.
+	So there is a unique isomorphism of $F_1$ onto $K$.
+	An identical argument also shows that there is a unique isomorphism
+	of $K$ onto $F_2$.
+	Composing the two, we get that there is a unique isomorphism
+	from $F_1$ onto $F_2$.
 
-	Since $D$ is a subring of $F_1$ and $F_2$, we have
-	the natural embedding of $D$ in $F_1$, $\eta_1 \colon D \hookrightarrow F_1$,
-	and the natural embedding of $D$ in $F_2$, $\eta_2 \colon D \hookrightarrow F_2$.
-	Since $\eta_1,\eta_2$ are injective, their inverses are
-
-	Some Oakley wisdom:
-	when we say the fields such that $\{\text{Fields }F \supset D\}$,
-	we can't say a smallest field because there is no order on all fields.
-	But if we consider subfields of $F_1$, $S = \{K \colon F_1 \supset K \supset D\}$,
-	then saying $F_1$ is the smallest is like saying $S = \{F_1\}$.
-
-	So we have the commutative diagram,
-	$D \to F, D \to K(D), K(D) \to F$ (last arrow unique).
-	But we must have that $K(D) = F_1$, so $F_1$ is isomorphic
-	to the field of fractions.
-	Both of them are, so we are done.
-
-	Also to use theorem, we need $D$ commutative.
-	But since $D$ is in a field,
-	we have $a,b \in D$, and so in $F$, $ab = ba$, but in $D$.
+	ff show that it is identity on $D$.
 \end{proof}
 
 
@@ -185,7 +176,7 @@
 	since ff (negative sign)
 
 	Recall that every $\pi$ can be decomposed as a product of transpositions.
-	Hence, if $\pi = \tau_n \circ \tau_{n-1} \circ \cdots \circ \tau_1$,
+	Hence, if $\pi = \tau_n\tau_{n-1} \cdots\tau_1$,
 	we have $\zeta(\pi) = \zeta(\tau_n) \circ \zeta(\tau_{n-1}) \circ \cdots \circ \zeta(\tau_1)$.
 	Since $\zeta(\pi)$ is an automorphism, we have
 	$\zeta(\pi)(\Delta^2) = (\zeta(\pi)(\Delta))^2$. So
@@ -221,7 +212,42 @@
 }
 
 \begin{proof}[Solution]\let\qed\relax
+	We define the homomorphism $\eta$
+
+	Consider an element $c_0 + c_1x + \cdots + c_mx^m \in F[x]$.
+	Every element in $F[u]$ is of the form
+	$b_0 + b_1u + b_2u^2 + \cdots + b_mu^m$, where $b_j \in F$.
+	Plugging in $u = x + (f(x))$, we get
+	$b_0 + b_1x + b_2x^2 + 2b_2x(f(x)) + b_2(f(x))^2 + \cdots + b_mx^m + \cdots
+	= b_0 + b_1x + b_2x^2 + \cdots + b_mx^m + (f(x))$.
 	ff
+
+	Let $c_0 + c_1u + \cdots + c_mu^m$ be an arbitrary element of $F[u]$.
+	Since $F[u] \cong F[x]/(f(x))$,
+	we have the isomorphism $\eta \colon F[u] \to F[x]/(f(x))$,
+	where $c_0 + c_1u + \cdots + c_m u^m \mapsto
+	c_0 + c_1x + \cdots c_mx^m + (f(x))$.
+	By the division algorithm, there exists some $q(x),r(x) \in F[x]$,
+	both unique since $F$ is a field, such that
+	\[
+		c_0 + c_1x + \cdots c_mx^m = q(x)f(x) + r(x)
+	\]
+	where $\deg(r) < f(x)$.
+	Since $f$ has degree $n$, we can write $r(x) = b_0 + b_1x + \cdots + b_{n-1}u^{n-1}$,
+	and so, since $q(x)f(x) \in (f(x))$,
+	\[
+		c_0 + c_1x + \cdots c_mx^m + (f(x)) = b_0 + b_1x + \cdots + b_{n-1}u^{n-1} + (f(x))
+	\]
+	Putting this back through $\eta^{-1}$ (which we have because it is bijective)
+	to $F[u]$, we get
+	\[
+		\eta(c_0 + c_1x + \cdots c_mx^m) = \eta(b_0 + b_1x + \cdots + b_{n-1}u^{n-1})
+	\]
+	and since $\eta$ is injective, we have that
+	\[
+		c_0 + c_1x + \cdots c_mx^m = b_0 + b_1x + \cdots + b_{n-1}u^{n-1}
+	\]
+	and this is unique by the uniqueness of our remainder.
 \end{proof}
 
 
@@ -236,7 +262,100 @@
 }
 
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	To show that $F[u]$ is a field, by Theorem 2.16,
+	it is sufficient to show that $f(x)$ is irreducible.
+	For the sake of contradiction, assume that $f(x)$ is reducible.
+	Then there exists $g(x),k(x) \in F[x]$ where $\deg(g),\deg(k)>0$, such that $f(x) = g(x)k(x)$.
+	Since $\deg(gk) = \deg(g) + \deg(k)$, we must have, assuming $\deg(g) \geq \deg(k)$,
+	that $\deg(g) = 2$ and $\deg(k) = 1$.
+	So $k(x)$ is of the form $k(x) = a_0 + a_1x$ where $a_0,a_1 \in \Q$.
+	Hence, we have $f(-a_0/a_1) = (a_0 + a_1(-a_0/a_1))g(-a_0/a_1) = 0$.
+	So $f(x)$ has a root at some rational.
+	We'll let $\frac{p}{q} = -\frac{a_0}{a_1}$ where $p \in \Z$, $q \in \N$,
+	and $\gcd(p,q) = 1$.
+	So we have $0 = f(\frac{p}{q}) = p^3/q^3 + 3p/q - 2
+	= \frac{p^3 + 3pq^2 - 2q^3}{q^3}
+	\implies p^3 + 3pq^2 - 2q^3 = 0$.
+	Now consider this modulo $q$, then we have that
+	$p^3 \equiv 0 \, (\mathrm{mod}\, q)$,
+	so $p$ is a zero divisor in $\Z/(q)$.
+	But from Theorem 2.4, since $p$ and $q$ are coprime,
+	$p$ is a unit in $\Z/(q)$.
+	But an element cannot be both a unit and zero divisor in a ring,
+	else $pp^2 = 0 \implies p^{-1}p^{-1}pp^2 = 0 \implies p = 0$,
+	and $0$ is not a unit, hence a contradiction.
+	Thus, there is no linear polynomial factor of $g(x)$ in $\Q[x]$,
+	and so $g(x)$ is irreducible.
+	Thus $F[u]$ is a field.
+
+	Now, for $(2u^2 + u - 3)(3u^2 - 4u + 1)$,
+	we can compute
+	\[
+		(2u^2 + u - 3)(3u^2 - 4u + 1)
+		= 6u^4 - 5u^3 - 11u^2 + 13u - 3
+	\]
+	We can map this through the isomorphism $\eta$ to $F[x]/I$ to get
+	$6x^4 - 5x^3 - 11x^2 + 13x - 3 + I$.
+	We can divide out by $f(x)$ to get an element in the same equivalence class:
+	\[
+		6x^4 - 5x^3 - 11x^2 + 13x - 3 + I
+		= (6x - 5)(x^3 + 3x -2) + (- 18x^2 + 27x - 10) + I
+		= - 18x^2 + 27x - 10 + I
+	\]
+	Hence, putting this back through $\eta^{-1}$ (which we have because it is bijective)
+	to $F[u]$ we have
+	\[
+		\eta((2u^2 + u - 3)(3u^2 - 4u + 1))
+		= 6x^4 - 5x^3 - 11x^2 + 13x - 3 + I = - 18x^2 + 27x - 10 + I
+		= \eta(-18u^2 + 27u - 10)
+	\]
+	And since $\eta$ is injective, we have 
+	\[
+		(2u^2 + u - 3)(3u^2 - 4u + 1) = -18u^2 + 27u - 10
+	\]
+
+	For the second, we are looking for $g(u) = a_0 + a_1u + a_2u^2\in F[u]$
+	such that $g(u)(u^2 - u + 4)$
+	(we need not check the other side because it is a field, and so commutative).
+	We can compute
+	\begin{align*}
+		g(u)(u^2 - u + 4) &= a_0u^2 - a_0u + 4a_0
+		+ a_1u^3 - a_1u^2 + 4a_1u + a_2u^4 - a_2u^3 + 4a_2u^2\\
+		&= a_2u^4 + (a_1 - a_2)u^3 + (a_0 - a_1 + 4a_2)u^2 + (4a_1 - a_0)u + 4a_0
+	\end{align*}
+	We can map this through the isomorphism $\eta$ to $F[x]/I$ to get
+	$a_2x^4 + (a_1 - a_2)x^3 + (a_0 - a_1 + 4a_2)x^2 + (4a_1 - a_0)x + 4a_0 + I$.
+	We can divide out by $f(x)$ to get an element in the same equivalence class:
+	\begin{align*}
+		&\big(a_2x^4 + (a_1 - a_2)x^3 + (a_0 - a_1 + 4a_2)x^2 + (4a_1 - a_0)x + 4a_0\big)
+		- (a_2x + (a_1 - a_2))(x^3 + 3x - 2)\\
+		= &(a_0 - a_1 + 4a_2)x^2 + (4a_1 - a_0)x + 4a_0
+		- 3a_2x^2 - 3(a_1 - a_2)x + 2a_2x + 2(a_1 - a_2)\\
+		= &(a_0 - a_1 + a_2)x^2 + (-a_0 + a_1 + 3a_2)x + (4a_0 + 2a_1 - 2a_2)
+	\end{align*}
+	Hence, $a_2x^4 + (a_1 - a_2)x^3 + (a_0 - a_1 + 4a_2)x^2 + (4a_1 - a_0)x + 4a_0 + I
+	= (a_0 - a_1 + a_2)x^2 + (-a_0 + a_1 + 3a_2)x + (4a_0 + 2a_1 - 2a_2) + I$.
+	If we want this to equal to $1 + I$, so we solve the system
+	\[
+		\begin{cases}
+			0 = a_0 - a_1 + a_2\\
+			0 = -a_0 + a_1 + 3a_2\\
+			1 = 4a_0 + 2a_1 - 2a_2
+		\end{cases}
+	\]
+	One can solve this system to find $a_0 = a_1 = \frac{1}{6}, a_2 = 0$.
+	Given these assignments, then
+	\[
+		a_2x^4 + (a_1 - a_2)x^3 + (a_0 - a_1 + 4a_2)x^2 + (4a_1 - a_0)x + 4a_0 + I
+		= 1 + I
+	\]
+	Hence, if $g(u) = \frac{1}{6} + \frac{1}{6}u$,
+	then $\eta(g(u)(u^2-u+4)) = 1 + I = \eta(1_{F[u]})$.
+	Since $\eta$ is a isomorphism, using injectivity, we get
+	$g(u)(u^2 - u + 4) = 1_{F[u]}$, and so
+	\[
+		(u^2 - u + 4)^{-1} = \frac{1}{6} + \frac{1}{6}u
+	\]
 \end{proof}
 
 
@@ -254,7 +373,37 @@
 
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		For the sake of contradiction, assume there exists some isomorphism
+		$\phi \colon \Q[\sqrt{2}] \to \Q[\sqrt{3}]$.
+		Note that any homomorphism between two fields that contain $\Q$
+		must be the identity map on itself:
+		$\phi(1) = 1$ and so $\phi(1+1) = \phi(1) + \phi(1) = 2$.
+		A simple induction would give us then $\phi(n) = n$ for all $n \in \N$.
+		Then $0 = \phi(0) = \phi(n-n) = \phi(n) + \phi(-n) = n + \phi(-n)
+		\implies \phi(-n) = -n$.
+		So $\phi(n) = n$ for all $n \in \Z$.
+		We also have $\phi(\frac{1}{n}) = \phi(n)^{-1} = n^{-1} = \frac{1}{n}$ for all $n \in \Z^*$,
+		Hence, since each element in $\Q$ can be written as $\frac{m}{n}$
+		where $m \in \Z$ and $n \in \N$, we have
+		$\phi(\frac{m}{n}) = \phi(m)\phi(\frac{1}{n}) = \frac{m}{n}$.
+
+		Since $\phi$ must be surjective,
+		there exists some $q = a + b\sqrt{2} \in \Q[\sqrt{2}]$
+		such that $\phi(q) = \sqrt{3} \in \Q[\sqrt{3}]$.
+		Thus,
+		\[
+			3 = \phi(q)\phi(q) = \phi(q^2)
+			= \phi(a^2 + 2ab\sqrt{2} + b^2)
+			= a^2 + 2ab\phi(\sqrt{2}) + b^2
+		\]
+		But then we have $\phi(\sqrt{2}) = \frac{3-a^2-b^2}{2ab} \in \Q$.
+		Let this rational value be $q \in \Q$.
+		So $\phi(\sqrt{2}) = q$.
+		But we also have $q \in \Q[\sqrt{2}]$ and $\phi(q) = q$.
+		And so $\phi(\sqrt{2}) = \phi(q)$.
+		But since $\phi$ is an isomorphism, and so is injective,
+		we have that $\sqrt{2} = q \implies \sqrt{2} \in \Q$,
+		which is a contradiction.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
 		ff
@@ -269,15 +418,6 @@
 }
 
 \begin{proof}[Solution]\let\qed\relax
-	Recall $I_1 + I_2 := (I_1 \cup I_2)$.
-	If $a_1 \in I_1$ and $a_2 \in I_2$, then $a = 0$ works.
-	If $a_1 \in I_1$ but $a_2 \not\in I_2$ (and so $a_2 \in I_1$
-	since $a_2 = i_1 + i_2$ and ff hmm now this seems a lot more trivial,
-	we have $a = a_2$ works, since $a_1 - a_2 \in I_1$ since $I$ is a subgroup
-	with respect to addition,
-	and $a_2 - a_2 = 0 \in I_2$ since $I_2$ must contain the zero
-	since it is a group with respect to addition.
-	The same works when $a_1 \not\in I_1$ and $a_2 \in I_2$, i.e. $a = a_1$.
 	ff
 \end{proof}
 \end{document}
