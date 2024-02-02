@@ -1,0 +1,278 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 3}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+
+\subsection*{Problem 2}
+Using the expansion $e^{Ah} = I + hA + (1/2)(hA)^2 + O(h^3)$ for $|h|$ small
+(i.e., near $0$) (where the constant in $O(h^3)$ depends on $A$),
+show that for any fixed square matrices $A,B$ of the same dimensions,
+\[
+	e^{(A+B)h} - e^{Ah}e^{Bh} = (1/2)(BA - AB)h^2 + O(h^3)
+\]
+for $|h|$ small.
+\begin{proof}[Solution]\let\qed\relax
+	We just algebraically verify:
+	\begin{align*}
+		e^{Ah}e^{Bh}
+		&= (I + hA + (1/2)(hA)^2 + O(h^3))(I + hB + (1/2)(hB)^2 + O(h^3))\\
+		&= I + hB + (h^2/2)B^2 + hA + h^2AB + (h^3/2)AB^2 +
+		(h^2/2)A^2 + (h^3/2)A^2B + (h^4/4)A^2B^2 + O(h^3)\\
+		&= I + h(A + B) + (h^2/2)B^2 + h^2AB + (h^2/2)A^2 + O(h^3)\\
+		&= I + h(A+B) + (h^2/2)(B^2 + 2AB + A^2) + O(h^3)
+	\end{align*}
+	Then
+	\begin{align*}
+		e^{(A+B)h} &- e^{Ah}e^{Bh}\\
+		&= I + h(A+B) + (1/2)(h(A+B))^2 + O(h^3)
+		- \left(I + h(A+B) + (h^2/2)(B^2 + 2AB + A^2) + O(h^3)\right)\\
+		&= \frac{1}{2}(A^2 + AB + BA + B^2 - B^2 - 2AB - A^2)h^2 + O(h^3)\\
+		&= (1/2)(BA - AB)h^2 + O(h^3)
+	\end{align*}
+	as desired.
+\end{proof}
+
+
+\subsection*{Problem 3}
+Recall that Euler's method for solving $y' = f(y)$ subject to $y(t_0) = y_0$
+involves (page 485 of [A\&G], where $a,c$ there are $t_0,y_0$ here)
+(1) choosing an $h > 0$,
+(2) setting $t_i = t_0 + ih$, and
+(3) approximating $y(t_i)$ as $y_i$ using the formula
+\[
+	y_{i+1} = y_i + hf(y_i)
+\]
+Now consider the ODE where $f(y) = |y|^{1/2}$.
+\begin{enumerate}
+	\item Say that for some $i \geq 1$, $y_{i+1} = 0$.
+		Show that $y_i$ is either $0$ or $-h^2$.
+	\item Say that for some $i \geq 1$, $y_{i+1} < 0$. Show that:
+		\begin{enumerate}
+			\item[(i).] $y_i < 0$; and
+			\item[(ii).] using part (i), setting $x = \sqrt{-y_i}$, i.e.,
+				$x$ is the positive square root of $-y_i$, show that
+				\[
+					x = \frac{h+\sqrt{h^2 - 4y_{i+1}}}{2},
+				\]
+				(where $\sqrt{h^2 - 4y_{i+1}}$ refrs to the positive square root)
+				and hence
+				\[
+					y_i = -\left(\frac{h+\sqrt{h^2 - 4y_{i+1}}}{2}\right)^2
+				\]
+		\end{enumerate}
+	\item Show that if for some $i \geq 1$, $y_{i+1} < 0$ and
+		$y_{i+1} = -uh^2$ for a real $u > 0$, then
+		\[
+			y_i = -h^2g(u) \quad \text{where} \quad
+			g(u) = \frac{1+2u+\sqrt{1+4u}}{2}
+		\]
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Plugging in our values for variables, we have $0 = y_i + h|y_i|^{1/2}$,
+		and rearranging gives $-y_i = h|y_i|^{1/2}$.
+		First, note that $y_i = 0$ satisfies our equation.
+		Now, assume that $y_i \neq 0$.
+		Squaring both sides gives $y_i^2 = h^2|y_i| \implies |y_i| = h^2$,
+		where we can divide by $|y_i|$ because it is nonzero.
+		If $y_i = h^2$, we have $0 = h^2 + h|h^2|^{1/2} = h^2 + h^2$.
+		But squares are nonnegative, and the sum of two nonnegative numbers
+		is also nonnegative;
+		but also we don't have equality becuase $y_i \neq 0 \implies h^2 \neq 0$,
+		hence $0 = h^2 + h^2 > 0$, so we cannot have $y_i = h^2$.
+		Now if $y_i = -h^2$, we have $0 = -h^2 + h|-h^2|^{1/2} = -h^2 + h^2 = 0$,
+		so $y_i = -h^2$ works.
+
+		Hence, we must either have $y_i = 0$ or $y_i = -h^2$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		\begin{enumerate}
+			\item[(i).] We prove the contrapositive.
+				That is, for some $i \geq 1$, assume that $y_i \geq 0$.
+				Note $h|y_i|^{1/2} \geq 0$ since $h > 0$ and $|x|^{1/2} \geq 0$
+				for all $x \in \R$.
+				Hence, $y_i + h|y_i|^{1/2} = y_{i+1} \geq 0$.
+				Therefore, we have shown $y_{i+1} < 0 \implies y_i < 0$.
+			\item[(ii).] Rearranging the Euler's method formula, we get
+				\[
+					y_{i+1} = y_i + h|y_i|^{1/2}
+				\]
+				Plugging in $x = \sqrt{-y_i}$, note that
+				$y_i = -x^2$ and since $-y_i = |y_i|$ since $y_i < 0$ by part (i),
+				we have $|y_i|^{1/2} = \sqrt{-y_i} = x$.
+				Then subbing back in, we get
+				\[
+					y_{i+1} = -x^2 + hx \implies x^2 - hx + y_{i+1} = 0
+				\]
+				The quadratic equation gives us
+				\[
+					x = \frac{h \pm \sqrt{h^2 - 4y_{i+1}}}{2}
+				\]
+				But $y_{i+1} < 0 \implies -4y_{i+1} > 0 \implies
+				h^2 - 4y_{i+1} > h^2 \implies h = \sqrt{h^2} < \sqrt{h^2 - 4y_{i+1}}$
+				hence $\frac{h-\sqrt{h^2 - 4y_{i+1}}}{2} < 0$,
+				but we said $x$ was positive.
+				Thus
+				\[
+					x = \frac{h + \sqrt{h^2 - 4y_{i+1}}}{2}
+				\]
+				(which is obviously positive, since we are adding two
+				positive values in the numerator).
+
+				Now, we substitute $x = \sqrt{-y_i}$ to recover
+				\[
+					\sqrt{-y_i} = \frac{h + \sqrt{h^2 - 4y_{i+1}}}{2}
+					\implies y_i = -\left(\frac{h + \sqrt{h^2 - 4y_{i+1}}}{2}\right)^{2}
+				\]
+				as desired.
+		\end{enumerate}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using the formula from the previous part, we plug in $y_{i+1} = -uh^2$ to get
+		\begin{align*}
+			y_i &= -\left(\frac{h + \sqrt{h^2+4uh^2}}{2}\right)^2\\
+				&= -\left(\frac{h + h\sqrt{1+4u}}{2}\right)^2\\
+				&= -\left(\frac{h(1 + \sqrt{1+4u})}{2}\right)^2\\
+				&= -h^2\left(\frac{1 + \sqrt{1+4u}}{2}\right)^2\\
+				&= -h^2\left(\frac{1 + 2\sqrt{1+4u} + 1 + 4u}{4}\right)\\
+				&= -h^2\left(\frac{1 + 2u + \sqrt{1+4u}}{4}\right)\\
+				&= -h^2g(u)
+		\end{align*}
+		as desired.
+	\end{proof}
+\end{enumerate}
+
+\subsection*{Problem 4}
+Consider the ODE $y' = |y|^{1/2}$, with subject to $y(0) = y_0$ and arbitrary $h > 0$.
+\begin{enumerate}
+	\item Using the results of the previous exercise,
+		find a value of $y_0 < 0$ (as a function of $h$)
+		such that (in exact arithmetic) $y_1 = 0$,
+		and therefore $y_2 = 0$, $y_3 = 0$, etc.
+	\item Using the results of the previous exercise,
+		find a value of $y_0 < 0$ (as a function of $h$) such that
+		(in exact arithmetic) $y_1 < 0$ and $y_2 = y_3 = \cdots = 0$.
+	\item Use the code from Homework 2 called \verb|chaotic_sqrt.m|,
+		or implement your own Euler's method solver for $y' = |y|^{1/2}$.
+		What does MATLAB report for $y(2)$ on the initial condition
+		$y(0) = y_0$ where $h = 2/N$ for the values:
+		$N = 2,4,16,64,65,63,99,100,101$ and $y_0 = -(2/N)^2 = -h^2$?
+		Make a table of computed values of $y(2)$.
+		Which values of $N$ above yields something likely due to roundoff
+		or truncation error in finite precision?
+		(Therefore you might want to type something like
+		\verb|chaotic_sqrt(0,2,63,-4/(63^2));| into MATLAB for $N=63$.)
+	\item Use the code from Homework 2 called \verb|chaotic_sqrt.m|,
+		or implement your own Euler's method solver for $y' = |y|^{1/2}$.
+		What does MATLAB report for $y(2)$ on the initial condition $y(0) = y_0$
+		where $h = 2/N$ for the values: $N = 7,8,9,10,100,101,10^6,10^6+1$ and for
+		\[
+			y_0 = -h^2\left(\frac{3+\sqrt{5}}{2}\right)?
+		\]
+		Type this same expression into MATLAB as written above
+		(e.g., don't write down an approximation for $\sqrt{5}$).
+		(Therefore you might want to type something like
+		\verb|chaotic_sqrt(0,2,100,-(4/(100^2))*(3+sqrt(5))/2);|
+		into MATLAB for $N = 100$.)
+		Which values of $N$ above yields something likely due to roundoff
+		or truncation error in finite precision?
+\end{enumerate}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Since $y_1 = 0$, and our ODE is $y' = |y|^{1/2}$,
+		we can invoke question 3(a) to get
+		$y_0 = 0, -h^2$.
+		Since we ask for $y_0 \neq 0$, we have $y_0 = -h^2$,
+		which is less than $0$ since $h^2 > 0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		As with the previous part, we can use our results from question 3.
+		Now, since $y_2 = 0$, we can invoke question 3(a) to get
+		$y_1 = 0, -h^2$. But since we say $y_1 \neq 0$,
+		this gives us $y_1 = -h^2$.
+		Now, from question 3(c) (since $y_1 = y_{0+1} < 0$), we have $y_{0 + 1} = -uh^2$
+		where $u = 1$, and so we get $y_0 = -h^2g(1)$.
+		But $g(1) = \frac{1+2(1) + \sqrt{1 + 4(1)}}{2} = \frac{3 + \sqrt{5}}{2}$.
+		Hence $y_0 = -h^2\frac{3+\sqrt{5}}{2}$,
+		which is less than $0$ since $h^2 > 0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Here is my table of computed values:
+			\begin{center}
+				\begin{tabular}{ | c | c | }
+					\hline
+					$N$ & $y(2)$ \\
+					\hline
+					$2$ & $0$ \\ 
+					$4$ & $0$ \\  
+					$16$ & $0$ \\
+					$64$ & $0$ \\
+					$65$ & $0$ \\
+					$63$ & $0.8042$ \\
+					$99$ & $0$ \\
+					$100$ & $0$ \\
+					$101$ & $0.8703$ \\
+					\hline
+				\end{tabular}
+			\end{center}
+		By part (a) of this problem, since $y_0 = -h^2$ regardless of $N$,
+		$y_1 = y_2 = \cdots = 0$.
+		Hence, theory says $y(2) = 0$.
+		Out of the above values, $N = 63, 101$ are instances
+		of something due to roundoff or truncation error in finite precision,
+		since they are not equal to $0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Here is my table of computed values:
+			\begin{center}
+				\begin{tabular}{ | c | c | }
+					\hline
+					$N$ & $y(2)$ \\
+					\hline
+					$7$ & $0$ \\ 
+					$8$ & $0$ \\  
+					$9$ & $0$ \\
+					$10$ & $0$ \\
+					$100$ & $0.8507$ \\
+					$101$ & $0$ \\
+					$10^6$ & $0$ \\
+					$10^6+1$ & $1.000$ \\
+					\hline
+				\end{tabular}
+			\end{center}
+		By part (b) of this problem, since $y_0 = -h^2\left(\frac{3+\sqrt{5}}{2}\right)$
+		regardless of $N$, $y_2 = y_3 = \cdots = 0$.
+		Hence, theory says $y(2) = 0$ when $N \geq 2$.
+		Out of the above values, $N = 100, 10^6+1$ are instances
+		of something due to roundoff or truncation error in finite precision,
+		since they are not equal to $0$.
+	\end{proof}
+\end{enumerate}
+\end{document}
