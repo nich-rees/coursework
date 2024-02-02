@@ -32,7 +32,8 @@
 
 \begin{document}
 \begin{center}
-	{\bf Math 321 Homework 3}
+	{\bf Math 321 Homework 3}\\
+	(Including work made in collaboration with Arsam Najafian, Oscar Poitras, and Sushrut Tadwalkar.)
 \end{center}
 
 The goal of the next few problems is to understand which functions can
@@ -49,7 +50,7 @@ This is called the \emph{variation of $f$ with respect to the partition $[a,b]$}
 \]
 where the supremum is taken over all partitions of $[a,b]$.
 this is called the \emph{total variation of $f$ on $[a,b]$}.
-We say that $f$ has \emph{bounded variatoin on $[a,b]$} if $TV\lvert f \rvert < \infty$.
+We say that $f$ has \emph{bounded variation on $[a,b]$} if $TV\lvert f \rvert < \infty$.
 For $c \in (a,b]$, define $TF\lvert f_{[a,c]}\rvert$ to be the
 total variation of $f \colon [a,c] \to \R$
 (i.e. $f$ is restricted to the interval $[a,c] \subset [a,b]$).
@@ -61,8 +62,26 @@ We define $TV\lvert f_{[a,a]}\rvert = 0$.
 	Prove that $f(x) = \alpha(x) - \beta(x)$ has bounded variation on $[a,b]$.
 }
 \begin{proof}[Solution]\let\qed\relax
-	Basically, $f$ is bounded by $\alpha$ and $\beta$ (watch for negatives)
-	and monotone functions have bounded variation.
+	Let $P$ be some partition, $P = \{x_0,\dots,x_n\}$.
+	Note that for any monotone increasing function $\gamma$,
+	we have $\gamma(x_i) - \gamma(x_{i-1}) > 0
+	\implies |\gamma(x_i) - \gamma(x_{i-1})| = \gamma(x_i) - \gamma(x_{i-1})$.
+	We have
+	\begin{align*}
+		V(f,P) &= \sum_{i=1}^n \lvert f(x_i) - f(x_{i-1})|\\
+			   &= \sum_{i=1}^n \lvert \alpha(x_i) - \beta(x_i) - \alpha(x_{i-1}+\beta(x_{i-1}))|\\
+			   &\leq \sum_{i=1}^n \left(\lvert \alpha(x_i) - \alpha(x_{i-1})\rvert +
+			   \lvert \beta(x_{i-1}) - \beta(x_i)\rvert\right)\\
+			   &= \sum_{i=1}^n \lvert \alpha(x_i) - \alpha(x_{i-1})\rvert +
+		   \sum_{i=1}^n\lvert \beta(x_i) - \beta(x_{i-1})\rvert\\
+			   &= \sum_{i=1}^n \left(\alpha(x_i) - \alpha(x_{i-1})\right) +
+		   \sum_{i=1}^n\left(\beta(x_i) - \beta(x_{i-1})\right)\\
+			   &= \alpha(b) - \alpha(a) + \beta(b) - \beta(a) =: M
+	\end{align*}
+	where we take advantage that both are telescoping series.
+	This is true for any partition of $[a,b]$,
+	and so $TV\lvert f \rvert = \sup_P V(f,P) = M < \infty$.
+	Hence, $f$ has bounded variation on $[a,b]$.
 \end{proof}
 
 
@@ -86,13 +105,73 @@ We define $TV\lvert f_{[a,a]}\rvert = 0$.
 }
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			Let $b \geq x_2 > x_1 \geq a$.
+			If $x_1 = a$, then $TV|f_{[a,x_1]}| = 0$.
+			Since $x_2 > a$, there is some partition of $[a,x_2]$
+			so $V(f,P)$ is defined,
+			and this is the sum of nonzero elements, so $TV|f_{[a,x_2]}| \geq 0$ as well.
+			Then $TV|f_{[a,x_2]}| \geq TV|f_{[a,x_1]}|$.
+
+			Now assume that $x_1 \neq a$.
+			So let $P = \{a=y_0,y_1,\dots,y_n=x_1\}$ be any partition of $[a,x_1]$.
+			Note that $P^+ = P \cup \{x_2\}$ is a partition of $[a,x_2]$.
+			Then $V(f,P) = \sum_{i=1}^n |f(y_i) - f(y_{i-1})| \leq
+			\sum_{i=1}^n |f(y_i) - f(y_{i-1})| + |f(x_2) - f(x_1)|
+			= V(f,P^+)
+			\leq TV|f_{[a,x_2]}|$.
+			This is true for any partition $P$ of $[a,x_1]$,
+			so $TV|f_{[a,x_2]}|$ is an upper bound for all $V(f,P)$,
+			and so must be greater than the supremum,
+			namely $TV|f_{[a,x_2]}| \geq TV|f_{[a,x_1]}|$.
+
+			In either case, we have shown that $x_2 > x_1 \implies g(x_2) \geq g(x_2)$,
+			which means that $g$ is (weakly) monotone increasing.
 		\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			We want to show $|f(x_2) - f(x_1)| \leq TV|f_{[a,x_2]}| - TV|f_{[a,x_1]}|$
+			for all $a \leq x_1 < x_2 \leq b$.
+			We deal first with when $a = x_1$.
+			Then $TV|f_{[a,x_1]}| = 0$.
+			So if we hav a partition $P = \{a,x_2\}$,
+			we have $|f(x_2) - f(x_1)| = V(P,f)
+			\leq TV|f_{[a,x_2]}| = TV|f_{[a,x_2]}| - TV|f_{[a,x_1]}|$
+			as desired.
+
+			It now remains to show the inequality when $a < x_1 < x_2 \leq b$.
+			For the sake of contradiction, assume that there exists
+			$c,d$ such that $a < c < d \leq b$ but
+			$|f(d) - f(c)| > TV|f_{[a,d]}| - TV|f_{[a,c]}|$.
+			Then $|f(d) - f(c)| + TV|f_{[a,c]}| - TV|f_{[a,d]}| > 0$
+			is some fixed positive value, which we'll denote with $\eta > 0$.
+			So $TV|f_{[a,d]}| + \eta = |f(d) - f(c)| + TV|f_{[a,c]}|$.
+
+			Now, since $TV|f_{[a,c]}| = \sup_P V(P,f)$
+			(which is well-defined, since $c > a$),
+			there exists some partition $P$ such that
+			$TV|f_{[a,c]}| - \eta/2 \leq V(P,f)$.
+			Note that $P^+ = P \cup \{d\}$ is a partition of $[a,d]$.
+			We see now that
+			\begin{align*}
+				|f(d) - f(c)| + TV|f_{[a,c]}|
+				&\leq |f(d) - f(c)| + V(P,f) + \eta/2\\
+				&= V(P^+,f) + \eta/2\\
+				&\leq TV|f_{[a,d]}| + \eta/2\\
+				&< TV|f_{[a,d]}| + \eta\\
+				&= |f(d) - f(c)| + TV|f_{[a,c]}|
+			\end{align*}
+			But there is a strict inequality between values that are equal,
+			thus a contradiction.
+
+			So if $x_2 > x_1$, we have $|f(x_2) - f(x_1)| \leq TV|f_{[a,x_2]}| - TV|f_{[a,x_1]}|$.
+			We have $f(x_1) - f(x_2) \leq |f(x_1) - f(x_2)| = |f(x_1) - f(x_2)|$,
+			so $f(x_1) + TV|f_{[a,x_1]}| \leq f(x_2) + TV|f_{[a,x_2]}|$.
+			Hence, $x_2 > x_1 \implies h(x_2) \geq h(x_1)$,
+			which means that $h$ is (weakly) monotone increasing.
 		\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			Note that $f(x) = h(x) - g(x)$ from above,
+			and we have just shown that $g,h \colon [a,b] \to \R$
+			are (weakly) monotone increasing.
 		\end{proof}
 \end{enumerate}
 
@@ -118,7 +197,27 @@ We define $TV\lvert f_{[a,a]}\rvert = 0$.
 	$\gamma = \alpha - \beta$ that is chosen.
 }
 \begin{proof}[Solution]\let\qed\relax
-	ff
+	Since $f$ is continuous on $[a,b]$, we have that
+	$f \in \mathcal{R}_{\alpha_1}[a,b]$,
+	$f \in \mathcal{R}_{\alpha_2}[a,b]$,
+	$f \in \mathcal{R}_{\beta_1}[a,b]$, and
+	$f \in \mathcal{R}_{\beta_2}[a,b]$,
+	by Rudin Theorem 6.8.
+	Hence, $f \in\mathcal{R}_{\alpha_1 + \beta_2}[a,b],\mathcal{R}_{\alpha_2 + \beta_1}[a,b]$,
+	and by Rudin Theorem 6.12 (e), we get
+	\[
+		\int_a^b fd\alpha_1 + \int_a^b fd\beta_2
+		= \int_a^b f d(\alpha_1 + \beta_2) = \int_a^b f d(\alpha_2 + \beta_1)
+		= \int_a^b f d\alpha_2 + \int_a^b fd\beta_1
+	\]
+	where the equality in the middle is because
+	$\alpha_1(x) + \beta_2(x) = \alpha_2(x) + \beta_1(x)$,
+	and so they are the same integral. We then get
+	\[
+		\int_a^b fd\alpha_1 - \int_a^bfd\beta_1
+		= \int_a^b fd\alpha_2 - \int_a^bfd\beta_2
+	\]
+	as desired.
 \end{proof}
 
 
@@ -145,16 +244,121 @@ We define $TV\lvert f_{[a,a]}\rvert = 0$.
 			\end{equation}
 			If so, prove it. If not, give a counter-example
 			(i.e. a choice of interval $[a,b]$, a choice of monotone increasing $\alpha$,
-			and a choice of $f \in \mathcal{R}_\alpha[a,b]$ for which (\ref{limit} fails)
+			and a choice of $f \in \mathcal{R}_\alpha[a,b]$ for which (\ref{limit}) fails
 			and show that your counter-example is correct.
 	\end{enumerate}
 }
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			Let $\ep > 0$.
+			Since $f \in \mathcal{R}[a,b]$, there exists some
+			partition $P$ such that $U(P,f) - L(P,f) < \ep/2$.
+			Let $K$ be the number of points in $P$.
+			Let $A = \min_{i}\{x_{i} - x_{i-1}\}$, the smallest distance
+			between points in $P$.
+			By the Archimedean property, there exists some $N_1$ such that
+			we have $\frac{1}{N_1} < \frac{A}{4}$,
+			and so when $n \geq N_1$, we have $\frac{1}{n} \leq \frac{1}{N_1} < \frac{A}{4}$.
+			Now let $n \geq N_1$.
+			Consider $P_n = \{a,a+\frac{d}{n},\cdots,a+d=b\} = \{y_0,y_1,\dots, y_r\}$.
+			Then every element in $P$ is contained in either one
+			or two intervals of the form $[y_{j-1},y_j]$
+			(the two interval case is when $x_i$ falls on some $y_j$).
+			Furthermore, since $y_j - y_{j-2} = \frac{2}{N_1} < \frac{A}{2}
+			< A \leq x_i - x_{i-1}$ for any $j,i$,
+			we have that any contiguous pairs of intervals $[y_{j-2},y_{j-1}],[y_{j-1},y_j]$
+			that contain some $x_i$ do not contain any other $x_{i'}$
+			(otherwise we would violate the inequality).
+
+			Let $B = \sup_{x \in [a,b]} f(x) - \inf_{x \in [a,b]}f(x)$
+			(which is a real number, since $f \in \mathcal{R}[a,b]$
+			only when $f$ is bounded, by definition).
+			By the Archimedean property, there exists some $N_2$ such that
+			$\frac{1}{N_2} < \frac{\ep}{4}\frac{1}{KdB}$
+			and so when $n \geq N_2$, we have
+			$\frac{1}{n} \leq \frac{1}{N_2} < \frac{\ep}{4}\frac{1}{KdB}
+			\implies \frac{2KdB}{n} < \frac{\ep}{2}$.
+			
+			Now let $N = \max\{N_1,N_2\}$.
+			For all $n \geq N$, fix our $P_n$.
+			Let $S = \{j \colon j\in\N_{\leq r}, [y_{j-1},y_j] \cap P \neq \emptyset\}$.
+			We have $\#S \leq 2K$, by what we mentioned earlier about
+			how each element of $P$ is in at most $2$ intervals $[y_{j-1},y_j]$.
+			Now, note that $P^* = \{y_j \colon j \not\in S\} \cup P$ is a refinement of $P$,
+			and denote its elements $\{z_1,z_2,\dots\}$.
+			So
+			\[
+				\sum_{j \not\in S}(M_j - m_j)\Delta y_j \leq
+				\sum_{k=1}^{\#P^*-1} (M_k - m_k)\Delta z_k =
+				U(P^*,f) - L(P^*,f) \leq
+				U(P,f) - L(P,f) < \frac{\ep}{2}
+			\]
+			where the first inequality is true,
+			because we are only adding terms (all of which are positive),
+			and the second inequality is true by Rudin Theorem 6.4
+			since $P^*$ is a refinement of $P$.
+			
+			We now make our final push:
+			\begin{align*}
+				U(P_n,f) - L(P_n,f)
+				&= \sum_j (M_j - m_j)\Delta y_j\\
+				&\leq \sum_{j \not\in S}(M_j - m_j)\Delta y_j
+				+ \sum_{j \in S}(M_j - m_j)\Delta y_j\\
+				&\leq \sum_{j \not\in S}(M_j - m_j)\Delta y_j
+				+ \sum_{j \in S}B\Delta y_j\\
+				&< \frac{\ep}{2} + \sum_{j\in S}B\frac{d}{n}\\
+				&\leq \frac{\ep}{2} + 2K\frac{dB}{n}\\
+				&< \frac{\ep}{2} + \frac{\ep}{2} = \ep
+			\end{align*}
+			as desired.
 		\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-			ff
+			We claim that this is not true.
+			Let $[a,b] = [1,2]$, $\alpha \colon [1,2] \to \R$
+			be a variant of the Heaviside step function:
+			\[
+				\alpha(x) = \begin{cases}
+					0 & x \in [1,\sqrt{2}]\\
+					1 & x \in (\sqrt{2},2]
+				\end{cases}
+			\]
+			And we define $f \colon [1,2] \to \R$ below:
+			\[
+				f(x) = \begin{cases}
+					0 & x \in [1,\sqrt{2})\\
+					1 & x \in [\sqrt{2},2]
+				\end{cases}
+			\]
+			Let $\ep > 0$.
+			We give the partition $P = \{1, \sqrt{2}, 2\}$.
+			Then $U(P,f,\alpha) = M_1\Delta \alpha_1 + M_2 \Delta\alpha_2 = 1\cdot0 + 1\cdot 1 = 1$
+			and $L(P,f,\alpha) = m_1\Delta\alpha_1 + m_2\Delta\alpha_2
+			= 0\cdot0 + 1\cdot 1 = 1$.
+			Hence, $U(P,f,\alpha) - L(P,f,\alpha) = 1-1 = 0 < \ep$.
+			Therefore, $f \in \mathcal{R}_\alpha[a,b]$.
+
+			However, consider $P_n$ for any $n$ (as defined in (\ref{partition})).
+			Denote its elements $1 = x_0 < x_1 < \dots < x_n = 2$.
+			Note that $\sqrt{2} \not\in P_n$ since all elements of
+			$P_n$ are rational and $\sqrt{2} \not\in \Q$.
+			Thus, there exists some $k$ such that $x_{k-1} < \sqrt{2} < x_k$.
+			Note that for $[a,x_{k-1}]$, $\alpha$ is constant,
+			and for $[x_k,b]$, $\alpha$ is constant,
+			so $\Delta\alpha_i = 0$ whenever $i\neq k$.
+			We can then compute
+			\[
+				U(P_n,f,\alpha) = \sum_{i=1}^n M_i(\alpha(x_i) - \alpha(x_{i-1}))
+				= M_k(\alpha(x_k) - \alpha(x_{k-1}))
+				= 1\cdot1 = 1
+			\]
+			\[
+				L(P_n,f,\alpha) = \sum_{i=1}^n m_i(\alpha(x_i) - \alpha(x_{i-1}))
+				= m_k(\alpha(x_k) - \alpha(x_{k-1}))
+				= 0\cdot 1 = 0
+			\]
+			Since this is true for all $P_n$, no matter how large $n$ is,
+			we have $\lim_{n\to\infty}(U(P_n,f,\alpha) - L(P_n,f,\alpha)) = 1$,
+			which obviously shows (\ref{limit}) fails.
 		\end{proof}
 \end{enumerate}
 \end{document}
