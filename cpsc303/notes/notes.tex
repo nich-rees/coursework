@@ -805,4 +805,146 @@ If
 \]
 ff
 (I think using the fact that $F_1 = \lambda F_0$ or something.)
+
+\section{Feburary 2}
+\begin{theorem}
+	Let $Fy' = f(t,y), y(t_0) = y_0$.
+	Then there exists a (unique) solution if $f$ is (Lipschitz) continuous.
+\end{theorem}
+Proof is in Appedix A, but won't go into; it is quite long.
+
+
+\subsection{Recurrences}
+\begin{theorem}
+	Let $f = f(n,x)$, i.e. $f \colon \Z \times \R \to \R$ and consider
+	$x_{n+1} = f(n,x_n)$ for all $n \geq n_0$ and $x_{n_0} = x_0$.
+	Then, there exists a unique solution $x_{n_0}, x_{n_0+1}, x_{n_0 + 2},\dots$,
+	i.e. $x \colon \{n_0, n_0 + 1, n_0 + 2,\dots \} \to \R$.
+\end{theorem}
+\begin{proof}
+	Proof is trivial by induction:
+	$x_{n_0+1} = f(n_0,x_{n_0}), x_{n_0+2} = f(n_0+1, x_{n_0+1}), \dots$
+	are all uniquely determined by $f$.
+\end{proof}
+This is one of the places where a existence/uniqueness proof is much easier.
+Compare this to the proof for ODEs.
+
+\begin{remark}
+	By contrast, we can't go $x_{n_0}, x_{n_0+1},\dots \to x_{n_0-1}$.
+	It is not clear that $x_{n_0} = f(n_0-1,x_{n_0-1})$.
+\end{remark}
+In the case of Euler's method however, this will work.
+
+When we're solving an ODE, can intuitively think about taking little steps,
+and incremeneting by our $f$.
+But it is not clear what the exact relationship between ODE's and recurrences.
+Perhaps trapezoidal method for an ODE will give different recurrence than Euler's.
+But it is often that ODEs are the limit (for say Euler's method) of recurrences
+(depends on $h > 0$).
+Regardless, there is a lot that happens in common.
+
+Reverse engineer:
+$(r-3)(r-2) \leftrightarrow x_n = c_1 2^n + c_23^n$.
+Then $r^2 -  5r + 6 = 0$, and so $(\sigma^2 - 5\sigma + 6)(x_n) = 0$,
+so $x_{n+2} - 5x_{n+1} + 6x_n = 0$.
+
+So saw we want to solve $x_{n+2} - 5x_{n+1} + 6x_n = 0$.
+Guess (like with ODEs) maybe $x_n = r^n$ will  be a solution for some $r$.
+Plugging in, we have
+$r^{n+2} - 5r^{n+1} + 6r^n = 0$.
+If $r \neq 0$, this holds for all $n \in \Z$ if and only if (???)
+$r^2 - 5r + 6 = 0 \implies (r-2)(r-3) = 0$.
+So $x_n = 2^n$ works, $3^n$ works.
+Check our work: $x_0 = 1$, $x_1 = 2$, $x_2 = 4$:
+$4 = 5 \cdot 2 - 6 \cdot 1$ works ($n=0$),
+and $8 = 5\cdot 4 - 6\cdot 2$ works ($n=1$).
+Similarly, for $x_n = 3^n$, so $x_n = c_12^n + c_23^n$.
+
+\begin{proposition}
+	For $x_{n+2} = 5x_{n+1} - 6x_n$ for any $x_0,x_1$, there is a unique solution.
+\end{proposition}
+\begin{proof}
+	We have $x_2$ is a function of $x_1,x_0$, and
+	$x_3$ is a function of $x_2,x_1$, and, etc.
+	and $6x_n = 5x_{n+1} - x_{n+2} \implies x_n = (5x_{n+1} - x_{n+2})/6$.
+	And so $x_{-1}$ is a function of $x_0,x_1$.
+\end{proof}
+Another:
+\begin{proof}
+	We know $x_n = c_12^n + c_23^n$ is a solution.
+	So find $c_1,c_2$ that works:
+	\begin{align*}
+		c_12^0 + c_23^0 &= x_0\\
+		c_12^1 + c_23^1 &= x_1\\
+	\end{align*}
+	or $x_0,x_1$ given, solve
+	\[
+		\begin{bmatrix}
+			1 & 1\\ 2 & 3
+		\end{bmatrix}
+		\begin{bmatrix} c_1 \\ c_2 \end{bmatrix}
+		= \begin{bmatrix} x_0 \\ x_1 \end{bmatrix}
+	\]
+	This is invertible, so solvable.
+	Even more nice, this is a Vandermonde matrix! Will show up everywhere.
+\end{proof}
+
+Similarly, if we had $x_n = c_12^n + c_23^n + c_37^n$
+via $(\sigma - 2)(\sigma -3 )(\sigma - 7)(x_n) = 0$
+to solve for $c_1,c_2,c_3$ given $x_0,x_1,x_2$,
+\[
+	\begin{bmatrix}
+		1 & 1 & 1\\ 2 & 3 & 7\\ 2^2 & 3^2 & 7^2
+	\end{bmatrix}
+	\begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix}
+	= \begin{bmatrix} x_0 \\ x_1 \\ x_2 \end{bmatrix}
+\]
+And get $x_{n+3} = \cdots x_{n+2} \cdots x_{n+1} \cdots x_n$.
+
+Let's return to our recurrence
+$x_{n+2} = 5x_{n+1} - 6x_n$ or $x_{n+2} - 5x_{n+1} + 6x_n = 0$.
+So let $\vec{z}_n = \begin{bmatrix} x_{n+1}\\x_n \end{bmatrix}$, $n \in \Z$.
+\[
+	\vec{z}_{n+1} = \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}
+	= \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix}\begin{bmatrix} x_{n+1} \\ x_n\end{bmatrix}
+	= \vec{z}_n\begin{bmatrix} x_{n+1} \\ x_n\end{bmatrix}
+\]
+Where we found the entries of our matrix from the relatoin above.
+We guessed $x_n = r^n$ for ($r = 2,3$) is a solution
+\begin{align*}
+	\vec{z}_n &= \begin{bmatrix} x_{n+1}\\x_n \end{bmatrix}
+	= \begin{bmatrix} r^{n+1}\\r^n \end{bmatrix}\\
+	\vec{z}_{n+1} &= \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix} \vec{z}_n\\
+	\begin{bmatrix} r^{n+2}\\r^{n+1} \end{bmatrix}
+	 &= \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} r^{n+1}\\r^n\end{bmatrix}
+\end{align*}
+Which is true if and only if ($r \neq 0$)
+\[
+	\begin{bmatrix} r \\ 1 \end{bmatrix} = \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix}
+	\begin{bmatrix} r \\ 1 \end{bmatrix}
+\]
+which is to say that $\begin{bmatrix} r \\ 1 \end{bmatrix}$ is an eigenvector.
+So if $r = 2,3$ work:
+\[
+	2\begin{bmatrix} 2 \\ 1 \end{bmatrix} = \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix}
+	\begin{bmatrix} 2 \\ 2 \end{bmatrix}
+\]
+\[
+	3\begin{bmatrix} 3 \\ 1 \end{bmatrix} = \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix}
+	\begin{bmatrix} 3 \\ 2 \end{bmatrix}
+\]
+Computing the eigenvalues of $\begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix}$:
+$\det(\lambda I - \begin{bmatrix} 5 & -6 \\ 1 & 0 \end{bmatrix})$.
+Which gives $0= \lambda^2 - 5\lambda _ 6$.
+
+Does this method always work?
+Consider $x_{n+2} = 4x_{n+1} - 4x_n$,
+so $x_{n+2} - 4x_{n+1} + 4x_n = 0$.
+We see then $0 = (\sigma^2-4\sigma+4)(x_n) = (\sigma-2)^2(x_n)$.
+Duplicate root.
+We guess $x_n = 2^n$: this will work, but what else will?
+There's no $r^n$ for $r \neq 2$
+$r^2 - 4r + 4 = (r-2)^2 = 0$.
+What else might work?
+We will answer this on Monday.
 \end{document}

@@ -1113,4 +1113,71 @@ Taking inspiration from series, we can take a step function
 of $\frac{(-1)^n}{n}$.
 
 Next time, we'll finally look sequences of functions.
+
+\section{Feburary 2}
+\subsection{Sequences and series of functions}
+The setup:
+Let $E$ be a set ($E = [a,b]$, $ E = \R$).
+Let $\{f_n\}_{n=1}^\infty$ be a sequence of functions $f_n\colon E \to S$
+(usually $S = \R$, or $\C$, or some metric space $(M,d)$)
+and let $f \colon E \to S$.
+
+What does it mean for $f_n$ to converge to $f$, i.e. $f_n \to f$?
+If $f_n \to f$, and the functions $f_n$ all have some property,
+must it be true that $f$ also has that property?
+
+\subsubsection{Pointwise convergence}
+ff missed a whole chunk late to class
+
+\begin{definition}[Pointwise Convergence (Rudin 7.1)]
+	Let $\{f_n\}_{n=1}^\infty$ be a sequence of functions $f_n \colon E \to M$.
+	If the sequence $\{f_n(x)\}_{n=1}^\infty$ converges for every $x \in E$.
+	Then we say $\{f_n\}$ converges pointwise (on $E$).
+	If this happens, define $f(x) = \lim_{n\to\infty}f_n(x)$, $f(x) \colon E \to M$,
+	and we say $f_n \to f$ pointwise (on $E$).
+\end{definition}
+
+Note that there are two definitions one might use for convergence of functions.
+\begin{itemize}
+	\item $\forall \ep > 0$, $\exists N$, $\forall n \geq N$,
+		$\forall x \in E$, $d(f_n(x) - f(x)) < \ep$.
+	\item $\forall x \in E$, $\ep > 0$, $\exists N$, $\forall n \geq N$
+		$d(f_n(x) - f(x)) < \ep$.
+\end{itemize}
+The second is the definition we did above.
+The first is called uniform convergence, and we will cover later.
+
+Now, let us consider the second question we asked:
+for pointwise convergence, what properties hold?
+\begin{itemize}
+	\item Continuity: $E = \R$. If each $f_n$ is continuous and $f_n \to f$ pointwise,
+		must it be true that $f$ is continuous?
+		No: $f_n = e^{-nx^2}$ and $f = \begin{cases} 1, &x=0 \\ 0, &x\neq 0 \end{cases}$,
+		but $f_n \to f$.
+		Also, $f_n = x^n$ and $f = \begin{cases} 1, & x=1\\ 0, & \text{elsewhere}\end{cases}$
+		where $E = [0,1]$, but $f_n \to f$.
+		In fact, we can make our points of discontinuity arbitrarily where we want.
+	\item Boundedness: If each $f_n$ is bounded and $f_n \to f$ pointwose, must $f$ be bounded?
+		The converse doesn't hold ($f_n = \frac{x}{n} \to 0$).
+		We have $f_n(x) = \begin{cases} x, &x\in[-n,n]\\n, &x\in(n,\infty)\\
+		-n, &x\in(-\infty,n)\end{cases}$
+		which pointwise converges to $f(x) = x$.
+	\item Quantitative boundedness: If each $f_n$ is bounded by $1$,
+		i.e. $|f_n(x)| \leq 1, \forall x \in E$,
+		and $f_n \to f$ pointwise, must it be true that $|f| \leq 1,
+		\forall x \in E$.
+		The answer is yes: contradiction, assume $|f| > 1$,
+		so $|f(x)| = 1 + \ep > 1$, there will be some $f_n(x) > 1$.
+		
+		If we change our previous condition to $<1$, this is no longer true,
+		can get $|f| = 1$.
+	\item Integrability: $f_n \in \mathcal{R}[0,1]$, $f_n \to f$ pointwise,
+		must it be true that $f \in \mathcal{R}[0,1]$.
+		We don't know many functions that fail to be integrable,
+		but one is $f = \begin{cases} 1, & x \in \Q\\ 0, & x \not\in\Q\end{cases}$.
+		Note that $f_n(x) = \begin{cases} 1, & x\in\{q_1,\dots,q_n\}\\0\end{cases}$,
+		where $q_n$ is an enumeration of the rationals.
+	\item Food for thought: assuming $f_n$ and $f$ are both integrable,
+		must the values of their integrals converge?
+\end{itemize}
 \end{document}
