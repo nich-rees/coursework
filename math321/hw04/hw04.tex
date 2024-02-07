@@ -1,0 +1,286 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 4}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 3}
+\end{center}
+
+\subsection*{Problem 1}
+\problem{
+	Let $f \in \mathcal{R}[a,b]$ and $0 < p < \infty$. Define
+	\[
+		\lVert f \rVert_p = \left( \int_a^b \lvert f \rvert^pdx\right)^{1/p}
+	\]
+	\begin{enumerate}
+		\item Prove that for $0 < p < \infty$, $\lvert f \rvert^p \in \mathcal{R}[a,b]$
+			(and hence the above definition makes sense).
+		\item If $f$ is continuous, prove that
+			\[
+				\lim_{p \to \infty} \lVert f \rVert_p =
+				\sup\{\lvert f(x) \rvert \colon x \in [a,b]\}.
+			\]
+		\item For $f$ fixed, define $\phi(p) = \lVert f \rVert_p^p$.
+			Using Rudin Problem 6.10, prove that $p \mapsto \log{\phi(p)}$
+			is convex on $(0 , \infty)$
+			(recall Rudin problem 4.23 for the definition of convexity, and its consequences).
+			Do not submit the proof of Rudin Problem 6.10
+			(but I encourage you to do it; it is a good exercise).
+	\end{enumerate}
+	\begin{remark}
+		Since convex functions are continuous (see Rudin Problem 4.23),
+		you have just shown that $\phi$ and hence $p \mapsto \lVert f \rVert_p$ are continuous.
+	\end{remark}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff follows from Rudin 6.12
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Note that since $f$ is continuous, so is $|f|$ (ff).
+		Furthermore, the function is defined on the closed and bounded set $[a,b]$,
+		which in $\R$ is compact,
+		so $|f|$ attains its maximum value on $[a,b]$ (ff).
+		6.21(d) gives us an upper bound.
+
+		Hmm maybe like IVT.
+		We have that sup is an upper bound.
+		Prove monotonically increasing.
+		Then assume some lower value is an upper bound,
+		but $|f|$ attains this by IVT
+		(or attains halfway between it and the sup),
+		and somehow argue that the integral is larger.
+
+		ff
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		ff
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 2}
+\problem{
+	Let $\{f_n\}$ and $\{g_n\}$ be sequences of functions from $\R \to \R$
+	that converge pointwise.
+	Must it be true that $\{f_n \circ g_n\}$ converges pointwise?
+	If so, prove it.
+	If not, give a counter-example and prove that your counter-example is correct.
+}
+\begin{proof}[Solution]\let\qed\relax
+	It can be false.
+	We provide the counter-example:
+	define $f_n(x)$ on $0 < x \leq \frac{1}{n}$ as $f_n(x) = x$,
+	and we periodically extend this function off of $(0,\frac{1}{n}]$
+	so that $f_n(x+k) = f_n(x)$ for any $k \in \Z$;
+	now let
+	\[
+		g_n(x) = \begin{cases} n, & 0 < x \leq \frac{1}{n} \\ 0, & \text{otherwise}\end{cases}
+	\]
+	as well.
+
+	Clearly, both of these are functions from $\R \to \R$.
+	Furthermore, we get that both of these sequences of functions
+	converge pointwise to the $0$ function.
+	To see this for $f$, note that $f_n$ attans its maximum value at $x = \frac{1}{n}$,
+	since on $x \in (0,\frac{1}{n}]$, $f_n$ is monotone increasing and
+	this is the right most value,
+	and since $f_n$ is periodic, the largest value this function attains
+	is the same as the largest value it attains on this interval.
+	Furthermore, $f_n(\frac{1}{n}) = \frac{1}{n}$.
+	Let $\ep > 0$ and $x \in \R$ be fixed,
+	then Archimedean gives us some $N \in \N$ such that $\frac{1}{N} < \ep$,
+	and so for any $n \geq N$, we have
+	$\lvert f_n(x) - 0\rvert = f_n(x) \leq \frac{1}{n} \leq \frac{1}{N} < \ep$,
+	which means that $f_n$ is pointwise convergent to $0$ for all $x \in \R$.
+
+	To see this for $g$, fix some $\ep > 0$ and some $x \in \R$.
+	Archimedean gives us some $N \in \N$ such that $\frac{1}{N} < x$.
+	By the definition of $g_n$, when $n \geq N$,
+	we have that $|g_n(x) - 0| = g_n(x) = 0 < \ep$
+	(since $x > \frac{1}{N} \geq \frac{1}{n}$).
+	Hence, $g_n$ is pointwise convergent to $0$ for all $x \in \R$.
+
+	Now let us consider the composition, $\{f_n \circ g_n\}$.
+	ff considering the values pointwise seem like a pain.
+	Make some argument that $f_n \circ g_n = n$, which
+	obviously converges pointwise nowhere.
+\end{proof}
+
+
+\subsection*{Problem 3}
+\problem{
+	Let $E$ be a set and let $(M_1,d_1),(M_2,d_2)$ be metric spaces with
+	the discrete metric (i.e. $d(x,y) = 0$ if $x= y$, and $d(x,y)=1$ if $x \neq y$).
+	Let $\{g_n\}$ be a sequence of functions from $E \to M_1$,
+	and let $\{f_n\}$ be a sequence of functions from $M_1 \to M_2$.
+	Suppose that $\{f_n\}$ and $\{g_n\}$ converge pointwise.
+	Must it be true that $\{f_n \circ g_n\}$ converges pointwise?
+	If so, prove it.
+	If not, give a counter-example and prove that your counter-example is correct.
+}
+\begin{proof}[Solution]\let\qed\relax
+	We claim that this is true,
+	specifically if $g \colon E \to M_1$ and $f \colon M_1 \to M_2$
+	are functions such that $g_n \to g$ and $f_n \to f$ pointwise,
+	$f_n \circ g_n \to f \circ g$ pointwise as well.
+
+	Let $\ep > 0$ and $x \in E$.
+	Since $g_n \to g$, for all $\ep' > 0$,
+	there exists some $N_1$ such that $d(g_n(x),g(x)) < \ep'$
+	for all $n > N_1$.
+	If we let $\ep' = \frac{1}{2}$,
+	since this is the discrete metric so
+	$d(g_n(x),g(x))$ can only either be $1$ or $0$,
+	this tells us that for all $n \geq N_1$, $d(g_n(x),g(x)) = 0$,
+	i.e. $g_n(x) = g(x)$.
+	
+	Note $g(x) \in M_1$.
+	Since $f_n \to f$, for all $\ep' > 0$,
+	there exists some $N_2$ such that $d(f_n(g(x)), f(g(x))) < \ep'$
+	for all $n > N_2$.
+	If we let $\ep' = \frac{1}{2}$,
+	since this is the discrete metric so
+	$d(f_n(g(x)), f(g(x))$ can only either be $1$ or $0$,
+	this tells us that for all $n \geq N_2$, $d(f_n(g(x)), f(g(x))) = 0$,
+	i.e. $f_n(g(x)) = f(g(x))$.
+
+	We now consider $\{f_n \circ g_n\}$.
+	Let $N = \max\{N_1,N_2\}$.
+	Then for all $n \geq N$, $f_n(g_n(x)) = f_n(g(x)) = f(g(x))$.
+	Thus, $d(f_n(g_n(x)), f(g(x))) = d(f(g(x)), f(g(x))) = 0 < \ep$.
+
+	$\ep,x$ were arbitrary,
+	hence $\{f_n \circ g_n\}$ converges pointwise.
+\end{proof}
+
+
+\subsection*{Problem 4}
+\problem{
+	Let $\{f_n\}$ be a sequence of functions in $\mathcal{R}[a,b]$,
+	let $f \in \mathcal{R}[a,b]$, let $f_n \to f$ pointwise,
+	and suppose that $\{f_n(x)\}$ is monotone increasing for each $x \in [a,b]$.
+	Prove that
+	\[
+		\lim_{n\to\infty} \int_a^b f_n(x)dx = \int_a^b f(x)dx
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	We want $\inf_{P'} U(P',f) - \inf_P U(P,f_n)< \ep$.
+	We know that for any $x \in [a,b]$, there exists some $N$
+	such that for all $n \geq N$, $f(x) - f_n(x) < \ep$;
+	also $f_n(x) \leq f_{n+1}(x)$.
+
+	The integrals are a monotone sequence of functions,
+	their supremum is $\int_a^b f(x)dx$.
+
+	I think $f_n \to f$ uniformly because monotone.
+	
+	Once we have a uniform bound, then we get that for any
+	$\int f_ndx > \int_a^b f - \ep dx = \int_a^b fdx - \ep(b-a)$.
+
+	Probably prove that $f \geq f_n$ for all $n$.
+
+	We first prove that $f_n$ converge uniformly.
+	We do this by verifying the Cauchy criterion for uniform convergence (Rudin Theorem 7.8),
+	which we can apply, since our functions are maps into $\R$
+	(presumebly, since we have not defined the Riemann integral otherwise),
+	which is a complete metric space.
+	So let $\ep > 0$ be aribtrary.
+	ff
+
+	Note that it must converge to $f$ specifically,
+	since ff (theorem doesn't specify what it converges to).
+
+	For the sake of contradiction, assume that $f_n$ does not converge to $f$ uniformly.
+	Then there exists some $\ep > 0$
+	such that for all $N \in \N$,
+	there is some $n \geq N$ and some $x \in [a,b]$
+	such that $f(x) - f_n(x) \geq \ep$.
+	But then $f_n(x) \not\in$
+
+	Let $\ep > 0$ be arbitrary.
+	Let $B$ be the lower bound on $f_1$, i.e. $B \leq f_1 \leq f_n \leq f$
+	for all $n$ (by monotonicity).
+	Let $\delta_0 = \sup_{x\in[a,b]} \{f(x) - B\}$
+	Note $\delta_0 > 0$ for all $x \in [a,b]$,
+	since $f(x) - B \geq f_1(x) - B \geq 0$
+	(and we can ignore equality in the first inequality,
+	because if that was the case, $f(x) = f_1(x) \implies f(x) = f_n(x)$
+	and so uniform convergence is trivial... maybe make another paragraph for this ff),
+	and must exist in $\$R$,
+	since $f$ must be bounded above, say by $M$, and $0 < f(x) - B \leq M - B \in \R$.
+
+	Now, define $\delta_n = \delta_0/2^n$.
+	Note that since $f_n \to f$ pointwise,
+	there exists some $N \in \N$ such that for all $n \geq N$,
+	$f_n > f - \ep$,
+	otherwise
+	Since $f_n \in \mathcal{R}[a,b]$, $f_n$ is bounded on $[a,b]$.
+
+	Consider $\ep_1 = \sup_{x\in[a,b]}\{f(x) - f_n(x)\}$.
+	This satisfies uniformity for $\ep_1$.
+
+	
+	The Tighe Cook:
+	Let $\ep > 0$, and define $\ep' = \frac{\ep}{2(b-a)}$.
+	Consider the set of subintervals of $[a,b]$, denote it $X$.
+	Define a set of tags for each subinterval,
+	namely $S = \{s \colon s \in I, I \in X\}$.
+	Conversely, let $I_s$ be the subinterval associated with $s\in S$,
+	and $\delta_s$ is the length of $I_s$.
+	For each $k \in \N$, let $L_k = \{s \colon g_k(s) < \ep', s \in S\}$.
+	By pointwise convergence, there exists some $k_s$
+	such that $s \in L_{k_s}$.
+	Note that $\bigcup_{s \in S}I_s$ covers $[a,b]$ (sus with the boundrary),
+	and since $[a,b]$ is compact, we can extract a finite subcover,
+	so we have $G_1, G_2, \dots, G_N$ that covers $[a,b]$.
+	Then there is a finite $k$ such that all the $s \in L_k$
+	for all the $s$ centered in the $G_i$.
+
+	Define $g_n = f - f_n$.
+	Note that for any $I_s$ where $s \in L_k$,
+	where we have
+	\[
+		\left\lvert \int_{I_s} g_n - g_n(s)\delta_s \right\rvert < \ep' \delta_s
+	\]
+	(For any $g_n$, $\exists \delta_n$ such that $P$ finr than $\delta_n$,
+	so we have the inequality above).
+
+	And then we're done:
+	\[
+		\int_a^bg_n = \sum_{I_s \in P}\int_{I_s} g_n \leq g_n\sum_{s} (g_n(s) + \ep')\delta)s \leq 2\ep'(b-a) = \ep
+	\]
+\end{proof}
+\end{document}
