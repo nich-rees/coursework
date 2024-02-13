@@ -1180,4 +1180,393 @@ for pointwise convergence, what properties hold?
 	\item Food for thought: assuming $f_n$ and $f$ are both integrable,
 		must the values of their integrals converge?
 \end{itemize}
+
+
+\section{February 5}
+Say $f_n \to f$ pointwise.
+Recall we found that integrability of $f_n$ does not imply integrability of their limit.
+But we asked: If $\{f_n\}$ are Reimann integrable and $f$ Riemann integrable,
+must it be true that $\lim_{n\to\infty} \int_0^1 f_ndx \to \int_0^1 fdx$.
+My counter-example (inspired by height of $\frac{1}{n}$ and width of $n$):
+\[
+	g_n(x) = \begin{cases}
+		n, & 0 < x < \frac{1}{n}\\
+		0, &\text{otherwise}
+	\end{cases}
+\]
+It is clear the sequence converges to the $0$ function,
+but the area under the curve remains $1$.
+If we wanted to make it so our limit doesn't even exist,
+then we could use $n^2$, or something like $(-1)^nn$.
+On the homework, we add in some extra conditions that make it true,
+that is monotonicity.
+However, a monotone sequence of functions doesn't necessarily mean
+the integrals converge: $f$ may not be in $\mathcal{R}[a,b]$,
+as we saw from the counter-example last time.
+But if we assume $f \in \mathcal{R}[a,b]$, then it is enough.
+
+We have seen examples of $f_n \to f$ pointwise,
+where $f_n$ are continuous or integrable, and the limit is not.
+What is going on?
+Suppose $f_n \to f$, $f \colon \R \to \R$.
+Let $f_n$ continuous at $c \in \R$, is $f$ continuous at $c$?
+Well, we know $\lim_{x \to c}f(x) = f(c)$, so $f$ continuous at $c$ if
+\[
+	\lim_{x \to c} \lim_{n \to \infty} f_n(x) = \lim_{n\to\infty} \lim_{x \to c} f_n(x)
+\]
+But we cannot interchange the limit, we know examples where this fails,
+and this leads to the failiure of $f$ being continuous.
+
+We can do something similar with Riemann integrability,
+but we have to be a bit more careful with it.
+Recall, $f$ is Riemann integrable (on $[0,1]$) if
+$\lim_{m\to\infty} U(P_m,f) - L(P_m,f) = 0$ (from homework).
+$f_n \to f$ pointwise, is it true that
+\[
+	\lim_{m\to\infty} U(P_m, \lim_{n\to\infty} f_n)
+	= \lim_{n\to\infty} \lim_{m\to\infty} U(P_m,f_n)
+\]
+(and likewise with $L(P_m,f_n)$).
+Even though the limit is inside, this is taking the limits in different order.
+The examples we have been providing have been using the failiure to
+interchange limits.
+We saw Lipschitz continuity last term: it also fails to hold in
+a pointwise limit, because of this interchange of limits.
+.
+
+One final example showing you \emph{cannot} (in general)
+interchange limits (an example to keep in mind).
+\[
+	a_{n,m} = \frac{n}{n+m}, \quad n,m \in \N
+\]
+Easy to see that
+\[
+	\lim_{n\to\infty} a_{n,m} = 1
+	\implies \lim_{m\to\infty} \lim_{n\to\infty} a_{n,m} = 1
+\]
+\[
+	\lim_{m\to\infty} a_{n,m} = 0 \implies
+	\lim_{n\to\infty} \lim_{m\to\infty} a_{n,m} = 0
+\]
+This is somehow the most simple example.
+Most of the examples we gave yesterday were of this flavour.
+
+\subsection{Uniform convergence}
+It is harder for functions to converge uniformly,
+but many of the properties we want carry over.
+
+\begin{definition}[Uniform convergence (Rudin 7.7)]
+	Let $E$ be a set, (i.e. $\R$, or $[a,b]$),
+	$(M,d)$ a metric space (i.e. $\R,\C$).
+	Let $\{f_n\}$ be a sequence of functions $f_n \colon E \to M$ and $F \colon E \to M$.
+	We say $f_n \to f$ \emph{uniformly} if:
+	$\forall \ep > 0$, $\exists N$ such that $\forall n > N$, $x \in E$,
+	$d(f_n(x), f(x)) < \ep$.
+\end{definition}
+
+We talked in 320 about sequences that converge,
+and talked about sequences that are Cauchy.
+If we have a complete metric space,
+our Cauchy sequences and convergent sequences are the same.
+Something similar happens here:
+
+\begin{theorem}[Cauchy Criteria for Uniform Convergence (Rudin 7.8)]
+	Let $E$ be a set, $(M,d)$ a \emph{complete} metric space.
+	Let $\{f_n\}$ be a sequence, $f_n \colon E \to M$.
+	Then $\{f_n\}$ converges uniformly (to some $f \colon E \to M$)
+	iff $\forall \ep > 0$, $\exists N$ such that
+	$\forall n,m \geq  N, x \in E$, $d(f_n(x),f_m(x)) < \ep$.
+\end{theorem}
+
+Digression: if we consider the functions as a metric space,
+say $(X,\rho)$ where $X$ are the functions $f \colon [0,1] \to \R$
+and$\rho(f,g) = \sup\lvert f(x) - g(x) \rvert$,
+this in fact is a complete metric space and so we do get that
+Cauchy sequences are the convergent sequences.
+But this is actually the metric corresponding to uniform convergence:
+to prove that this is a complete metric space,
+probably use the Cauchy Criteria.
+If we had changed $X$ to $f \colon [0,1] \to \Q$, $(X,\rho)$
+is no longer a complete metric space, as Cauchy Criteria would predict.
+
+\begin{proof}
+	Forwards: Suppose $f_n \to F$ uniformly.
+	Let $\ep > 0$, $\exists N$ such that $\forall n \geq N, x \in E$
+	$d(f_n(x), f(x)) < \ep/2$.
+	So $\forall n,m \geq N, x \in E$,
+	\[
+		d(f_n(x),f_m(x)) \leq d(f_n(x),f(x)) + d(f_m(x),f(x)) <
+		\frac{\ep}{2} + \frac{\ep}{2} = \ep
+	\]
+
+	Backwards: Suppose $\{f_n\}$ satisfies the Cauchy Criteria.
+	For each $x \in E$, $\{f_n(x)\}$ is a Cauchy sequence in $M$
+	and $(M,d)$ is complete, so $\{f_n(x)\}$ converges,
+	i.e. $\lim_{n\to\infty} f_n(x)$ exists.
+	Define $f(x) = \lim_{n\to\infty} f_n(x)$.
+	We have shown pointwise convergence.
+	Final goal: show that $f_n \to f$ \emph{uniformly}.
+	Let $\ep > 0$. Since $\{f_n\}$ satisfies the Cauchy Criteria,
+	$\exists N$ such that $n,m \geq N, x \in E$ we have
+	\[
+		d(f_n(x), f_m(x)) < \frac{\ep}{2}
+	\]
+	Hence, $d(f_n(x),f(x)) \leq d(f_n(x), f_m(x)) + d(f_m(x),f(x))
+	\leq \frac{\ep}{2} + d(f_m(x),f(x))$.
+	Since $f_m(x) \to f(x)$ (for this particular $x$),
+	we can select $m \geq N$ such that $d(f_m(x),f(x)) < \ep/2$, hence
+	\[
+		d(f_n(x), f(x)) < \ep
+	\]
+\end{proof}
+Subtle point: we first use the fact that $M$ is complete to show that
+$f_n \to f$ pointwise, and then we choose $m$ for the Cauchy Criteria,
+but that is okay because it is for fixed $x$.
+
+There is a cluster of true theorems around this:
+i.e. don't need complete metric space if $f_n \to f$ pointwise,
+and also an equivalent Cauchy Criteria changing quantifiers for pointwise convergence.
+
+\section{Februrary 7}
+\begin{theorem}[Rudin 7.11]
+	Let $(M_1,d_1)$ and $(M_2,d_2)$ be metric spaces, with
+	$(M_2,d_2)$ complete, i.e. $\R$ or $\C$.
+	Let $E \subset M$, let $\{f_n\}$ be a sequence of functions
+	$f_n \colon E \to M_2$, and suppose $f_n \to f$ uniformly on $E$.
+	Let $E \in M_1$ be a limit point of $E$.
+	Suppose $\lim_{t\to x}f_n(t) = y_n$ exists for each $n$.
+	Then $\{y_n\}$ is a convergent sequence, i.e. $y_n \to y \in M_2$,
+	and $\lim_{t\to x}f(t) = y$, i.e.
+	\[
+		\lim_{t \to x}\underbrace{\lim_{n \to \infty} f_n(t)}_{f(t)} =
+		\lim_{n\to\infty} \underbrace{\lim_{t \to x} f_n(t)}_{y_n}
+	\]
+\end{theorem}
+
+\begin{corollary}
+	Let $(M_1,d_1),(M_2,d_2), \{f_n\}, f, E$ be as before.
+	If each $f_n$ is continuous on $E$, and $f_n \to f$ uniformly,
+	then $f$ is continuous on $E$.
+	``The uniform limit of continuous functions is continuous."
+\end{corollary}
+We first prove that the theorem implies the corollary.
+\begin{proof}
+	Isolated points are always continuous,
+	so we need only to consider limit points $x \in E \cap E'$.
+	For every such $x$, Theorem 7.11 implies
+	\[
+		f(x) = \lim_{n\to\infty} f_n(x)
+		= \lim_{n\to\infty}\underbrace{\lim_{t\to x}f_n(t)}_{f_n \text{ cts}}
+		= \lim_{t\to x} \lim_{n \to \infty} f_n(t) = \lim_{t \to x}f(t)
+	\]
+\end{proof}
+
+We now proceed with the proof of the theorem.
+\begin{proof}
+	Step 1: Show that $\{y_n\}$ converges (to some $y \in M_2$).
+	It sufficies to $\{y_n\}$ is Cauchy.
+	Let $\ep > 0$. Choose $N$ such that $\forall n,m \geq2 N, t \in E$,
+	$d_2(f_n(t), f_m(t)) < \ep/2$ by the Cauchy Criterion.
+	Then $d_2(y_n,y_m) \leq d_2(y_n,f_n(t)) + d_2(f_n(t), y_m)
+	\leq d_2(y_n,f_n(t)) + d_2(f_n(t),f_m(t)) + d_2(f_m(t),y_m)$.
+	We can choose $t$ such that the above is at most $< \ep/3 + \ep/3 + \ep/3$.
+	Now we call this the ``$\ep$ over $3$ trick" (won't show full details in the future).
+	Conclusion: $\forall \ep > 0, \exists N$ such that $n,m \geq N$,
+	$d_2(y_n,y_m) < \ep$, i.e. $\{y_n\}$ is Cauchy, hence convergent
+	($(M_2,d_2)$ complete).
+
+	Step 2: Prove that $f(t) \to y$ as $t \to x$.
+	We have $\forall t \in E$ and $n$, $d_2(f(t),y) \leq
+	d_2(f(t),f_n(t)) + d_2(f_n(t),y_n) + d_2(y_n,y)$.
+	We could first fix $N$ large, and then make $t$ close to $x$,
+	or we could do it in the reverse order.
+	It will turn out that the former will be more fruitful.
+	Let $\ep > 0$. Since $f_n \to f$ uniformly, $\exists N_1$ such that
+	$\forall n \geq N_1, t\in E$, $d_2(f(t),f_n(t)) < \ep/3$.
+	Since $y_n \to y$, $\exists N_2$ such that $\forall n \geq N_2$,
+	$d_2(y_n,y) < \ep/3$.
+	Let $n = \max(N_1,N_2)$.
+	Applying A1 (with this choice of $n$), we have
+	\[
+		d_2(f(t),y) < \ep/3 + d_2(f_n(t),y_n) + \ep/3
+	\]
+	Since $\lim_{t \to x} f_n(t) = y_n$,
+	$\exists \delta > 0$ such that $\forall t \in E$, $d_1(t,x) < \delta$,
+	we have $d_2(f_n(t),y_n) < \delta$,
+	we have $d_2(f(t),y) < \ep$.
+\end{proof}
+
+Now, where did we use uniform convergence in this proof?
+We used it in Step 1 to prove that our $y_n$ converge (Cauchy criterion).
+So what if we add the additional hypothesis that $y_n$ converges,
+but we weaken it to pointwise convergence.
+Well, we use it by making $N$ large for all $t$,
+so Step 2 goes wrong as well.
+This proof is not fixable with pointwise convergence.
+
+\subsection{Series of functions}
+Series are not as important as sequences of functions,
+but it is useful in everyday life.
+
+\begin{definition}
+	Let $E$ be a set, let $\{f_n\}$ be a sequence of functions
+	$f_n \colon E \to \R$ or $E \to \C$
+	and let $g \colon E \to \R$ or $E \to \C$.
+	We say that $\sum_{n=1}^\infty f_n$ converges pointwise (resp. uniformly) to $g$ on $E$
+	if the sequence $S_n = \sum_{i=1}^n f_i$ converges pointwise (resp. uniformly) to $g$.
+\end{definition}
+Can't do this in full arbitrary of $f_n$, needs to support addition.
+I guess you can do it in some group, but this is abstraction for no good reason.
+
+Example: The series $1 + \sum_{n=1}^\infty \frac{x^n}{n!}$.
+Converges to $g(x) = e^x$:
+\begin{itemize}
+	\item pointwise (on $\R$)
+	\item uniformly on any bounded set $E \subset \R$,
+		or specifically compact sets $E \subset \R$.
+\end{itemize}
+
+\begin{theorem}[Weierstrass M-test (Rudin 7.10)]
+	Let $E$ be a set, $E \to \R$ on $E \to \C$.
+	If $\lvert f_n(x) \rvert \leq M_n$, $\forall n \geq N_0, x \in E$,
+	and if $\sum_{n=1}^\infty M_n < \infty$,
+	then $\sum_{n=1}^\infty f_n$ converges uniformly.
+\end{theorem}
+Proof is an exercise, but useful is Cauchy criterion.
+This theorem is almost trivial, but very practical.
+
+\section{February 12}
+Housekeeping:
+Midterm on Wednesday (bring ID, everything up to and including pointwise convergence).
+HW4 is graded, but bonus problem will be graded soon (by him).
+
+Recall last class we talked about $(X,d)$ a metric space,
+and $\mathcal{C}(X)$ be the bounded continuous functions $f \colon X \to \C$.
+We talked about how $\mathcal{C}(X)$ is a normed vector space that is complete.
+
+What about $\mathcal{C}(X,Y)$,
+the bounded continuous functions $f \colon X \to Y$ ($X,Y$ are metric spaces)
+(bounded here means $f(X)$ is contained in some $r$-ball in $Y$).
+Our metric is $d(f,g) = \sup_{x \in X} d_Y(f(x),g(x))$ (check this is a metric).
+Is $\mathcal{C}(X,Y)$ complete?
+Yes iff $Y$ is complete (same proof as before;
+consider constant function of Cauchy sequence that doesn't converge).
+
+\subsection{Properties of Uniform Convergence}
+\begin{theorem}[Rudin 7.16]
+	Let $\alpha \colon [a,b] \to \R$ monotone increasing.
+	Let $\{f_n\}$ a sequence $f_n \in \mathcal{R}_\alpha[a,b]$.
+	Let $f \colon [a,b] \to \R$ and suppose $f_n \to f$ uniformly.
+	Then $f \in \mathcal{R}_\alpha[a,b]$ and
+	$\lim_{n\to\infty}\int_a^b fd\alpha = \int_a^bfd\alpha$.
+\end{theorem}
+\begin{proof}
+	We first show that $f \in \mathcal{R}_\alpha[a,b]$.
+	We will show $\underline{\int_a^b} fd\alpha = \overline{\int_a^b}fd\alpha$.
+	Note that we can always assume that these upper and lower integrals exist:
+	we just need to show that they are bound, so
+	take $\ep = 1$, $\exists N$ such that $|f(x) - f_N(x)| \leq 1$ for all $x$,
+	and $|f_N(x)| < K$ since Riemann integrable,
+	so $|f(x)| \leq |f(x) - f_N(x)| + |f_N(x)| < K + 1$.
+
+	Now, to show the upper and lower integrals are equal, we could show that
+	they difference is less than $\ep$ for all $\ep > 0$.
+	Let $\ep > 0$. Since $f_n \to f$ uniformly, there exists $N$ such that
+	$\forall n \geq N$, $x \in [a,b]$, $|f(x) - f_n(x)| \leq \ep$.
+	Note $f_n(x) - \ep \leq f(x) \leq f_n(x) + \ep$, so
+	\[
+		\int_a^b (f_n - \ep)d\alpha \leq \underline{\int_a^b} fd\alpha
+		\leq \overline{\int_a^b}fd\alpha \leq \int_a^b(f_n + \ep)d\alpha
+	\]
+	since each $m_i$ is the greatest lower bound,
+	it is greater than $f_n-\ep$ on each interval for any partition,
+	so $\underline{\int}(f_n - \ep)d\alpha \leq \underline{\int}fd\alpha$
+	but the upper and lower converges because its Riemann integrable
+	(this is only the first inequality, but the other follows the same).
+	Rearranging, we get
+	\[
+		\overline{\int_a^b}fd\alpha - \underline{\int_a^b} fd\alpha
+		\leq \int_a^b(f_n+\ep)d\alpha - \int_a^b(f_n-\ep)d\alpha
+		= \int_a^b 2\ep d\alpha = 2\ep(\alpha(b) - \alpha(a))
+	\]
+	Since $\ep > 0$ is arbitrary, $\underline{\int_a^b} fd\alpha = \overline{\int_a^b}fd\alpha$.
+
+	Now we need to show that the integral agrees with the limit of the integrals of $f_n$
+	(which we don't get for free, as we saw with the pointwise case).
+	Rearranging our inequality chain, we get
+	\[
+		\int_a^b f_nd\alpha - \int_a^b \ep d\alpha
+		\leq \int_a^b fd\alpha \leq \int_a^b f_nd\alpha + \int_a^b \ep d\alpha
+	\]
+	And so
+	\[
+		\left\lvert\int_a^b fd\alpha - \int_a^b f_nd\alpha\right\rvert < \ep(\alpha(b)-\alpha(a))
+	\]
+\end{proof}
+\begin{corollary}
+	If $f_n \in \mathcal{R}_\alpha[a,b]$, and $\sum_{n=1}^\infty$
+	converges uniformly on $[a,b]$ to $f$, then $f\in \mathcal{R}_\alpha[a,b]$, and
+	\[
+		\int_a^b fd\alpha = \sum_{n=1}^\infty \int_a^b f_nd\alpha
+	\]
+\end{corollary}
+\begin{proof}
+	Let $g_n = \sum_{i=1}^n f_i$ and $g_n \to f$ uniformly.
+	Apply Theorem 7.16.
+	(Exercise: write this down precisely yourself.)
+\end{proof}
+You will be moving an infinite sum inside an integral
+($\lim_{m\to\infty}\sum_{n=1}^m \int_a^b f_nd\alpha$ and move the sum inside),
+which we can't normally do, but the point os Theorem 7.16 is when we can do this.
+
+Our next theorem will take some effort to prove.
+Note that we can have a series of differentiable functions
+that converge uniformly but is not differentiable.
+The functions $f_0 = \sin(x)$, $f_1 = \frac12 \sin(4x)$, $f_n = \frac{1}{2^n} \sin(4^nx)$
+are all differentiable,
+but  $\sum_{n=1}^\infty f_n$, which uniformly converges
+(Weierstrass $M$-test) is not differentiable
+(actually not differentiable anywhere, hard to show, Weierstrass function???).
+The derivative of $f_n$ is $\frac{4^{n^2}}{2^n}\cos(4^nx))$,
+and basically show that the $\cos$ have the conspire and cancel out in such a way
+that it just cannot happen.
+
+If we assume a lot, however, we can say some things about differentiability.
+\begin{theorem}[Rudin 7.17]
+	Lt $\{f_n\}$ be a sequence of functions $f_n \colon [a,b] \to \R$.
+	Suppose that
+	\begin{enumerate}
+		\item each $f_n$ is differentiable on $[a,b]$
+		\item $\exists x_0 \in [a,b]$ such that $\{f_n(x)\}$ converges
+		\item $f_n'$ converge uniformly on $[a,b]$
+	\end{enumerate}
+	Then $\exists f$ such that $f_n \to f$ uniformly on $[a,b]$,
+	and $f'(x)$ exists for all $x\in[a,b]$ and $f'(x) = \lim_{n\to\infty} f'_n(x)$
+	(i.e. $f'_n \to f'$ uniformly).
+\end{theorem}
+We need the last hypothesis, because our example above fails it.
+The second is also important, as $f_n = n$ is differentiable and has derivatives,
+but it does not converge.
+
+Won't finish proof right now, but we'll get started with an important estimate.
+Step 1: $f_n \to f$ uniformly.
+Let $\ep > -$, let $N$ large enough that $\lvert f_n(x_0) - f_n(x_0) \rvert < \ep$
+for all $n,m \geq N$ (convergent sequences are Cauchy)
+and $\lvert f'_n(x) - f'_m(x)\rvert < \ep$ for all $n,m \geq N$, for all $x \in [a,b]$.
+Here is the crucial idea of this proof: apply the Mean Value Theorem
+to the difference $(f_n - f_m)$.
+For $x,t \in [a,b], x\neq t$, $\exists c$ between $x$ and $t$ such that
+\[
+	\lvert (f_n(x) - f_m(x)) - (f_n(t) - f_m(t)) \rvert
+	= \lvert (f'_n - f'_m)(c)\rvert\lvert x - t\rvert \leq \ep \lvert x -t \rvert
+\]
+How do we use this inequality?
+We have two consequences:
+\begin{enumerate}
+	\item[(1)] $|((f_n9x) = f_m(x)) - (f_n(t) - f_m(t)) | < \ep |b-a|$
+		(useful for uniform convergence)
+	\item[(2)] $\frac{|f_n(x) - f_m(x) - f_n(t) + f_m(t)|}{|x-t|} < \ep$
+		(useful for differentiability)
+\end{enumerate}
+(I don't know if this one is right, some power tripping Math 101 TA kicked us out.)
 \end{document}
