@@ -1092,4 +1092,195 @@ when $F$ is a finite field of order $q$.
 	Here's the idea: whenever you see $x_i^q$ replace it wth $x_i$
 	until you get a polynomial with all variables with degrees less than $q$.
 \end{proof}
+
+\section{February 6}
+Going to skip over the polynomial function stuff Zinovy didn't get to,
+can just read it and a bit behind schedule because of the snow.
+So homework pushed back a bit so we can cover symmetric polynomials today,
+but next week will still be on schedule.
+\subsection{Symmetric polynomials}
+Studied for 100s of years, and still don't know where they come from.
+One source is as follows:
+$f(X) = 0, f \in \Q[X]$,
+\[
+	f = \sum a_nX^n = X^n + a_{n-1}X^{n-1} + \cdots + a_0
+	= \prod_{i=1}^n (X - \alpha_i)
+\]
+(assuming monic).
+How are $a_j$ and $\alpha_i$ related?
+$a_0 = (-1)^n \prod \alpha_i$,
+$a_{n-1} = -\sum \alpha_i$,
+or generally,
+\[
+	a_j = \pm \sum \prod \alpha_i \cdots \alpha_{i_{n-j}}
+\]
+So $a_j = $ are the symmetric functions of roots $=$
+elementary symmetric polynomial in roots.
+Solving the equation $f(X) = 0$ given $a_0,\dots,a_{n-1} = n-1$
+symmetric functions of $\alpha_1,\dots,\alpha_n$.
+We want to find $\alpha_1,\dots,\alpha_n$.
+But can't, because these $a_j$ can't distinguish between the roots.
+We talked last term only possible when degree is $2,3,4$.
+
+General fact: symmetric functions of roots generate all possible symmetric functions.
+Start with $X_1,\dots,X_n$ variables, $F(X_1,\dots,X_n)$ polynomial.
+\begin{definition}
+	$F$ is symmetric if $F(X_{\sigma(1)},\dots,X_{\sigma(n)})
+	= F(X_1,\dots,X_n)$, $\forall \sigma \in S_n$.
+	Define $P_j = j$-th symmetric polynomial
+	$ = \sum_{j-\text{tuples}} \prod X_{i_1} \cdots X_{i_j}$
+	(where $i_1 < i_2 < \cdots < i_j$).
+\end{definition}
+\begin{theorem}
+	If $F$ is symmetric, then
+	\begin{enumerate}
+		\item $F$ is a polynomial function of $P_1,\dots,P_n$
+		\item $P_1,\dots,P_n$ are algebraically independent,
+			in the sense that if $F[X_1,\dots,X_n]$ is any polynomial such that
+			$F[P_1,\dots,P_n] = 0$, then $F = 0$.
+	\end{enumerate}
+\end{theorem}
+
+$k[X_1,\dots,X_n] \cong k[P_1,\dots,P_n]$ (via (b)).
+So symmetric functions $\subsetneq k[X_1,\dots,X_n]$,
+but the symmetric functions are isomorphic to $k[X_1,\dots,X_n]$ via $X_i \to P_i$.
+
+\begin{proof}(Part (a))
+	Some sort of ``long division" in $n$-variables.
+
+	Talked about before that long division with multiple variables
+	is a bit undefined in what we mean by one polynomial being
+	``bigger" than another.
+	So we will use the lexicographic ordering of monomials:
+	monomials $X_1^{i_1}X_2^{i_2}\cdots X_n^{i_n} > X_1^{j_1}\cdots X_n^{j_n}$
+	by looking for the first index $k$ where $i_k \neq j_k$, bigger one wins.
+	So $X_1^2 X_2 > X_1X_2X_3$ and $X_1X_2X_3^2X_4 < X_1X_2X_3^4$.
+	This is an example of a Gr\"{o}bner basis,
+	relevant in computational algebra.
+	\begin{remark}
+		This depends on the ordering of the $X_i$, which is arbitrary.
+	\end{remark}
+	Fact: if $P,Q$ are monomials of degree $m$,
+	and $P < Q$, then $NP < NQ$ for any other monomial $N$.
+
+	Start with $F[X_1,\dots,X_n]$ symmetric,
+	subtract off polynomials in the $P_1, \dots, P_n$ to reduce the biggest term.
+	this is $\sum (\text{coeff})\text{monomials}
+	= \sum_d \underbrace{\sum(\text{coeff})
+	\text{monomials of }\deg{d}}_{F_d = d\text{-th homogenous part}}$,
+	and these $F_d$ are symmetric as well.
+	Fix $d$, and sconsider $F = F_d$.
+	Sum of terms: $(\text{coeff})X_1^{i_1}\cdots X_n^{i_n}$ where $\sum_{i_k} = d$.
+	This is symmetric, so conains this monomial for all permutations of the $X_i$.
+	So it contains a biggest term $X_1^{k_1}X_2^{k_2}\cdots X_n^{k_n}$,
+	$k_1 \geq k_2 \geq k_3 \geq \cdots$
+	(this must be the biggest, otherwise $k_i \leq k_j$ where $i < j$,
+	and could swap them).
+
+	Claim: we can find a polynomial expression in $P_1,\dots,P_n$
+	with the same leading/highest/biggest term.
+	To do this, need to study leading coefficients of the $P_i$.
+	First, $P_1 = X_1 + \cdots + X_n$ has leading coefficent $X_1$
+	(why are we calling these leading coefficient???);
+	$P_2 = \sum_{\text{pairs}} X_iX_j = X_1X_2 + \cdots$ has leading term $X_1X_2$;
+	generally, $P_j = X_1X_2\cdots X_j + \cdots$, leading term is $X_1X_2\cdots X_j$.
+	Leading term of
+	\[
+		P_1^{d_1}P_2^{d_2}\cdots P_n^{d_n} =
+		X_1^{\sum_{i=1}^nd_i}X_2^{\sum_{i\geq1}^nd_i} + \cdots
+	\]
+	can make this match $k_1,k_2,\dots,k_n$ ???
+
+	Pick $d_n = k_n$, work backwards to solve for $d_1,\dots,d_n$
+	therefore we get smoe expression in $P_1\cdots P_n$ with same leading term,
+	scale to match coefficients, subtract to reduce size, repeat.
+	This is symmetric, so contains this monomial for all polynomials of the $X_i$.
+	Thus, this contains a biggest term with $X_1^{k_1}X_2^{k_2}\cdots X_n^{k_n}$
+	where $k_1 \geq k_2 \geq k_3 \geq \cdots$.
+\end{proof}
+This is annoying to do by hand, not bad with a computer.
+
+Standard problem in computer algebra and algebraic geometry
+is you have some ring with variables being permuted by some group,
+might ask which polynomials are invariant.
+This is just the most basic setup, with we have an arbitrary ring
+and our group is the symmetric group.
+Called geometric invariance theory.
+
+\begin{proof}(Part (b))
+	We are showing algebraic independence of $P_1,\dots,P_n$.
+	Suppose wee have $\sum_{(d)}a_{d_1\cdots d_r}P_1^{d_1}\cdots P_r^{d_r} = 0$,
+	the sum over $r$-tuples $(d)$.
+	If nontrivial, there is some coefficient $a_{d_1\cdots d_r} \neq 0$.
+
+	Define $k_i = d_i + d_{i+1} + \cdots + d_r$.
+	Then the degree of $P_1^{d_1}\cdots P_r^{d_r}$ is
+	$m = \sum k_i = \sum i d_i$
+	(check this yourself, but notation can be a nuisance).
+	We then write this in terms of the $X_1,\dots,X_n$,
+	and look at the terms of highest degree,
+	this appears only once.
+	We will get a contradiction out of that...
+	read the book, it's a pain, notation bogs things down.
+	``Kinda fun, and worth understanding."
+\end{proof}
+Here's a thing to point out about these multi-variable polynomials:
+there is a lot of bookkeeping, and this makes it hard,
+but you just have to get used to it and think it through.
+In practice, most multi-variable stuff is done on a computer.
+
+\subsection{Factorization}
+Let $R$ be a commutative integral domain (e.g. $\Z$).
+Given $x \in R$, $x \neq 0$, want to factor it uniquely in some sense.
+Clearly, if $u$ is a unit, $x = u\cdot u^{-1} x$,
+so factorizations only unique up to units.
+
+First question: what is the analogue of a prime?
+In $\Z$, $x$ is called prime if $x = yz \implies$ $y$ or $z$ is $\pm 1$.
+In a general ring, can adapt this definition.
+\begin{definition}[Irreducible]
+	$x$ is irreducible in $R$ if $x$ is not a unit,
+	and $x = yz \implies$ either $y$ or $z$ is a unit.
+\end{definition}
+Note that we are not using the word prime here.
+
+Another defining feature of primes in $\Z$ (Euclid's lemma):
+in $\Z$, $p$ is a prime $\iff p \mid ab \implies p \mid a$ or $p \mid b$.
+These are different: one is about how $p$ can be divided,
+this one is how $p$ divides other elements.
+\begin{definition}[Prime]
+	$x$ is a prime in $R$ if $x$ is not a unit,
+	and if $x \mid ab \implies$ $x \mid a$ or $x \mid b$.
+\end{definition}
+In general, irreducible and prime are not equivalent,
+even though they are in $\Z$.
+\begin{theorem}
+	``Unique factorization" works in $R$
+	$\iff$ (irreducible $\iff$ prime).
+\end{theorem}
+
+Let's do some examples of how this thing can break.
+Let $R = \Z[\sqrt{-5}]$.
+We can factor $6$ in multiple ways: $6 = 3 \cdot 2 = (1+\sqrt{-5})(1-\sqrt{-5})$.
+Can we ``match" these factors? (i.e. they are equal up to units).
+Generally, no.
+
+Is $3$ irreducible in $\Z[\sqrt{-5}]$?
+Assume $3 = (a + b\sqrt{-5})(c +d\sqrt{-5})$.
+Hard to multiply out, because there are units floating around,
+but what if we took the abolsute value
+(and also squaring?):
+$9 = (a^2 + 5b^2)(c^2 + 5d^2)$, which are all in $\Z$.
+Will find you can't do it???
+
+What are the units in this ring?
+$u \cdot r = 1$,
+so $(a+b\sqrt{-5})(c+d\sqrt{-5}) = 1$.
+Then $(a^2+5b^2)(c^2+5d^2) = 1 \implies a,c = \pm 1$, $b,d = 0$.
+
+Through very non-elementary means,
+one can show that there are only $10$ possible values such that $\Z[d]$
+has unique factorization (modular forms or something).
+Posed by Gauss and not solved until the 50s.
+Solved by German schoolteacher who went to his grave without recognition.
 \end{document}
