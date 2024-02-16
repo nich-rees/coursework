@@ -549,6 +549,95 @@ Here the trajectories are circles (the second picture in the assigned reading).
 But there are other classes of transformations than just iteration of one???
 
 
+\section{January 25}
+\subsection{M\"{o}bius Transformations}
+More about $f(z) = \frac{1}{z}$.
+Geometrically as a transformation of the plane $\C$,
+this is the composition of two geometric transformations:
+\begin{enumerate}
+	\item[(1)] Circle inversion in the unit circle:
+		if $z$ is a point in the plane, $z^*$ is its inversion.
+		Then $\arg(z) = \arg(z^*)$ and $|z^*||z| = 1$.
+	\item[(2)] Reflection in the $x$-axis $z \mapsto \bar{z}$.
+\end{enumerate}
+So $\frac{1}{z} = \overline{z^*}$.
+We then get that $\left\lvert \frac{1}{z} \right\rvert = \frac{1}{|z|}$
+and $\arg\frac{1}{z} = - \arg{z}$ (from these facts).
+
+The circle inversion and the reflection both have the property: circles or lines
+map to circles or lines.
+Therefore, also the M\"{o}bius transformation $f(z) = 1/z$ has this property.
+For example, $f(\text{circle in }\C \text{ not through }0)
+= f(\text{circle in }\hat{\C}\text{ through }\infty \text{ not }0) =$
+circle in $\hat{C}$ through $0$ not through $\infty = $
+circle through $0$.
+A line is a circle through the north pole on the Riemann sphere.
+
+Two more examples:
+$g(z) = z + b$, a translation.
+This can be written as $\frac{az + b}{cz + d}$ with $a =1, c= 0, d = 1$,
+so the matrix $\begin{bmatrix} 1 & b \\ 0 & 1 \end{bmatrix}$.
+This takes lines to lines and circles to circles.
+$h(z) = az$, a rotation-dilation (rotostretch).
+This can be written $\begin{bmatrix} a & 0 \\ 0 & 1 \end{bmatrix}$,
+and required $a \neq 0$.
+$h$ preserves lines and circles.
+
+Fact: Every M\"{o}bius transformation is a composition of
+transformations of these three types: $f,g,h$.
+\[
+	\frac{az + b}{cz + d} = \frac{a}{(ad-bc)\frac{1}{az+b} + c}
+\]
+(if $a \neq 0$).
+Consequence: All M\"{o}bius transformatoins map lines and circles to lines or circles.
+On the Riemann sphere: all MTs map circles to circles.
+
+Consider the transformations $g$ and $h$ we were looking at before.
+First, $g(z) = z + b$.
+In the plane, trajectories are parallel lines:
+$z, z+ b, z+ 2b, \dots$.
+But on the sphere, there is one fixed point, $\infty$:
+$\infty + b = \infty$.
+$g(z)$ just maps a circles to a circle that is closer to $\infty$.
+This is a parabolic transformation.
+
+Second, $h(z) = az$.
+When $|a| = 1$, the trajectories are circles.
+This is an elliptic MT.
+When $a$ is real, $h(z)$ is a scaling transformation.
+The trajectory goes from $0$ to $\infty$, or vice versa (the two fixed points).
+this is a hyperbolic MT.
+If $a$ is not real, $|a| \neq 1$, then trajectories are spirals,
+or loxodromes.
+These are called loxodromic MTs.
+Same fixed points.
+
+In general, every M\"{o}bius transformation (not the identity)
+has either $1$ or $2$ fixed points.
+1 fixed point: parabolic (ex. translation).
+2 fixed points: hyperbolic, elliptic, loxodromic.
+There are pictures in Wegert.
+
+Example calculation:
+Let $(p,q,0)$ in $\C$ correspond to $(x,y,z)$ on $\hat{C} = \mathbb{S}^2$.
+ff I'm not doing this shit stupid ass projection.
+
+Back to M\"{o}bius transformations:
+Every $2 \times 2$ matrix with complex entires, $\det \neq 0$ gives rise to a MT,
+i.e. $\begin{bmatrix} a & b \\ c & d \end{bmatrix} \to \frac{az + b}{cz + d}$.
+Multiply the matrix by $\lambda \in \C$, $\lambda \neq 0$, we get the same MT.
+Every M\"{o}bius transformatoin, which is also a MT.
+Recall $\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1}
+= \frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$.
+If $f(z) = \frac{az + b}{cz + d}$,
+then $g(z) = \frac{dz - b}{-cz + a}$ is the inverse!
+One can compute and verify this, but I'm not gonna.
+
+If the matrix $A$ defines the MT $f$, then $A^{-1}$ defines the $f^{-1}$.
+Also, if $A$ defines $f$, and $B$ defines $g$, then $AB$ defines $f \circ g$,
+i.e. composition of MT are again a MT.
+M\"{o}bius transformations are one-to-one and onto maps $\hat{C} \to \hat{C}$.
+
 \section{January 30}
 Fact: Every non-identity M\"{o}bius transformation has either 
 $1$ fixed point (the matrix as a repeated eignevalue and is not diagonliazble,
@@ -664,19 +753,101 @@ Obviously, $f(z) = z$ is differentiable at all $c \in \C$:
 so $f'(c) = 1$ for all $c \in \C$.
 So polynomials are differentiable: $f(z) = 2z^2 + 3iz + 1$
 gives $f'(z) = 4z + 3i$.
-
 Less simple: $g(z) = \frac{z^2 + i}{z-i}$ is differentiable for all $c \neq i$.
-ff (I zoned out) ah I'm done with class actually.
 
-ff
+We can write out what it means for the real/imaginary parts.
+If $z = x + iy$, then $f(z) = f(x+iy) = u(x+iy) + iv(x + iy)
+= u(x,y) + iv(x,y)$,
+where $u,v \colon \R^2 \to \R$.
+We will look at the derivative limit as $z$ approaches some point $c$.
+If $c = a + ib$, $a,b \in \R$ is a constant,
+and fix $z$ be on the horizontal line through $c$,
+i.e. $z = x + iy$ where $y = b$, then
+\begin{align*}
+	\lim_{x \to a} \frac{f(x+iy) - f(a + ib)}{x + iy - (a + ib)}
+	&= \lim_{x \to a} \frac{u(x,y) + iv(x,y) - u(a,b) - iv(a,b)}{x+iy - a - ib}\\
+	&= \lim_{x\to a} \frac{u(x,b) + iv(x,b) - u(a,b) - iv(a,b)}{x - a}\\
+	&= \lim_{x \to a} \frac{u(x,b) - u(a,b)}{x-a} +
+	i\lim_{x \to a} \frac{v(x,b) - v(a,b)}{x-a}
+\end{align*}
+Hence $f'(a+ib) = \frac{\partial u}{\partial x} \big\vert_{(a,b)}
++ i \frac{\partial v}{\partial x}\big\vert_{(a,b)}$.
+Now we fix $x = a$ and let $y$ vary:
+\begin{align*}
+	f'(a+ib) &= \lim_{y \to b} \frac{u(a,y) + iv(a,y) - (u(a,b) + iv(a,b))}{(a+iy)-(a+ib)}\\
+			 &= lim_{y \to b} \frac{v(a,y) - v(a,b)}{y-b} - i\lim_{y\to b}
+			 \frac{u(a,y) - u(a,b)}{y-b}\\
+			 &= \frac{\partial v}{\partial y} \bigg\vert_{(a,b)}
+			 - i \frac{\partial u}{\partial y}\bigg\vert_{(a,b)}
+\end{align*}
 
 So if $f$ is complex differentiable at $c = (a+ib) = (a,b)$, then
 \[
-	\frac{\partial u}{\partial x}\vert_{(a,b)} = \frac{\partial v}{\partial y}\vert_{(a,b)}
+	\frac{\partial u}{\partial x}\bigg\vert_{(a,b)} = \frac{\partial v}{\partial y}\bigg\vert_{(a,b)}
 	\qquad
-	\frac{\partial v}{\partial x}\vert_{(a,b)} = -\frac{\partial u}{\partial y}\vert_{(a,b)}
+	\frac{\partial v}{\partial x}\bigg\vert_{(a,b)} = -\frac{\partial u}{\partial y}\bigg\vert_{(a,b)}
 \]
 (The Cauchy-Riemann equations).
 This is only from considering approaching along vertical and horizontal lines,
 so not a sufficient condition.
+
+\subsection{February 1}
+Example: $f(z) = \bar{z}$.
+$f(x+iy) = \overline{x+iy} = x -iy = u(x,y) + iv(x,y)$.
+So $u(x,y) = x$ and $v(x,y) = -y$.
+We have $\frac{\partial u}{\partial x} = 1$,
+$\frac{\partial u}{\partial y} = 1$, $\frac{\partial v}{\partial x} = 0$,
+and $\frac{\partial v}{\partial y} = -1$.
+So our second criteria is satisfied, i.e.
+$\frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}$,
+but our first criteria is not, since $1 = -1$ holds nowhere in $\C$,
+so $\frac{\partial u}{\partial x} \neq \frac{\partial v}{\partial y}$.
+Hence, $f(z) = \bar{z}$ is not complex differentiable.
+
+Example: $f(z) = |z|^2 = z\bar{z}$.
+ff calculation,
+So $f(z)$ is not complex differentiable anywhere,
+except for maybe at the origin.
+Then compute the limit at the origin:
+\[
+	\lim_{z \to 0} \frac{f(z) - f(0)}{z - 0}
+	= \lim{z \to 0}\frac{|z|^2 - 0}{z}
+	= \lim{z \to 0}\bar{z} = \overline{\lim_{z \to 0}z} = 0
+\]
+Since this limit exists, $f(z) = |z|^2$ is complex differentiable at $z = 0$,
+and $f'(0) = 0$.
+
+Warning: just because the C.R. equations hold at some point $z = c$,
+doesn't mean that $f(z)$ is complex differentiable at $z = c$.
+Counterexample: $f(x + iy) = \sqrt{|xy|}$ at the origin.
+ff can check that C.R. equations hold,
+but ff compute that the line $x = y$ leads to different values
+from the right and the left.
+
+\begin{theorem}
+	Let $D = D(c,r)$ the disk centered at $c \in \C$, radius $r \in \R$, $r > 0$.
+	Suppose that $D \subset$ the domain of the complex function $f = u + iv$.
+	Suppose that $\frac{\partial u}{\partial x},\frac{\partial u}{\partial y},
+	\frac{\partial v}{\partial x},\frac{\partial v}{\partial y}$
+	exists and are continuous at all points of $D$.
+	Then if the C.R. equations hold at $c$, then $f$ is complex differentiable at $c$.
+	(If the C.R. equations hold at all points of $D$,
+	then $f$ is holomorphic at all points of $D$).
+\end{theorem}
+
+\begin{definition}
+	A subset $U \subset \C$ is open if
+	for every $z_0 \in U$, there exists an $r > 0$ such that $D(z_0,r) \subset U$.
+\end{definition}
+E.g. $\{z \mid |z - z_0| < r\}$ is open, but
+$\{z \mid |z - z_0| \leq r\}$ is not open.
+
+\begin{definition}
+	Let $U \subset \C$ is open, $f \colon U \to \C$ a function.
+	If $f$ complex differentiable at every point $c \in U$, then $f$ is called
+	holomorphic or analytic.
+	If $U = \C$, then $f$ is entire.
+\end{definition}
+So $f(z) = |z|^2$ is complex differentiable at $0$ but not holomorphic at $0$
+(holomorphic requires differentiable on some open set).
 \end{document}

@@ -947,4 +947,188 @@ There's no $r^n$ for $r \neq 2$
 $r^2 - 4r + 4 = (r-2)^2 = 0$.
 What else might work?
 We will answer this on Monday.
+
+\section{February 5}
+3 Handouts:
+\begin{itemize}
+	\item Intro to ODEs
+	\item Recurrence Relations and Finite precision
+		(you'll notice no mention of ODEs; from old course order)...
+		some of the next homework problems are on here,
+		and some have partial solutions too.
+		We did Appendices A, B, and C
+	\item Normal and Subnormal numbers
+\end{itemize}
+Today: A bit more on first two handouts, and start normal and subnormal numbers.
+
+3-term recurrence relations:
+$x_{n+2} = ax_{n+1} + bx_n$, $a,b \in \R$, $\dots, x_{-1},x_0,x_1,\dots$,
+$b \neq 0$ (then if $a \neq 0$, $x_{n+2} = ax_{n+1}$ which is just one term).
+This is actually an analog of second order ODE:
+$\vec{y}_{n+1} = A \vec{y}_n$
+where $\vec{y}_{n+1} = \begin{bmatrix} 1 & 1 \\ 1 & 0\end{bmatrix} \begin{bmatrix} F_{n+1} \\ F_n \end{bmatrix}$.
+ff something I was busy on Piazza
+
+Last time: $x_{n+2} - 4x_{n+1} + 4x_n = 0$,
+$(\sigma^2 - 4\sigma + 4)(x_n) = 0$.
+Guess $x_n = r^n$ is a solution...
+$r^2 - 4r + 4 = 0$,
+$(r-2)^2 = 0$, $r = 2,2$.
+So $x_n = 2^n$ is a solution, and $x_n = c_1 2^n$ is also a solution.
+Think of it... $(r-2)(r-2-\ep) = 0$.
+If $\ep > 0$: $(\sigma - 2)(\sigma - 2 - \ep) = 0$,
+then $x_n = c_12^n + c_2(2+\ep)^n$.
+Fix $\ep > 0$, have $x_0 = 3, x_11 = -40, x_2 = x_2(\ep), x_3, \dots$.
+So $x_{21} = ( \cdot) x_0 + (\cdot) x_1$ given $x_0,x_1$.
+Taking $\ep \to 0$, $x_{21}(0) = (\cdot)x_0 + (\cdot)x_1$.
+
+What is the general solution to $x_{n+2} - 4x_{n+1} + 4x_n = 0$
+if $x_n = c_12^n + c_2 n 2^n$ (like what we do with ODEs).
+Does this work?
+Well, $(n+2)2^n - 4(n+1)2^{n+1} - 4\cdot2^n = 0$.
+Try this: $(\sigma - 2)(\sigma - 2)(n2^n) = 0$?
+$(\sigma - 2)(n2^n) = (n+1)2^{n+1} \cdots 2(n2^n) = 2^n((n+1)2 - 2n) = 2^n (2)$
+and $(\sigma - 2)(2^n\cdot \text{constant}) =
+\text{constant}(2^{n+1} - 2\cdot 2^n) = 0$.
+What about $(\sigma - 2)^4(x_n) = 0$.
+$x_n = c_12^n + c_2 n2^n + c_3n^22^n + c_4 n^32^n4$.
+
+In general, we have for $p(n)$ a polynomial,
+$(\sigma - 2)(p(n)2^n) = 2^n\cdot$(polynomial of lower degree).
+We can verify for our case $(\sigma - 2)(n^k 2^n)
+= (n+1)^k2^{n+1} - n^k2^n\cdot 2
+= 2^{n+1}((n+1)^k - n^k) = 2^{n+1}(kn^{k-1} + \text{lower})$.
+Hmm... $kx^{k-1}$ looks like the derivative of $x^k$.
+When we interpolate a polynomial, take two nearby points and find the value in between,
+we are taking the derivative.
+
+Now, the general solution to
+$(\sigma - r_1)^{m_1}\cdots(\sigma - r_k)^{m_k}(x_n) = 0$ is
+\[
+	x_n = p_1(n)r_1^n + \cdots + p_k(n)r_k^n
+\]
+where $\deg(p_i) \leq m_k -1$.
+E.g. $(\sigma-2)^2(\sigma - 5)(x_n) = 0$ has the solution
+$x_n = c_12^n + c_2n2^n + c_35^n$.
+
+Looking at $x_{n+2} - 4x_{n+1} + 4x_n = 0$,
+$\vec{y}_n = \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}$,
+$\vec{y}_{n+1} = \begin{bmatrix} x_{n+2} \\ x_{n+1} \end{bmatrix} = 
+\begin{bmatrix} 4 & -4 \\ 1 & 0 \end{bmatrix}\begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}$.
+ff
+
+$\lambda^2 - 4\lambda + 4 = 0$, $\lambda = 2,2$.
+We know then that we cannot have two linearly independent eigenvectors.
+When we have two eignevalues that are the same,
+cannot be linearly independent, otherwise
+$A = S\begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix} S^{-1}
+= 2SIS^{-1} = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix}$.
+(Why can't we do this?)
+
+Look at $\lambda I - \begin{bmatrix} 4 & -4 \\ 1 & 0 \end{bmatrix}$.
+ff
+We call these matrices deficient, defective, etc.
+We cannot diagonalize this matrix.
+
+Since $2I - \begin{bmatrix} 4 & -4 \\ 1 & 0 \end{bmatrix} =
+\begin{bmatrix} -2 & 4 \\ -1 & 2 \end{bmatrix} =: N$.
+We have $N \neq \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$,
+but $N^2 = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$.
+We say that $N$ is \emph{nilpotent}
+if $N^k = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$ for some $k \geq 1$.
+
+So we have $2I - \begin{bmatrix} \text{matrix of interest}\end{bmatrix} = N = $ nilpotent.
+ff
+
+
+\section{February 16}
+Not Joel, the 302 guy, but he's one of the author's of the textbook.
+
+Recall monomial interpolation:
+we are given two points, can easily find $c_0 + c_1x$ such that it passes through both.
+If $(1,1),(2,3)$, then we let $1 = c_0 + c_1\cdot 1$ and $3 = c_0 + c_1\cdot2$,
+and solve the linear system $\begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}
+\begin{bmatrix} c_0 \\ c_1 \end{bmatrix} = \begin{bmatrix} 1 \\ 3 \end{bmatrix}$.
+Then $p_1(x) = 2x - 1$.
+Similar happens if there is a third point and we use a degree $2$ polynomial:
+$p_2(x) = c_0 + c_1x + c_2x^2$.
+
+These are super-intuitive: if asked to find a polynomial,
+this is what you would do.
+But this method is not always the best. Some problems:
+\begin{enumerate}
+	\item[(1)] Can't directly connect solution $c_0,c_1$ to the data points,
+		not obvious what the connection is
+		(this will be clearer when we talk about Lagrange points later today).
+	\item[(2)] But also, for an $n \times n$ system, our cost is $O(n^3)$ flops (floating point operations?).
+		This is not that good, but not awful because our computers
+		can evaluate a polynomial really fast.
+		But it is high cost, because even though $n$ is typically not that large,
+		we often need to repeat many times and it becomes expensive
+		(e.g. in machine learning, computing many polynomials).
+		However, although the construction is expensive,
+		the evaluation is cheap (can easily evaluate the polynomial at some other value).
+	\item[(3)] In MATLAB, we have the command \verb|vander| to get the vandermonde matrix of ???
+		and \verb|cond| to get that matrix's condition number.
+		Now can compute something: the matrix is badly condition
+		(which means inaccurate computations).
+		Something like close to $10^{16}$ (particularly bad).
+\end{enumerate}
+Recall the definition of the condition number $K$:
+$K(A) = \lVert A \rVert \lVert A^{-1} \rVert$.
+Suppose $Ax = b$, $\tilde{x}$ is a numerical solution. Then
+\[
+	\frac{\lVert x - \tilde{x} \rVert}{\lVert x \rVert}
+	\leq K(A) \frac{\lVert b - A\tilde{x}\rVert}{\lVert b \rVert}
+\]
+In our previous example, $x$ is our solution $\begin{bmatrix} c_0 \\ c_1 \end{bmatrix}$.
+In a common application, we can't compute $x$, and have $\tilde{x}$.
+And we can compute the residual $A\tilde{x}$.
+So we can compute $\frac{\lVert b - A\tilde{x}\rVert}{\lVert b \rVert}$.
+But if $K(A)$, we do not have any assurance that our $\tilde{x}$
+is a good approximation of $x$.
+
+Some facts about condition numbers:
+the smallest they can be is $K(A) = 1$, called perfectly conditioned.
+See $\lVert I \rVert = 1$.
+The worst possible is $K(A) = \infty$, this is for singular matrices.
+
+\subsection{Lagrange interpolation}
+Quite a nice method, very different from monomial.
+We are given the points $(x_j,y_j)_{j=0}^n$.
+Our monomial interpolation gave us
+\[
+	p_n(x) = \sum_{j=0}^n c_j \phi_j(x)
+\]
+where $\phi_j(x) = x^{j-1}$.
+Lagrange interpolation gives
+\[
+	p_n(x) = \sum_{j=0}^n y_j L_j(x)
+\]
+Notably now, we actually get the $y_j$s showing up in the solution
+(remember the relation between the polynomial and the points?).
+How do we construct our $L_j$s? We want
+\[
+	L_j(x_i) = \begin{cases} 1 & i = j \\ 0 & i \neq j \end{cases}
+\]
+Then $p_n(x_3) = y_3$, etc.
+We want to construct Lagrange polynomials that do this for us.
+
+What is $L_0$ for our system from before ($(1,1),(2,3),(4,3)$)?
+We can make $2$ and $3$ roots, and have a coefficient out front to normalize.
+So $L_0(x) = a(x-2)(x-4)$, and $L_0(1) = 1 = a(1-2)(1-4) \implies a = \frac13$.
+So in the arbitrary setting, we have
+\[
+	L_j(x) = \frac{1}{(x_j - x_0)\cdots(x_j-x_n)}(x-x_0)\cdots (x - x_{j-1}
+	(x - x_{j+1})(x-x_n)
+\]
+
+What is the linear system we solved?
+It was the identity matrix.
+What was the cost of construction?
+Well, we did $n$ multiplications $n$ times,
+and so there were $O(n^2)$ floating point operations.
+But the evaluation is more costly: now need to evaluate $n^2$.
+
+Something about uniqueness, but didn't get to.
 \end{document}

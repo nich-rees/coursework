@@ -1537,7 +1537,7 @@ If we assume a lot, however, we can say some things about differentiability.
 	Suppose that
 	\begin{enumerate}
 		\item each $f_n$ is differentiable on $[a,b]$
-		\item $\exists x_0 \in [a,b]$ such that $\{f_n(x)\}$ converges
+		\item $\exists x_0 \in [a,b]$ such that $\{f_n(x_0)\}$ converges
 		\item $f_n'$ converge uniformly on $[a,b]$
 	\end{enumerate}
 	Then $\exists f$ such that $f_n \to f$ uniformly on $[a,b]$,
@@ -1550,7 +1550,7 @@ but it does not converge.
 
 Won't finish proof right now, but we'll get started with an important estimate.
 Step 1: $f_n \to f$ uniformly.
-Let $\ep > -$, let $N$ large enough that $\lvert f_n(x_0) - f_n(x_0) \rvert < \ep$
+Let $\ep > 0$, let $N$ large enough that $\lvert f_n(x_0) - f_n(x_0) \rvert < \ep$
 for all $n,m \geq N$ (convergent sequences are Cauchy)
 and $\lvert f'_n(x) - f'_m(x)\rvert < \ep$ for all $n,m \geq N$, for all $x \in [a,b]$.
 Here is the crucial idea of this proof: apply the Mean Value Theorem
@@ -1563,10 +1563,143 @@ For $x,t \in [a,b], x\neq t$, $\exists c$ between $x$ and $t$ such that
 How do we use this inequality?
 We have two consequences:
 \begin{enumerate}
-	\item[(1)] $|((f_n9x) = f_m(x)) - (f_n(t) - f_m(t)) | < \ep |b-a|$
+	\item[(1)] $|((f_n(x) - f_m(x)) - (f_n(t) - f_m(t)) | < \ep |b-a|$
 		(useful for uniform convergence)
-	\item[(2)] $\frac{|f_n(x) - f_m(x) - f_n(t) + f_m(t)|}{|x-t|} < \ep$
+	\item[(2)] $\frac{|(f_n(x) - f_m(x)) - (f_n(t) - f_m(t))|}{|x-t|} < \ep$
 		(useful for differentiability)
 \end{enumerate}
 (I don't know if this one is right, some power tripping Math 101 TA kicked us out.)
+
+
+\section{February 16}
+Recall what we had last time: in the process of proving theorem 7.17.
+\begin{proof}
+	What did we do to prove it last time?
+	Fixed $\ep > 0$, found $N$ such that $\forall n,m \geq N$,
+	\[
+		\lvert f_n(x_0) - f_m(x_0) \rvert < \ep
+		\quad\text{ and }\quad
+		\lvert f'_n(x) - f'_m(x)\rvert < \ep, \forall x
+	\]
+	We used MVT $x,t \in [a,b]$, $x \neq t$ and got two consequences
+	\begin{enumerate}
+		\item[(1)] $|((f_n(x) - f_m(x)) - (f_n(t) - f_m(t)) | \leq \ep |b-a|$
+			(useful for uniform convergence)
+		\item[(2)] $\frac{|(f_n(x) - f_m(x)) - (f_n(t) - f_m(t))|}{|x-t|} \leq \ep$
+			(useful for differentiability)
+	\end{enumerate}
+
+	We are splitting our step into several proofs.
+	We first show that there is some $f$ that $f_n$ converges uniformly to,
+	and then prove the statement for the derivative.
+
+	We will try to rearrange (1) to get the Cauchy criterion.
+	By (1) for $t = x_0$, for $n,m \geq N$, $x \in [a,b]$, we get
+	\[
+		\lvert f_n(x) - f_m(x) \rvert
+		\leq \lvert (f_n(x) - f_m(x)) - (f_n(x_0) - f_m(x_0))\rvert
+		+ \lvert f_n(x_0) - f_m(x_0)) \rvert 
+		\leq \ep(b-a) + \ep
+	\]
+	Since $\ep$ can be arbitrarily small ($\ep'((b-a) + 1) = \ep$),
+	$\{f_n\}$ satisfies the Cauchy Criterion for uniform convergence.
+	
+	Now we prove that $f' = \lim_{n\to\infty} f'_n$.
+	Fix $x \in [a,b]$.
+	We need to show $f$ is differentiable at $x$ and $f'(x) = \lim_{n\to\infty} f'_n(x)$.
+	Since the derivative involves limits,
+	this will invovle a careful interchange of limits.
+	We write the derivative out explicitly:
+	\[
+		\phi_n(t) = \frac{f_n(t) - f_n(x)}{t-x}, \quad \phi(t) = \frac{f(t) - f(x)}{t-x}
+	\]
+	so $f'_n(x) = \lim_{t \to x}\phi_n(t)$, and similarly  for $f'(x)$, if it exists.
+	Inequality (2) says for $n,m \geq N$,
+	\[
+		\lvert \phi_n(t) - \phi_m(t) \rvert \leq \ep
+	\]
+	i.e. the functions $\{\phi_n\}$ satisfies Cauchy criterion for uniform convergence,
+	which implies $\phi_n$ converges uniformly on the domain $[a,b] \setminus\{x\}$
+	(but at least $x$ is a limit point; important later).
+	This says something about $\phi_n$, but we don't know
+	if it converges to $\phi(t)$ at any fixed $t$.
+	Showing pointwise is enough.
+	Fix $t \in [a,b] \setminus \{x\}$.
+	\[
+		\phi_n(t) - \phi(t) =
+		\left\lvert\frac{(f_n(t) - f_n(x)) - (f(t) - f(x))}{t-x}\right\rvert
+		\leq \left\lvert \frac{(f_n(t) - f(t)}{t-x}\right\rvert
+		+ \left\lvert \frac{(f_n(x) - f(x)}{t-x}\right\rvert
+	\]
+	which goes to $0$ as $n \to \infty$.
+	Conclusion, $\phi_n \to \phi$ pointwise, hence uniformly on $[a,b] \setminus \{x\}$.
+
+	Theorem 7.11: properties being inherited by uniform limit,
+	interchanging limits.
+	Since $x$ is a limit point of $[a,b] \setminus \{x\}$,
+	and $\phi_n \to \phi$ uniformly on $[a,b] \setminus \{x\}$,
+	we apply theorem 7.11 to conclude
+	\[
+		f'(x) = \lim_{t \to x} \phi(t) =
+		\lim_{t \to x} \lim_{n\to\infty} \phi_n(t)
+		= \lim_{n\to\infty} \lim_{t \to x} \phi_n(t) = \lim_{n\to\infty} f'_n(x)
+	\]
+	if the limit exists, and it does.
+	And this is a uniform limit???
+\end{proof}
+
+\subsection{The Weierstrass function}
+\begin{theorem}[Rudin 7.18]
+	There exists a continuous function $f \colon \R \to \R$ such that
+	$f'(x)$ does not exist for any $x \in \R$.
+\end{theorem}
+One way to do this is to construct such a function.
+Note that if we close our eyes and pick a function at random from $C(\R)$,
+it will almost surely be a function that is not differentiable anywhere.
+But if we try to write any function down, it is usually differentiable.
+``It's like looking for hay in a hay stack, but we never get they hay."
+This happens often in math: can prove that almost always functions have a certain property,
+but can't even write it out.
+\begin{proof}
+	Consider the periodization of $|x|$ on $[-1,1]$ to the whole real line,
+	call this $\phi(x)$.
+	This function is continuous, in fact, it is Lipschitz,
+	with Lipschitz constant $1$, or $1$-Lipschitz:
+	$\lvert \phi(x) - \phi(y) \rvert \leq 1\lvert x-y \rvert$.
+	Note that being Lipschitz is not preserved under pointwise limits,
+	but being $k$-Lipschitz, for a fixed $k$, is.
+
+	Let $f(x) = \sum_{n = 0}^\infty \left(\frac{3}{4}\right)^n \phi(4^n x)$.
+	This series converges absolutly by the Weierstrass $M$-test.
+	Each of these terms are continuous,
+	and since absolutely convergent series of continuous functions
+	converges to a continuous function, $f$ is continuous.
+
+	For $n$ large, what does $\left(\frac{3}{4}\right)^n \phi(4^n x)$ look like?
+	Very small, but very spiky.
+	But note that the $4^n$ is getting large faster than
+	$\left(\frac{3}{4}\right)^n$ is getting small,
+	i.e. if we multiply them, we get $3^n$, which still blows up.
+	We get that $\left(\frac{3}{4}\right)^n \phi(4^n x)$ is $3^n$-Lipschitz.
+	
+	Fix $x \in \R$.
+	When to show: $f(x)$ is not differentiable at $x$.
+	Suffices to find $\delta_m \searrow 0$ such that
+	\[
+		\left\lvert \frac{f(x + \delta_m) - f(x)}{\delta_m}\right\rvert \nearrow \infty
+	\]
+	as $m \to \infty$.
+	Trick is finding $\delta_m$ such that
+	bigger $m$ cancel out (equal spots on the period),
+	and for the smaller values of $m$, the Lipschitz constant is too small
+	to make a difference: even if all the other peaks were working against it,
+	$3^j - \sum_{n=0}^{j-1} 3^j = \frac{1}{6}3^j$ or something like that.
+
+	Full proof in Rudin, or work through it yourself.
+\end{proof}
+
+Will talk about equicontinuity after the break.
+Administrative note: two homeworks,
+one walks you through the proof of DCT but not to be handed in,
+the other is the actual homework.
 \end{document}
