@@ -1131,4 +1131,298 @@ and so there were $O(n^2)$ floating point operations.
 But the evaluation is more costly: now need to evaluate $n^2$.
 
 Something about uniqueness, but didn't get to.
+
+
+\section{February 26}
+Plan:
+\begin{itemize}
+	\item Review:
+		\begin{itemize}
+			\item Relative error in double precision
+			\item Relative error and condition number
+				\[
+					K_p(A) := \lVert A \rVert_p \lVert A^{-1} \rVert_p
+				\]
+		\end{itemize}
+	\item Compare
+		\begin{itemize}
+			\item 10.2 Monomial Interpolation
+			\item 10.3 Lagrange Interpolation
+		\end{itemize}
+	\item This week: 10.4 Divided Differences
+\end{itemize}
+
+Here is the basic problem of this course: CPSC 303 is not supposed to be 302.
+But things like condition numbers are so useful, that we want to use them,
+and will mainly see their application towards interpolation.
+
+Chen is more like a numerical algebraist.
+When he sees condition numbers, particularly an example of a bad condition number,
+he gets excited.
+Joel really just sees it as a tool that something is going wrong.
+
+\begin{remark}
+	Say you have scientific notation, base 10, remembering 4 digits:
+	$1.00 \times 10^{71}, 1.001 \times 10^{71}, \dots,
+	9.999 \times 10^{71}, 1.000 \times 10^{72}$.
+	So for something with true value $3.217569 \times 10^{71}$,
+	the scienticific notation up to $4$ places is $3.218 \times 10^{71}$,
+	which gives the relative error
+	\[
+		\frac{|(\text{true value}) - (\text{sci notation})|}{|\text{true value}|}
+		= \frac{|3.217569 - 3.218|}{|3.217569|}
+		\leq \frac{|0.0005|}{3.217569|}
+	\]
+	So the maximum size of the relative error is
+	\[
+		\frac{| \frac{1}{2} \cdot 10^{-3}|}{|1.000|} = \frac12 \cdot 10^{-3}
+	\]
+\end{remark}
+
+Similar to in the remark, the error in double precision for a standard number:
+\[
+	\pm 1.b_1\dots b_{52} \cdot 2^m \quad (-1022 \leq m \leq 1023)
+\]
+has maximum relative error
+\[
+	2^{-52} \cdot \frac12 = 2^{-53} \approx 1.1 \times 10^{-16}
+\]
+In ODE's and recurrences, this error compounds.
+
+Let's say we are solving $A \vec{x}_{\text{true}} = \vec{b}_{true}$,
+but really $\vec{b}_{\text{true}} \rightsquigarrow \vec{b}_{\text{observed}}
+= \vec{b}_{\text{true}} + \vec{b}_{\text{error}}$.
+So what we are solving is $A \vec{x}_{\text{observed}} = \vec{b}_{\text{observed}}
+\neq \vec{b}_{\text{true}}$ (we have the true value of $A$ though)...
+I think this is a definition for $\vec{x}_{\text{observed}}$.
+Then $\vec{x}_{\text{observed}} = A^{-1} \vec{b}_{\text{observed}}$.
+The condition number answers how bad does this relative error of $\vec{x}$ differ.
+Specifically: $1 \leq p \leq \infty$, using $\lVert \cdot \rVert_p$.
+The relative error in $\vec{b}$:
+\[
+	\text{Relative error in } \vec{b}
+	= \frac{\lVert\vec{b}_{\text{true}} - \vec{b}_{\text{observed}}\rVert}
+	{\lVert \vec{b}_{\text{true}}\rVert}
+\]
+Then
+\[
+	\frac{\lVert\vec{x}_{\text{true}} - \vec{x}_{\text{observed}}\rVert}
+	{\lVert \vec{x}_{\text{true}}\rVert}
+	\leq C\frac{\lVert\vec{b}_{\text{true}} - \vec{b}_{\text{observed}}\rVert}
+	{\lVert \vec{b}_{\text{true}}\rVert}
+\]
+And we call the maximum $C$ the condition number.
+We might ask, what is the max $C$, and when is this max attained?
+
+Last week: $1 \leq p \leq \infty$, we said the worst $C$ is
+\[
+	C = K_p(A) = \lVert A \rVert_p \lVert A^{-1} \rVert_p
+\]
+Let's just believe this...
+Something something decoupled???
+We can solve the error and true value seperately or something.
+
+We will actually see in the homework that the condition number for a Vandermonde matrix
+is really bad.
+The homework gives a matrix where we can compute it, at least for one row (bottom righ entry???),
+which will help show how bad things can actually get.
+The monomial method relies on Vandermonde matrices, and so get a high error.
+We will see the Lagrange and divided differences have a much lower condition number.
+
+Trick we will use:
+Recall $A\vec{x}_{\text{true}} = \vec{b}_{\text{true}}$
+and $A\vec{x}_{\text{observed}} = \vec{b}_{\text{observed}}$.
+And so $A(\vec{x}_{\text{true}} - \vec{x}_{\text{obs}}) =
+\vec{b}_{\text{true}} - \vec{b}_{\text{obs}}$,
+and if we define $\vec{b}_{\text{error}} := \vec{b}_{\text{true}} - \vec{b}{\text{obs}}$,
+then $A\vec{x}_{\text{error}} = \vec{b}_{\text{error}}$.
+
+So now we can express our problem in terms of the relative error in $\vec{x}$ with
+the relative error in $\vec{b}$ (looking for max $C$):
+\[
+	\frac{\lVert \vec{x}_{\text{error}}\rVert_p}{\lVert \vec{x}_{\text{true}}\rVert_p}
+	\leq C\frac{\lVert \vec{b}_{\text{error}}\rVert_p}{\lVert \vec{b}_{\text{true}}\rVert_p}
+\]
+We can now seperate our problem:
+\begin{enumerate}
+	\item[(1)] What is the max constant $C_1$ such that
+		\[
+			\lVert \vec{x}_{\text{error}} \rVert_p \leq C_1
+			\lVert \vec{b}_{\text{error}} \rVert_p
+		\]
+	\item[(2)] What is the max constant $C_2$ such that
+		\[
+			\frac{1}{\lVert \vec{x}_{\text{true}} \rVert_p} \leq C_2
+			\frac{1}{\lVert \vec{b}_{\text{true}} \rVert_p}
+		\]
+\end{enumerate}
+Where $\vec{b}_{\text{error}}$ is anything, and $\vec{b}_{\text{true}}$ is anything,
+so these are completely independent of each other!
+Probably the most remarkable thing in this course.
+On the homework, they will give a few $2 \times 2$ examples where this happens.
+
+Looking at the error first, we have $\vec{x}_{\text{error}} = A^{-1} \vec{b}_{\text{error}}$, so
+\[
+	\lVert \vec{x}_{\text{error}} \rVert_p = \lVert A^{-1} \vec{b}_{\text{error}} \rVert_p
+	\leq \lVert A^{-1} \rVert_p \lVert \vec{b}_{\text{error}}\rVert_p
+\]
+Also, you can have $\vec{x}_{\text{error}},\vec{b}_{\text{error}}$ non-zero, and
+\[
+	\lVert A^{-1} \vec{b}_{\text{error}} \rVert_p
+	= \lVert A^{-1} \rVert_p \lVert \vec{b}_{\text{error}}\rVert_p
+\]
+since
+\[
+	\lVert M \rVert_p := \max_{\vec{x} \neq 0} \frac{\lVert M\vec{x}\rVert_p}
+	{\lVert \vec{x} \rVert_p}
+\]
+\begin{remark}
+	To find such a pair $\vec{b}_{\text{error}}, \vec{x}_{\text{error}}
+	= A^{-1} \vec{b}_{\text{error}}$,
+	it is not so nice for $\lVert \cdot \rVert_2$,
+	but not so bad for $\lVert \cdot \rVert_\infty$,
+	since
+	\[
+		\left\lVert \begin{bmatrix} a & b \\ c & d \end{bmatrix} \right\rVert_\infty
+		= \max(|a| + |b|, |c| + |d|)
+	\]
+\end{remark}
+So $\lVert \vec{x} \rVert_p \leq C_1 \lVert \vec{b}_{\text{error}} \rVert_p$
+where $C_1$ can be as low as $\lVert A^{-1} \rVert_p$.
+
+Now, we want the smallest possible $C_2$ such that
+\[
+	\frac{1}{\lVert \vec{x}_{\text{error}} \rVert_p} \leq C_2
+	\frac{1}{\lVert \vec{b}_{\text{error}} \rVert_p}
+\]
+I.e. the smallest $C_2$ such that
+\[
+	\lVert \vec{b}_{\text{true}} \rVert_p \leq C_2 \lVert \vec{x}_{\text{true}} \rVert_p
+\]
+But recall $\lVert \vec{b}_{\text{true}} \rVert_p$ ff
+So smallest $C_2$ is $\lVert A \rVert_p$, and
+$\lVert \vec{b}_{\text{true}} \rVert_P \leq \lVert A \rVert_p
+\lVert \vec{b}_{\text{true}} \rVert_P$
+is attained with equality when
+\[
+	\lVert A \vec{x}_{\text{true}} = \lVert A \rVert_p \lVert \vec{x}_{\text{true}}\rVert_p
+\]
+(it is stretching $\vec{x}_{\text{true}}$ out to its maximum).
+
+So we have $C_1 = \lVert A^{-1} \rVert_p$ and $C_2 = \lVert A \rVert_p$.
+ff
+
+
+\section{February 28}
+For today:
+\begin{itemize}
+	\item Monic interpolation (Section 10.2) versus Lagrange interpolation (Section 10.3)
+	\item Divided differences (Sections 10.4 - 10.7)
+		(See article: CPSC 303 Remarks on divided differences.
+		Likely to be revised to include more comments on 10.4-10.7,
+		since book doesn't even talk about it enough)
+\end{itemize}
+Homework 7 (not yet posted),
+will likely look at the following...
+
+Monic interpolation: given data $(x_0,y_0),\dots,(x_n,y_n)$
+and want to fit a polynomial $p(x)$ of degree $n+1$ (should be $n$???),
+specifically $p(x) = c_0 + c_1 x + c_2 x^2 + \cdots + c_nx^n$, such that
+$p(x_i) = y_i$, $i = 0,\dots,n$.
+In 10.2, we use the Vandermonde matrix
+\[
+	\begin{bmatrix}
+		1 & x_0 & \cdots & x_0^n\\
+		\vdots & \vdots & \ddots & \vdots\\
+		1 & x_n & \cdots & x_n^n
+	\end{bmatrix}
+	\begin{bmatrix} c_0 \\ \vdots \\ c_n \end{bmatrix} = 
+	\begin{bmatrix} y_0 \\ \vdots \\ y_n \end{bmatrix}
+\]
+What could possible go wrong?
+Say $(x_0,y_0),(x_1,y_1)$, and $x_0 = 2, x_1 = 2+ 10^{-5}$.
+You just want $c_0 + c_1 x$, so to find $c_0,c_1$ compute
+halfway between: $p(2 + (10^{-5})\frac12)$,
+call this point $x_{\text{mid}}$.
+Our system is (??? why did he put this here)
+\[
+	\begin{bmatrix} 1 & 2 \\ 1 & 2 + 10^{-5} \end{bmatrix}
+	\begin{bmatrix} c_0 \\ c_1 \end{bmatrix}
+	= \begin{bmatrix} y_0 \\ y_1 \end{bmatrix}
+\]
+but we can compute $p(x_{\text{mid}}) = \frac{y_0 + y_1}{2}$ since it is linear.
+
+We can numerically solve our system:
+$A \vec{c} = \vec{y}$, where $A$ is our matrix from above.
+We can solve $A^{-1} = \frac{1}{\det}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
+= \frac{1}{(2+10^{-5})-2}\begin{bmatrix} 2 + 10^{-5} & -2 \\ -1 & 1 \end{bmatrix}
+= 10^5\begin{bmatrix} 2 + 10^{-5} & -2 \\ -1 & 1 \end{bmatrix}$.
+It is clear to see that this matrix will have a very large condition number.
+We can compute the infinty norm (since it is easiest) to see
+\[
+	\left\lVert \begin{bmatrix} 1 & 2 \\ 1 & 2 + 10^{-5}\end{bmatrix}\right\rVert_\infty
+	= \max(1 + 2, 1 + 2 + 10^{-5}) = 3 + 10^{-5}
+\]
+and so ff some problem
+
+But consider Lagrange interpolation:
+say fitting $(x_0, y_0), (x_1,y_1), (x_2,y_2)$.
+Note fixed $x_0,x_1,x_2$.
+We have
+\[
+	L_0(x) = \frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}
+\]
+satisfies $L_0(x_1) = (x_1 - x_1)(\text{etc.}) = 0$,
+$L_0(x_2) = 0$, and $L_0(x_0) = \frac{(x_0-x_1)(x_0-x_2)}{(x_0-x_1)(x_0-x_2)} = 1$
+(note that this is still a polynomial, since the denominator is just a constant).
+So this is like the Dirac delta.
+Then, we have
+\[
+	p(x) = y_0 L_0(x) + y_1L_1(x) + y_2L_2(x)
+\]
+Then, it is easy to compute that $p(x_0) = y_0, p(x_1) = y_1, p(x_2) = y_2$.
+Note that the $L_i$ are all polynomials of degree $2$.
+
+We will see that Lagrange interpolation solves our problem.
+Let's look at the linear case $(x_0,y_0),(x_1,y_1)$.
+Then $p(x) = y_0\frac{x-x_1}{x_0-x_1} + y_1\frac{x-x_0}{x_1-x_0}$.
+This is the exact same polynomial as before with monic interpolation,
+and will be the same one we get with divided differences.
+What happens: $x_0 = 2, x_1 = 2 + 10^{-5}$, and want
+$p(x_{\text{mid}}) = p(2 + 10^{-5}\frac12)$.
+We compute it the way Lagrange suggests to do: compute each term seperately first:
+\[
+	p(x_{\text{mid}})
+	= y_0\left(\frac{x_{\text{mid}} - x_1}{x_0 - x_1}\right) +
+	y_2\left(\frac{x_{\text{mid}} - x_0}{x_1 - x_0}\right)
+\]
+The first term becomes $\frac{((2 + 10^{-5}\frac12) - (2+10^{-5}))}
+{(2 - (2 + 10^{-5}))}$.
+MATLAB, using double precision, has maximum relative error $10^{-16}$.
+We can calculat $2 + 10^{-5}\frac12 = 2.000005$.
+then we are computing the difference $2.000005 - 2.00001$,
+each with at least $10^{-16}$ relative precision,
+so get $-0.000005 \pm 2\cdot 10^{-16}$.
+
+The point:
+\[
+	\frac{(x-x_0)(x-x_1)\cdots(x-x_{n-1})}{(x_n-x_0)(x_n-x_1)(\cdots(x_n-x_{n-1}}
+\]
+and $x_0,\dots,x_n$ close: $x_0 = 2, x_1 = 2 + \ep, x_2 = 2 + 2\ep,\dots$.
+And $x \to 2 + \ep/2$ ???
+
+Even though the polynomials are mathematically the same,
+Lagrange interpolation is computed much better.
+Perhaps if you wanted to evaluate a ton of points, and they're not all close together,
+monic interpolation might be better.
+But this gives one siutation where Lagrange interpolatoin
+loses less precision than monic interpolation.
+
+On the homework, will choose $y_0,y_1$ to be some irrational number,
+so that precision is forced to be lost.
+Some fractions in base $2$ are exact (like $1/8$), but all irrationals
+cannot be exact in any base.
+
+Moving on, 10.4 - 10.7 and beyond is a much bigger story
+of Newton's divided differences.
 \end{document}

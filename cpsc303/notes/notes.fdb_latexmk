@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1708123943 "notes.tex" "notes.pdf" "notes" 1708123944 0
+["pdflatex"] 1709160393 "notes.tex" "notes.pdf" "notes" 1709160393 0
   "/home/nich/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1695159989 11524 a545fe7b6db104cbf3b60e865f10efb5 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1704400182 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1704400182 1004 54797486969f23fa377b128694d548df ""
@@ -29,6 +29,7 @@
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1704400182 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb" 1704400182 31099 c85edf1dd5b9e826d67c9c7293b6786c ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb" 1704400182 30457 bc0868ebece724ed7c3d37e3d9bff7bd ""
+  "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1704400182 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1704400182 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/share/texmf-dist/tex/generic/atbegshi/atbegshi.sty" 1704400182 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
   "/usr/share/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty" 1704400182 40635 c40361e206be584d448876bba8a64a3b ""
@@ -79,9 +80,9 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1704400182 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1706180302 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1706180302 6768053 23d65275ad9c0910048d43d14c4070e3 ""
-  "notes.aux" 1708123944 3308 becae5445cea64c2769ecb1936e3e64e "pdflatex"
-  "notes.out" 1708123944 3033 7e1dad985ddcbab258160e72bf9c1f3b "pdflatex"
-  "notes.tex" 1708123943 42943 fdfd6a4c03e87ee63a2b07244f2478f8 ""
+  "notes.aux" 1709160393 3530 856779477f8612fa6739ba67f735ab4e "pdflatex"
+  "notes.out" 1709160393 3239 12438bb1a413e4158abbae76272de9de "pdflatex"
+  "notes.tex" 1709160391 54333 79ff4ad5e10c43e4c28014c1c600127d ""
   (generated)
   "notes.aux"
   "notes.log"

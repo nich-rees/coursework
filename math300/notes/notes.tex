@@ -791,7 +791,8 @@ So if $f$ is complex differentiable at $c = (a+ib) = (a,b)$, then
 This is only from considering approaching along vertical and horizontal lines,
 so not a sufficient condition.
 
-\subsection{February 1}
+\section{February 1}
+\subsection{Differentiation (cont.)}
 Example: $f(z) = \bar{z}$.
 $f(x+iy) = \overline{x+iy} = x -iy = u(x,y) + iv(x,y)$.
 So $u(x,y) = x$ and $v(x,y) = -y$.
@@ -805,24 +806,41 @@ so $\frac{\partial u}{\partial x} \neq \frac{\partial v}{\partial y}$.
 Hence, $f(z) = \bar{z}$ is not complex differentiable.
 
 Example: $f(z) = |z|^2 = z\bar{z}$.
-ff calculation,
-So $f(z)$ is not complex differentiable anywhere,
+$f(x+iy) = (x+iy)(x-iy) = x^2 + y^2$
+so $u(x,y) = x^2 + y^2$ and $v(x,y) = 0$.
+We have $\frac{\partial u}{\partial x} = 2x$, $\frac{\partial u}{\partial y} = 2y$,
+$\frac{\partial v}{\partial x} = 0$, and $\frac{\partial v}{\partial y} = 0$.
+The two criteria give that $2x = 0 = 2y$, so the only solution
+to both equations is $(x,y) = (0,0)$, or $z = 0$.
+So $f(z) = |z|^2$ is not (complex) differentiable anywhere,
 except for maybe at the origin.
 Then compute the limit at the origin:
 \[
 	\lim_{z \to 0} \frac{f(z) - f(0)}{z - 0}
-	= \lim{z \to 0}\frac{|z|^2 - 0}{z}
-	= \lim{z \to 0}\bar{z} = \overline{\lim_{z \to 0}z} = 0
+	= \lim_{z \to 0}\frac{|z|^2 - 0}{z}
+	= \lim_{z \to 0}\bar{z} = \overline{\lim_{z \to 0}z} = 0
 \]
 Since this limit exists, $f(z) = |z|^2$ is complex differentiable at $z = 0$,
 and $f'(0) = 0$.
 
 Warning: just because the C.R. equations hold at some point $z = c$,
 doesn't mean that $f(z)$ is complex differentiable at $z = c$.
-Counterexample: $f(x + iy) = \sqrt{|xy|}$ at the origin.
-ff can check that C.R. equations hold,
-but ff compute that the line $x = y$ leads to different values
-from the right and the left.
+Counterexample: $f(x + iy) = \sqrt{|xy|}$ at the origin $c = 0$.
+We have $u(x,y) = \sqrt{|xy|}, v(x,y) = 0$.
+On the real axis ($y = 0$) and on the imaginary axis ($x = 0$),
+we have $u(x,y) = 0$.
+So $\frac{\partial u}{\partial x} \big \vert_0$ and
+$\frac{\partial u}{\partial y} \big \vert_0$ exist and are $0$
+(also $\frac{\partial v}{\partial x} \big \vert_0 =
+\frac{\partial v}{\partial x} \big \vert_0 = 0$).
+So the C.R. equations hold at $c = 0$.
+BUT: $f$ is not (complex) differentiable at $c = 0$.
+Consider $f$ restricted to the line $x = y$.
+Then $f(x + ix) = \sqrt{|x^2|} = |x|$,
+and $\lim_{x \to 0^+} \frac{|x| - |0|}{x-0} = 1$
+but $\lim_{x \to 0^-} \frac{|x| - |0|}{x-0} = -1$
+so $\lim_{z\to 0} \frac{f(z) - f(0)}{z-0}$ does not exist,
+and hence $f$ is not complex differentiable at $c = 0$.
 
 \begin{theorem}
 	Let $D = D(c,r)$ the disk centered at $c \in \C$, radius $r \in \R$, $r > 0$.
@@ -850,4 +868,532 @@ $\{z \mid |z - z_0| \leq r\}$ is not open.
 \end{definition}
 So $f(z) = |z|^2$ is complex differentiable at $0$ but not holomorphic at $0$
 (holomorphic requires differentiable on some open set).
+
+\subsection{Power Series}
+How do we construct holomorphic functions
+(beyond polynomials, rational functions)?
+The most important way is by power series.
+
+Recall the geometric series,
+$\sum_{n = 0}^\infty r^n = 1 + r + r^2 + \cdots$, where $0 \leq r < 1$.
+The limit exists by the ratio test: $\lim_{n\to\infty} \frac{r^{n+1}}{r^n}
+= \lim_{n\to\infty} r = r < 1$.
+The sum is $\sum_{n=0}^\infty r^n = \frac{1}{1-r}$.
+
+Now, recall what it means for a sequence of complex numbers to converge:
+$(z_n)_{n \geq 0}$ converges to $L \in \C$, $\lim_{n\to\infty} z_n = L$
+if $\forall \ep > 0, \exists N \colon |z_n - L| < \ep$
+(the same definition as for sequences of real numbers,
+except the interval $|x_n - L| < \ep$ is replaced by the disc $|z_n - L| < \ep$).
+A series $\sum_{n = 0}^\infty z_n$ converges if
+$\lim_{k \to \infty}\left(\sum_{n=0}^k z_n \right)$ converges
+(if the limit of the sequence of partial sums exists)
+and $\sum_{n = 0}^\infty z_n = \lim_{k \to \infty} \sum_{n = 0}^k z_n$.
+Fact: If $\sum_{n=0}^\infty z_n$ converges, then $\lim_{n \to \infty} z_n = 0$.
+\begin{definition}
+	If $\sum_{n=0}^\infty |z_n|$ converges then $\sum_{n=0}^\infty z_n$
+	is called \emph{absolutely convergent} (absolute convergence $\implies$ convergence).
+\end{definition}
+\begin{remark}
+	$\sum_{n=0}^\infty|z_n|$ is a series of real numbers,
+	so all standard convergence tests apply
+	(ratio test, root test, comparison test, integral test, etc.).
+\end{remark}
+
+We also have complex geometric series when $r = z \in \C$.
+We might ask, when is $\sum_{n = 0}^\infty z^n$ is absolutely convergent?
+$\sum_{n=0}^\infty |z^n| = \sum_{n=0}^\infty |z|^n$,
+which converges if $|z| < 1$.
+So $\sum_{n=0}^\infty z^n$ is absolutely convergent for all
+$z \in D(0,1) = \{z \mid |z| < 1\}$ and the limit is
+\[
+	\sum_{n=0}^\infty z^n = 1 + \sum_{n=1}^\infty z^n = 1+z\sum_{n=1}^\infty z^{n-1}
+	= 1 + z\sum_{n=0}^\infty z^n
+	\implies (1-z)\sum_{n=0}^\infty z^n = 1 \implies
+	\sum_{n=0}^\infty z^n = \frac{1}{1-z}
+\]
+
+\begin{definition}[Power series]
+	A series of the form $\sum_{n=0}^\infty c_n(z-a)^n$,
+	$(c_0,c_1,\dots)$ a sequence of complex numbers,
+	is called a $\emph{power series}$,
+	where $c_n$ are the coefficients, $a\in \C$ is the center.
+\end{definition}
+When $a = 0$, we get the special case $\sum_{n=0}^\infty c_nz^n$,
+e.g. $\sum_{n=0}^\infty z^n$ is the geometric series,
+or $\sum_{n=0}^\infty \frac{1}{n!}z^n$ is the exponential series.
+
+\begin{theorem}
+	Suppose $\sum_{n=0}^\infty c_n(z-a)^n$ converges at $z = z_0$.
+	Then $\sum_{n=0}^\infty c_nz^n$ converges absolutely at all $z$
+	such that $|z - a| < |z_0 - a|$.
+\end{theorem}
+\begin{theorem}
+	The power series $\sum_{n=0}^\infty c_n(z-a)^n$ satisfies one (and only one)
+	of the conditions
+	\begin{enumerate}
+		\item[(1)] converges for all $z \in \C$
+		\item[(2)] converges only for $z = a$
+		\item[(3)] there exists a positive real number $R > 0$
+			(the radius of convergence) such that $\sum_{n=0}^\infty c_n(z-a)^n$
+			converges absolutely for all $z \colon |z-a| < R$
+			(and diverges for all $|z-a| > R$).
+	\end{enumerate}
+\end{theorem}
+
+
+\section{February 6}
+\subsection{Power series (cont.)}
+\begin{theorem}
+	Suppose $\sum_{n=0}^\infty c_nz^n$ converges at $z = z_0$.
+	Then $\sum_{n=0}^\infty c_nz^n$ converges absolutely
+	foor all $z$ such that $|z| < |z_0|$
+\end{theorem}
+\begin{proof}
+	$c_n z_0^n \to 0$ so there exists $R > 0$ such that
+	$|c_nz_0^n| < R$ for all $n \geq 0$.
+	Let $z$ be such that $|z| < |z_0|$,
+	then $\frac{|z|}{|z_0|} < 1$ so the geometric series
+	$\sum_{n=0}^\infty \left(\frac{|z|}{|z_0|}\right)^n$ converges;
+	then also $\sum_{n=0}^\infty R\left(\frac{|z|}{|z_0|}\right)^n$ converges.
+	\[
+		|c_nz^n| = \left|c_n z_0^n \left(\frac{z}{z_0}\right)^n\right|
+		= |c_nz_0^n|\left(\frac{|z|}{|z_0|}\right)^n < R\left(\frac{|z|}{|z_0|}\right)^n
+	\]
+	so by the comparison test, $\sum_{n=0}^\infty |c_nz^n|$ converges.
+\end{proof}
+\begin{remark}
+	This holds with arbitrary centre: if $\sum c_n(z-a)^n$ converges
+	at $z_0$, then it converges absolutely for all $z$ such that
+	$|z-a| < |z_0 - a|$.
+\end{remark}
+
+\begin{theorem}
+	Let $\sum_{n=0}^\infty c_n(z-a)^n$ be a power series with radius of convergence $R$.
+	\begin{enumerate}
+		\item[(1)] If $\lim_{n\to\infty} \frac{|c_{n+1}|}{|c_n|}$ exists
+			and equal to $\lambda$, then $R = 1/\lambda$.
+		\item[(2)] If $\lim_{n\to\infty} \sqrt[n]{|c_n|}$ exists
+			and equal to $\lambda$, then $R = 1/\lambda$.
+	\end{enumerate}
+	($R = 0,\infty$ included).
+\end{theorem}
+
+Example: $\sum_{n=0}^\infty 2^n(z-i)^n$.
+Note $c_n = 2^n$ and $a = i$.
+We can compute $\lim_{n\to\infty} \frac{|c_{n+1}|}{|c_n|}
+= \lim_{n\to\infty} \frac{2^{n+1}}{2^n} = \lim_{n\to\infty} 2= 2$,
+so $R = 1/2$.
+(Directly, this is a geometric series $\sum_{n=0}^\infty (2(z-i))^n$ which converges
+when $|2(z-i)| < 1 \implies |z-i| < \frac12$ so $R = 1/2$.)
+
+Example: $\sum_{n=0}^\infty \frac{1}{n!} z^n$.
+Using ratio test, we get $\lim_{n\to\infty}\frac{1}{(n+1)!}/\frac{1}{n!}
+= \lim_{n\to\infty} \frac{n!}{(n+1)!} = \lim_{n \to \infty} \frac{1}{n+1} = 0$,
+so $R = \infty$.
+Hence the exponential series converges for all $z \in \C$.
+
+\begin{theorem}
+	Let $\sum_{n=0}^\infty c_n(z-a)^n$ be a power series
+	with radius of convergence $R > 0$. Then define
+	\[
+		f(z) = \sum_{n=0}^\infty c_n(z-a)
+	\]
+	with domain $D(a,R) = \{z \mid |z-a| < R\}$.
+	Then $f(z)$ is holomorphic in $D(a,R)$ with
+	\[
+		f'(z) = \sum_{n=1}^\infty nc_n(z-a)^{n-1}
+	\]
+\end{theorem}
+
+Example: $\exp(z) = \sum_{n=0}^\infty \frac{1}{n!} z^n$ is an entire function
+with derivative
+\[
+	\exp'(z) = \sum_{n=1}^\infty n\frac{1}{n!} z^{n-1}
+	= \sum_{n=1}^\infty \frac{1}{(n-1)!} z^{n-1} = \sum_{n=0}^\infty \frac{1}{n!}z^n = \exp(z)
+\]
+
+Other properties of $\exp(z)$:
+\begin{enumerate}
+	\item $\exp(z) \neq 0$ for all $z \in \C$
+	\item $\exp(z_1 + z_2) = \exp(z_1)\exp(z_2)$
+	\item $\exp(2\pi i) = \cos(2\pi) + i\sin(2\pi) = 1$.
+		More generally, $\exp(2\pi i k) = 1$ for all $k \in \Z$
+		and $\exp(z + 2\pi i) = \exp(z)\exp(2\pi i) = \exp(z)$.
+		So $\exp$ is periodic with period $2 \pi i$.
+		In fact, $\exp(z_1) = \exp(z_2)$ if and only if
+		there exists a $k \in \Z$ such that $z_2 + z_1 + 2\pi i k$.
+\end{enumerate}
+
+Example: $\sum_{n=0}^\infty (n+1)^2 z^n$.
+Try to use the ratio test to find $R$:
+\[
+	\lim_{n\to \infty} \frac{(n+2)^2}{(n+1)^2}
+	= \lim_{n\to\infty} \left(\frac{1+2/n}{1+1/n}\right)^2
+	= \left(\lim_{n\to\infty} \frac{1+2/n}{1+1/n}\right)^2
+	= \left(\frac{1 + \lim 2/n}{1 + \lim 1/n}\right)^2
+	= \left(\frac{1 + 0}{1 + 0}\right)^2 = 1
+\]
+So $R = 1/1 = 1$.
+(The ratio test for $\sum_{n=0}^\infty (n+1)^2$ is inconclusive though.)
+
+Example: $\sum_{n=0}^\infty z^{n!} = z^1 + z^1 + z^2 + z^6 + z^{24} + \cdots
+= 2z + z^2 + z^6 + z^{24} + \cdots$.
+This is a power series with coefficients
+$0,2,1,0,0,0,1,0,\dots$.
+Ratoi test does not work, $\lim_{n\to\infty} \sqrt[n]{|c_n|}$ does not exist.
+But there does exist a general formula:
+\[
+	\frac{1}{R} = \limsup \sqrt[n]{|c_n|}
+\]
+We have $\sqrt[n]{|c_n|} = 0, \sqrt[n]{2}, 1, 0, 0, 0, 1, 0, \dots$,
+so in this case $\limsup \sqrt[n]{|c_n|} = 1$,
+so $R = 1$.
+
+\subsection{Logarithms}
+\begin{definition}
+	$z = \exp(w) \iff w$ is a logarithm of $z$
+\end{definition}
+If $w$ is a lograithm of $z$ then $w + 2\pi i$ is another lograithm of $z$
+($z = \exp(w) \implies z = \exp(w + 2\pi i)$).
+So the logarithm of $z$ is multivalued!
+
+Say $w = u + iv$ ($u,v \in \R$),
+then $z = \exp(w) \iff z = \exp(u + iv)
+\iff z = \exp(u)\exp(iv) = e^u(\cos{v} + i\sin{v})
+\iff |z| = e^u$ and $v = \arg(z)$ ($v$ is an argument of $z$)
+$\iff u = \ln |z|$ and $v = \arg(z)$.
+(We write $\ln$ for the usual real logarithm $\ln \colon \R_{>0} \to \R$.)
+So $w = \log{z} \iff \mathrm{Re}(w) = \ln|z|$ and $\mathrm{Im}(w) = \arg(z)$.
+
+\begin{definition}
+	The \emph{principal logarithm} of $z \in \C$, $z \neq 0$ is
+	\[
+		\log(z) := \ln|z| + i \arg(z)
+	\]
+	where $\arg(z)$ is the principal argument of $z$,
+	so $- \pi < \mathrm{Im}(\log(z)) \leq \pi$.
+\end{definition}
+Example: $\log(-2) = \ln|-2| + i\arg(-2) = \ln(2) + i\pi$.
+All the logarithms of $-2$: $\mathrm{Log}(-2) = \ln(2) + i\pi + 2\pi i \Z$.
+
+If we consider $z \mapsto \log(z)$,
+a circle of points has fixed real component,
+and the imaginary component ranges from $-\pi i$ to $\pi i$.
+As the radius of the circle gets larger, the image (which is a line)
+goes more to the right.
+
+When $z = r \in \R$, $r > 0$: $\log(r) = \ln|r| + i\arg(r) = \ln(r)$.
+
+We have $\log(e^{i\theta}) = \ln\left|e^{i\theta}\right| + i\arg(e^{i\theta})
+= \ln(1) + i\theta = i\theta$ if $ - \pi < \theta < \pi$,
+or $\log(\frac12 e^{i\theta}) = \ln(\frac12) + i\theta$.
+
+We will now look at the multifunction.
+$\mathrm{Arg}(z) = $ the set of all arguments of $z$,
+which is $\arg(z) + 2\pi \Z = \{\arg(z) + 2\pi n \mid n \in \Z\}$.
+The multifunction $\mathrm{Log}(z) = \ln|z| + i\mathrm{Arg}(z)$.
+
+\subsubsection{Power functions}
+
+We can use logarithms to define powers:
+\[
+	w^z = \exp(z\log(w))
+\]
+In this formula, the meaning of $w^z$ depends on the meaning of $\log(w)$.
+The most common meaning is the principal value
+(unless otherwise specified what we mean) and then the multifunction $\exp(z\mathrm{Log}(w))$.
+
+A power function: fix a complex number $c \in \C$ and consider the function
+$z \mapsto z^c = \exp(c \log(z))$.
+E.g. $z \mapsto z^{1/3}$ ($c = 1/3$).
+The principal value of $z^{1/3}$ is
+$\exp(\frac13 \log(z)) = \exp(\frac13(\ln|z| + i\arg(z)))
+= \exp(\frac13\ln|z|) \exp(i\frac13 \arg(z))
+= |z|^{1/3}\exp(\underbrace{i \frac13 \arg(z)}_{\text{divide arg. by }3})$.
+This is the unique solution of $w^3 = z$ with $-\pi/3 < \arg \leq \pi/3$.
+
+If $p$ is a positive integer,
+the principal value of $z^{1/p}$ is the unique $p$th root of $z$
+in the region with arguments $-\pi/p < \arg \leq \pi/p$.
+The multifuction $z^{1/p}$ gives all $p$ $p$th roots of $z$
+(it is multivalued with $p$ many values).
+
+\subsubsection{Exponential functions}
+We define the exponential function $z \mapsto c^z$ with base $c$ as
+\[
+	c^z = \exp(z \log(c))
+\]
+and actually not multivalued,
+once we make the choice of $\log{e}$,
+e.g. $z \mapsto e^z = \exp(z\log{e})$
+the usual choice $\log(e) = \ln(e) = 1$,
+then $e^z = \exp(z \log(e)) = \exp(z)$.
+(If we made the choice of $1 + 2\pi i$, then
+$z \mapsto e^z = \exp(z(1+2\pi i)) = \exp(z)\exp(2\pi i z)$.)
+
+We have $\exp(\log(z)) = z$.
+
+\subsubsection{Properties of exponential, log, and power functions
+(from formula sheet)}
+\textbf{Exponential function} $\exp(z) = e^z$, if $e^z$ is defined
+in terms of the principal value of $\log(e) = 1$, which is \textbf{emph} assumed.
+\newline $e^{z_1 + z_2} = e^{z_1}e^{z_2}$.
+\newline $(e^z)^n = e^{nz}$, if $n$ is an integer.
+\newline $c^{z_1 + z_2} = c^{z_1}c^{z_2}$,
+if all exponential are defined in terms of the same value of $\log(c)$.
+\newline $(c^z)^n = c^{nz}$, if $n$ is an integer,
+and if all exponentials are defined in terms of the same value of $\log(c)$.
+
+\textbf{Arguments} the principal branch of the argument satisfies $-\pi < \arg(z) \leq \pi$,
+the branch $\arg_\alpha$ of $\mathrm{Arg}$ with values
+$-\pi + \alpha < \arg_\alpha(z) \leq \pi + \alpha$ is
+$\arg_\alpha(z) = \arg(ze^{-i\alpha}) + \alpha$
+(what??? is this just not doing anything?).
+
+\textbf{Logarithms} Every branch $w = f(z)$ of the logarithm satsifies $\exp(w) = z$.
+\newline The derivatie of any branch of the lograithm is $\frac{1}{z}$.
+\newline The principal branch of the logarithm is $\log(z) = \ln|z| + i\arg(z)$.
+\newline $\log(\exp(z)) = z$, if $-\pi < \mathrm{Im}(z) \leq \pi$.
+\newline $\mathrm{Log}(\exp(z)) = z + 2\pi i \Z$.
+\newline $\log(z_1z_2) = \log{z_1} + \log{z_2}$,
+if $- \pi < \arg(z_1 + \arg(z_2) \leq \pi$.
+\newline $\log(rz) = \ln(r) + \log{z}$, if $r \in \R_{>0}$.
+\newline $\mathrm{Log}(z_1z_2) = \mathrm{Log}z_1 + \mathrm{Log}z_2$.
+\newline the branch $\log_\alpha$ of $\mathrm{Log}$ with
+$-\pi + \alpha < \mathrm{Im}(\log_\alpha(z)) \leq \pi + \alpha$
+is $\log_\alpha(z) = \log(ze^{-i\alpha}) + i\alpha$.
+
+\textbf{Power functions} $z^{c_1}z^{c_2} = z^{c_1 + c_2}$,
+if all three power functions are defined in terms of the same branch
+of the logarithm.
+\newline $(z^c)^n = z^{nc}$, for all $n \in \Z$,
+if both power functions are defined in terms of the same branch of the logarithm.
+\newline $z^{c_1 + c_2} \subseteq z^{c_1}z^{c_2}$ for the power multifunctions.
+\newline $(z_1 z_2)^c = z_1^cz_2^c$ for the principal branches if
+$- \pi < \arg(z_1) + \arg(z_2) \leq \pi$.
+\newline $(z_1z_2)^c = z_1^cz_2^c$ for the multifunctions.
+\newline the derivative of $z^c$ is $cz^{c-1}$,
+as long as both power functions are defined in terms of the same branch of the logarithm.
+\newline every branch of $w = z^{m/n}$ ($m,n$ integers, $n \neq 0$) is
+a solution of $w^n = z^m$.
+
+Example: The rule $z^{c_1 + c_2} \subseteq z^{c_1}z^{c_2}$
+for the power multifunctions:
+\begin{align*}
+	z^{c_1 + c_2}
+	&= \exp((c_1 + c_2)\log(z))\\
+	&= \exp((c_1 + c_2)(\ln|z| + i\mathrm{Arg}(z)))\\
+	&= \exp((c_1 + c_2)(\ln|z| + i\arg(z) + 2\pi i \Z))\\
+	&= \exp((c_1 + c_2)\ln|z| + i(c_1 + c_2)\arg(z) + (c_1+c_2)2\pi i \Z)\\
+	z^{c_1}z^{c_2}
+	&= \exp(c_1(\ln|z| + i\arg(z) + 2\pi i \Z))\exp(c_2(\ln|z| _ i\arg(z) + 2\pi i \Z))\\
+	&= \exp(c_1(\ln|z| + i\arg(z) + 2\pi i \Z) + c_2(\ln|z| + i\arg(z) + 2\pi i \Z))\\
+	&= \exp((c_1 + c_2) \ln|z| + (c_1 + c_2)i\arg(z)
+	+ c_1 2\pi i \Z + c_2 2\pi i \Z)
+\end{align*}
+so the claim follows from $(c_1 + c_2)2\pi i \Z \subseteq c_1 2\pi i \Z + c_2 2 \pi i \Z$,
+because if $k \in \Z$, $(c_1 + c_2)2\pi i k 
+= c_1 2\pi i k + c_2 2 \pi i k \in c_1 2\pi i \Z + c_2 2\pi i \Z$,
+but in general $c_1 2\pi i \Z + c_2 2\pi i \Z$ is larger than $(c_1 + c_2) 2\pi i \Z$.
+
+
+\section{February 8 and 15}
+Midterm 1: PLOMS (??? what the hell is this acronym).
+
+\subsection{The cross-ratio}
+\begin{definition}
+	Given $4$ complex numbers (including $\infty$) $z,a,b,c$, at least $3$ of them distinct.
+	Then the cross-ratio of $z,a,b,c$ is determined to be
+	\[
+		(z,a \colon b,c) := \frac{z-b}{z-c} \colon \frac{a-b}{a-c}
+		= \frac{(z-b)(a-c)}{(z-c)(a-b)} \in \hat{\C}
+	\]
+\end{definition}
+\begin{theorem}
+	Fix three distinct points $a,b,c$ in $\hat{\C}$.
+	Then the mapping $\hat{\C} \to \hat{\C}$ given by
+	$z \mapsto (z,a \colon b,c) = \frac{(z-b)(a-c)}{(z-c)(a-b)}
+	= \frac{(a-c)z + (c-a)b}{(a-b)z + (b-a)c}$
+	is a M\"{o}bius transformation.
+	In fact, it's the unique M.T. such that
+	\begin{align*}
+		a &\mapsto \frac{(a-b)(a-c)}{(a-c)(a-b)} = 1\\
+		b &\mapsto \frac{(b-b)(a-c)}{(b-c)(a-b)} = 0\\
+		c &\mapsto \frac{c-b}{c-c}\frac{a-c}{a-b} = \infty
+	\end{align*}
+\end{theorem}
+You can use the cross-ratio to find the M.T. sending
+$a \mapsto a'$, $b \mapsto b'$, and $c \mapsto c'$,
+Since if $f$ is $(z,a\colon b,c)$ and $g$ is $(z,a'\colon b',c')$,
+then $g^{-1}\circ f$ does what we want and is M.T.
+(Note: BMPS uses a different convention.
+There are $6$ ways to define the cross-ratio. Here, he followed wikipedia.)
+
+\begin{theorem}
+	Let $f \colon \hat{\C} \to \hat{\C}$ be a M\"{o}bius transformation.
+	Then for any $4$ points in $\hat{\C}$ we have
+	$(z,a \colon b,c) = (f(z),f(a) \colon f(b),f(c))$.
+	So M\"{o}bius transformations preserve the cross-ratio.
+\end{theorem}
+
+\subsection{An application of Cauchy-Riemann equations}
+Find a holomorphic function $f \colon \C \to \C$ with real part $u(x,y) = y - 2xy$.
+We have $\frac{\partial u}{\partial x} = -2y$ and
+$\frac{\partial u}{\partial y} = 1-2x$.
+From the C.R. equations, this gives us $\frac{\partial v}{\partial y} = -2y$
+and $\frac{\partial v}{\partial x} = -1 + 2x$.
+These are 2 partial differential equations for the unknown function $v(x,y)$.
+Examining the first, we guess $v(x,y) = -y^2 + h(x)$,
+which gives $\frac{\partial v}{\partial x} = 0 + h'(x)$.
+So using the second, we have $-1 + 2x = h'(x)$,
+and so $h(x) = x^2 -x + C$,
+so $v(x,y) = -y^2 + x^2 - x + C$.
+
+The most general holomorphic function with real part $u(x,y) = y - 2xy$ is
+\[
+	f(x,y) = y - 2xy + i(-y^2 + x^2 - x + C)
+\]
+For example, $f(x,y) = y-2xy + i(-y^2 + x^2 - x)$.
+
+\subsection{Geometric meaning of complex derivaties}
+Suppose $f(z)$ is holomorphic at$z = z_0$.
+What is the meaning of $f'(z_0)$?
+Let $\gamma \colon \R \to \C$ be a path (differentiable),
+or we can think of $\gamma \colon \R \to \R^2$.
+We have $\gamma(t) = (x(t),y(t))$ and $\gamma'(t) = (x'(t),y'(t))$.
+Note $\gamma'(t_0)$ is the tangent vector to the path
+$\gamma$ at the point $\gamma(t_0)$.
+
+Suppose that $\gamma(0) = z_0$.
+Consider $\R \overset{\gamma}{\to}\C \overset{f}{\to} \C$ the composition.
+The chain rule applies to this composition:
+$(f\circ \gamma)'(0) = f'(\gamma(0))\gamma'(0) = f'(z_0) \gamma'(0)$.
+Note the tangent vector to $\gamma$ at $z_0$ gets mapped by $f$
+to the tangent vector of $f \circ g$ at $f(z_0)$.
+We have shown that this is done by multypling by $f'(z_0)$.
+So tangent vectors are rotated by $\arg(f'(z_0))$,
+and are scaled by the factor $|f'(z_0)|$.
+In particular, if $\gamma_1,\gamma_2$ both pass through $z_0$,
+both tangent vectors are rotated by the same angle $\arg(f'(z_)))$,
+i.e. the angle between the paths is preserved under $f$.
+So holomorphic maps are angle preserving (what we call \emph{conformal})
+and $|f'(z_0)|$ is the infinitesimal scaling factor.
+
+So the derivative describes how paths in $\C$ change after getting mapped by $f$.
+
+\subsection{Branches of logarithms and powers}
+Ex. Find all values of $i^i$ and the principal value.
+\begin{align*}
+	i^i &= \exp(i \mathrm{Log}(i))\\
+		&= \exp(i(\ln|i| + i\mathrm{Arg}(i)))\\
+		&= \exp(-\mathrm{Arg}(i))\\
+		&= \exp(-(\arg(i) + 2\pi\Z))\\
+		&= \exp(-\pi/2 + 2\pi \Z)
+\end{align*}
+So the princiapl value of $i^i$ is $e^{-\pi/2}$.
+All values of $i^i$ are $e^{-\pi/2 + 2\pi k}$ for $k \in \Z$ (they're all real).
+
+\begin{definition}[Branch of the logarithm]
+	A \emph{branch} of the logarithm is any holomorphic function
+	$f \colon U \to \C$ where $U \in \C$ is open,
+	and $\exp(f(z)) = z$ for all $z \in U$.
+\end{definition}
+For example, the principal branch (as a holomorphic function)
+is defined on the open subset $U = \C \setminus \R_{\leq 0}$.
+$\R_{\leq 0}$ is called the \emph{branch cut}.
+
+Other branches include $\log(z) + 10 \pi i$ defined on $z \in \C \setminus\R_{\leq 0}$.
+Check: $\log(z)$ is holomorphic for $z \in \C \setminus \R_{\leq 0}$
+and $\exp(\log(z) + 10\pi i) = \exp(\log{z})\exp(10\pi i) = z \cdot 1 = z$.
+
+Next, we will consider branches with branch cuts that are other rays through $0$.
+Define $\arg_\alpha(z)$ to be the value of $\mathrm{Arg}(z)$ such that
+$-\pi + \alpha < \arg_\alpha(z) \leq \pi + \alpha$.
+Formula for $\arg_\alpha(z)$ in terms of $\arg(z)$:
+start with $\mathrm{Arg}(z) - \alpha = \mathrm{Arg}(ze^{-i\alpha})
+\implies \arg_\alpha(z) - \alpha = \arg(ze^{-i\alpha})$ (by definition of $\arg_\alpha$) hence
+\[
+	\arg_\alpha(z) = \arg(ze^{-i\alpha}) + \alpha
+\]
+
+This branch of $\mathrm{Arg}(z)$ gives rise to a branch of $\mathrm{Log}(z)$:
+\begin{align*}
+	\log_\alpha(z) &= \ln|z| + i\arg_\alpha(z)\\
+				   &= \ln|z| + i\arg(ze^{-i\alpha}) + i\alpha\\
+				   &= \ln|ze^{-i\alpha}| + i\arg(ze^{-i\alpha}) + i\alpha
+\end{align*}
+And so
+\[
+	\log_\alpha(z) = \log(ze^{-i\alpha}) + i\alpha
+\]
+(this is the $\log$ where the branch cut is the ray pointing in the direction of
+$\pi + \alpha$ from the origin:
+$\log_\alpha(z)$ is not holomorphic when $ze^{-i\alpha} = -r$
+or $z = - re^{i\alpha}$ ($r \geq 0$)).
+
+\subsection{Singularities}
+Say $f$ is holomorphic on $U \setminus \{a\}$, $U$ open and $a \in U$.
+\begin{itemize}
+	\item $a$ is a \emph{removable singularity} if $f$ can be extended to $U$ holomorphically,
+		e.g. $f(z) = \frac{z^2-1}{z+1}= z-1$ on $\C\setminus \{-1\}$,
+		so we can extend $f$ by $f(-1) = -2$.
+	\item $a$ is a \emph{pole} if $(z-a)^Nf(z)$ has a removable singularity
+		for some $N > 0$,
+		e.g. $f(z) = \frac{1}{(z+1)^5}$.
+		Here $a = -1$.
+		Then $(z-a)^5f(z) = (z+1)^5\frac{1}{(z+1)^5} = 1$.
+		The smallest possible such $N$ is the order of the pole.
+		So we say $f(z) = \frac{1}{(z+1)^5}$ has a pole of order $5$ at $z = -1$.
+	\item $f$ has a \emph{zero} of order $n$ if $\frac{f(z)}{(z-a)^n}$
+		has a removable singularity,
+		and $n$ is the largest such value,
+		e.g. $f(z) = (z+1)^2(z-2)$.
+		Here $z = -1$ is a zero.
+		$\frac{f(z)}{(z+1)^2} = z - 2$.
+		so we say that it has a zero of order $2$ at $z = -1$.
+\end{itemize}
+
+Fact: If $f(z) = (z-a)^ng(z)$ where $g(z)$ is holomorphic at $z = a$,
+then if $n > 0$, $f$ has a zero of order $n$ at $z = a$,
+and if $n < 0$, $f$ has a pole of order $n$ at $z = a$.
+
+\begin{definition}
+	$f(z)$ is \emph{meromorphic} in $U \subset \C$ open
+	if the only type of singularities it has are poles (or removable singularities).
+\end{definition}
+If a singularity is neither removable, nor a pole, it is an \emph{essential} singularity.
+E.g. $e^{1/z}$ at $z = 0$ is an essential singularity.
+
+\begin{remark}
+	Meromorphic functions $U \to \C$ can be extended to continuous functions
+	$U \to \hat{\C}$ by sending the poles to $\infty$.
+\end{remark}
+To see this, for continuity, need $f(a) = \lim_{z \to a} f(z)$,
+and so if $a$ is a pole of $f$,
+$\lim_{z \to a} f(z) = \lim_{z \to a} \frac{1}{(z-a)^n}g(z)
+= \frac{1}{0}g(a) = \frac{\neq 0}{0} = \infty = f(a)$
+(where we know $g(a) \neq 0$ and $n > 0$).
+In fact, meromorphic functions can be thought of as holomorphic functions $U \to \hat{\C}$.
+
+To extend meromorphic functions defined in $U = \C$ to $\hat{\C}$:
+\begin{definition}
+	The type of singularity of $f(z)$ at $z - \infty$ is the
+	type of singularity of $f(\frac{1}{z})$ at $z = 0$.
+\end{definition}
+Ex. $h(z) = \frac{2z^2 + 3z + 1}{5z^5 + z}$.
+Write $w = \frac{1}{z}$ (so $z = \infty \leftrightarrow w= 0$)
+and substitute for $z$.
+\[
+	\frac{2\frac{1}{w^2} + 3\frac{1}{w} + 1}{5\frac{1}{w^5} + \frac{1}{w}}
+	= \frac{2w^3 + 3w^4 + w^5}{5 + w^4} = w^3 \underbrace{\frac{2 + 3w + w^2}
+	{5 + w^4}}_{g(w), g(0)\neq0}
+\]
+this has a zero of order $3$ at $w = 0$.
+So $h(z)$ has a zero of order $3$ at $z = \infty$.
+So we can extend $h \colon \hat{\C} \to \hat{\C}$ continuous where $\infty \mapsto 0$.
+(Again, in a more advanced course,
+we can consider meromorphic functions to be holomorphic functions $\hat{\C} \to \hat{\C}$.
+Examples: M\"{o}bius transformations are the unique meromorphic functions
+$\hat{\C} \to \hat{\C}$ which are one-to-one and onto.)
 \end{document}

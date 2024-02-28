@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1707859629 "notes.tex" "notes.pdf" "notes" 1707859630 0
+["pdflatex"] 1709122365 "notes.tex" "notes.pdf" "notes" 1709122365 0
   "/home/nich/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1695159989 11524 a545fe7b6db104cbf3b60e865f10efb5 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1704400182 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1704400182 1004 54797486969f23fa377b128694d548df ""
@@ -23,6 +23,7 @@
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1704400182 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1704400182 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1704400182 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmti7.tfm" 1704400182 1492 86331993fe614793f5e7e755835c31c5 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1704400182 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1704400182 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1704400182 30251 6afa5cb1d0204815a708a080681d4674 ""
@@ -60,8 +61,8 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1704400182 40684 9b9ec0b4288972636ff6a3b9c4238efc ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1706180302 27758 38728abbce47239bb9c148cdc8c9e373 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1706180302 6768053 23d65275ad9c0910048d43d14c4070e3 ""
-  "notes.aux" 1707859630 2327 20b078a487c736c8b25427953156c9d5 "pdflatex"
-  "notes.tex" 1707859629 36523 f938fe2050c86a46c32247774f97418a ""
+  "notes.aux" 1709122365 3984 7198dfbf955075b731f47f0cb4b66a41 "pdflatex"
+  "notes.tex" 1709122364 59663 e280189a4ce2ba866571531ee98f3ac8 ""
   (generated)
   "notes.aux"
   "notes.log"

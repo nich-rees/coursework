@@ -1283,4 +1283,180 @@ one can show that there are only $10$ possible values such that $\Z[d]$
 has unique factorization (modular forms or something).
 Posed by Gauss and not solved until the 50s.
 Solved by German schoolteacher who went to his grave without recognition.
+
+
+\section{February 27}
+Let $k$ a field, we might wonder what $k[X]/(f(X))$ is.
+If $f(X)$ is irreducible (and so $(f(x))$ is maximal),
+we get another field, $k(u)$
+(where $u$ is a root of $f(X)$, $u = \bar{X} = X + (f(X))$).
+Now, when $J$ is principal and $(g(X)) = J \supset (f(X))$,
+then $g(X) \mid f(X) \implies g(X) \sim f(X)$.
+If we instead have $f(X) = g(X)^e$, $g(X)$ irreducible,
+then $k[X]/(f(X)) = R$,
+not even an integral domain, since
+$g(X) \neq 0$ in $R$, $g(X)^e = 0$ in $R$.
+More generally:
+\begin{theorem}
+	When $f(X) = \prod g_i(X)^{e_i}$,
+	where the $g_i(X)$ are irreducible, monic, and distinct,
+	\[
+		k[X]/(f(X)) \cong \oplus k[X]/(g_i(X)^{e_i})
+	\]
+\end{theorem}
+This generalizes the Chinese remainder theorem:
+\begin{theorem}[CRT]
+	$R = \Z$, $n = \prod p_i^{e_i}$, $\Z/n\Z \cong \oplus \Z/p_i^{e_i}\Z$.
+\end{theorem}
+When $n = p$ prime, get a field $\mathbb{F}_p$,
+or if equal to $p^e$, get $\Z/p^e\Z$.
+
+As long as you don't have repeated roots in the factorization,
+things don't look too weird.
+When it is just one, looks like $\Z/p\Z$,
+but when we add more, it starts looking funkier.
+
+How do we prove the theorem?
+The proof actually looks a lot like the proof for the Chinese remainder.
+For CRT, we want $\Z/pq\Z \cong \Z/p\Z \oplus \Z/q\Z$,
+and generally, we want $k[X]/(f(X)) = k[X]/(f_1f_2) \cong k[X]/(f_1(X)) \oplus k[X]/(f_2(X))$.
+What is the map in the CRT case?
+We have $r \, \mathrm{mod}\, pq \mapsto r \, \mathrm{mod} \, p \oplus
+r \, \mathrm{mod} \, q$.
+We have $(pq) \subseteq (p)$ and $(pq) \subseteq (q)$.
+What is the equivalent in the general setting?
+ff something about homomorphism theorem.
+
+For CRT, how do we prove injectivity?
+Well, $r \, \mathrm{mod}\, p = 0 \implies p \mid r$
+and $r \, \mathrm{mod}\, q = 0 \implies q \mid r$,
+and since $p,q$ are coprime, this gives $pq \mid r$,
+and so the kernel is just $0$.
+Similarly, $g(X) = 0 \, \mathrm{mod} \, f_1 \implies f_1 \mid g$
+and $g(X) = 0 \, \mathrm{mod} \, f_2 \implies f_2 \mid g$
+which imply $f_1f_2 \mid g$, hence, injective.
+
+Now we prove surjectivity.
+To get $\Z/pq\Z \twoheadrightarrow \Z/p\Z \oplus \Z/q\Z$,
+consider the element $(r_1,r_2) \in \Z/p\Z \oplus \Z/q\Z$.
+We want $r \in \Z$ such that $r \equiv r_1 \, \mathrm{mod}\, p$
+and $r \equiv r_2 \, \mathrm{mod} \, q$.
+Bezout's says $\exists m,n$ such that
+$mp + nq = 1 = \gcd(p,q)$.
+So $r_2mp + r_1nq \equiv r_1nq \, \mathrm{mod}\, p \equiv
+r_1 (1 - mp) \equiv r_1 \, \mathrm{mod}\, p$.
+Similarly, $r_2mp + r_1nq \equiv r_2 \, \mathrm{mod}\, q$.
+So $r = r_2mp + r_1nq \equiv r_1nq$.
+Now in the general setting, we are given
+$r_1(X) \, \mathrm{mod} \, f_1(X)$ and $r_2(X) \, \mathrm{mod}\, f_2(X)$,
+want $r(X) \equiv r_1(X) \, \mathrm{mod}\, f_1$ and $r(X) \equiv r_2(X)\,\mathrm{mod}\,f_2$. 
+The same process works, since the g.c.d. exists and is $1$.
+To get $m(X)f_1(X) + n(X)f_2(X) = 1$ for coprime $f_1(X),f_2(X)$,
+we could use the Euclidean algorithm as in $\Z$,
+or for a method that works for any PID,
+we can use the fact that $(f_1(X))$ is maximal.
+Then $(f_1(X),f_2(X)) \supsetneq (f_1(X)) \implies
+(f_1(X),f_2(X)) - k[X] \implies 1 \in (f_1(X),f_2(X))$.
+
+(Oops, I've been saying general setting through, but this is really
+just the polynomial setting).
+
+\subsection{Hilbert's basis theorem from quiz}
+``It is actually quite easy once you see that induction is involved.
+We've used this technique a bunch of times."
+Bruh, no shit it's induction.
+
+We have $k[X_1,\dots,X_n]$, and we want to prove any ideal is finitely generated.
+We go with induction on $n$: $n = 1$, $k[X]$, PID< so clear (first part).
+Assume the result for $n-1$ variables,
+let $I$ be an ideal in $k[X_1,\dots,X_n]$ in this ring.
+Take $f \in I$, it is of the form
+\[
+	f = a_m(X_1,\dots,X_{n-1})X_n^m + a_{m-1}(X_1,\dots,X_{n-1})X^{m-1}
+	+ \cdots
+\]
+(the $a_i(X_1,\dots,X_{n-1}$) are polynomials).
+Consider the coefficients $a_m(X_1,\dots,X_{n-1}) \in k[X_1,\dots,X_{n-1}]$
+as $f$ runs over $f \in I$.
+Claim: this is an ideal $J$ in $k[X_1,\dots,X_{n-1}]$.
+To see this, let $g \in I$,
+so $g = b_r(X_1,\dots,X_{n-1})X_n^r + \cdots$.
+Assuming $m \geq r$ (otherwise, leading coefficient won't be $m$th power???),
+the leading coefficient of $X^{m-r}g + f$ is $b_r + a_m$,
+so it is closed under addition.
+Closure under multiplication is obvious.
+
+By induction, $J$ is finitely generated.
+So there exists finitely many polynomials
+$f_1,\dots,f_s$ in $I \subseteq k[X_1,\dots,X_n]$ whose leading coefficients generate $J$.
+Which means given any $f \in I$, there exists polynomials $g_1,\dots,g_s$
+in $k[X_1,\dots,X_{n-1}]$ such that
+the leading coefficient of $\sum_{i=1} g_i f_i$ matches that of
+$f \implies I = (f_1,\dots,f_s)$.
+(Like how proved that $k[X]$ is a P.I.D.)
+
+A simpler way to put this is to state it as
+$R$ noetherian implies $R[x]$ noetherian:
+Let $I \subset R[X]$, want finiteily many generators.
+Write $f \in I = a_mX^m + a_{m-1}X^{m-1} + \cdots + a_0$
+(these $a_i$ are functions of $f$).
+Let $J$ be genereated by $a_m(f)$ for all $f \in I$,
+which is an ideal in $R$, and so it is finitely generated.
+Then, we show that it these generate $I$:
+take top coefficient, match it, and left with a lower degree,
+then give another combination of the generators, and so on.
+
+Hmm, Arvin might have pointed out a problem...
+will post an update later
+(an adjust marks if there is a problem).
+
+Quiz on Thursday: said Euclidean rings are mainly just a curiosity
+and not a lot of interesting results.
+So for quiz, really just need to know $\Z$ and polynomial rings
+are Euclidean rings.
+
+\subsection{Intro to modules}
+Modules are for rings what vector spaces are for fields.
+\begin{definition}[Module]
+	Let $R$ be a ring (usually commutative).
+	A \emph{module} is an abelian group $M$ plus a map
+	``multiplication by $R$": $R\times M \to M$
+	that satisfies the obvious conditions:
+	$(r_1r_2)m = r_1(r_2m)$, $(r_1+r_2)m + r_1m+r_2m$,
+	$r(m_1+m_2) + rm_1 + rm_2$, and $1m = m$.
+\end{definition}
+Example: a vector space over a field.
+
+In general, the action of $r \in R$ can be complicated.
+It is not invertible in general, $rm = 0$ can happen even when $r \neq 0$.
+For us $R$ will be a P.I.D. (usually $\Z$ and a polynomial $X$ over a field)
+and $M$ will be a finitely generated module
+(will say what this means in a second)
+so that it is much nicer.
+And in this case, wwe can describe them explicitly,
+a complete structure theory.
+But often in research, will get some random module over a complicated ring,
+and it is quite hard to figure out what is going on.
+This is commutative algebra, and ``it is kind of a black art."
+
+$M$ finite generated module when it is a finite abelian group
+(and as we discussed, can represent as direct sum of $\Z$ mod prime powers;
+will get an even stronger result).
+
+Example: $R = \Z$, $M$ is an abelian group,
+$rm = (m + m + \cdots + m)$ $r$ times.
+Then $M$ is a $\Z$-module.
+Quotients of $\Z/n\Z$ will give the theory here?
+
+Example: $k$ a field, $V = k^n$, $A = n \times n$ matrix with entries in $k$.
+$V$ is a $k[X]$-module by sending $p(X) = p(A) = $
+$n \times n$ matrix acts on $k^n$.
+The quotient stuff we talked about the beginning of the lecture
+will be important here.
+
+These two modules look quite different,
+but will see can be described by the same structure theory.
+Particularly, we will be able to describe the matrix $A$,
+and will get a lot of things falling out from linear algebra
+(don't need to go to $\C$ just to get eigenvalues).
 \end{document}

@@ -1702,4 +1702,214 @@ Will talk about equicontinuity after the break.
 Administrative note: two homeworks,
 one walks you through the proof of DCT but not to be handed in,
 the other is the actual homework.
+
+
+\section{February 26}
+\subsection{Equicontinuity}
+\begin{definition}[Equicontinuous]
+	$\mathcal{F}$ is a family of functions $f \colon E \to \C$
+	where $E$ is a set in a metric space $X$.
+	$\mathcal{F}$ is \emph{equicontinuous} on $E$ if for every $\ep > 0$,
+	there exists $\delta > 0$ such that whenever $x,y \in E$ where
+	$d(x,y) < \delta$ and $f \in \mathcal{F}$,
+	\[
+		\forall f \in \mathcal{F}, \quad \lvert f(x) - f(y)\rvert < \ep
+	\]
+\end{definition}
+\begin{remark}
+	If $\mathcal{F}$ is equicontinuous, each $f \in \mathcal{F}$ is uniformly continuous)
+\end{remark}
+\begin{remark}
+	Converse is false: $X = [0,1], \mathcal{F} = \{f_n\}_{n=1}^\infty$, 
+	something something $f_n = x^n$, $f_n = nx$ ???
+\end{remark}
+\begin{remark}
+	If $\mathcal{F}$ is finite and each $f \in \mathcal{F}$ is uniformly continuous,
+	then $\mathcal{F}$ is equicontinuous.
+\end{remark}
+
+\begin{theorem}[Rudin 7.24]
+	Let $K$ be a compact metric space,
+	$f_n \colon K \to \C$ continuous ($f_n \in C(K)$)
+	and $\{f)n\}$ converges uniformly on $K$,
+	then $\{f_n\} = \mathcal{F}$ is equicontinuous on $K$.
+\end{theorem}
+\begin{proof}
+	We will use the $\ep/3$ argument (just about splitting things up).
+	Let $\ep > 0$.
+	Since $\{f_n\}$ converges uniformly,
+	there exists $N$ such that $\forall n,m \geq N$, $x \in K$,
+	$\lvert f_n(x) - f_m(x) \rvert < \ep/3$.
+	Since $K$ is compact, each function is uniformly continuous.
+	So $\{f_1,\dots,f_N\}$ is equicontinuous,
+	i.e. $\exists \delta > 0$ such that $\forall x,y \in K$ (with $d(x,y) < \delta$)
+	and all $n \leq N$,
+	$\lvert f_n(x) - f_n(t) < \ep/3$.
+	Next, if $n > N$ and $x,y \in K$ with $d(x,y) < \delta$,
+	$\lvert f_n(x) - f_n(y) \rvert$
+	ff couldn't see the bottom of the board,
+	but the proof finishes as you would expect.
+\end{proof}
+
+\begin{theorem}[Rudin 7.16]
+	Let $K$ be a compact metric sapce,
+	$\{f_n\}$ an equicontinuous family of functions $f_n \colon K \to \C$.
+	If $\{f_n\}_{n=1}^\infty$ converges pointwise on $K$,
+	then $\{f_n\}_{n=1}^\infty$ converges uniformly.
+\end{theorem}
+Important in math, particularly in analysis,
+important to remember the proofs of the theorem.
+Will often come across a problem that hasn't a slightly different set up of theorem,
+and so modify proof slightly to get what you want.
+How do you remember hundreds of proof.
+You could remember every penstroke, but those form words, so easier to remember words;
+now we could remember every word, but those come together to form sentences,
+so easier to remember sentences;
+now could remember every sentence, but those come together to make arguments,
+so it is simpler to just remember the argument.
+In this case, we remember $\ep / 3$ argument and try to expand out of that.
+\begin{proof}
+	$\ep / 3$ argument.
+	Let $\ep > 0$. Select $\delta > 0$ such that $\forall x,y \in K$
+	with $d(x,y) < \delta$, and for all $f_n$, $\lvert f_n(x) - f_n(y)\rvert < \ep/3$.
+	Since $K$ is compact, the open cover $\{N_\delta (x)\}_{x \in K}$ has
+	a finite subcover, $N_\delta(x_1),\dots,N_\delta(x_l)$.
+	Thus, given $x \in K$, there exists $x_j$ such that
+	$d(x,x_j) < \delta$ so for $n,m \in N$,
+	\[
+		\lvert f_n(x) - f_m(x) \rvert \leq
+		\underbrace{\lvert f_n(x) - f_n(x_j) \rvert}_{<\ep/3}
+		+ \lvert f_n(x_j) - f_m(x_j) \rvert + 
+		\underbrace{\lvert f_m(x_j) - f_m(x)\rvert}_{<\ep/3}
+	\]
+	So there is one more thing we have to bound by $\ep / 3$.
+	Since $\{f_n\}$ converges pointwise,
+	for each $j = 1, \dots, l$, $\exists N_j$ such that $\forall n,m \geq N_j$,
+	$\lvert f_n(x_j) - f_m(x_j) \rvert < \ep/3$.
+	Let $N = \max\{N_1,\dots,N_l\}$.
+	Then $\forall n,m \geq N, \forall j = 1,\dots, l$
+	\[
+		\lvert f_n(x_j) - f_m(x_j) \rvert < \ep/3
+	\]
+	and the proof follows.
+\end{proof}
+We use compactness in a pretty essential way.
+In the previous theorem, we just used it for continuity thus uniform continuity.
+But here, we really needed it in the argument,
+so compactness is the natural environment for equicontinuity.
+
+
+\section{February 28}
+\begin{definition}[Rudin 7.19]
+	Let $X$ be a metric space, $E \subset X$, let $\mathcal{F}$
+	be a family of functions $f \colon E \to \C$.
+	We say $\mathcal{F}$ is \emph{pointwise bounded}
+	if there exists $\phi \colon E \to \R$ such that
+	$\lvert f(x) \rvert \leq \phi(x)$ for every $x \in E$ and $f \in \mathcal{F}$.
+	We say $\mathcal{F}$ is \emph{uniformly bounded} if there exists
+	$M \in \R$ such that $\lvert f(x) \rvert \leq M$ for all $x \in E$ and $f \in \mathcal{F}$.
+\end{definition}
+How would we generalize this, i.e. for $f \colon E \to Y$
+where $(Y,\rho)$ is any metric space.
+ff not sure about pointwise, but perhaps for uniform,
+we say that $f(E)$ is contained with a bounded set
+(above, our bounded set is centereed at $0$, but could be anywhere).
+But we will just stick with looking at functions to $\C$.
+
+\begin{theorem}[Rudin 7.23]
+	Let $X$ be a metric space, $E \subset X$, $E$ countable.
+	Let $f_n \colon E \to \C$, and suppose $\{f_n\}$ is pointwise bounded on $E$.
+	Then there exists a subsequence that converges pointwise on $E$.
+\end{theorem}
+Just as last class, proof is just one sentence: Cantor diagonalization argument.
+The idea is that we will get a subsequence that works for one element of $E$,
+then a subsubsequence that works for two elements of $E$, etc.
+\begin{proof}
+	Write $E = \{x_1,x_2,\dots\}$.
+	We know $\{f_n(x_1)\}_{n=1}^\infty$ is a bounded sequence of complex numbers,
+	and hence has a convergent subsequence $\{f_{1,k}\}_{k=1}^\infty$
+	(note that this is a sequence of functions, NOT evaluated at $x_1$).
+	We will construct successive subsequences.
+	\[
+		\begin{matrix}
+			f_{1,1} & f_{1,2} & f_{1,3} & f_{1,4} & \cdots\\
+			f_{2,1} & f_{2,2} & f_{2,3} & f_{2,4} & \cdots\\
+			f_{3,1} & f_{3,2} & f_{3,3} & f_{3,4} & \cdots\\
+			\vdots & \vdots & \vdots & \vdots & \ddots
+		\end{matrix}
+	\]
+	where $\{f_{i,k}\}_{k=1}^\infty$ is a subsequence of $\{f_{i-1,k}\}_{k=1}^\infty$,
+	hence $\{f_{i,k}\}_{k=1}^\infty$ converges.
+	We take the diagonal sequence $f_{i,i}$.
+	This converges at $x_j$ for every $j$.
+	Because $\{f_{i,i}\}$ is a subsequence of $\{f_{j,k}\}_{k=1}^\infty$,
+	except possibly for the first $j-1$ elements.
+\end{proof}
+
+\begin{theorem}[Arzela-Ascooli (Rudin 7.25)]
+	Let $K$ be a compact metric space,
+	Let $\{f_n\} \subset C(K)$ (i.e. $f_n$ are continuous, $f_n \colon K \to \C$)
+	by equicontinuous and pointwise bounded. Then
+	\begin{enumerate}
+		\item[(a)] $\{f_n\}$ is uniformly bounded
+		\item[(b)] $\{f_n\}$ has a uniformly convergent subsequence
+	\end{enumerate}
+\end{theorem}
+Might recall an equivalent definition of compactness:
+every convergent sequence has a convergent subsequence.
+We can't really say this is compact (not quite a sequence in a metric space),
+but gives us some similar idea.
+
+\begin{proof}
+	(a) We need to find $M \in \R$ such that $\forall x \in K, n \in \N$,
+	$\lvert f_n(x) \rvert \leq M$.
+	Since $\{f_n\}$ is equicontinuous, there exists $\delta > 0$ ($\ep = 1$)
+	such that $\forall n \in \N$, $\forall x,y \in K$ with $d(x,y) < \delta$,
+	we have $\lvert f_n(x) - f_n(y) \rvert < 1$.
+	Since $K$ is compact,
+	the cover $\{N_\delta(x)\}_{x \in K}$ has a finite subcover
+	$N_\delta(x_1),\dots,N_\delta(x_l)$.
+	For each $i = 1,\dots,l$, $\{f_n(x_i)\}_{n=1}^\infty$ is bounded by $M_i$.
+	Let $M = 1 + \max\{M_1,\dots,M_l\}$.
+	For any $x \in K,n\in\N$,
+	\[
+		\lvert f_n(x) \rvert \leq
+		\lvert f_n(x_i) \rvert + \lvert f_n(x) - f_n(x_i)\rvert
+		< M_i + 1 \leq M
+	\]
+	where $x_i$ is a point with $x \in N_\delta(x_i)$.
+	Hence, we have uniform boundedness.
+
+	(b) Step 1: Let $E$ be a countable, dense subset of $K$.
+	(How do we know exists?
+	Consider the cover of balls at each point with radius of the form $1/n$,
+	take finite subcover for each $1/n$, and iterating over each $n$
+	gives us a countable set of points.
+	Easy to convince that it is dense: closure is equal to $K$.)
+	By Theorem 7.23, there exists a subsequence of $\{f_n\}$
+	that converges pointwise on $E$.
+	Call this sequence $\{g_i\}$.
+	We will show that $\{g_i\}$ satisfies the Cauchy Criterion for conveergence.
+
+	Step 2: Let $\ep > 0$. By equicontinuity of $\{g_i\}$,
+	$\exists \delta > 0$ such that $\forall x,y \in K$ with $d(x,y) < \delta$,
+	$\forall i \in \N$, $\lvert g_i(x) - g_i(y) \rvert < \ep/3$.
+	Since $E \subset K$ is dense, $\{N_\delta(y)\}_{y \in E}$ is a cover of $K$,
+	thus there exists a finite subcover $\{N_\delta(y_1),\dots,N_\delta(y_l)\}$, $y_i \in E$.
+	For all $x \in K$, $\exists s$ such that $d(x,y_s) < \delta$.
+	
+	Step 3: Now we just complete the proof ($\ep/3$ argument).
+	For $x \in K, i,j \in \N$,
+	\[
+		\lvert g_i(x) - g_j(y) \rvert \leq \underbrace{\lvert g_i(x) - g_i(y_s) \rvert}_{<\ep/3}
+		+ \underbrace{\lvert g_i(y_s) - g_i(y_s)\rvert}_{\text{converges}}
+		+ \underbrace{\lvert g_j(y_s) - g_j(x) \rvert}_{<\ep/3}
+	\]
+	If we choose $N \in \N$ sufficiently large,
+	$\forall i,j \geq N$, we have $\lvert g_i(y_s) - g_j(y_s) \rvert < \ep/3$
+	for all $s \in 1,\dots,l$
+	(because there are only finite number of choices of $s$).
+\end{proof}
+Used compactness in an essential way in part (a) and (b).
+Can be an exercise: find when $K$ isn't compact, this fails.
 \end{document}
