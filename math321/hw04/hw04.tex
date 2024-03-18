@@ -34,7 +34,8 @@
 
 \begin{document}
 \begin{center}
-	{\bf Math 321 Homework 3}
+	{\bf Math 321 Homework 3}\\
+	(Including work made in collaboration with Tighe McAsey.)
 \end{center}
 
 \subsection*{Problem 1}
@@ -65,27 +66,138 @@
 }
 \begin{enumerate}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff follows from Rudin 6.12
+		By Rudin Theorem 6.13(b), since $f \in \mathcal{R}[a,b]$,
+		we have $|f| \in \mathcal{R}[a,b]$.
+		Then, since $p$ is finite,
+		by applying Rudin Theorem 6.13(a) $p$ times, we get that
+		$|f|^p \in \mathcal{R}[a,b]$ as well.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		Note that since $f$ is continuous, so is $|f|$ (ff).
+		Note that since $f$ is continuous, so is $|f|$
+		since composition of continuous functions is also continuous.
+		Similarly, $|f|^p$ is also continuous.
 		Furthermore, the function is defined on the closed and bounded set $[a,b]$,
 		which in $\R$ is compact,
-		so $|f|$ attains its maximum value on $[a,b]$ (ff).
-		6.21(d) gives us an upper bound.
+		so $|f|$ attains its maximum value $M$ on $[a,b]$, say at point $e\in[a,b]$.
+		So $|f| \leq M$ on $[a,b]$.
+		Since $f(x) = x^p$ is a monotonically (strictly) increasing
+		function on $[0,\infty)$,
+		and $0 \leq |f|$,
+		our inequality is preserved if we raise it to $p$, so
+		$|f|^p \leq M^p$ on $[a,b]$.
+		We then have $\int_a^b |f|^pdx \leq M^p(b-a)$ by Rudin Theorem 6.12(d)
+		(and part (a), which says $|f|^p \in \mathcal{R}[a,b]$).
+		Since $f(x) = x^{1/p}$ is a monotonically (strictly) increasing
+		function on $[0,\infty)$,
+		and $0 \leq |f|^p \implies 0 \leq \int_a^b |f|^pdx$,
+		our inequality is preserved if we raise it to $1/p$, so
+		\[
+			\int_a^b |f|^pdx \leq M(b-a)^{1/p}
+		\]
+		Now when we take the limit $p \to \infty$,
+		since limits preserve non-strict inequalities, we get
+		\[
+			\lim_{p\to\infty} \int_a^b |f|^pdx \leq M\lim_{p\to\infty} (b-a)^{1/p}
+			= M
+		\]
+		where we use the fact $b - a > 0$
+		(otherwise integral is $0$ and this fact actuall fails)
+		and Rudin Theorem 3.20(b): $\lim_{n\to\infty} \sqrt[n]{p} = 1$ when $p > 0$.
+		So $\lim_{p \to \infty} \lVert f \rVert_p$ has an upper bound,
+		specifically, $M = \sup\{|f(x)| \colon x \in [a,b]\}$.
+		So either $\lim_{p \to \infty} \lVert f \rVert_p = M$,
+		or there exists some $L < M$ such that $\lim_{p \to \infty} \lVert f \rVert_p$.
+		We proceed with showing such an $L$ cannot exist.
 
-		Hmm maybe like IVT.
-		We have that sup is an upper bound.
-		Prove monotonically increasing.
-		Then assume some lower value is an upper bound,
-		but $|f|$ attains this by IVT
-		(or attains halfway between it and the sup),
-		and somehow argue that the integral is larger.
+		We prove that for all $\ep > 0$, there exists some $N \in \N$
+		such that for all $p \geq N$, we have $\lVert f \rVert_p \geq M - \ep$.
+		Let $\ep > 0$.
+		We may assume that $M - \ep > 0$,
+		otherwise $\lVert f \rVert_p > 0 \geq M - \ep$ for all $p\in\N$, and we are done.
+		Let $c,d$ be the points $a \leq c < d \leq b$
+		defined as follows:
+		\begin{itemize}
+			\item $c$: If $f(x) \geq M - \ep/2$ for all $x \in [a,e]$,
+				then let $c = a$.
+				Otherwise, there is some $y \in [a,e]$ such that
+				$f(y) < M - \ep/2$, and so by intermediate value theorem,
+				since $f$ is continuous,
+				there is some point $c' \in (y,e)$ such that $f(c') = M - \ep/2$.
+				We let $c$ be the rightmost point, i.e.,
+				$f(x) \in (M - \ep/2, M)$ when $x \in (c,e)$
+				(and we can pick such a $c$,
+				otherwise, if $f(x) = M - \ep/2$ arbitrarily close to $e$,
+				we would break continuity since $f(e) = M$).
+			\item $d$: Identical as above,
+				i.e. $d = b$ when $f(x) \geq M - \ep/2$ for all $x \in [e,b]$;
+				otherwise, $d$ is the leftmost point so that $f(d) = M - \ep/2$.
+		\end{itemize}
+		Note that we get the strict inequality on account of $c < e < d$.
 
-		ff
+		Since $|f|^p$ is positive, $|f|^p \geq |f_{[c,d]}|^p$
+		where $f_{[c,d]} =
+		\begin{cases} f(x) & x \in [c,d]\\ 0 & \text{otherwise}\end{cases}$,
+		and $\int_c^d |f|^pdx = \int_a^b |f_{[c,d]}|^pdx$, so we have
+		\[
+			\int_a^b |f|^pdx \geq \int_a^b |f_{[c,d]}|^p =
+			\int_c^d |f|^pdx \geq (M - \ep)^p(d - c) > 0
+		\]
+		Raising it to $1/p$ (which doesn't change inequalities) gives
+		\[
+			\lVert f \rVert_p \geq (M-\ep)(d-c)^{1/p}
+		\]
+		If $(d-c) \geq 1$, then we have $\lVert f \rVert_p \geq M - \ep$
+		for all $p \in \N$
+		(since $(d-c)^{1/p} \geq 1$ for all $p \in \N$),
+		and we are done.
+		Now, assume $(d-c) < 1$.
+		Since $(d-c) > 0$, Rudin 3.20(b) gives the limit
+		$\lim_{p\to\infty} \sqrt[p]{d-c} = 1$.
+		Thus, there exists some $N \in \N$ such that for all $p \geq N$,
+		we have $0 < 1 - (d-c)^{1/p} < \ep/(2M)$.
+		Rearranging gives $(d-c)^{1/p} > 1 - \ep/(2M)$.
+		Then for all $p \geq N$,
+		\[
+			\lVert f \rVert_p > (M - \ep/2)(1 - \ep/(2M)) =
+			M -M(\ep/(2M)) - \ep/2 + \ep^2/(4M)
+			\geq M - \ep + \ep^2/(4M)
+			> M - \ep
+		\]
+		which is what we wanted to show.
+
+		Hence, if $\lim_{p \to \infty} \lVert f \rVert_p = L<M$,
+		there exists $N \in \N$ such that for all $p \geq N$,
+		$\lVert f \rVert_p > M - (M-L)/2 > M - (M-L) = L$,
+		which is a contradiction.
+		This only leaves $\lim_{p \to \infty}\lVert f \rVert_p = M
+		= \sup\{|f(x)| \colon x \in [a,b]\}$.
 	\end{proof}
 	\item \begin{proof}[Solution]\let\qed\relax
-		ff
+		Let $\lambda \in (0,1)$ and let $p,p' \in (0,\infty)$.
+		Since $\lambda + (1 - \lambda) = 1$,
+		and $|f|^{\lambda p}, |f|^{(1-\lambda)p'} \in \mathcal{R}[a,b]$ from part (a),
+		we can use H\"{o}lder's inequality:
+		\begin{align*}
+			\log\phi(\lambda p + (1-\lambda)p')
+			&= \log\left(\int_a^b|f|^{\lambda p + (1-\lambda) p'}dx\right)\\
+			&= \log\left(\int_a^b(|f|^p)^\lambda(|f|^{p'})^{1-\lambda}dx\right)\\
+			&\leq \log\left\lvert\int_a^b(|f|^p)^\lambda(|f|^{p'})^{1-\lambda}dx\right\rvert\\
+			&\leq \log\left(
+				\left(\int_a^b\left\lvert(|f|^p)^\lambda\right\rvert^{1/\lambda}
+				dx\right)^\lambda
+				\left(\int_a^b\left\lvert(|f|^{p'})^{1-\lambda}\right\rvert^{1/(1-\lambda)}
+				dx\right)^{1-\lambda}
+			\right)\\
+			&= \log\left(\left(\int_a^b|f|^pdx\right)^\lambda
+			\left(\int_a^b|f|^{p'}dx\right)^{1-\lambda}\right)\\
+			&= \lambda\log\left(\int_a^b |f|^pdx\right)
+			+ (1 - \lambda)\log\left(\int_a^b |f|^{p'}dx\right)\\
+			&= \lambda \log\phi(p) + (1-\lambda)\log\phi(p')
+		\end{align*}
+		where we are using the fact that since $\log$ is a monotone increasing function,
+		it preserves inequalities
+		(and also eliminating some $|\cdot|$
+		since $|f| > 0 \implies |f|^x > 0$).
 	\end{proof}
 \end{enumerate}
 
@@ -101,41 +213,44 @@
 \begin{proof}[Solution]\let\qed\relax
 	It can be false.
 	We provide the counter-example:
-	define $f_n(x)$ on $0 < x \leq \frac{1}{n}$ as $f_n(x) = x$,
+	define $g_n(x)$ on $0 < x \leq \frac{1}{n}$ as $g_n(x) = x$,
 	and we periodically extend this function off of $(0,\frac{1}{n}]$
-	so that $f_n(x+k) = f_n(x)$ for any $k \in \Z$;
+	so that $g_n(x+k) = g_n(x)$ for any $k \in \Z$;
 	now let
 	\[
-		g_n(x) = \begin{cases} n, & 0 < x \leq \frac{1}{n} \\ 0, & \text{otherwise}\end{cases}
+		f_n(x) = \begin{cases} n, & 0 < x \leq \frac{1}{n} \\ 0, & \text{otherwise}\end{cases}
 	\]
 	as well.
 
 	Clearly, both of these are functions from $\R \to \R$.
 	Furthermore, we get that both of these sequences of functions
 	converge pointwise to the $0$ function.
-	To see this for $f$, note that $f_n$ attans its maximum value at $x = \frac{1}{n}$,
-	since on $x \in (0,\frac{1}{n}]$, $f_n$ is monotone increasing and
+	To see this for $g$, note that $g_n$ attains its maximum value at $x = \frac{1}{n}$,
+	since on $x \in (0,\frac{1}{n}]$, $g_n$ is monotone increasing and
 	this is the right most value,
-	and since $f_n$ is periodic, the largest value this function attains
+	and since $g_n$ is periodic, the largest value this function attains
 	is the same as the largest value it attains on this interval.
-	Furthermore, $f_n(\frac{1}{n}) = \frac{1}{n}$.
+	Furthermore, $g_n(\frac{1}{n}) = \frac{1}{n}$.
 	Let $\ep > 0$ and $x \in \R$ be fixed,
 	then Archimedean gives us some $N \in \N$ such that $\frac{1}{N} < \ep$,
 	and so for any $n \geq N$, we have
-	$\lvert f_n(x) - 0\rvert = f_n(x) \leq \frac{1}{n} \leq \frac{1}{N} < \ep$,
-	which means that $f_n$ is pointwise convergent to $0$ for all $x \in \R$.
+	$\lvert g_n(x) - 0\rvert = g_n(x) \leq \frac{1}{n} \leq \frac{1}{N} < \ep$,
+	which actually uniformly bounds $g_n$,
+	and so we must have $f_n$ is pointwise convergent to $0$ for all $x \in \R$.
 
-	To see this for $g$, fix some $\ep > 0$ and some $x \in \R$.
+	To see this for $f$, fix some $\ep > 0$ and some $x \in \R$.
 	Archimedean gives us some $N \in \N$ such that $\frac{1}{N} < x$.
-	By the definition of $g_n$, when $n \geq N$,
-	we have that $|g_n(x) - 0| = g_n(x) = 0 < \ep$
+	By the definition of $f_n$, when $n \geq N$,
+	we have that $|f_n(x) - 0| = f_n(x) = 0 < \ep$
 	(since $x > \frac{1}{N} \geq \frac{1}{n}$).
-	Hence, $g_n$ is pointwise convergent to $0$ for all $x \in \R$.
+	Hence, $f_n$ is pointwise convergent to $0$ for all $x \in \R$.
 
-	Now let us consider the composition, $\{f_n \circ g_n\}$.
-	ff considering the values pointwise seem like a pain.
-	Make some argument that $f_n \circ g_n = n$, which
-	obviously converges pointwise nowhere.
+	Now let us consider the composition, $f_n \circ g_n$.
+	If $x \in \R$, then $g_n(x)$ maps $x$ to some value in $(0,\frac{1}{n})$,
+	which then $f_n(x)$ would map to $n$.
+	Hence, $f_n \circ g_n = n$.
+	As $n \to \infty$, it is clear that for every $x$,
+	this function diverges to infinity, and so obviously does not converge pointwise.
 \end{proof}
 
 
@@ -197,90 +312,129 @@
 	\]
 }
 \begin{proof}[Solution]\let\qed\relax
-	We want $\inf_{P'} U(P',f) - \inf_P U(P,f_n)< \ep$.
-	We know that for any $x \in [a,b]$, there exists some $N$
-	such that for all $n \geq N$, $f(x) - f_n(x) < \ep$;
-	also $f_n(x) \leq f_{n+1}(x)$.
+	First, some definitions.
+	If $P = \{x_0,\dots,x_n\}$ is a partition,
+	define $D(P) = \max_i\{x_i - x_{i-1}\}$.
+	Secondly, $|I|$ will denote the length of an interval
+	(either open or closed or neither, e.g. $|(a,b]| = b - a$).
 
-	The integrals are a monotone sequence of functions,
-	their supremum is $\int_a^b f(x)dx$.
+	We now collect some useful facts.
+	\begin{lemma}
+		If $f \in \mathcal{R}[a,b]$ and $\ep > 0$,
+		then there exists some $\delta > 0$ such that
+		if $P$ is some partition of $[a,b]$ where $D(P) < \delta$
+		then $U(P,f) - L(P,f) < \ep$.
+	\end{lemma}
+	\begin{proof}
+		Let $f \in \mathcal{R}[a,b]$, $\ep > 0$ be given.
+		There must exist a partition, call it $P^*$ such that
+		$U(P^*,f) - L(P^*,f) < \ep/3$.
+		We claim $\delta = \min_i\{x_i - x_{i-1}\}$ is the value we want.
+		Let $P$ be a partition of $[a,b]$ such that $D(P) < \delta$.
+		Then an interval in $P$ is in at most two intervals in $P^*$.
+		For all of the intervals of $P$ entirely contained within
+		one interval of $P^*$, call it $[x_{i-1},x_i]$,
+		their upper Riemann sum is bounded above by $M_i(x_i - x_{i-1})$
+		(and likewise with their lower).
+		For the intervals $[y_{i-1},y_i]$ of $P$ that are between two intervals of $P^*$
+		(and there are at most $\#P^*$ of them, since there are only
+		those many boundaries between intervals),
+		say $[x_{i-2},x_{i-1}],[x_{i-1},x_i]$,
+		then $\sup\{f(x) \colon x \in [y_{i-1},y_i]\}(y_{i} - y_{i-1})$
+		is less than $M_{i-1}(x_{i-1}-x_{i-2}) + M_i(x_i - x_{i-1})$,
+		since $\sup\{f(x) \colon x \in [y_{i-1},y_i]\} \leq \max\{M_{i-1},M_i\}$,
+		and $y_{i} - y_{i-1} < \delta \leq (x_{i-1}-x_{i-2}),(x_i - x_{i-1})$
+		(and likewise with the lower sum and infinum).
+		Since there are $\#P^*$ of these points,
+		an upper bound on the upper Riemann sum of these points
+		is twice $U(P^*,f)$.
+		Hence,
+		\[
+			U(P,f) - L(P,f) \leq 3U(P^*,f) - 3L(P^*,f) = 3(U(P^*,f) - L(P^*,f)) < \ep
+		\]
+	\end{proof}
 
-	I think $f_n \to f$ uniformly because monotone.
-	
-	Once we have a uniform bound, then we get that for any
-	$\int f_ndx > \int_a^b f - \ep dx = \int_a^b fdx - \ep(b-a)$.
+	\begin{lemma}
+		Let $f \in \mathcal{R}[a,b]$ be nonnegative, $\ep > 0$,
+		and $\delta$ given by Lemma $1$ from $f$ and $\ep$.
+		For any $a \leq u < v \leq b$ where $0 < (v-u) < \delta$
+		and $s \in [u,v]$, we have
+		\[
+			\int_u^v fdx < \ep + f(s)(v-u)
+		\]
+	\end{lemma}
+	\begin{proof}
+		By Lemma 1, we have that $U(P,f) - L(P,f) < \ep$.
+		Let $P^* = P \cup \{u,v\}$, a refinement of $P$.
+		Hence, $U(P^*,f) - L(P^*,f) < \ep$ by Rudin Theorem 6.7.
+		If $u$ and $v$ are entirely contained within the same interval of $P$,
+		i.e. some $i$ such that $x_{i-1} \leq u < v \leq x_i$, then
+		we have $\int_u^v fdx$ is less than some value in the upper sum,
+		namely $M_{[u,v]}(v-u)$,
+		and likewise, $f(s)(v-u)$ is greater than some value in the lower sum,
+		namely $m_{[u,v]}(v-u)$.
+		Hence, since all the terms are nonnegative since $f$ is nonnegative
+		\[
+			\int_u^v fdx - f(s)(v-u) \leq U(P^*,f) - L(P^*,f) < \ep
+		\]
+		The case where there is a a point from $P$ in between is handled
+		identically by just removing that point:
+		since we still have $D(P^*) < \delta$,
+		we still keep our $\ep$ bound.
+	\end{proof}
 
-	Probably prove that $f \geq f_n$ for all $n$.
-
-	We first prove that $f_n$ converge uniformly.
-	We do this by verifying the Cauchy criterion for uniform convergence (Rudin Theorem 7.8),
-	which we can apply, since our functions are maps into $\R$
-	(presumebly, since we have not defined the Riemann integral otherwise),
-	which is a complete metric space.
-	So let $\ep > 0$ be aribtrary.
-	ff
-
-	Note that it must converge to $f$ specifically,
-	since ff (theorem doesn't specify what it converges to).
-
-	For the sake of contradiction, assume that $f_n$ does not converge to $f$ uniformly.
-	Then there exists some $\ep > 0$
-	such that for all $N \in \N$,
-	there is some $n \geq N$ and some $x \in [a,b]$
-	such that $f(x) - f_n(x) \geq \ep$.
-	But then $f_n(x) \not\in$
-
-	Let $\ep > 0$ be arbitrary.
-	Let $B$ be the lower bound on $f_1$, i.e. $B \leq f_1 \leq f_n \leq f$
-	for all $n$ (by monotonicity).
-	Let $\delta_0 = \sup_{x\in[a,b]} \{f(x) - B\}$
-	Note $\delta_0 > 0$ for all $x \in [a,b]$,
-	since $f(x) - B \geq f_1(x) - B \geq 0$
-	(and we can ignore equality in the first inequality,
-	because if that was the case, $f(x) = f_1(x) \implies f(x) = f_n(x)$
-	and so uniform convergence is trivial... maybe make another paragraph for this ff),
-	and must exist in $\$R$,
-	since $f$ must be bounded above, say by $M$, and $0 < f(x) - B \leq M - B \in \R$.
-
-	Now, define $\delta_n = \delta_0/2^n$.
-	Note that since $f_n \to f$ pointwise,
-	there exists some $N \in \N$ such that for all $n \geq N$,
-	$f_n > f - \ep$,
-	otherwise
-	Since $f_n \in \mathcal{R}[a,b]$, $f_n$ is bounded on $[a,b]$.
-
-	Consider $\ep_1 = \sup_{x\in[a,b]}\{f(x) - f_n(x)\}$.
-	This satisfies uniformity for $\ep_1$.
-
-	
-	The Tighe Cook:
-	Let $\ep > 0$, and define $\ep' = \frac{\ep}{2(b-a)}$.
-	Consider the set of subintervals of $[a,b]$, denote it $X$.
-	Define a set of tags for each subinterval,
-	namely $S = \{s \colon s \in I, I \in X\}$.
-	Conversely, let $I_s$ be the subinterval associated with $s\in S$,
-	and $\delta_s$ is the length of $I_s$.
-	For each $k \in \N$, let $L_k = \{s \colon g_k(s) < \ep', s \in S\}$.
-	By pointwise convergence, there exists some $k_s$
-	such that $s \in L_{k_s}$.
-	Note that $\bigcup_{s \in S}I_s$ covers $[a,b]$ (sus with the boundrary),
-	and since $[a,b]$ is compact, we can extract a finite subcover,
-	so we have $G_1, G_2, \dots, G_N$ that covers $[a,b]$.
-	Then there is a finite $k$ such that all the $s \in L_k$
-	for all the $s$ centered in the $G_i$.
-
+	Let $\ep > 0$, and define $\ep' = \frac{\ep}{4(b-a)+1}$.
 	Define $g_n = f - f_n$.
-	Note that for any $I_s$ where $s \in L_k$,
-	where we have
-	\[
-		\left\lvert \int_{I_s} g_n - g_n(s)\delta_s \right\rvert < \ep' \delta_s
-	\]
-	(For any $g_n$, $\exists \delta_n$ such that $P$ finr than $\delta_n$,
-	so we have the inequality above).
+	Clearly, $g_n$ is a nonnegative, monotone decreasing in $n$,
+	and $g_n \to 0$ pointwise, by the properties of $f_n$.
+	We seek to show that there exists some $K \in \N$ such that
+	for all $n \geq K$, $\int_a^b g_n(x)dx < \ep$.
 
-	And then we're done:
-	\[
-		\int_a^bg_n = \sum_{I_s \in P}\int_{I_s} g_n \leq g_n\sum_{s} (g_n(s) + \ep')\delta)s \leq 2\ep'(b-a) = \ep
-	\]
+	Invoking Lemma 1, we define $\delta_n > 0$ such that
+	for any partition $P$ of $[a,b]$ where $D(P) < \delta_n$,
+	we have $U(P,g_n) - L(P,g_n) < 2^{-n}\ep'$.
+	Define $k(s)$ be the least $k$ such that $g_k(s) < \ep'$
+	for any $s \in [a,b]$,
+	which must exist since $g_n \to g$ pointwise.
+	Now define $I_s = (s - \delta_{k(s)}/2, s + \delta_{k(s)}/2)$.
+	For all $s \in [a,b]$, $s \in I_s$,
+	so $\{I_s\}_{s \in [a,b]}$ is an open cover of $[a,b]$.
+	Since this interval is closed and bounded, it is compact in $\R$,
+	so we can extract a finite subcover
+	$I_{s_1},\dots,I_{s_N}$,
+	particularly one that does not have any redudancy
+	(i.e. $I_{s_i} \not\subset I_{s_j}$ when $i \neq j$),
+	which we can do because removing a redundant open set doesn't
+	change the union of the sets.
+	Define $J_{s_i} = \overline{I_{s_i}} \cap [a,b]$,
+	hence $\bigcup_{i=1}^N J_{s_i} = [a,b]$.
+
+	Finally, for all $n \geq K = \max\{k(s_1),\dots,k(s_N)\}$, we have
+	\begin{align}
+		\int_a^b g_n(x)dx
+		&\leq \sum_{i=1}^N \int_{J_{s_i}} g_n(x)dx\\
+		&\leq \sum_{i=1}^N \int_{J_{s_i}} g_K(x)dx\\
+		&\leq \sum_{i=1}^N \int_{J_{s_i}} g_{k(s_i)}(x)dx\\
+		&\leq \sum_{i=1}^N \left(\ep'2^{-k(s_i)} + g_{k(s_i)}(s_i)|J_{s_i}|\right)\\
+		&\leq \ep'\sum_{i=1}^N \left(2^{-k(s_i)} + |J_{s_i}|\right)\\
+		&\leq \ep'(1 + 2(b-a)) = \ep
+	\end{align}
+	Where (1) is done by splitting up $[a,b]$ centered at the $s_i$ by Rudin Theorem 6.12(c),
+	and then expanding the surrounding interval so that we are integrating
+	over all of $J_{s_i}$ only increases the value since $g_n$ is nonnegative;
+	(2) is because $g_n$ is monotone decreasing;
+	(3) is by definition of $K$ and monotone decreasing;
+	(4) is by Lemma 2;
+	(5) is by definition of $k(s_i)$ so that $g_{k(s_i)}(s_i) < \ep'$; and
+	(6) since the at any point in $[a,b]$, at most two intervals $J_{s_i}$ overlap,
+	otherwise we would have a nested interval which we constructed to avoid,
+	and so since the $J_{s_i}$ cover $[a,b]$, at most each $[a,b]$
+	is inside two intervals, so $\sum_{i=1}^N |J_{s_i}| \leq 2(b-a)$;
+	the dyadic terms are bounded above by $1$ by just taking our $k$ large enough, which we were allowed to do.
+
+	Therefore, we have that for all $n \geq K$,
+	$\int_a^b g_n(x)dx = \int_a^b (f(x) - f_n(x))dx
+	= \int_a^b f(x)dx - \int_a^b f_ndx < \ep$,
+	hence, $\lim_{n\to\infty} \int_a^b f_ndx = \int_a^b f(x)dx$.
 \end{proof}
 \end{document}

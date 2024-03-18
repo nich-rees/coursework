@@ -1,0 +1,349 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 6}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 6}
+\end{center}
+
+\subsection*{Problem 1}
+\problem{
+	Let $\{f_n\}$ and $f$ be functions from $[0,1] \to \R$.
+	Suppose that $f_n,f$ have bounded variation on $[0,1]$.
+	Define $g_n(x) = TV[f_n\vert_{[0,x]}]$ and $g(x) = TV[f\vert_{[0,x]}]$
+	(recall Homework $3$ for the relevant defintions).
+	\begin{enumerate}
+		\item Suppose that $f_n \to f$ pointwise.
+			Is it true that $g_n \to g$ pointwise?
+			If so, prove it.
+			If not, give a counter-example and prove that your counter-example is correct.
+		\item Suppose that $f_n \to f$ uniformly.
+			Is it true that $g_n \to g$ uniformly?
+			If so, prove it.
+			If not, give a counter-example and prove that your counter-example is correct.
+		\item Suppose that $g_n \to g$ pointwise.
+			Is it true that $f_n \to f$ pointwise?
+			If so, prove it.
+			If not, give a counter-example and prove that your counter-example is correct.
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Consider the functions
+		\[
+			f_n(x) = \begin{cases}
+				n & x \in (0,\frac{1}{n})\\
+				0 & \text{otherwise}
+			\end{cases}
+		\]
+		We claim that $f_n \to 0$ pointwise.
+		Let $x \in [0,1]$, and $\ep > 0$.
+		If $x = 0$, we are done.
+		If $x \neq 0$, note that Archimedes gives us an $N \in \N$
+		such that $Nx > 1 \implies x > \frac{1}{N} \geq \frac{1}{n}$
+		for any $n \geq N$.
+		Hence, for all $f_n$ where $n \geq N$, $|f_n(x)| = 0 < \ep$.
+		Hence, $f_n \to 0$.
+
+		We now show that $f_n$ and $f = 0$ both have bounded variation on $[0,1]$.
+		Clearly, $f$ has bounded variation, and fruthermore, $g(x) = 0$
+		(this follows directly from the definition: $\sum_i \Delta f_i
+		= \sum 0 = 0$).
+		Now consider $f_n$.
+		If $P = \{x_1,\dots,x_l\}$ is a partition of $[0,1]$,
+		then if $P$ contains no point in $(0,\frac{1}{n})$,
+		then all $f(x_i) = 0$ and so $V(f_n,P) = \sum_i |f(x_i) - f(x_{i-1})| = \sum_i 0 = 0$.
+		If $P$ does contain points in $(0,\frac{1}{n})$,
+		then we must have $x_1 \in (0,\frac{1}{n})$,
+		and some $s \in \N_{\leq l}$ such that $x_s \geq \frac{1}{n}$
+		but $x_{s-1} < \frac{1}{n}$.
+		Then $V(f,P) = \sum_i |f(x_i) - f(x_{i-1})|
+		= |f(x_1) - f(x_0)| + \sum_{i=2}^{s-1}|f(x_i) - f(x_{i-1})|
+		+ |f(x_s) - f(x_{s-1})| + \sum_{i=s+1}^l |f(x_i) - f(x_{i-1})|
+		= n + 0 + n + 0 = 2n$.
+		Then $TV[f_n] = 2n$, and so it has bounded variation.
+		Note that if we restrict our domain, our analysis is the same as above
+		to conlude that $TV[f_n\vert_{[0,x]}] = 2n$ when $0 < x \leq 1$,
+		and $V[f_n\vert_{[0,0]} = 0$ by definition.
+		Hence, $g_n(x) = \begin{cases} 0 & x = 0\\ 2n & 0 < x \leq 1\end{cases}$.
+		This does not converge pointwise to $g(x)$ at $x = 1$:
+		for all $n \in \N$, $|g_n(1) - g(1)| \geq 1$,
+		and so they never get within $\ep = \frac12$.
+		Hence, we have $f_n \to f$ pointwise and both of bounded variation,
+		but $g_n$ does not converge pointwise to $g$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Consider the functions
+		\[
+			f_n(x) = \begin{cases}
+				\frac{1}{n} & x \in \{\frac{j}{n+1}\colon j \in \N_{< n}\}\\
+				0 & \text{otherwise}
+			\end{cases}
+		\]
+		We claim that $f_n \to 0$ uniformly.
+		Let $\ep > 0$. Archimedes gives us some $N \in \N$
+		such that $N\ep > 1 \implies \ep > \frac{1}{N} \geq \frac{1}{n}$
+		for all $n \geq N$.
+		Then for all $n \geq N, x \in [0,1]$, $|f_n(x) - 0| \leq \frac{1}{n} < \ep$.
+		So $f_n \to 0$ uniformly.
+
+		We know that $f = 0$ has bounded variation,
+		so we now show that $f_n$ has bounded variation.
+		Consider some partition $P = \{x_1,\dots,x_l\}$.
+		Clearly, $V(f,P)$ is maximized when $P$ contains all of
+		$\{\frac{j}{n+1}\colon j \in \N_{< n}\}$ and
+		there exists some $x_i$ between every $\frac{j}{n},\frac{j+1}{n}$
+		(and the end points),
+		since the only positive terms in the sum $\sum_i |f(x_i) - f(x_{i-1})|$
+		are all equal (with a value of $\frac{1}{n}$)
+		and are precisely those where one of $x_i$ or $x_{i-1}$ are in
+		$\{\frac{j}{n+1}\colon j \in \N_{\leq n}\}$, and the other is not.
+		There is at most $2n$ of such terms, so
+		$\sup_P V(f,P) = ((2n)\frac{1}{n} = 2$.
+		Hence, $TV[f_n] = 2$ for all $n$.
+
+		To show that $g_n$ doesn't converge to $g$ uniformly,
+		it is sufficient to show that $g_n$ doesn't even converge to $g$ pointwise
+		at some point, say $x = 1$.
+		Clearly, $g(x) = 0$, see part (a) of this problem,
+		and $g_n(1) = TV[f_n] = 2$.
+		Hence, $|g_n(1) - g(1)| = 2$ for all $n \in \N$,
+		and so they never get within $\ep = 1$, meaning $g_(1) \not\to g(1)$.
+		Thus, we have $f_n \to f$ and both of bounded variation,
+		but $g_n$ does not converge uniformly to $g$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Consider $f_n(x) = 1$ and $f(x) = 0$.
+		This gives $g_n(x) = 0$ and $g(x) = 0$,
+		identical to our method for $f(x) = 0$ from part (a) of this problem.
+		Hence, we have $g_n = g$ for all $n \in \N$,
+		and so $|g_n(x) - g(x)| = 0 < \ep$ for any $\ep > 0$ and $x \in [0,1]$,
+		thus $g_n \to g$.
+		However, clearly $f_n$ does not converge to $f$,
+		as $|f_n - f| = 1$ for all $n \in \N$
+		and so they never get within $\ep = \frac12$.
+		Thus, $g_n \to g$ pointwise,
+		but $f_n$ does not converge pointwise to $f$.
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 2}
+\problem{
+	For $n \in \N$, let $f_n \colon [-1,1] \to [0,\infty)$ be:
+	(i) continuous, (ii) obey $\int_{-1}^1 f_n(x)dx = 1$,
+	and (iii) be such that $f_n$ converges to $0$ uniformly on
+	$[-1,-c]\cup[c,1]$ for every $c \in (0,1)$.
+	Suppose $g \colon [-1,1] \to \R$ is bounded, Riemann integrable,
+	and continuous at $0$.
+	Prove that $\lim_{n\to\infty} \int_{-1}^1 f_n(x)g(x)dx = g(0)$.
+	\newline Hint: $g(0) = \int_{-1}^1 f_n(x)g(0)dx$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	Given the hint, we have the following to be equivalent if
+	the limit exists:
+	\begin{align*}
+		\lim_{n\to\infty} \int_{-1}^1 f_n(x)gxdx = g(0)
+		&\iff \lim_{n\to\infty} \int_{-1}^1 f_n(x)gxdx
+		- \int_{-1}^1f_n(x)g(0)dx = 0\\
+		&\iff \lim_{n\to\infty}\int_{-1}^1 f_n(x)(g(x) - g(0))dx = 0
+	\end{align*}
+	where we can bring the integral inside the limit because it is just a constant
+	(even with a $f_n$ term, the value is a constant value),
+	and we can bring the second term inside the integral by Rudin 6.12(a).
+
+	Let $\ep > 0$ be given.
+	Since $g$ is continuous,
+	there is some $0 < \delta < 1$ such that $|x-0| \leq \delta$
+	implies that $|g(x) - g(0)| < \frac{\ep}{3}$.
+	Since $g$ is bounded, we have some $M\geq0$ such that $|g(x)| \leq M$
+	for all $x \in [-1,1]$.
+	Since $f_n \to f$ uniformly converges on $[-1,-\delta]$,
+	Rudin 7.16 gives us an $N_1 \in \N$ such that for all $n \geq N_1$, we have
+	\[
+		\left\lvert \int_{-1}^{-\delta} f_n(x)dx - 0 \right\rvert
+		< \frac{\ep}{6M}
+	\]
+	Similarly, since $f_n \to f$ uniformly on $[\delta,1]$, 7.16 gives
+	an $N_2 \in \N$ such that for all $n \geq N_2$, we have
+	\[
+		\left\lvert \int_{\delta}^{1} f_n(x)dx - 0 \right\rvert
+		< \frac{\ep}{6M}
+	\]
+	Let $N = \max\{N_1,N_2\}$.
+
+	Rudin 6.13 tells us that since $g(x) - g(0) \in \mathcal{R}[-1,1]$
+	(since $g(x) \ in \mathcal{R}[-1,1]$),
+	then so is $|g(x) - g(0)|$ and
+	\[
+		\left\lvert \int_{-1}^1 f_n(x)(g(x) - g(0))dx\right\rvert
+		\leq \int_{-1}^1 |f_n(x)||g(x)-g(0)|dx
+		= \int_{-1}^1 f_n(x)|g(x) - g(0)|dx
+	\]
+	Finally, Rudin 6.12(c) lets us split up the integral, to see
+	that when $n \geq N$, we have
+	\begin{align*}
+		\left\lvert \int_{-1}^1 f_n(x)(g(x) - g(0))dx \right\rvert
+		&\leq \int_{-1}^1 f_n(x)|g(x) - g(0)|dx\\
+		&= \int_{-1}^{-\delta} f_n(x)|g(x) - g(0)|dx
+		+ \int_{-\delta}^{\delta} f_n(x)|g(x) - g(0)|dx
+		+ \int_{\delta}^1 f_n(x)|g(x) - g(0)|dx\\
+		&\leq \int_{-1}^{-\delta} f_n(x)2Mdx
+		+ \int_{-\delta}^{\delta} f_n(x)\frac{\ep}{3}dx
+		+ \int_{\delta}^1 f_n(x)2Mdx\\
+		&\leq 2M\frac{\ep}{6M} + \frac{\ep}{3}\int_{-1}^1f_n(x)dx + 2M\frac{\ep}{6M}\\
+		&= \frac{\ep}{3} + \frac{\ep}{3} + \frac{\ep}{3} = \ep
+	\end{align*}
+	(where expanding the domain of our integral was an upper bound,
+	since $f$ is always nonnegative,
+	and 6.12(b) and (c) gives us the bound we want by comparing $f$
+	and $f' = f$ on $[-\delta,\delta]$ and $0$ everywhere else).
+	Therefore, we have shown
+	\[
+		\lim_{n\to\infty} \int_{-1}^1 f_n(x)(g(x) - g(0))dx = 0
+	\]
+	as desired.
+\end{proof}
+
+
+\subsection*{Problem 3}
+\problem{
+	Let $c \in \R$. For each $n \in \N$ and $x \in [0,1]$,
+	define $f_n(x) = n^cx^3(1-x^4)^n$.
+	\begin{enumerate}
+		\item Prove that the limit $f(x) = \lim_{n\to\infty}f_n(x)$
+			exists for all $x \in [0,1]$ and determine the limit
+			(you should justify any steps in your computation).
+		\item Determine the values of $c$ for which the convergence
+			in part (a) is uniform.
+			Prove that your answer is correct.
+		\item For what values of $c$ do we have
+			\[
+				\lim_{n\to\infty} \int_0^1 f_n(x)dx
+				= \int_0^1 f(x)dx ?
+			\]
+			Prove that your answer is correct.
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+			Let $x \in [0,1]$ be fixed.
+			If $x = 0,1$, then $f_n(x) = 0$ for all $n$,
+			and so $\lim_{n\to\infty} f_n(x)$ exists and is $0$.
+			Now assume that $x \neq0,1$.
+			Note that since $0 < (1-x^4) < 1$,
+			we have $1 < (1 - x^4)^{-1}$,
+			and so there is some $p > 0$ (specifically $p = (1 - x^4)^{-1} - 1$)
+			such that $(1-x^4)^{-1} = 1+p$
+			and so
+			\[
+				(1 - x^4)^n = ((1-x^4)^{-1})^{-n}
+				= \frac{1}{(1+p)^n}
+			\]
+			Thus, we can compute the limit
+			\[
+				\lim_{n\to\infty} n^c x^3 (1-x^4)^n
+				= x^3 \lim_{n\to\infty} \frac{n^c}{(1+p)^n}
+				= x^3(0) = 0
+			\]
+			where we apply Rudin 3.3(b) and Rudin 3.20(d)
+			(where $c = \alpha$).
+			Hence, we have shown $f(x) = \lim_{n\to\infty} f_n(x)$
+			exists and is equal to $0$ for all $x \in [0,1]$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		It is sufficient to show that $M_n = \sup_x |f_n(x)| \to 0$
+		as $n \to \infty$ by Rudin 7.6.
+
+		Note that since $f_n(x)$ is continuous 
+		(product of continuous functions) on a compact domain,
+		$f_n(x)$ attains its extrema.
+		Math 100 gives us the first derivative test:
+		consider
+		\begin{align*}
+			f'_n(x)
+			&= n^c(3x^2(1-x^4)^n - x^3n(1-x^4)^{n-1}4x^3)\\
+			&= n^cx^2(1-x^4)^{n-1}(3(1-x^4) - 4nx^4)\\
+			&= n^cx^2(1-x^4)^{n-1}(3 - (3+4n)x^4)
+		\end{align*}
+		The extrema of $f'_n(x)$ hence occur precisely when $f'_n(x) = 0$,
+		or when $x = 0, 1, \left(\frac{3}{3+4n}\right)^{1/4}$.
+		But recall that $f_n(0) = f(1) = 0$, but
+		$f_n(0.1) = n^c(0.1)^3(1-0.1^4)^n > 0$ since it is three positive factors
+		multiplied to each other.
+		Hence, $M_n = f\left(\left(\frac{3}{3+4n}\right)^{1/4}\right)$.
+		So it is sufficient for us to consider the condition on $c$
+		for when $\lim_{n\to\infty} f\left(\left(\frac{3}{3+4n}\right)^{1/4}\right) = 0$.
+
+		We can plug in our value:
+		\begin{align*}
+			f_n\left(\left(\frac{3}{3+4n}\right)^{1/4}\right)
+			&= n^c\left(\frac{3}{3+4n}\right)^{3/4}\left(1 - \frac{3}{3+4n}\right)^n\\
+			&= n^c\left(\frac{3}{3+4n}\right)^{3/4}\left(\frac{3 + 4n - 3}{3+4n}\right)^n\\
+			&= n^{c-3/4}\left(\frac{3n}{3+4n}\right)^{3/4}\left(\frac{1}{3/4n + 1}\right)^n
+		\end{align*}
+		Using the appropriate theorems from Rudin Chapter 3 (3.3,3.31), we can conlude
+		\begin{align*}
+			\lim_{n\to\infty} M_n
+			&= \left(\lim_{n\to\infty} n^{c-3/4}\right)
+			\left(\lim_{n\to\infty} \left(\frac{3}{4+3/n}\right)^{3/4}\right)
+			\left(\lim_{n\to\infty} \left(\frac{1}{3/4n + 1}\right)^n\right)\\
+			&= \left(\lim_{n\to\infty} n^{c-3/4}\right)
+				\left(\frac{3}{4}\right)^{3/4}e^{-3/4}
+		\end{align*}
+		Hence, our function uniformly converges if and only if
+		$\lim_{n\to\infty} n^{c-3/4} = 0$.
+		This only occurs when $c -\frac{3}{4} < 0$ (Rudin 3.20),
+		therefore our requirement is that $c \in (-\infty,3/4)$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let
+		$F_n(x) = -\frac{n^c}{4}\left(\frac{(1-x^4)^{n+1}}{n+1}\right)$.
+		Since $F'(x)$ is differentiable (polynomials are differentiable)
+		and $F'_n(x) = f_n(x)$, $f_n(x) \in \mathcal{R}[0,1]$
+		since it is continuous becuase it is the product of continuous functions,
+		the fundamental theorem of calculus gives us
+		\[
+			\int_0^1 f_n(x)dx = F_n(1) - F_n(0) = \frac{n^c}{4(n+1)}
+		\]
+		We need this value to go to $0$ as $n \to \infty$,
+		since $\int_0^1 f(x)dx = \int_0^1 0dx = 0$.
+
+		We have $0 < \frac{n^c}{4(n+1)} < \frac{n^{c-1}}{4}$.
+		When $c < 1$, the fraction goes to $0$.
+		Otherwise, it does not.
+		Hence, we require $c \in (-\infty,1)$.
+	\end{proof}
+\end{enumerate}
+\end{document}

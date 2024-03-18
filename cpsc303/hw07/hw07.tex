@@ -1,0 +1,675 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 7}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+
+\subsection*{Problem 2}
+The point of this exercise is to compare monomial interpolation
+(Section 10.2 of [A\&G]) with Lagrange interpolation (Section 10.3).
+\begin{enumerate}
+	\item Let $p(x) = c_0 + c_1x$ be the unique polynomial of degree at most $1$ such that
+		\[
+			p(2) = \sqrt{2}, \quad p(2.01) = \sqrt{3}
+		\]
+		In exact arithmetic,
+		\[
+			p(2.005) = \frac{\sqrt{2} + \sqrt{3}}{2}
+		\]
+		since $2.005$ is the midpoint between $2$ and $2.01$.
+		Hence one can also write:
+		\[
+			p(2.005) = c_0 + c_1(2.005)
+		\]
+		Solve for $c_0,c_1$ using the Vandemonde matrix and the formula derived in class
+		(see also page 300 of [A\&G]).
+		[Hint: you may find the following MATLAB commands useful:
+		\begin{verbatim}
+		A = fliplr( vander([2 2.01]))
+		y = [sqrt(2);sqrt(3)]
+		c = A^(-1)*y
+		trueVal = (y(1)+y(2))/2
+		monoVal = c(1) + c(2) * 2.005
+		\end{verbatim}
+		What does MATLAB report for the absolute error in
+		\[
+			(c_0 + c_1(2.005))
+		\]
+		as an approximation for
+		\[
+			\frac{\sqrt{2} + \sqrt{3}}{2}
+		\]
+		(in absolute value)? What about the relative error?
+	\item Same question, where
+		\[
+			p(2) = \sqrt{2}, \quad p(2 + 10^{-6}) = \sqrt{3}
+		\]
+		and you want to compute $p(2 + 10^{-6}/2)$.
+		[Hint: Recall $5 \times 10^{-7}$ in MATLAB notation is \verb|5e-7| or \verb|5.0e-7|.]
+	\item Same question, where
+		\[
+			p(2) = \sqrt{2}, \quad p(2 + 10^{-10}) = \sqrt{3}
+		\]
+		and you want to compute $p(2 + 10^{-10}/2)$.
+		[Hint: Recall $5 \times 10^{-11}$ in MATLAB notation is \verb|5e-11| or \verb|5.0e-11|.]
+	\item What is the $L^p$-condition number of $A$ in part (c) for $p = \infty$?
+		Do this FIRST by typing \verb|cond(A,Inf)|,
+		and SECOND check this by examining the values of $A$ and $A^{-1}$ and using the formula
+		\[
+			\left\lVert \begin{bmatrix} a & b \\ c & d \end{bmatrix} \right\rVert_\infty
+			= \max(|a| + |b|, |c| + |d|)
+		\]
+		(i.e., given in class and proven on the previous homework).
+	\item Double precision for standard numbers has a relative precision error
+		after rounding of roughly $2^{-53} = 1.1102\dots\times 10^{-16}$
+		in the worst case (the reason is that a true value of $1 + 2^{-53}$
+		has to be stored as either $1$ or $1 + 2^{-52}$ or a number farther away,
+		resulting in a relative error of $2^{-53}/(1+2^{-53}$);
+		of course, in the best case the relative error is $0$).
+		If you multiply this by the condition number of $A$
+		(and this is only a very rough indication of the precision
+		you'd expect to lose $\mathbf{c}$...),
+		what do you get?
+	\item Now use the Lagrange formula for $p(x)$ in part (c):
+		\[
+			p(x) = y_0 \frac{x-x_1}{x_0-x_1} + y_1\frac{x - x_0}{x_1-x_0}
+		\]
+		to calculate $p(2 + 10^{-10}/2)$;
+		what are the absolute and relative errors in this calculation
+		compared with the true value?
+	\item Now use the Lagrange formula for $p(x)$ in part (c):
+		\[
+			p(x) = y_0\frac{x-x_1}{x_0 - x_1} + y_1\frac{x-x_0}{x_1-x_0}
+		\]
+		to calculate $p(2+10^{-10}/3)$, and compute the true value of
+		\[
+			p(2+10^{-10}/3) = (2/3)\sqrt{2} + (1/3)\sqrt{3}
+		\]
+		via the MATLAB line \verb|(2/3)*sqrt(2) + (1/3)*sqrt(3)|.
+		What are the absolute and relative errors in the Lagrange formula
+		computation as compared with the true value?
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute $c_0$ and $c_1$ using the formula:
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \end{bmatrix}
+			= A^{-1}\mathbf{y} =
+			\begin{bmatrix} x_0^0 & x_0^1\\ x_1^0 & x_1^1 \end{bmatrix}^{-1}
+			\begin{bmatrix} y_0 \\ y_1 \end{bmatrix}
+			= \begin{bmatrix} 1 & 2 \\ 1 & 2.01 \end{bmatrix}^{-1}
+			\begin{bmatrix} \sqrt{2} \\ \sqrt{3} \end{bmatrix}
+		\]
+		We can compute the inverse to be
+		\[
+			\frac{1}{2.01-2}\begin{bmatrix} 2.01 & -2 \\ -1 & 1 \end{bmatrix}
+			= \begin{bmatrix} 201 & -200 \\ -100 & 100 \end{bmatrix}
+		\]
+		We can then compute
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \end{bmatrix}
+			= \begin{bmatrix} 201\sqrt{2} - 200\sqrt{3} \\ -100\sqrt{2} + 100\sqrt{3} \end{bmatrix}
+		\]
+		Hence, written exactly, $c_0 = 201\sqrt{2} - 200\sqrt{3}$
+		and $c_1 = -100\sqrt{2} + 100\sqrt{3}$.
+		MATLAB calculates \verb|c0 = -62.1532| and \verb|c1 = 31.7837|.
+		Using these values, MATLAB can produce an approximate value
+		of $p(2.005)$ with $p(2.005) = c_0 + c_1(2.005)$.
+		MATLAB calculates an abosolute error of \verb|7.9936e-15|
+		and a relative error of \verb|5.0813e-15|.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using the same method as before, MATLAB computes
+		\verb|c0 = -6.3567e+05| and \verb|c1 = 3.1784e+05|.
+		MATLAB then gives an absolute error of
+		\verb|6.1605e-11| and a relative error of \verb|3.9161e-11|.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using the same method as before, MATLAB computes
+		\verb|c0 = -6.3567e+09| and \verb|c1 = 3.1784e+09|.
+		MATLAB then gives an absolute error of
+		\verb|1.2837e-06| and a relative error of \verb|8.1599e-07|.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		First, MATLAB produces \verb|1.2000e+11|.
+		Secondly, recall the formula for the condition number of $A$,
+		$\kappa_\infty(A) = \lVert A \rVert_\infty \lVert A^{-1} \rVert_\infty$.
+		Furthermore,
+		\[
+			A^{-1} = \begin{bmatrix} 1 & 2 \\ 1 & 2 + 10^{-10} \end{bmatrix}^{-1}
+			= \frac{1}{2 + 10^{-10} - 2}
+			\begin{bmatrix} 2 + 10^{-10} & -2 \\ -1 & 1 \end{bmatrix}
+			= \begin{bmatrix} 2\times 10^{10} + 1 & -2 \times 10^{10}\\
+			-10^{10} & 10^{10} \end{bmatrix}
+		\]
+		Then we can compute
+		\begin{align*}
+			\kappa_\infty(A)
+			&= \left\lVert \begin{bmatrix} 1 & 2 \\ 1 & 2 + 10^{-10} \end{bmatrix}
+			\right\rVert_\infty
+			\left\lVert \begin{bmatrix} 2\times10^{10} + 1 & -2\times 10^{10} \\
+			-10^{10} & 10^{10} \end{bmatrix} \right\rVert_\infty\\
+			&= \max(|1| + |2|, |1| + |2+10^{-10}|)
+				\max(|2\times 10^{10} + 1| + |-2\times 10^{10}|, |-10^{10}| + |10^{10}|)\\
+			&= (3 + 10^{-10})(4 \times 10^{10} + 1)\\
+			&= 12 \times 10^{10} + 3 + 4 + 10^{-10}\\
+			&= 1.2 \times 10^{11} + 7 + 10^{-10}
+		\end{align*}
+		This is approximately the same as the MATLAB value, since the $10^{11}$ term is
+		so much larger than the others.
+	\end{proof}	
+	\item \begin{proof}[Solution]\let\qed\relax
+		MATLAB produces \verb|1.3323e-05|.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		MATLAB produces an absolute and relative error of $0$ in the calculation.
+		Amazing!
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		MATLAB produces an absolute error of \verb|2.2204e-16|
+		and a relative error of \verb|1.4607e-16|.
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 3}
+\begin{enumerate}
+	\item Let $p(x) = c_0 + c_1x + c_2x^2$ be the unique polynomial
+		of degree at most $2$ such that
+		\[
+			p(2) = \sqrt{2}, \quad p(2.01) = \sqrt{3},
+			\quad p(2.02) = \sqrt{5}
+		\]
+		Let
+		\[
+			\alpha_2 = p(2.005)
+		\]
+		(we will explain the subscript $2$ in the notation $\alpha_2$ below).
+		Approximate $\alpha$ as follows:
+		first solve for $\mathbf{c} = (c_0,c_1,c_2)$ as $\mathbf{c} = A^{-1}\mathbf{y}$
+		using the formula derived in class (see also page 300 of [A\&G])
+		$A\mathbf{c} = \mathbf{y}$ where $\mathbf{y} = (y_0,y_1,y_2)$
+		and $A$ is a Vandermonde matrix.
+		\begin{enumerate}
+			\item[(i).] What value do you get for $\alpha_2$?
+				Report this as a base 10 number $1.d_1d_2d_3d_4d_5d_6d_7\dots$
+				(so drop the remaining digits, rather than round up/down,
+				and make sure you type \verb|format long| into MATLAB
+				if you aren't seeing enough decimal places).
+			\item[(ii).] What does MATLAB report for the $\infty$-condition number of $A$?
+				(Here a few decimal places suffice, e.g., $5.37\dots\times 10^5$.)
+		\end{enumerate}
+		You may find some of the following lines of MATLAB code helpful:
+		\begin{verbatim}
+		A = fliplr( vander([2, 2.01, 2.02]))
+		y = [sqrt(2);sqrt(3);sqrt(5)]
+		c = A^(-1)*y
+		%	For the result below, note that MATLAB indexing
+		%	begins with 1, not 0
+		monoVal = c(1) + c(2) * 2.005 + c(3) * (2.005)^2
+		cond(A,Inf)
+		\end{verbatim}
+	\item Let $q(x)$ be the unique polynomial of degree at most $2$ such that
+		\[
+			q(2) = \sqrt{2}, \quad q(2 + 10^{-6}) = \sqrt{3},
+			\quad q(2 + 10^{-6}\cdot2) = \sqrt{5}
+		\]
+		Let
+		\[
+			\alpha_6 = q(2 + 10^{-6}/2)
+		\]
+		Approximate $\alpha_6$ in the same way as you did $\alpha_2$ in part (a).
+		\begin{enumerate}
+			\item[(i).] What value do you get for $\alpha_6$?
+				Report this as a base 10 number $1.d_1d_2d_3d_4d_5d_6d_7\dots$
+				(so drop the remaining digits, rather than round up/down,
+				and make sure you type \verb|format long| into MATLAB
+				if you aren't seeing enough decimal places).
+			\item[(ii).] What does MATLAB report for the $\infty$-condition number of $A$?
+		\end{enumerate}
+	\item Same question in part (b), with $q(x)$, $10^{-6}$, $\alpha_6$
+		respectively replaced with $r(x), 10^{-7}, \alpha_7$.
+	\item Same question in part (b), with $q(x)$, $10^{-6}$, $\alpha_6$
+		respectively replaced with $s(x), 10^{-8}, \alpha_8$.
+	\item Let $p$ be the polynomial in part (a),
+		and $q$ that in part (b).
+		Show that $f(y) = p(2 + y10^{-2}) - q(2 + y10^{-6})$
+		is a polynomial in $y$ of degree $2$ such that $f(y) = 0$ for $y = 0,1,2$.
+	\item Use the previous part to show that (in an exact computation) $\alpha_2 = \alpha_6$.
+	\item Use the ideas of the two previous parts to argue that in exact computations,
+		$\alpha_6=\alpha_7$.
+	\item Now use the Lagrange formula for quadratic polynomials,
+		\[
+			p(x) = y_0\frac{x-x_1}{x_0-x_1}\frac{x-x_2}{x_0-x_2}
+			+ y_1\frac{x-x_0}{x_1-x_0}\frac{x-x_2}{x_1-x_2}
+			+ y_2\frac{x-x_0}{x_2-x_0}\frac{x-x_1}{x_2-x_1}
+		\]
+		to calculate $\alpha_2,\alpha_7,\alpha_8$ and report
+		all the decimal places that MATLAB's \verb|format long| reports.
+		You may find the following MATLAB lines helpful for the $\alpha_2$ calculation:
+		\begin{verbatim}
+		n=2
+		x0 = 2 ; x1 = 2 + 10^(-n) ; x2 = 2 + 10^(-n) * 2;
+		x = 2 + 10^(-n)/2;
+		y0 = sqrt(2); y1 = sqrt(3); y2 = sqrt(5);
+		L0 = (x-x1) * (x-x2) / ( (x0-x1) * (x0-x2) );
+		L1 = (x-x0) * (x-x2) / ( (x1-x0) * (x1-x2) );
+		L2 = (x-x0) * (x-x1) / ( (x2-x0) * (x2-x1) );
+		p = y0 * L0 + y1 * L1 + y2 * L2
+		\end{verbatim}
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute $c_0,c_1,c_2$ using the formula:
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \end{bmatrix}
+			= A^{-1}\mathbf{y} =
+			\begin{bmatrix} x_0^0 & x_0^1 & x_0^2\\ x_1^0 & x_1^1 &x_1^2\\
+			x_2^0 & x_2^1 & x_2^2\end{bmatrix}^{-1}
+			\begin{bmatrix} y_0 \\ y_1 \\ y_2\end{bmatrix}
+				= \begin{bmatrix} 1 & 2 & 4 \\ 1 & 2.01 & (2.01)^2\\
+				1 & 2.02 & (2.02)^2\end{bmatrix}^{-1}
+			\begin{bmatrix} \sqrt{2} \\ \sqrt{3}\\\sqrt{5} \end{bmatrix}
+		\]
+		We can have MATLAB solve for $c_0,c_1,c_2$ and evaluate the polynomial
+		$p(x) = c_0 + c_1 x + c_2 x^2$ at $x = 2.005$.
+		We find $\alpha_2 = 1.549859694375755$.
+
+		MATLAB produces $5.7371\cdots \times 10^5$
+		as the $\infty$-condition number of $A$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute $c_0,c_1,c_2$ using the formula:
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \end{bmatrix}
+			= A^{-1}\mathbf{y} =
+			\begin{bmatrix} 1 & 2 & 4 \\1 & 2 + 10^{-6} & (2 + 10^{-6})^2\\
+			1 & 2 + 10^{-6}\cdot2 & (2 + 10^{-6}\cdot2)^2\end{bmatrix}^{-1}
+			\begin{bmatrix} \sqrt{2} \\ \sqrt{3}\\\sqrt{5} \end{bmatrix}
+		\]
+		We can have MATLAB solve for $c_0,c_1,c_2$ and evaluate the polynomial
+		$q(x) = c_0 + c_1 x + c_2 x^2$ at $x = 2 + 10^{-6}/2$.
+		We find $\alpha_6 = 14.468750000000000$.
+
+		MATLAB produces $3.5836\cdots \times 10^{15}$
+		as the $\infty$-condition number of $A$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using the same formula as before,
+		we can have MATLAB solve for $c_0,c_1,c_2$ and evaluate the polynomial
+		$r(x) = c_0 + c_1 x + c_2 x^2$ at $x = 2 + 10^{-7}/2$.
+		MATLAB computes that $\alpha_7 = 8$.
+
+		MATLAB produces $7.3367\cdots \times 10^{17}$
+		as the $\infty$-condition number of $A$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using the same formula as before,
+		we can have MATLAB solve for $c_0,c_1,c_2$ and evaluate the polynomial
+		$s(x) = c_0 + c_1 x + c_2 x^2$ at $x = 2 + 10^{-8}/2$.
+		MATLAB computes that $\alpha_8 =$ \verb|Inf|
+		and also the $\infty$-condition number of $A$ is $\verb|Inf|$ as well.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		First, we can write $f(y)$:
+		\begin{align*}
+			f(y)
+			&= c_{0,2} + c_{1,2}(2 + y10^{-2}) + c_{2,2}(2 + y10^{-2})^2
+			- c_{0,6} + c_{1,6}(2 + y10^{-6}) + c_{2,6}(2 + y10^{-6})^2\\
+			&= c_{0,2} + 2c_{1,2} + c_{1,2} 10^{-2}y
+			+ 4c_{2,2} + c_{2,2}20^{-2}y + c_{2,2}10^{-4}y^2\\
+			&- c_{0,6} - 2c_{1,6} - c_{1,6} 10^{-6}y
+			- 4c_{2,6} - c_{2,6}20^{-6}y - c_{2,6}10^{-12}y^2\\
+			&= d_0 + d_1y + d_2y^2
+		\end{align*}
+		with appropriate collecting of terms.
+		$d_0,d_1,d_2$ are all constants (since they are from just adding/subtracting constants),
+		hence $f(y)$ is clearly a polynomial of degree at most $2$
+		(we have degree less than $2$ when $d_2 = 0$).
+		
+		From parts (a) and (b) of this problem,
+		we have $f(0) = p(2) - q(2) = \sqrt{2} - \sqrt{2} = 0$,
+		$f(1) = p(2 + 10^{-2}) - q(2 + 10^{-6}) = \sqrt{3} - \sqrt{3} = 0$,
+		and $f(2) = p(2 + 2\cdot 10^{-2}) - q(2 + 2\cdot 10^{-6}) = \sqrt{5} - \sqrt{5} = 0$.
+		So $f(0) = f(1) = f(2) = 0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		From the theorem from class (Feb. 9),
+		there is a unique degree at most $2$ polynomial that passes
+		through the three points
+		$(0,f(0)), (1,f(1)), (2,f(2))$.
+		$f$ is a degree at most $2$ polynomial that passes through all those points.
+		Also $0$ is a polynomial of degree at most $2$ that passes through all the points.
+		Hence, $f(y) = 0$ by uniqueness.
+		Hence, $0 = f(1/2) =
+		p(2 + \cdot 10^{-2}/2) - q(2 + \cdot 10^{-6}/2) = \alpha_2 - \alpha_6
+		\implies \alpha_2 = \alpha_6$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We claim that $g(y) = q(2+y10^{-6}) - r(2 + y10^{-7})$
+		is a polynomial of degree at most $2$ such that $g(0) = g(1) = g(2) = 0$.	
+		We expand out $g(y)$:
+		\begin{align*}
+			g(y)
+			&= c_{0,6} + c_{1,6}(2 + y10^{-6}) + c_{2,6}(2 + y10^{-6})^2
+			- c_{0,7} + c_{1,7}(2 + y10^{-7}) + c_{2,7}(2 + y10^{-7})^2\\
+			&= c_{0,6} + 2c_{1,6} + c_{1,6} 10^{-6}y
+			+ 4c_{2,6} + c_{2,6}20^{-6}y + c_{2,6}10^{-12}y^2\\
+			&- c_{0,7} - 2c_{1,7} - c_{1,7} 10^{-7}y
+			- 4c_{2,7} - c_{2,7}20^{-7}y - c_{2,7}10^{-14}y^2\\
+			&= e_0 + e_1y + e_2y^2
+		\end{align*}
+		with appropriate collecting of terms.
+		$e_0,e_1,e_2$ are all constants (since they are from just adding/subtracting constants),
+		hence $g(y)$ is clearly a polynomial of degree at most $2$.
+		
+		From parts (b) and (c) of this problem,
+		see $g(0) = q(2) - r(2) = \sqrt{2} - \sqrt{2} = 0$,
+		$g(1) = q(2 + 10^{-6}) - r(2 + 10^{-7}) = \sqrt{3} - \sqrt{3} = 0$,
+		and $g(2) = q(2 + 2\cdot 10^{-6}) - r(2 + 2\cdot 10^{-7}) = \sqrt{5} - \sqrt{5} = 0$.
+		So $g(0) = g(1) = g(2) = 0$.
+
+		From the theorem from class,
+		there is a unique degree at most $2$ polynomial that passes
+		through the three points
+		$(0,g(0)), (1,g(1)), (2,g(2))$.
+		$g$ is a degree at most $2$ polynomial that passes through all those points.
+		Also $0$ is a polynomial of degree at most $2$ that passes through all the points.
+		Hence, $g(y) = 0$ by uniqueness.
+		Hence, $0 = g(1/2) =
+		q(2 + \cdot 10^{-6}/2) - r(2 + \cdot 10^{-7}/2) = \alpha_6 - \alpha_7
+		\implies \alpha_6 = \alpha_7$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We compute
+		\begin{align*}
+			\alpha_2 &= 1.549859694379098\\
+			\alpha_7 &= 1.549859695416296\\
+			\alpha_8 &= 1.549859694379095
+		\end{align*}
+	\end{proof}
+\end{enumerate}
+
+
+For the next problem(s), recall that if $A$ is a square, invertible matrix,
+and if $A\mathbf{x}_{\text{true}} = \mathbf{b}_{\text{true}}$
+(representing the ``true values" of vector $\mathbf{x},\mathbf{b}$)
+and $A\mathbf{x}_{\text{approx}} = \mathbf{b}_{\text{approx}}$
+(representing the ``approximate values" or ``observed values by some experiment"),
+in class we defined the $p$-norm relative error (for $1 \leq p \leq \infty$)
+\begin{equation}
+	\mathrm{RelError}_p(\mathbf{x}_{\text{approx}},\mathbf{x}_{\text{true}})
+	:= \frac{\lVert \mathbf{x}_{\text{approx}} - \mathbf{x}_{\text{true}}\rVert_p}
+	{\lVert \mathbf{x}_{\text{true}}\rVert_p}
+\end{equation}
+(assuming $\mathbf{x}_{\text{true}} \neq \mathbf{0}$)
+and similarly with $\mathbf{x}$ replaced with $\mathbf{b}$.
+(See also [A\&G], pages 3 and Section 5.8.)
+In class we proved that
+\begin{equation}\label{condineq}
+	\mathrm{RelError}_p(\mathbf{x}_{\text{approx}},\mathbf{x}_{\text{true}})
+	\leq \kappa_p(A)\mathrm{RelError}_p(\mathbf{b}_{\text{approx}},\mathbf{b}_{\text{true}})
+\end{equation}
+where
+\[
+	\kappa_p(A) = \lVert A \rVert_p\lVert A^{-1} \rVert_p
+\]
+and, moreover, that for any $A$ there are
+$\mathbf{x}_{\text{true}},\mathbf{b}_{\text{true}},
+\mathbf{x}_{\text{approx}}, \mathbf{b}_{\text{approx}}$
+for which equality holds in (\ref{condineq}).
+Equivalently, if $\mathbf{x}_{\text{error}} =
+\mathbf{x}_{\text{approx}} - \mathbf{x}_{\text{true}}$
+and similarly for $\mathbf{b}_{\text{error}}$, then (\ref{condineq}) is equivalent to
+\begin{equation}\label{condineq2}
+	\frac{\lVert \mathbf{x}_{\text{error}}\rVert_p}{\lVert \mathbf{b}_{\text{error}} \rVert_p}
+	\frac{\lVert \mathbf{b}_{\text{true}}\rVert_p}{\lVert \mathbf{x}_{\text{true}} \rVert_p}
+	\leq \kappa_p(A)
+\end{equation}
+([A\&G] refer to $\mathbf{b}_{\text{error}}$ as the \emph{residual}, and denote
+it $\hat{\mathbf{r}}$.)
+
+Conversely, for any $A,p$, here is a recipe for producing cases
+where (\ref{condineq}) holds with equality:
+let $\mathbf{b}_{\text{error}}$ and $\mathbf{x}_{\text{true}}$ be arbitrary
+(nonzero) vectors such that
+\begin{equation}\label{recipe1}
+	\frac{\lVert A^{-1} \mathbf{b}_{\text{error}}\rVert_p}
+	{\lVert \mathbf{b}_{\text{error}}\rVert_p}
+	= \lVert A^{-1} \rVert_p, \quad
+	\frac{\lVert A\mathbf{x}_{\text{true}}\rVert_p}
+	{\lVert \mathbf{x}_{\text{true}}\rVert_p}
+	= \lVert A \rVert_p
+\end{equation}
+(such vectors do exist); then (\ref{condineq2}) holds, and so working backwards we set
+\begin{equation}\label{recipe2}
+	\mathbf{x}_{\text{error}} = A^{-1}\mathbf{b}_{\text{error}},
+	\quad \mathbf{b}_{\text{true}} = A\mathbf{x}_{\text{true}}
+\end{equation}
+and
+\begin{equation}
+	\mathbf{x}_{\text{approx}} = \mathbf{x}_{\text{true}} + \mathbf{x}_{\text{error}},
+	\quad \mathbf{b}_{\text{approx}} = \mathbf{b}_{\text{true}} + \mathbf{b}_{\text{error}}
+\end{equation}
+yielding an example for which (\ref{condineq}) holds with equality.
+
+\subsection*{Problem 4}
+Let $\ep > 0$ be a real number (which we think of as small), and let
+\begin{equation}
+	A = \begin{bmatrix} 1 & 2 \\ 1 & 2 + \ep \end{bmatrix}
+\end{equation}
+and hence
+\[
+	A^{-1} = \frac{1}{\ep}\begin{bmatrix} 2 + \ep & -2 \\ -1 & 1 \end{bmatrix}
+\]
+\begin{enumerate}
+	\item What are $\lVert A \rVert_\infty$ and $\lVert A^{-1} \rVert_\infty$?
+	\item Show that
+		\[
+			\left\lVert A\begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\rVert_\infty
+			= \lVert A \rVert_\infty \left\lVert
+			\begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\rVert_\infty
+		\]
+		and for any $\delta \in \R$
+		\[
+			\left\lVert A^{-1}\begin{bmatrix} \delta \\ -\delta \end{bmatrix} \right\rVert_\infty
+			= \lVert A^{-1} \rVert_\infty \left\lVert
+			\begin{bmatrix} \delta \\ -\delta \end{bmatrix} \right\rVert_\infty
+		\]
+	\item Use the previous part to show that
+		\[
+			\mathbf{b}_{\text{error}} = \begin{bmatrix} \delta \\ -\delta \end{bmatrix}, \quad
+			\mathbf{x}_{\text{true}} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+		\]
+		satisfy (\ref{recipe1});
+		then let $\mathbf{x}_{\text{error}}$ satisfying (\ref{recipe2}),
+		and show that the resulting $\mathbf{x}_{\text{approx}}$ is
+		\begin{equation}\label{xapprox}
+			\mathbf{x}_{\text{approx}}(\delta)
+			= \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+			+ \begin{bmatrix} 4 + \ep \\ -2 \end{bmatrix} \frac{\delta}{\ep}
+		\end{equation}
+	\item Show that $\mathbf{x}_{\text{approx}}$(0) equals $\mathbf{x}_{\text{true}}$ above.
+	\item Now check your work: let $\mathbf{x}_{\text{approx}}(\delta)$
+		be as in (\ref{xapprox}), and let $\delta \neq 0$.
+		\begin{enumerate}
+			\item[(i).] Evaluate
+				\[
+					\mathrm{RelError}_\infty(\mathbf{x}_{\text{approx}},\mathbf{x}_{\text{true}})
+					= \frac{\lVert \mathbf{x}_{\text{approx}}(\delta)
+					- \mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+					{\lVert \mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+				\]
+			\item[(ii).] Evaluate
+				\[
+					\mathrm{RelError}_\infty(A\mathbf{x}_{\text{approx}},A\mathbf{x}_{\text{true}})
+					= \frac{\lVert A\mathbf{x}_{\text{approx}}(\delta)
+					- A\mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+					{\lVert A\mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+				\]
+			\item[(iii).] Divide the result in (i) and (ii) and show that the result is equal to
+				\[
+					\kappa_\infty(A) = \lVert A \rVert_\infty \lVert A^{-1} \rVert_\infty
+				\]
+				(which you should find to be $(3+\ep)(4+\ep)/\ep$, using part (a)).
+		\end{enumerate}
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Recall the formula we proved on the previous homework
+		(and mentioned in problem 2(d) of this homework):
+		\[
+			\left\lVert \begin{bmatrix} a & b \\ c & d \end{bmatrix}\right\rVert_\infty
+			= \max(|a| + |b|, |c| + |d|)
+		\]
+		We can then compute (using the fact that $\ep > 0$ when appropriate):
+		\begin{align*}
+			\lVert A \rVert_\infty
+			&= \max(|1| + |2|,|1| + |2+\ep|)
+			= 3 + \ep\\
+			\lVert A^{-1} \rVert_\infty
+			&= \max(|(2+\ep)/\ep| + |-2/\ep|,|-1/\ep| + |1/\ep|)
+			= \max((4+\ep)/\ep,2/\ep)
+			= \frac{4+\ep}{\ep}
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		See that
+		\[
+			\left\lVert A\begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\rVert_\infty
+			= \left\lVert \begin{bmatrix} 1 + 2 \\ 1  + 2 + \ep \end{bmatrix}\right\rVert_\infty
+			= 3 + \ep
+			= \lVert A \rVert_\infty \cdot 1
+			= \lVert A \rVert_\infty \left\lVert
+			\begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\rVert_\infty
+		\]
+		If $\delta \in \R$, then
+		\[
+			\left\lVert A^{-1}\begin{bmatrix} \delta \\ -\delta \end{bmatrix} \right\rVert_\infty
+			= \left\lVert \frac{1}{\ep}
+			\begin{bmatrix} 2\delta+\delta\ep + 2\delta \\ -2\delta \end{bmatrix} \right\rVert_\infty
+			= \frac{4 + \ep}{\ep}\delta
+			= \lVert A^{-1} \rVert_\infty\cdot\delta
+			= \lVert A^{-1} \rVert_\infty \left\lVert
+			\begin{bmatrix} \delta \\ -\delta \end{bmatrix} \right\rVert_\infty
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		To verify that these choices of $\mathbf{b}_{\text{error}}$
+		and $\mathbf{x}_{\text{true}}$ satisfy (\ref{recipe1}), see
+		\begin{align*}
+			\frac{\lVert A^{-1} \mathbf{b}_{\text{error}}\rVert_\infty}
+			{\lVert \mathbf{b}_{\text{error}}\rVert_\infty}
+			&= \frac{\lVert A^{-1}\rVert_\infty
+			\left\lVert \begin{bmatrix} \delta \\ -\delta \end{bmatrix} \right\rVert_\infty}
+			{\left\lVert \begin{bmatrix} \delta \\ -\delta \end{bmatrix} \right\rVert_\infty}
+			= \lVert A^{-1} \rVert_\infty\\
+			\frac{\lVert A\mathbf{x}_{\text{true}}\rVert_\infty}
+			{\lVert \mathbf{x}_{\text{true}}\rVert_\infty}
+			&= \frac{\lVert A\rVert_\infty
+			\left\lVert \begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\rVert_\infty}
+			{\left\lVert \begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\rVert_\infty}
+			= \lVert A \rVert_\infty
+		\end{align*}
+		Now assume that $\mathbf{x}_{\text{error}}= A^{-1} \mathbf{b}_{\text{error}}$.
+		We can then find $\mathbf{x}_{\text{approx}}$ as a function of $\delta$:
+		\[
+			\mathbf{x}_{\text{approx}}(\delta)
+			= \mathbf{x}_{\text{true}}(\delta) + \mathbf{x}_{\text{error}}(\delta)
+			= \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+			+ A^{-1} \begin{bmatrix} \delta \\ -\delta \end{bmatrix}
+			= \begin{bmatrix} 1 \\ 1 \end{bmatrix} + \frac{1}{\ep}
+			\begin{bmatrix} 2\delta+\delta\ep + 2\delta \\ -2\delta \end{bmatrix} 
+			= \begin{bmatrix} 1 \\ 1 \end{bmatrix} +
+			\begin{bmatrix} 4+\ep \\ -2 \end{bmatrix}\frac{\delta}{\ep}
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute $\mathbf{x}_{\text{approx}}(0)
+		= \begin{bmatrix} 1 \\ 1 \end{bmatrix} +
+		\begin{bmatrix} 4+\ep \\ -2 \end{bmatrix}\frac{0}{\ep}
+		= \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \mathbf{x}_{\text{true}}$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $\delta \neq 0$. We can compute
+		\[
+			\mathrm{RelError}_\infty(\mathbf{x}_{\text{approx}},\mathbf{x}_{\text{true}})
+			= \frac{\lVert \mathbf{x}_{\text{approx}}(\delta)
+			- \mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+			{\lVert \mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+			= \frac{\left\lVert
+			\begin{bmatrix} 4 + \ep \\ -2 \end{bmatrix}\frac{\delta}{\ep}\right\rVert_\infty}
+			{\left\lVert\begin{bmatrix}1 \\ 1 \end{bmatrix}\right\rVert_\infty}
+			= (4+\ep)\frac{\delta}{\ep}
+		\]
+
+		See that $A\mathbf{x}_{\text{approx}}(0)
+		= A\begin{bmatrix} 1 \\ 1 \end{bmatrix} =
+		\begin{bmatrix} 1 + 2 \\ 1 + 2 + \ep \end{bmatrix}
+		= \begin{bmatrix} 3 \\ 3 + \ep\end{bmatrix}$ and
+		using the linearity of matrix multiplication, we also get
+		$A\mathbf{x}_{\text{approx}}(\delta)
+		= A\left(\begin{bmatrix} 1 \\ 1 \end{bmatrix}
+		+ \begin{bmatrix} 4 + \ep \\ -2 \end{bmatrix}\frac{\delta}{\ep}\right)
+		= A\mathbf{x}_{\text{approx}}(0) + \frac{\delta}{\ep}
+		A\begin{bmatrix} 4 + \ep \\ -2 \end{bmatrix}
+		= A\mathbf{x}_{\text{approx}}(0) + \frac{\delta}{\ep}
+		\begin{bmatrix} 4 + \ep - 4 \\ 4 + \ep - 4 - 2\ep) \end{bmatrix}
+		= A\mathbf{x}_{\text{approx}}(0) + \delta
+		\begin{bmatrix} 1 \\ - 1 \end{bmatrix}$.
+		Then we can compute
+		\begin{align*}
+			\mathrm{RelError}_\infty(A\mathbf{x}_{\text{approx}},A\mathbf{x}_{\text{true}})
+			&= \frac{\lVert A\mathbf{x}_{\text{approx}}(\delta)
+			- A\mathbf{x}_{\text{approx}}(0)\rVert_\infty}
+			{\lVert A\mathbf{x}_{\text{approx}}(0)\rVert_\infty}\\
+			&= \frac{\left\lVert A\mathbf{x}_{\text{approx}}(0)
+			+ \begin{bmatrix} \delta \\ -\delta \end{bmatrix} -
+			A\mathbf{x}_{\text{approx}}(0)\right\rVert_\infty}
+			{\left\lVert \begin{bmatrix} 3 \\ 3 + \ep \end{bmatrix} \right\rVert_\infty}\\
+			&= \frac{\delta}{3 + \ep}
+		\end{align*}
+
+		Finally, we have that
+		\[
+			\frac{\mathrm{RelError}_\infty(\mathbf{x}_{\text{approx}},\mathbf{x}_{\text{true}})}
+			{\mathrm{RelError}_\infty(A\mathbf{x}_{\text{approx}},A\mathbf{x}_{\text{true}})}
+			= \frac{(4+\ep)\delta/\ep}{\delta/(3+\ep)}
+			= (3+\ep)\frac{4+\ep}{\ep}
+			= \lVert A \rVert_\infty \lVert A^{-1} \rVert_\infty
+			= \kappa_\infty(A)
+		\]
+		where we have inserted the values of $\lVert A \rVert_\infty,
+		\lVert A^{-1} \rVert_\infty$ from part (a) of this problem.
+	\end{proof}
+\end{enumerate}
+\end{document}

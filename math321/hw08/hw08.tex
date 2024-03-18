@@ -1,0 +1,489 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 8}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 8}\\
+\end{center}
+
+For the next problem, we will need the following definition.
+Let $N \geq 1$ be an integer and let $s,t$ be integers.
+We define the half-open square
+\[
+	S_{s,t;N} = \left[\frac{s}{N},\frac{s+1}{N}\right) \times
+	\left[\frac{t}{n},\frac{t+1}{N}\right)
+\]
+Observe that for each fixed $N$, $\R^2$ is a disjoint union of the half-open squares
+$\{S_{s,t;N} \colon s,t \in \Z\}$.
+We say a function $f \colon \R^2 \to \C$ or $\R^2 \to \R$ is
+``constant on half-open squares at resolution $N$"
+if $f$ is constant on each $S_{s,t;N}$, i.e. $f$ can be written as
+\[
+	f(x,y) = \sum_{s,t \in \Z} a_{s,t}\chi_{s,t;N}(x,y)
+\]
+\subsection*{Problem 1}
+\problem{
+	\begin{enumerate}
+		\item Let $N \geq 1$ be an integer and let $f \colon \R^2 \to \R$
+			have compact support and be constant on half-open squares at resolution $N$.
+			For each $x,y \in \R$, define
+			\[
+				g(x) = \int_{-\infty}^\infty f(x,y)dy, \quad
+				h(y) = \int_{-\infty}^\infty f(x,y)dx, \quad
+			\]
+			Prove that $g$ and $h$ are integrable on $\R$, and that
+			\[
+				\int_{-\infty}^\infty g(x)dx = \int_{-\infty}^\infty h(y)dy
+			\]
+			(and that both integrals converge).
+		\item Let $f \colon \R^2 \to \R$ be continuous and have compact support.
+			For each $x,y \in \R$, define
+			\[
+				g(x) = \int_{-\infty}^\infty f(x,y)dy, \quad
+				h(y) = \int_{-\infty}^\infty f(x,y)dx, \quad
+			\]
+			Prove that $g$ and $h$ are integrable on $\R$, and that
+			\[
+				\int_{-\infty}^\infty g(x)dx = \int_{-\infty}^\infty h(y)dy
+			\]
+	\end{enumerate}
+	\begin{remark}
+		You have just proved that for $f \colon \R^2 \to \R$ continuous
+		with compact support, we have
+		\[
+			\int_{-\infty}^\infty \left(\int_{-\infty}^\infty f(x,y)dx\right)dy =
+			\int_{-\infty}^\infty \left(\int_{-\infty}^\infty f(x,y)dy\right)dx
+		\]
+	\end{remark}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Since $f$ has compact support, there exists some $s',t'$
+		such that $a_{s,t} = 0$ when $|s| > s'$ or $|t| > t'$.
+		Alternatively, $\mathrm{supp}(f) \subset [-M,M] \times [-M,M]$
+		for some $M \in \R$. Thus, using Rudin Theorem 6.12(a)
+		(our sum is finite, so there are no problems with using the theorem),
+		\begin{align*}
+			g(x) &= \int_{-\infty}^\infty f(x,y)dy\\
+				 &= \int_{-M}^M \sum_{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}} a_{s,t}
+			\chi_{s,t;N}(x,y)dy\\
+				 &= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\int_{t/N}^{(t+1)/N} a_{s,t}\chi_{s,t;N}(x,y)dy\\
+				 &= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+				 a_{s,t}\int_{t/N}^{(t+1)/N}\chi_{s,t;N}(x,y)dy\\
+				 &= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+				 \frac{a_{s,t}}{N}\chi_{s,t;N}(x)\\
+		\end{align*}
+		And the integral converges, via 6.12(a) as well.
+		Similarly, we can do the same for $h(y)$ to get
+		\[
+			h(y) = \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\frac{a_{s,t}}{N}\chi_{s,t;N}(y)\\
+		\]
+		Since our $s',t'$ are the same as before,
+		we still have $\mathrm{supp}(g) \subset [-M,M]$
+		and $\mathrm{supp}(h) \subset [-M,M]$.
+		Hence, using Rudin Theorem 6.12(a) again, we see
+		\begin{align*}
+			\int_{-\infty}^\infty g(x)dx
+			&= \int_{-M}^M \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+				 \frac{a_{s,t}}{N}\chi_{s,t;N}(x)dx\\
+			&= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\int_{s/N}^{(s+1)/N} \frac{a_{s,t}}{N}\chi_{s,t;N}(x)dx\\
+			&= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\frac{a_{s,t}}{N}\int_{s/N}^{(s+1)/N}\chi_{s,t;N}(x)dx\\
+			&= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\frac{a_{s,t}}{N^2}\\
+		\end{align*}
+		And again, the integral converges 6.12(a). Similarly,
+		\[
+			\int_{-\infty}^\infty h(y)dy
+			= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\frac{a_{s,t}}{N^2}
+		\]
+		These are equal, hence we have shown
+		\[
+			\int_{-\infty}^\infty g(x)dx = \int_{-\infty}^\infty h(y)dy
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We first show that $g(x)$ is integrable.
+		Since $f(x,y)$ has compact support, there is some
+		$M \in \N$ such that $\mathrm{supp}(f) \subset [-M,M],[-M,M]$.
+		Since $f(x,y)$ continuous in a compact set,
+		it is uniformly continuous on its support.
+		Let $\ep > 0$.
+		Then for $\ep' = \ep/(4M)$, we have that there exists $\delta > 0$
+		such that for all $(x_1,y),(x_2,y) \in [-M,M] \times [-M,M]$
+		where $d((x_1,y),(x_2,y)) < \delta$ (the typical metric $d$),
+		we have $|f(x_1,y) - f(x_2,y)| < \ep'$. Thus by Theorem 6.13
+		\[
+			|g(x_1) - g(x_2)|
+			= \left\lvert \int_{-M}^M f(x_1,y) - f(x_2,y)dy\right\rvert
+			\leq \int_{-M}^M |f(x_1,y) - f(x_2,y)|dy
+			\leq \ep'\int_{-M}^Mdy = 2M\ep' = \ep/2 < \ep
+		\]
+		Therefore, $g(x)$ is continuous.
+		Furthermore, when $x \not\in [-M,M]$, we have
+		$\int_{-\infty}^\infty f(x,y)dy = \int_{-\infty}^\infty 0dy = 0$
+		and so $\mathrm{supp}(g) \subset [-M,M]$,
+		so $g(x)$ has compact support as well.
+		Thus, $\int_{-\infty}^\infty g(x)dx = \int_{-M}^M g(x)dx$
+		exists.
+		In an identical manner, one can show that $h(y)$ is integrable
+		by showing that it is continuous with compact support.
+
+		Let $a_{s,t;N}$ be the value of $f(x,y)$ at the center of $S_{s,t;N}$. Define
+		\[
+			f_N(x,y) = \sum_{s,t\in\Z} a_{s,t}\chi_{s,t;N}(x,y)
+		\]
+		
+		$f(x,y)$ is uniformly continuous,
+		so for any $\ep > 0$, we get a $\delta > 0$ such that
+		$|f(x_1,y_1) - f(x_2,y_2)| < \ep$ for all $(x_1,y_1),(x_2,y_2)
+		\in [-M,M]\times[-M,M]$
+		where $d((x_1,y_1),(x_2,y_2)) < \delta$.
+		Note that we can choose $N$ large enough so that
+		all points in $S_{s,t;N}$ are within $\delta$ of the center
+		(the furthest points at the corners are $\sqrt{2}/(2N)$ from the center,
+		which we can obviously make arbitrarily small).
+		Let all $N$ written below be this $N$, or larger.
+
+		Using the definitions we provided in part (a) (for $s',t'$), we have
+		(with appropriate triangle inequality and Rudin 6.13):
+		\begin{align*}
+			\left\lvert g(x) - \int_{-M}^M f_N(x,y)dy \right\rvert
+			&= \left\lvert \int_{-M}^M f(x,y)dy - \int_{-M}^M f_N(x,y)dy \right\rvert\\
+			&= \left\lvert \int_{-M}^M f(x,y) - f_N(x,y)dy \right\rvert\\
+			&= \left\lvert
+				\sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}} 
+				\int_{t/N}^{(t+1)/N} f(x,y) - a_{s,t;N}dy
+				\right\rvert\\
+			&= \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\int_{t/N}^{(t+1)/N} |f(x,y) - a_{s,t;N}|dy\\
+			&\leq \sum_{{\substack{s,t\in\Z\\|s|\leq s',|t|\leq t'}}}
+			\ep \int_{t/N}^{(t+1)/N}dy\\
+			&< \sum_{{\substack{t\in\Z\\|t|\leq t'}}}
+			\frac{\ep}{N} = \frac{T}{N}\ep\\
+		\end{align*}
+		where $T$ is the number of $T = 2MN$, the number of squares
+		along the $y$ direction that is inside $[-M,M]$.
+		$T$ is also the number of squares along the $x$ direction inside $[-M,M]$, by symmetry.
+		
+		In the same method, we can get
+		\[
+			\left\lvert h(y) - \int_{-\infty}^\infty f_N(x,y)dx \right\rvert
+			< \frac{T}{N}\ep
+		\]
+
+		Since $f_N(x,y)$ is defined from part (a),
+		we can interchange the order of integration to get equal integrals,
+		which gives us
+		\begin{align*}
+			\left\lvert \int_{-\infty}^\infty g(x)dx - \int_{-\infty}^\infty h(y)dx \right\rvert
+			&= \left\lvert \int_{-M}^M g(x)dx - \int_{-M}^M h(y)dx \right\rvert\\
+			&\leq \left\lvert \int_{-M}^M g(x)dx -
+				\int_{-M}^M \int_{-M}^M f_N(x,y) dydx \right\rvert\\
+			&+ \left\lvert \int_{-M}^M h(x)dx -
+				\int_{-M}^M \int_{-M}^M f_N(x,y) dxdy \right\rvert\\
+			&\leq \left\lvert \int_{-M}^M \left(g(x)dx -
+				\int_{-M}^M f_N(x,y) dy\right)dx \right\rvert\\
+			&+ \left\lvert \int_{-M}^M \left(h(x)dx -
+				\int_{-M}^M f_N(x,y) dx\right)dy \right\rvert\\
+			&< \left\lvert\int_{-M}^M \frac{T}{N}\ep dx \right\rvert
+			+ \left\lvert\int_{-M}^M \frac{T}{N}\ep dy \right\rvert\\
+			&= 4M\frac{2MN}{N}\ep
+		\end{align*}
+		and since $\ep > 0$ was abitrary, and the rest are constants
+		determined before, we can make this bound arbitrarily small.
+		Thus, the integrals are equal, i.e.
+		\[
+			\int_{-\infty}^\infty g(x)dx = \int_{-\infty}^\infty h(y)dy
+		\]
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 2}
+\problem{
+	Let $f,g \colon \R \to \R$ be continuous and have compact support. Prove that
+	\[
+		\int_{-\infty}^\infty |f * g(x)|dx \leq
+		\left(\int_{-\infty}^\infty |f(x)|dx\right)
+		\left(\int_{-\infty}^\infty |g(x)|dx\right)
+	\]
+	\emph{Hint}: Problem $1$ might be useful.
+}
+\begin{proof}[Solution]
+	(Disclaimer: sorry for the $f',g'$ notation below,
+	I originally proved it for $f,g$, but realized I needed it for
+	$|f|,|g|$, and so I wanted to minimize the amount of extra typing I'd need.)
+
+	Let $|f| = f'$ and $|g| = g'$.
+	Since $f,g$ are continuous with compact support,
+	$f',g'$ both also have compact support and are continuous.
+	We now show that $f' * g'(x)$ is continuous and has compact support as well.
+	Note that $f' * g'$ has compact support.
+	We have compact sets $K_f,K_g$ such that
+	$\mathrm{supp}(f') \subset K_f$ and $\mathrm{supp}(g') \subset K_g$.
+	Heine-Borel says that both of these sets are bounded,
+	and so there exists $M \in \R$ such that $K_f,K_g \subset [-M,M]$.
+	See $f'*g'(x)$ is defined for all $x \in \R$, since
+	$f'*g'(x) = \int_{-\infty}^\infty f'(t)g'(x-t)dt
+	= \int_{-M}^Mf'(t)g'(x-t)dt$
+	(since $f'(t) = 0$ when $t \not\in [-M,M]$),
+	and $f'(t)g'(x-t)$ is the product of two continuous functions,
+	and so is integrable and exists on $[-M,M]$ for any $x\in\R$.
+	Furthermore, when $x \not\in [-2M,2M]$,
+	we have that $g'(x-t) = 0$ since $t \in [-M,M]$,
+	and so $\int_{-M}^Mf'(t)g'(x-t)dt = 0$ as well
+	(since $f'(t)$ is bounded since it is continuous).
+	Thus, $f'*g'(x)$ has support contained in $[-2M,2M]$, and so has compact support.
+	
+	We also note that $f' * g'(x)$ is continuous.
+	Since $g'$ is continuous on a compact set $[-2M,2M]$, it is uniformly continuous on it.
+	Let $\ep > 0$. Let $\ep' = \ep\left(2\int_{-2M}^{2M} f'(t)dt\right)^{-1}$.
+	Then there exists $\delta > 0$ such that
+	$|g'(x) - g'(y)| < \ep'$ when $|x-y| < \delta$.
+	So if $|x-y| < \delta$ (and so $|x-t - (y-t)| < \delta$,
+	using Rudin Theorem 6.12 and 6.13 gives us
+	\begin{align*}
+		|f'*g'(x) - f'*g'(y)|
+		&\leq \left\lvert\int_{-2M}^{2M}f'(t)g'(x-t)dt
+		- \int_{-2M}^{2M}f'(t)g'(y-t)dt\right\rvert\\
+		&= \left\lvert \int_{-2M}^{2M}f'(t)(g'(x-t) - g'(y-t))dt \right\rvert\\
+		&\leq \int_{-2M}^{2M} \lvert f'(t) \rvert \lvert g'(x-t) - g'(y-t) \rvert dt\\
+		&\leq \ep'\int_{-2M}^{2M} \lvert f'(t) \rvert dt\\
+		&= \frac{\ep}{2} < \ep
+	\end{align*}
+	Hence, $f' * g'(x)$ is continuous.
+
+	Note that since $f * g(x)$, is continuous,
+	it is Riemann integrable, particularly since $f * g(x)$ is compactly supported,
+	we have $f * g(x) \in \mathcal{R}[-2M,2M]$.
+	Furthermore, clearly this means
+	$\mathrm{supp}(|f*g(x)|) = \mathrm{supp}(f*g(x)) \subset [-2M,2M]$ as well.
+	Hence, Rudin Theorem 6.13 gives us
+	\[
+		|f * g(x)|
+		= \left\lvert\int_{-\infty}^\infty f(t)g(x-t)dt\right\rvert
+		= \left\lvert\int_{-2M}^{2M} f(t)g(x-t)dt\right\rvert
+		\leq \int_{-2M}^{2M} |f(t)g(x-t)|dt
+		= \int_{-\infty}^\infty |f(t)||g(x-t)|dt
+		= f'*g'(x)
+	\]
+
+	Now, we can invoke Rudin Theorem 6.12(b) with the inequality from above,
+	and then use the result proven in Problem 1(b),
+	since $f'g'(x)$ is continuous and has compact support:
+	\begin{align*}
+		\int_{-\infty}^\infty |f * g(x)|dx
+		&\leq \int_{-\infty}^\infty f'*g'(x)dx\\
+		&= \int_{-\infty}^\infty \int_{-\infty}^\infty |f(t)| |g(x-t)|dxdt\\
+		&= \int_{-\infty}^\infty |f(t)| \int_{-\infty}^\infty |g(x-t)|dxdt\\
+		&= \int_{-\infty}^\infty |f(t)| \int_{-\infty}^\infty |g(x)|dxdt\\
+		&= \int_{-\infty}^\infty |g(x)dx \int_{-\infty}^\infty |f(t)|dt
+	\end{align*}
+	as desired.
+	Note that above, we have used the fact that for, fixed $t$,
+	we have $\int_{-\infty}^\infty |g(x-t)|dx = \int_{-\infty}^\infty |g(x)|dx$:
+	since $\mathrm{supp}(|g(x)|) \subset [-M,M]$,
+	we have $\int_{-\infty}^\infty |g(x-t)|dx = \int_{-M+t}^{M+t}|g(x-t)|dx
+	= \int_{-M}^M |g(x)|dx = \int_{-\infty}^\infty |g(x)|dx$
+	(this technically uses Rudin Theorem 6.19, where $\phi(y) = y + t$,
+	but this is also trivial to see as redefining $x = x - t$,
+	and the integrator function $x-t$ acts the same as $x$).
+\end{proof}
+
+
+\subsection*{Problem 3}
+\problem{
+	Let $f \colon \R \to \R$, and suppose $f$ can be uniformly approximated by polynomials.
+	Prove that $f$ must be a polynomial.
+
+	\emph{Hint}: If $P_n \to f$ uniformly, consider the sequence $P_{n+1} - P_n$.
+}
+\begin{proof}[Solution]
+	By the Cauchy Criterion (Rudin Theorem 7.8), we have that for any $\ep > 0$,
+	there exists some $N$ such that for all $m,n \geq N$ and all $x \in \R$,
+	$|P_m(x) - P_n(x)| < \ep$.
+	Note that $P_m - P_n$ must be a constant.
+	To see this, note that the difference of polynomials is also a polynomial,
+	and if the difference were not a constant, then our polynomial has some degree $l \geq 1$,
+	and so there is some $a\in\R^*$ such that
+	$P_m(x) - P_n(x) = ax^l + q(x)$ where $q(x)$ is the rest of the polynomial,
+	and has degree less than $l$;
+	then as $x \to \infty$, we know that $ax^l + q(x) \to \pm\infty$
+	(the sign is the same as $a$).
+	(This is a standard result, if you really want a proof:
+	let $A$ be the max of the coefficients of $q(x)$,
+	then for $x > 1$, $ax^l + q(x) \geq ax^l - lAx^{l-1} = (ax^l - lA)x^{l-1} \geq ax^l - nA$,
+	which very clearly diverges to $\pm \infty$ as $x \to \infty$,
+	so the original polynomial does as well.)
+	But this contradicts that $|P_m(x) - P_n(x)| = |ax^l + q(x)| < \ep$ for all $x \in \R$.
+	Thus, $P_m(x) - P_n(x)$ is a constant.
+
+	Let $c_n = P_n(x) - P_N(x)$ where $n > N$ from before.
+	We then have for $m > N$, and all $x \in \R$ that
+	\[
+		|c_m - c_n| = |P_m - P_N - P_n + P_N| = | P_m - P_n| < \ep
+	\]
+	thus $\{c_n\}$ is a real valued sequence that is Cauchy.
+	Hence, since $\R$ is complete, we get that $\{c_n\}$ converges,
+	say to some $c \in \R$.
+
+	Now, for all $\ep > 0$, there is some $N' \in \N$ such that for all $n \geq N_1$,
+	we have $|c_n - c| < \ep/2$.
+	Also, since $P_n \to f$ uniformly, we have that there exists some $N_2 \in \N$
+	such that for all $n \geq N_2$, we have $|f(x) - P_n| < \ep/2$
+	for all $x \in \R$.
+	So when $n \geq \max\{N_1,N_2\}$, we have that for all $x \in \R$,
+	\[
+		|f(x) - P_N(x) - c |
+		\leq |f(x) - P_n(x)| + |P_n(x) - P_N(x) - c|
+		< \frac{\ep}{2} + |c_n - c|
+		< \frac{\ep}{2} + \frac{\ep}{2} = \ep
+	\]
+	Hence, we get that $f(x) - P_N(x) - c = 0$ for all $x \in \R$,
+	thus $f(x) = P_N(x) + c$, which is a polynomial,
+	so $f(x)$ is a polynomial.
+\end{proof}
+
+
+For the next problem, we need the following definition.
+Let $(X,d)$ be a metric space and let $\alpha > 0$.
+We say that a function $f \in \mathcal{C}(X)$ is
+``H\"{o}lder's continuous of exponent $\alpha$" if the quantity
+\[
+	N_\alpha(f) = \sup_{x \neq y}\frac{|f(x) - f(y)|}{d(x,y)^{\alpha}}
+\]
+is finite.
+\subsection*{Problem 4}
+\problem{
+	\begin{enumerate}
+		\item Prove that if $X$ is compact then
+			$\{f \in \mathcal{C}(X) \colon \lVert f \rVert \leq 1
+			\text{ and } N_\alpha(f) \leq 1\}$
+			is a compact subset of $\mathcal{C}(X)$.
+		\item Prove that $\{f \in C([0,1]) \colon \lVert f \rVert \leq 1\}$
+			is \emph{not} a compact subset of $\mathcal{C}([0,1])$.
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Recall from Problem $3$ of Homework $7$ that it is sufficient to show that
+		$\mathcal{F} = \{f \in \mathcal{C}(X) \colon \lvert f \rvert \leq 1
+		\text{ and } N_\alpha(f) \leq 1 \}$ is closed, bounded, and equicontinuous.
+
+		We have that $\mathcal{F}$ is bounded,
+		since $0 \in \mathcal{F}$ and for all $f \in \mathcal{F}$,
+		we have $d(0,f) \leq 1 < 2$, since $\lVert f \rVert \leq 1$.
+
+		We show now that $\mathcal{F}$ is equicontinuous.
+		Note that for $f \in \mathcal{F}$, since $N_\alpha(f) \leq 1$,
+		\[
+			|f(x) - f(y)| \leq N_\alpha(f)d(x,y)^\alpha \leq d(x,y)^\alpha
+		\]
+		Let $\ep > 0$. Then we can choose $\delta = \ep^{1/\alpha}$ to get that
+		for any $f \in \mathcal{F}$ that when $d(x,y) < \delta$, we have
+		\[
+			|f(x) - f(y)| < \delta^\alpha = \ep
+		\]
+		hence $\mathcal{F}$ is equicontinuous.
+
+		We now show that $\mathcal{F}$ is closed.
+		That is, every limit point of $\mathcal{F}$ is also in $\mathcal{F}$.
+		That is, for any $f$ such that there is some sequence
+		$f_n \in \mathcal{F}$ where $f_n \to f$ uniformly (the metric of $C(\mathcal{X})$),
+		then $f \in \mathcal{F}$ as well.
+		Since $\mathcal{C}(X)$ with this metric
+		is a complete metric space (Rudin Theorem 7.15),
+		we have $f \in \mathcal{C}(X)$.
+		Also, for all $\ep > 0$, there exists some $N_1 \in \N$ such that for all $n \geq N_1$,
+		we have $\lVert f - f_n \rVert < \ep$. Thus
+		\[
+			\lVert f \rVert \leq \lVert f - f_n \rVert + \lVert f_n \rVert
+			\leq 1 + \ep
+		\]
+		But since $\ep$ can be made arbitrarily small, we get the nonstrict inequality
+		$\lVert f \rVert \leq 1$ as well.
+		Finally, there exists $N_2 \in \N$ such that for all $n \geq N_2$,
+		we have $\lVert f - f_n \rVert < \ep/2$,
+		and for any $x,y \in X$ where $x \neq y$, we have
+		\[
+			|f(x) - f(y)|
+			\leq |f(x) - f_n(x)| + |f_n(x) - f_n(y)| + |f_n(y) - f(y)|
+			\leq 2\lVert f - f_n\rVert + d(x,y)^\alpha
+			\leq \ep + d(x,y)^\alpha
+		\]
+		Since $\ep$ can be made arbitrarily small,
+		we get the nonstrict inequality $|f(x) - f(y)| \leq d(x,y)^\alpha$.
+		$d(x,y) \neq 0$, so we get $N_\alpha(f) = \frac{|f(x) - f(y)|}{d(x,y)^\alpha} \leq 1$.
+		Thus, this verifies all the conditions on $\mathcal{F}$,
+		thus $f \in \mathcal{F}$, and so $\mathcal{F}$ is closed.
+		
+		Finally, this shows that $\mathcal{F}$ is a compact subset of $\mathcal{C}(X)$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Define for $a \in \R^+$.
+		\[
+			f_a = \begin{cases}
+				ax & x \in [0,1/a]\\
+				1 & x \in (1/a,1]
+			\end{cases}
+		\]
+		Note that for any $a$, $f_a \in \mathcal{C}(X)$.
+		When $x \in [0,1/a)$ and $x \in (1/a,1]$, $f_a$ are functions which are
+		known to be continuous.
+		If $x = 1/a$, then $\lim_{x\nearrow \frac1a} f_a(x) = 1 = \lim_{x\searrow \frac1a}f_a(x)$,
+		so it is continuous at $\frac{1}{a}$,
+		and so continuous everywhere.
+		Also, clearly $\lVert f_a \rVert = 1$,
+		hence $f_a \in \{f \in \mathcal{C}([0,1]) \colon \lVert f \rVert \leq 1\}$
+		for all $a \in \R^+$.
+
+		We now show that $\{f \in \mathcal{C}([0,1]) \colon \lVert f \rVert \leq 1\}$
+		is not compact.
+		We do this by showing that the set is not equicontinuous,
+		and so by Problem 3 of Homework 7, the set is not compact in $\mathcal{C}([0,1])$.
+		Let $\ep = 1$. Then for all $\delta > 0$,
+		let $x = \delta/2, y = 0$ so $d(x,y) < \delta$, and $f = f_{2/\delta}$, so we get
+		\[
+			|f(x) - f(y)| = |f_{2/\delta}(\delta/2)| = 1 \geq \ep
+		\]
+		This shows that $\{f \in \mathcal{C}([0,1]) \colon \lVert f \rVert \leq 1\}$
+		is not equicontinuous, and hence not compact.
+	\end{proof}
+\end{enumerate}
+\end{document}

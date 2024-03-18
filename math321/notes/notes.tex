@@ -1912,4 +1912,851 @@ but gives us some similar idea.
 \end{proof}
 Used compactness in an essential way in part (a) and (b).
 Can be an exercise: find when $K$ isn't compact, this fails.
+
+
+\section{March 1}
+(Notes via Sushrut.)
+
+\begin{definition}[Convolution]
+	Let $f,g \colon \R \to \R$ or $\R \to \C$ be Riemann itnegrable over all of $\R$,
+	i.e. the ffollowing integrals exist:
+	\[
+		\lim_{z\to-\infty} \int_{-z}^0 f(x)dx
+		\quad\text{ and }\quad
+		\lim_{z \to \infty} \int_0^z f(x)dx
+	\]
+	For $x \in \R$ we define
+	\[
+		f * g(x) = \int_{-\infty}^\infty f(t)g(x-t)dt
+	\]
+	If the integral exists, $f*g$ is a function whose domain is a subset of $\R$.
+\end{definition}
+(For most examples that we care about, the domain is $\R$.)
+Exercise: If $f*g(x)$ exists, then $g*f(x)$ exists and $f*g(x) = g*f(x)$.
+
+\begin{definition}[Approximate identity]
+	We say that a sequence of functions $\{f_n\}$, $f_n \colon \R \to \C$
+	(or $\R \to \R$) is called an \emph{approximate identity} if they satisfy the following:
+	\begin{enumerate}
+		\item $\int_{-\infty}^\infty f_n(t)dt = 1$ for all $n$
+		\item There exists $M \geq 0$ such that
+			\[
+				\int_{-\infty}^\infty \lvert f_n(t) \rvert dt \leq M
+			\]
+			for all $n \in \N$.
+			(Note: thiss part is superfluous if $f_n(t) \geq 0$
+			for all $t \in \R$, for all $n \in \N$.)
+		\item For all $\delta > 0$,
+			\[
+				\lim_{n \to \infty} \int_{-\infty}^{-\delta} \lvert f_n(t) \rvert dt = 0
+				\quad \text{ and } \quad
+				\lim_{n \to \infty} \int_{\delta}^{\infty} \lvert f_n(t) \rvert dt = 0
+			\]
+	\end{enumerate}
+\end{definition}
+
+Example: Consider the function $f_n(t) = nf(nt)$, such that
+\[
+	\int_{-\infty}^\infty f_n(t)dt = 1
+\]
+(I feel like something is missing).
+The limit of this sequence obeys
+\[
+	\int_{-\infty}^\infty f(t)dt = \int_{-1}^1 f(t)dt
+\]
+This sequence is slowly approaching the Dirac-$\delta$ function.
+We now build on the example further.
+
+Example: Consider the function
+\[
+	g(x) = \begin{cases} 1, & x \in [-1,1]\\ 0 &\text{otherwise}\end{cases}
+\]
+We will now try to sketch the graphs of $g * f_1(x)$ and $g * f_5(x)$
+and try to make a guesstimate of how the graph changes
+as we keep convolving with $f_n$ for larger $n$.
+
+Note that if we look at $g * f_1(100) = \int_{-\infty}^\infty g(t)f_1(100-t)$,
+we get this evaluates to zero, since $g(t)$ is zero for all $t$
+outside $I := [-1,1]$ and $f_1(100-t) = 0$ for all $t \in [-1,1]$
+since $f_1$ has a width of $1$ where it is non-zero, and it is centered at $100$.
+Thus, $g*f_1(100) = 0$.
+So if we observe carefully, since $g$ is non-zero only in $I$,
+we get that the only points where $g * f_1(x) \neq 0$ is on the interval $[-2,2]$.
+The graph will be wider than that of $f_1$, and the descent to zero begins
+immediately after you move off the origin on either side.
+Similarly, we can repeat this for higher $n$,
+and what we see is that the curve gets flatter on top because it equals $1$
+for all $x$ up to $1 - \frac{1}{n}$,
+and then has a very fast descent to zero on the interval $\left[1-\frac1n,
+1+\frac{1}{n}\right]$.
+
+\section{March 4}
+Recall the definition of an approximate identity:
+\begin{definition}
+	Let $\{f_n\}$ be a sequence of functions such that $\int_{-\infty}^\infty \leq M$ for all $n$,
+	and $\int_{-\infty}^{-\delta} |f_n| \to 0$ and $\int_{\delta}^\infty |f_n| \to 0$
+	(all of the mass of $f_n$ is shrinking to the origin.)
+\end{definition}
+Recall that $f_n$ approaching dirac delta.
+If $g$ is the square wave, then $f_n * g$ approaches being a square wave as well???
+
+Ex 2: $f_n = \begin{cases} c_n(1-x^2)^n, & -1 \leq x \leq 1 \\ 0, & \text{otherwise}\end{cases}$.
+Choose $c_n$ such that $\int_{-\infty}^\infty f_n(t)dt = \int_{-1}^1 f_n(t)dt = 1$.
+This a lot like our previous example, but actually not infinitely differentiable.
+Claim: $\{f_n\}$ is an approximate identity.
+\begin{enumerate}
+	\item $\int f_n = 1$, true by definition
+	\item $\int|f_n| = \int f_n = 1$ since $f_n$ nonnegative
+	\item $\int_{-\infty}^{-\delta}$ and $\int_\delta^\infty |f_n| \to 0$.
+		This is just a calculation.
+		Done in Rudin, gets a more accurate estimate, but it doesn't matter,
+		we're just going to zero.
+		Note $c_n$ is probably growing with $n$ since $(1-x^2) < 1$
+		so $(1-x^2)^n$ is shrinking with $n$.
+		It would be difficult to compute $c_n$,
+		but it is enough to approximate it.
+		Note that $f_n(x) \geq \frac12$ on
+		$\left[\frac{-1}{2\sqrt{n}}, \frac{1}{\sqrt{n}}\right]$. So
+		\[
+			\int_{-\infty}^\infty (1-x^2)^n dx
+			= \int_{-1}^1 (1-x^2)^ndx \geq \int_{\frac{-1}{2\sqrt{n}}}
+			^{\frac{1}{2\sqrt{n}}}(1-x^2)^4dx \geq
+			\int_{\frac{-1}{2\sqrt{n}}} ^{\frac{1}{2\sqrt{n}}}(1-x^2)^4dx
+			\geq \frac{1}{2\sqrt{n}}
+		\]
+		Then $c_n \leq 2\sqrt{n}$ ($100n^{100}$ would have also been fine).
+		For $\delta > 0$, then on $(-\infty,-\delta)$ and $(\delta,\infty)$:
+		\[
+			c_n(1-x^2)^n \leq 2\sqrt{n}(1-\delta^2)^n \to 0
+		\]
+		(the rate it goes to $0$ does depend on $\delta$, but we fix it).`
+		Thus $\int_{-\infty}^\delta |f_n(x)|dx = \int_{-1}^{-\delta}f_n(x)dx
+		\leq \int_{-1}^{-\delta}2\sqrt{n}(1-\delta^2)^ndx
+		\leq 2\sqrt{n}(1-\delta^2)^n \to 0$ as $n \to \infty$.
+		Same for $\int_\delta^\infty |f_n(x)|dx$.
+\end{enumerate}
+Good technique for approximating integrals.
+Restrict to a region that we understand well,
+and where the integral is big.
+
+Why is this an important example?
+It is a polynomial (at least in some region),
+and we'll use it to show how to approximate functions with polynomials.
+
+\begin{theorem}[C]
+	Let $\{f_n\}$ be an approximate identity.
+	Let $g \colon \R \to \C$ be bounded and uniformly continuous.
+	Then $f_n * g \to g$ uniformly on $\R$.
+\end{theorem}
+Can probably prove this ourself: very similar flavour to the homework problem we did.
+\begin{proof}
+	Select $M_1$ such that $\int_{-\infty}^\infty |f_n| \leq M_1$ for all $n$
+	and $M_2$ such that $|g(x)| \leq M_2$ fpr all $x \in \R$
+	(which we can do, since $\{f_n\}$ is an approximate identity and $g$ is bounded).
+	Let $\ep > 0$. $\exists \delta > 0$ such that $\forall x,y \in \R$
+	with $|x - y| < \delta$, $|g(x) - g(y)| < \ep$.
+	For $x \in \R$, we have
+	\[
+		\lvert f_n * g(x) - g(x) \rvert
+		= \left\lvert \int_{-\infty}^\infty f_n(t)g(x-t)dt
+			- \int_{-\infty}^\infty f_n(t)g(x)dt \right\rvert
+	\]
+	(Integrals exist, since second one works because $g(x)$ is fixed,
+	and the first one converges since $\int f_n$ is absolutely convergent,
+	and so we can multiply it by a bounded function to and it is still absolutely convergent,
+	which isn't true in general:
+	$\int_{-\infty}^\infty |f_n(t)g(x-t)|dt
+	\leq \int_{-\infty}^\infty M_2|f_n(t)|dt
+	\leq M_1M_2$.)
+	This is equivalent to
+	\[
+		\left\lvert \int_{-\infty}^\infty f_n(t)(g(x-t)-g(x))dt\right\rvert
+	\]
+	(Theorem 6.12 for $\int_a^bh + \int_a^b c = \int_a^b (h+c)$
+	is for integrals over an interval, but also
+	true for convergent integrals: $\int_{-\infty}^\infty h + \int_{-\infty}^\infty i
+	= \iint_{-\infty}^\infty h + i$...
+	probably already did on homework, so exercise.)
+	Also
+	\[
+		\leq \int_{-\infty}^\infty |f_n(t)(g(x-t) - g(x)|dt
+	\]
+	(Theorem 6.13... in indefinite integral case,
+	if not absolutely integrable its infinite, but inequality is still true anyway.)
+	Finally, 6.12 gives
+	\[
+		= \int_{-\infty}^{-\delta} \lvert f_n(t)(g(x-t) - g(x))\rvert dt
+		+ \int_{-\delta}^{\delta} \lvert f_n(t)(g(x-t) - g(x))\rvert dt
+		+ \int_{\delta}^\infty\lvert f_n(t)(g(x-t) - g(x))\rvert dt 
+	\]
+	(I think converges by definition of indefinite integral converging???)
+	We then have
+	\[
+		\leq 2M_2 \int_{-\infty}^{-\delta} |f_n(t)|dt
+		+ \ep\int_{-\delta}^\delta |f_n(t)|
+		+ 2M_2 \int_{\delta}^\infty |f_n(t)|dt
+		\leq 2M_2 \left(\int_{-\infty}^{-\delta} |f_n(t)|dt
+			+ \int_{\delta}^\infty |f_n(t)|dt\right)
+			+ \ep \int_{-\infty}^\infty |f_n(t)| dt
+	\]
+	(exanding domain of integral because nonnegative).
+	Select $N$ large such that $\forall n \geq N$,
+	$\int_{-\infty}^{-\delta}|f_n(t)|dt < \ep$
+	and $\int_{\delta}^{\infty}|f_n(t)|dt < \ep$ (since it's an approximate identity).
+
+	So for $n \geq N$, $x \in \R$ we have
+	\[
+		\lvert f_n * g(x) - g(x) \rvert < \ep(4M_2 + M_1)
+	\]
+	and $M_1,M_2$ fixed, so this proves the convergence we desired.
+\end{proof}
+He doesn't know the full history of approximate identities,
+but pretty sure that it wasn't this axiomatic way.
+There were a bunch of specific examples, families of functions,
+that they would use to prove things,
+and then realized that all of these were similar.
+One such example of proof we are going to do next time:
+Weierstrass apprixmation theorem.
+Given a continuous function compactly supported,
+then there is a sequence of polynomials that converge to it uniformly.
+We're gonna have a sequence of polynomials, and convolve it with the
+approximate identity from example 2.
+
+
+\section{March 6}
+\begin{definition}[Compact support]
+	$(X,d)$ a matric space (usually $X = \R$),
+	$f \colon X \to \C$ or $X \to \R$.
+	We say $f$ has \emph{compact support} if there is a compact set $K$
+	such that $f(x) = 0$ for all $x \in X \setminus K$ (i.e. for all $x \not\in K$).
+\end{definition}
+If a metric space is compact, then all of the functions defined on it
+have compact support, since just take the whole space.
+But that is usually not the case, since we normally work with $\R$.
+Heine-Borel tells us:
+If $X = \R$, then $f \colon \R \to \C$ has compact support iff $\exists R$ such that
+$f(x) = 0$ for all $x \not\in [-R,R]$.
+
+Why do we like functions with compact support?
+See that if $f,g$ have compact support, specifically in $[-R,R]$,
+then $f * g(x) = \int_{-\infty}^\infty f(t)g(x-t)dt$
+has compact support in $[-2R,2R]$.
+
+\begin{lemma}[D]
+	Let $f \colon \R \to \C$ or $\R \to \R$ be compactly supported and integrable.
+	Let $Q \colon \R \to \C$ be a polynomial.
+	Then $f * Q$ is a polynomial.
+	If $f \colon \R \to \R$ and $Q$ has real coefficients,
+	then $f * Q$ also has real coefficients.
+\end{lemma}
+\begin{proof}
+	What does it mean for $Q$ to be a polynomial?
+	Write $Q(x) = \sum_{k=0}^n a_k x^k$ ($x^0 = 1$).
+	Formally (we haven't discussed convergence) we have
+	$f * Q(x) = \int_{-\infty}^\infty f(t)Q(x-t)dt$,
+	but we do in fact have equality, because $f$ is compactly supported, so
+	if we want to get a polynomial of $x$ with coefficients in $t$,
+	we can try to seperate our $x$ and $t$:
+	\begin{align*}
+		f * Q(x) &= \int_{-R}^R f(t) Q(x-t) dt\\
+				 &= \int_{-R}^R f(t) \sum_{k=0}^n a_k (x-t)^kdt\\
+				 &= \int_{-R}^R f(t) \sum_{k=0}^n a_k \sum_{l=0}^k \binom{k}{l}(-t)^{k-l}x^ldt\\
+				 &= \int_{-R}^R \sum_{k=0}^n \sum_{l=0}^k
+				 \left(f(t)a_k \binom{k}{l}(-t))^{k-l}x^l\right)dt\\
+				 &= \sum_{k=0}^n \sum_{l=0}^k
+				 \left(\int_{-R}^R f(t) a_k\binom{k}{l}(-t)^{k-l}dt\right)x^l
+	\end{align*}
+	(Theorem 6.12 in the last line.)
+	And the coefficients are in $\C$, or are real iff $\R \to \R$ and all $a_k \in \R$.
+\end{proof}
+
+\subsection{Weierstrass Approximation Theorem}
+We have now built up the tools to prove the following theorem:
+\begin{theorem}[Weierstrass approximation theorem (Rudin 7.26)]
+	Let $f \colon [a,b] \to \C$ or $f \colon [a,b] \to \R$ be continuous.
+	Then there exists a sequence of polynomials $\{P_n\}$
+	so that $P_n \to f$ uniformly on $[a,b]$.
+	If $f \colon [a,b] \to \R$, then $\{P_n\}$ can be chosen to have real coefficients.
+\end{theorem}
+
+The proof for this just uses the following three facts:
+(1) convolving with an approximate identity gives us a piecewise polynomial,
+(2) when you convolve a bounded function with a uniformly convergent function,
+you uniformly converge to the function that you started with,
+(3) Convolve a compactly supported function with a polynomial is also a polynomial.
+What stops us from just citing these facts, what is the difficulty?
+Take a function continuous on $[a,b]$, and extend it to the reals
+by making it $0$ everywhere, not quite continuous.
+Also, when we convolve with our approximate identity,
+not quite a polynomial, but we will just have to go about this carefully.
+We will address these in the proof.
+
+\begin{proof}
+	Step 1: We want to reduce Theorem 7.26 to the special case
+	where $[a,b] = [0,1]$ and $f(0) = f(1) = 0$.
+	So suppose the theorem is true for such functions,
+	and let $g \colon [a,b] \to \C$ be continuous.
+	We'll make $g$ have endpoints at $0,1$,
+	and then subtract the linear function that passes through the end points.
+	Let $f_1(x) = g(x(b-a)+a)$.
+	Then $f_2(x) = f_1(x) - (f_1(0)(1-x) + f_1(1)x)$.
+	Hence, if $Q_n \to f_2$ uniformly,
+	then let $P_n(x) = Q_n\left(\frac{x-a}{b-a}\right) +
+	f_1(0)\left(1-\frac{x-a}{b-a}\right) + f_1(1)\left(\frac{x-a}{b-a}\right)$
+	(do we not need to cite that composiiton of uniformly convergent is uniformly convergent???).
+	Particularly, this is a polynomial
+	(composing a polynomial with a polynomial is also a polynomial).
+	Conclusion: it suffices to prove Theorem 7.26
+	for $f \colon [0,1] \to \C$ with $f(0) = f(1) = 0$.
+	We will extend $f \colon \R \to \C$ by setting $f(x) = 0$
+	for $x \not\in [0,1]$.
+	This $f$ is uniformly continuous and bounded,
+	so by Theorem C, if $\{\tilde{Q}\}_{n\in\N}$ is an approximate identity,
+	then $\tilde{Q}_n * f \to f$ uniformly.
+	We will use $\tilde{Q}_n$ from example 2
+	\[
+		\tilde{Q}_n(x) = \begin{cases} C_n(1-x^2)^n, & -1 \leq x \leq 1\\
+		0, &\text{otherwise}\end{cases}
+	\]
+	Last Step: Prove $\tilde{Q}_n* f = Q_n * f$.
+	Will pick this up next lecture.
+\end{proof}
+
+
+\section{March 8}
+(Notes via Sushrut.)
+
+\begin{theorem}[(B)]
+	For a polynomial function $g_n$, where $\{q_n\}$ is an approximate identity,
+	and $f \colon [a,b] \to \C$ (or $\R$) be a continuous function.
+	Then $q_n * f(x)$ is a polynomial function for each $n$.
+\end{theorem}
+\begin{proof}
+	Step 3: We claim that $\tilde{q}_n * f(x) = q_n * f(x)$ for all $x \in [0,1]$.
+
+	Let $x \in [0,1]$, hence
+	\begin{align*}
+		\tilde{q}_n*f(x) = f * \tilde{q}_n(x)
+		&= \int_{-\infty}^\infty f(t)\tilde{q}_n(x-t)dt\\
+		&= \int_0^1 f(t)\tilde{q}_n(x-t)dt, & \text{here }x-t \in [-1,1]\\
+		&= \int_0^1 f(t)q_n(x-t)dt\\
+		&= \int_{-\infty}^\infty f(t)q_n(x-t)dt = f*q_n(x) = q_n*f(x)
+	\end{align*}
+\end{proof}
+
+\subsection{Stone's Generalization of the Weierstrass approximation theorem}
+\begin{definition}[Algebra]
+	Let $\mathcal{A}$ be a set of functions $f \colon E \to \C$ (or $E \to \R$).
+	We say $\mathcal{A}$ is a (complex) \emph{algebra} if for all $f,g \in \mathcal{A}$,
+	for all $c \in \C$:
+	\begin{enumerate}
+		\item $f+g \in \mathcal{A}$
+		\item $f \cdot g \in \mathcal{A}$
+		\item $cf \in \mathcal{A}$
+	\end{enumerate}
+\end{definition}
+Examples:
+\begin{itemize}
+	\item Polynomial functions $f \colon \R \to \C$
+	\item $\mathcal{C}(\R)$ the bounded continuous function $f \colon \R \to \C$
+	\item Trigonometric polynomial functions, which are polynomials of the form
+		\[
+			p(x) = \sum_{k=0}^n (a_k \sin(kx) + b_k \cos(kx))
+		\]
+	\item Symmetric polynomial functions
+	\item Piecewise polynomial functions
+	\item Functions of the form
+		\[
+			f(x) = \sum_{k=0}^n c_k e^{2 \pi i kx}
+		\]
+	\item Functions of the form
+		\[
+			f(x) = \sum_{k=-n}^n c_k e^{2 \pi i kx}
+		\]
+	\item holomorphic functions over $\C$ (or over simply connected subsets of $\C$)
+\end{itemize}
+
+\begin{definition}[Uniformly closed]
+	We say $\mathcal{A}$ is \emph{uniformly closed} if
+	for all uniformly convergent sequences $\{f_n\} \subseteq \mathcal{A}$,
+	we have $\lim f_n \in \mathcal{A}$
+\end{definition}
+\begin{definition}[Uniform closure]
+	Let $\mathcal{A}$ be an algebra, and
+	\[
+		\mathcal{B} := \{f \colon E \to \C \colon
+			\text{there exist }\{f_n\} \subseteq \mathcal{A}
+		\text{ such that } f_n \to f \text{ uniformly}\}
+	\]
+	(the set of limit points of uniformly convergent sequences in $\mathcal{A}$).
+	$\mathcal{B}$ is called the uniformy closure of $\mathcal{A}$,
+	which we will denote by $\mathrm{Cl}_u(\mathcal{A})$.
+\end{definition}
+It is natural that when an algebra is uniformly closed, it equals its uniform closure.
+
+\begin{remark}[Consistency between definitions of uniform closure and closure]
+	If $\mathcal{A}$ is an algebra of bounded functions,
+	then it has the metric $\lVert \cdot \rVert_\infty$ (supremum norm),
+	so $(\mathcal{A},d)$ is a metric space;
+	it is subset of the metric space $(\mathcal{X},d)$,
+	where $\mathcal{X}$ is the set of all bounded functions $f \colon E \to \C$.
+\end{remark}
+The uniform closure of $\mathcal{A}$ is the closure of $\mathcal{A}$
+in the metric space $\mathcal{X}$.
+
+
+\section{March 11}
+\begin{theorem}[Rudin 7.29]
+	Let $\mathcal{A}$ be an algebra of bounded functions.
+	Then the uniform closure $\overline{\mathcal{A}}$
+	is a uniformly closed algebra.
+\end{theorem}
+\begin{proof}
+	Recall $(X,d)$ a metric space, $\overline{A}$ is the closure
+	of $\mathcal{A}$ in $(X,d)$, hence $\overline{A}$ is closed
+	($X$ are bounded functions $E \to \R$ or $E \to \C$).
+	We are not done: it is uniformly closed because in uniform metric.
+	But it is not clear that it is an algebra, but it is straight forward:
+	Let $f,g \in \overline{A}$, $c \in \R$ or $c \in \C$.
+	Let $\{f_n\} \subset A$, $f_n \to f$ uniformly and $\{g_n\} \subset A$,
+	$g_n \to g$ uniformly.
+	Show that $f_n + g_n \to f + g$, $f_n \cdot g_n \to f \cdot g$,
+	and $cf_n \to cf$, all uniformly
+	(exercise).
+\end{proof}
+Idea for Stone-Weierstrass (extend to complex later):
+Let $K$ be a compact set, $\mathcal{A}$ a (real) algebra of continuous functions,
+$f \colon K \to \R$.
+Then: $\overline{\mathcal{A}}$ is the algebra of \emph{all} continuous functions
+$f \colon K \to \R$.
+(This is what Weierstrass approximation theorem says).
+Unless there an obvious obstruction, which we'll define below.
+
+\begin{definition}[Rudin 7.30A]
+	Let $E$ be a set, $\mathcal{A}$ a set of functions
+	$f \colon E \to \R$ or $E \to \C$.
+	We say that $\mathcal{A}$ \emph{seperates points}
+	if for all $x,y \in E$, there exists $f \in \mathcal{A}$ such that $f(x) \neq f(y)$.
+\end{definition}
+Ex: $E = [-1,1]$ or $E = \R$.
+$\mathcal{A}$ is polynomials works, but $\mathcal{A}$ is even polynomials doesn't work,
+since $f(x) = f(-x)$.
+Failure to separate points is an obstruction to Stone-Weierstrass.
+
+\begin{definition}[Rudin 7.30B]
+	Let $E$ and $A$ as before.
+	We say that $\mathcal{A}$ \emph{vanishes at no point of} $E$
+	if for each $x \in E$, there is a function $f \in \mathcal{A}$ such that $f(x) \neq 0$.
+\end{definition}
+Ex. $E = [-1,1]$ or $E = \R$.
+$\mathcal{A}$ is polynomials works.
+Odd plynomials do not work, since $f(-x) = -f(x) \implies f(0) = 0$.
+(What is the smallest algebra that contains all odd polynomials?
+It is the ideal generated by $x$.
+What is the uniform closure of this? All continuous functions vanishing at 0, per SW actually).
+Vanishing at a point of $E$ is an obstruction to Stone-Weierstrass.
+
+\begin{theorem}[Real Stone-Weierstrass (Rudin 7.32)]
+	Let $K$ be a compact metric space,
+	$\mathcal{A}$ an algebra of continuous functions $f\colon K \to \R$.
+	Suppose that $\mathcal{A}$ separates points and vanishes at no point of $K$.
+	Then the uniform closure $\overline{\mathcal{A}}$ is the set/algebra
+	of all continuous functions $f \colon K \to \R$.
+\end{theorem}
+This generalizes the real version of the Weierstrass approximation theorem.
+We had some closed interval, that's $K$.
+Can show that the set of polynomials form an algebra,
+and can check it seperates and no vanishes.
+
+Doing math research: write down something hope to be true.
+Then guess what obstructions are, what they would look like.
+Both genuine obstructions, or things that look like they could be obstructions.
+There are whole sequences of papers trying to find the obvstructions
+of a theorem we would like to prove.
+And then this actually gives some ideas to the proof that we are going for.
+
+Why $\R$, and not just any metric space?
+Well, crucially, we need the ring structure of $\R$,
+so that we can add and multiply functions in $\R$ for our algebras.
+There are ways to generalize to more arbitrary spaces, but not a good introduction.
+We will go to $\C$, this will require considering another obstruction,
+but we will prove the real version first.
+
+The proof has $3$ main steps.
+
+\begin{lemma}
+	$K$ and $\mathcal{A}$ as above.
+	If $f \in \mathcal{A}$, then $|f| \in \overline{\mathcal{A}}$.
+\end{lemma}
+\begin{proof}
+	Let $f \in \mathcal{A}$, let $M = \sup_{x \in K} |f(x)|, M < \infty$.
+	Let $\ep > 0$. Goal: find $g \in \mathcal{A}$ with $\sup_{x\in K}
+	\lvert \lvert f(x) \rvert - g(x) \rvert < \ep$,
+	then $|f| \in \overline{\mathcal{A}}$.
+	By the Weierstrass approximation theorem (Theorem 7.26),
+	or just an explicit computation,
+	there exists a polynomial $Q$ with real coefficients such that
+	$|Q(y) - |y| < \ep/2$ for all $y \in [-M,M]$.
+	Let $P(y) = Q(y) - Q(0) \implies P(0) = 0$.
+	\begin{align*}
+		\lvert P(y) - \lvert y \rvert \rvert
+		&= \lvert Q(y) - Q(0) - \lvert y \rvert - \lvert 0 \rvert \rvert\\
+		&\leq \lvert Q(y) - \lvert y \rvert \rvert + \lvert Q(0) - \lvert 0 \rvert \rvert\\
+		&< \frac{\ep}{2} + \frac{\ep}{2} = \ep
+	\end{align*}
+	for all $y \in [-M,M]$.
+	Write $P(x) = \sum_{k=1}^n c_k x^k$ ($c_0 = 0$).
+	$\mathcal{A}$ is an algebra, so
+	\[
+		P(f) := \underbrace{\sum_{k=1}^n c_k f^k}_{g} \in \mathcal{A}
+	\]
+	for $x \in K$, $\lvert g(x) - \lvert f(x) \rvert \rvert
+	= \lvert P(f)(x) - \lvert f(x) \rvert \rvert =
+	\lvert P(f(x)) - \lvert f(x) \rvert \rvert < \ep$.
+\end{proof}
+
+
+\section{March 13}
+Last class: $f \in \overline{\mathcal{A}} \implies |f| \in \overline{\mathcal{A}}$.
+Stone-Weierstrass continuied:
+$K$ compact, $\mathcal{A}$ an algebra of continuous functions $f \colon K \to \R$
+with seperate points and vanishes at no points.
+Goal: $\overline{\mathcal{A}}$ is the set of all continuous functions $f \colon K \to \R$.
+
+\begin{lemma}
+	$K,\mathcal{A}$ as before.
+	Let $f_1,\dots,f_n \in \overline{\mathcal{A}}$, then
+	$\max\{f_1,\dots,f_n\} \in \overline{\mathcal{A}}$ and
+	$\min\{f_1,\dots,f_n\} \in \overline{\mathcal{A}}$.
+\end{lemma}
+\begin{proof}
+	Induct on $n$. $n = 1$ trivial.
+	Now let $f_1,\dots,f_n \in \overline{\mathcal{A}}$,
+	then $\max\{f_1,\dots,f_n\} = \max\{ \max\{f_1,\dots,f_{n-1}\},f_n\}$.
+	Let $g = \max\{f_1,\dots,f_{n-1}\}$.
+	It sufficies to show then that if $f,g \in \overline{\mathcal{A}}$,
+	then $\max\{f,g\}\in \overline{\mathcal{A}}$.
+
+	Note that $\max\{x,y\} = \frac{x+y}{2} + \frac{|x-y|}{2}$.
+	Hence $\max\{f,g\} = \frac12(f+g) + \frac12|f-g| \in \overline{\mathcal{A}}$.
+	Similarly, $\min\{f,g\} = \frac12(f+g) - \frac12|f-g| \in \overline{\mathcal{A}}$.
+\end{proof}
+
+We have not used the fact that $\mathcal{A}$ seperates points and vanishes nowhere.
+We use it in the proof of the following.
+\begin{lemma}[Rudin Theorem 7.31]
+	$K,\mathcal{A}$ as before.
+	Let $x,y \in K, x \neq y$, $c,d \in \R$,
+	then $\exists f \in \mathcal{A}$ such that $f(x) = c$ and $f(y) = d$.
+	(If $x = y$, true if $c = d$.)
+\end{lemma}
+\begin{proof}
+	Since $\mathcal{A}$ separates points and vanishes at no point,
+	$\exists g,h,k \in \mathcal{A}$ such that
+	$g(x) \neq g(y)$, $h(x) \neq 0$, $k(y) \neq 0$.
+	Let $u(z) = g(z)k(z) - \underbrace{g(x)}_{\in\R}k(z) = (g(z) - g(x))k(z) \in \mathcal{A}$
+	amd $v(z) = g(z)h(z) - g(y)h(y) = (g(z) - g(y))h(z) \in \mathcal{A}$.
+	Then $u(x) = 0$, $u(y) \neq 0$, $v(x) \neq 0$, $v(y) = 0$. Let
+	\[
+		f(z) = \underbrace{\frac{c}{v(x)}}_{\in\R}v(z) + \frac{d}{u(y)}u(z) \in \mathcal{A}
+	\]
+	Then $f(x) = c$, $f(y) = d$.
+	(If $x = y$ and $c = d$, exercise.)
+\end{proof}
+
+So we have used the fact $\mathcal{A}$ is an algebra (constantly),
+we have used that it separates points and vanishes no where,
+and used the fact that the functions were continuous to use the
+Weierstrass approximation theorem.
+We have yet to use the fact that $K$ is compact.
+\begin{lemma}
+	$K,\mathcal{A}$ as before.
+	Let $f \colon K \to \R$ continuous, $x \in K$, $\ep > 0$.
+	Then there exists $g \in \overline{\mathcal{A}}$ such that
+	\begin{itemize}
+		\item $g(x) = f(x)$
+		\item $g(t) - f(t) \geq - \ep$ $\forall t \in K$
+	\end{itemize}
+\end{lemma}
+\begin{proof}
+	Fpoor each $y \in K$, use Lemma 4 to find $g_y \in \overline{\mathcal{A}}$
+	such that $g_y(x) = f(x)$, $g_y(y) = f(y)$.
+	Note $g_y \in \mathcal{A} \implies g_y$ is continuous,
+	and so $g_y - f$ is continuous.
+	Also, $(g_y-f)(x) = 0$ and $(g_y-f)(y) = 0$.
+	Hence, by continuity, there exists an open set $U_y \in K$ such that
+	$g_y(t) - f(t) > -\ep$ $\forall t \in U_t$.
+
+	$U_y$ contains $y$. If we let $y$ range over all of $K$,
+	we get a cover for $K$.
+	$K$ is compact, so we can get a finite subcover $U_{y_1},\dots,U_{y_n}$.
+	Let $g = \max\{g_{y_1},\dots,g_{y_n}\} \in \overline{\mathcal{A}}$ by Lemma 3.
+	Let's verify
+	\[
+		g(x) = \max\{g_{y_1}(x),\dots,g_{y_n}(x)\}
+		= \max\{f(x),\dots,f(x)\} = f(x)
+	\]
+	And for $t \in K$, $t$ is contained in some $U_{y_j}$, $1\leq j \leq n$,
+	hence $g(t) \geq g_{y_j}(t)$, so
+	$g(t) - f(t) \geq g_{y_j}(t) - f(t) > - \ep$.
+\end{proof}
+Compactness was critical.
+Lemma 3 needed a finite number of functions to work,
+and we could only get this with compactness.
+We now mirror the proof to get a bound from above.
+\begin{lemma}
+	$K,\mathcal{A}$ as before.
+	Let $f \colon K \to \R$ continuous.
+	Then $\exists h \in \overline{\mathcal{A}}$ such that
+	$|h(t) - f(t)| \leq \ep$ $\forall t \in K$.
+\end{lemma}
+\begin{proof}
+	For $x \in K$, let $g_x \in \overline{\mathcal{A}}$ be as in Lemma 5 (same $\ep$).
+	$g_x - f$ is continuous and $(g_x - f)(x) = 0$.
+	Hence, $\exists$ an open set $U_x$ containing $x$ such that
+	$g_x(t) - f(t) < \ep$ $\forall t \in U_x$.
+
+	$K$ is compact, select a finite subcover $U_{x_1},\dots,U_{x_m}$
+	and let $h = \min\{g_{x_1},\dots,g_{x_m}\} \in \overline{\mathcal{A}}$ by Lemma 3.
+	By the same argument as Lemma 5, $h(t) - f(t) < \ep$ $\forall t \in K$
+	from the fac that $h(t) - f(t) \geq -\ep$ $\forall t \in K$
+	since this is true for each $g_{x_1},\dots,g_{x_m}$.
+\end{proof}
+
+Next class, we will wrap up all the details,
+and also look at the complex version.
+
+
+\section{March 15}
+Recall we are proving Stone-Weierstrass:
+$K$ is compact, $\mathcal{A} \subset \mathcal{C}_\R(K)$
+($\R$-valued continuous, bounded functions on $K$)
+where $\mathcal{A}$ is an algebra that seperates points and vanishses at no points.
+Want $\overline{\mathcal{A}} = \mathcal{C}_\R(K)$.
+
+Recall the Lemma we just finished at the end of last class.
+\begin{lemma}
+	For all $f \in \mathcal{C}_\R(K)$, $\forall \ep > 0$,
+	$\exists g \in \overline{\mathcal{A}}$ such that
+	$\lVert f - g \rVert < \ep$.
+\end{lemma}
+(we want $h \in A$).
+The proof of Stone-Weierstrass:
+\begin{proof}
+	Let $f \in \mathcal{C}_\R(K)$, for each $n$ select $g_n \in \overline{\mathcal{A}}$
+	such that $\lVert f - g_n \rVert < \frac{1}{2n}$.
+	Select $f_n \in \mathcal{A}$ such that $\lVert f_n - g_n \rVert < \frac{1}{2n}$.
+	Hence, $\lVert f - f_n \rVert < \frac{\ep}{2} + \frac{\ep}{2} = \ep$,
+	i.e. $f_n \to f$.
+\end{proof}
+
+Conjecture: The above theorem is true with $\mathcal{C}_R(K)$
+replaced by $\mathcal{C}(K)$ (complex-valued included).
+This is false.
+Counter-example:
+$K = S^1$ is the unit circle, $\{z \in \C \colon |z| = 1\}
+= \{e^{it} \colon t \in [0,2\pi]\}$.
+Then some function $f \colon S^1 \to \C$ can be represented as
+$f(z)$ or $f(e^{it})$ (require $f(e^{i0}) = f(e^{i2\pi})$.
+Our algebra $\mathcal{A}$ are the polynomials with $\C$ coefficients,
+$f(z) = \sum_{k=0}^n c_k z^k$ ($c_k \in \C$) or
+$f(e^{it}) = \sum_{k=0}^n c_k e^{ikt}$.
+We have shown before that this is an algebra.
+It can be confirmed that $\mathcal{A}$ that separates points and vanishes at no point.
+We want to show $\overline{\mathcal{A}} \neq \mathcal{C}_\R(K)$.
+We do this by showing there is some function in $\mathcal{C}_\R(K)$
+but is not in the closure of $\mathcal{A}$.
+
+Let $g(z) = \bar{z} \in \mathcal{C}(K)$.
+We now dip into some complex analysis for motivation.
+Recall that if we take the integral along some contour (closed simple curve)
+and the function is holomorphic on the interior and contour,
+then the contour integral is $0$.
+All of the polynomials are holomorphic, and so the integral is $0$.
+The integral of $\bar{z}$ will not be $0$.
+But recall that if a sequence of functions converge uniformly,
+the integral also converges, and so must be $0$ in this case.
+Which shows we can't have polynomials uniformly converge to $\bar{z}$.
+More formmally, let $P \in \mathcal{A}$.
+Let's compute (secretly a contour integral)
+\[
+	\int_0^{2\pi} P(e^{it})ie^{it}dt
+	= i\int_0^{2\pi} \sum_{k=0}^n c_k e^{i(k+1)t}dt
+	= i\sum_{k=0}^n c_k\int_0^{2\pi} e^{i(k+1)t}dt
+	= i\sum_{k=0}^n c_k \int_0^{2\pi} \left(\cos((k+1)t) + i\sin((k+1)t)\right)dt
+\]
+and this evaluates to $0$ on inspection of $\sin,\cos$. Next,
+\[
+	\int_{0}^{2\pi} g(e^{it})e^{it}ie^{it}dt
+	= i\int_0^{2\pi}e^{-it}e^{it}dt
+	=i\int_0^{2\pi} 1dt = 2\pi i
+\]
+Hence, if there existed $\{P_n\} \subset \mathcal{A}$ such that
+$P_n \to g$ uniformly (on $K$).
+Then $P_n z \to g z$ uniformly (on $K$),
+and hence, by Theorem 7.16,
+\[
+	\int_0^{2\pi} P_n(e^{it})e^{it}dt = 0 \to
+	\int_0^{2\pi} g(e^{it})e^{it}dt = 2\pi
+\]
+Contradiction.
+Hence, $g(z) = \bar{z} \not\in \mathcal{A}$.
+
+Intuitively, why does this not work?
+Polynomials in $\C$ are all holomorphic, they all satisfy a certain PDEs.
+This is invariant, even with the operations of an algebra,
+we are always going to have another holomorphic function.
+But not all continuous functions are holomorphic.
+
+What is the addition? The moral of the counter-example,
+is that, even thought it is not the only counter-example,
+it presents the only obstruction to it.
+Recall that our original Stone-Weierstrass, we wanted it to be really simple.
+We saw that the most naive version, no restrictions on the algebra,
+did not work.
+If all the functions vanish at a point, this is an invariant you can't
+escape through the operations of an algebra.
+If all the functions are equal at a point, this is an invariant you can't
+escape through the operations of an algebra.
+And in this case, an algebra being holomorphic is an invariant you can't escape.
+One way to break out is conjugation: we've already seen it is not holomorphic.
+
+\begin{theorem}[Complex Stone-Weierstrass (Rudin 7.33)]
+	Let $K$ be a compact metric space, $A \subset \mathcal{C}(K)$,
+	$\mathcal{A}$ is an algebra,
+	$\mathcal{A}$ separates points, $\mathcal{A}$ vanishes at no point,
+	$\mathcal{A}$ is self-adjoint: if $f \in \mathcal{A}$, then $\bar{f} \in \mathcal{A}$
+	($\bar{f}(z) = \overline{f(z)}$).
+	Then, $\overline{\mathcal{A}} = \mathcal{C}(K)$
+	(uniform complex closure of $\mathcal{A}$).
+\end{theorem}
+The proof of this is not bad, actually reduces to the real case.
+
+It was clear that the real version of Stone-Weierstrass was a generalization
+the real Weierstrass theorem.
+But does complex Stone-Weierstrass generalize complex Weierstrass?
+(I.e. it follows from the other).
+It does: our original was complex-valued functions,
+but the domain was still $[a,b] \subset \R$.
+And if the domain is the real line, automatically self-adjoint
+because the conjugate is itself.
+
+Next lecture will be the proof.
+
+
+\section{March 18}
+Last time, we were talking about the complex version of Stone-Weierstrass.
+Recall that we came across another obstruction:
+if all the functions in our algebra were holomorphic,
+there were non-holomorphic continuous functions that was not in the closure.
+
+We are trying to prove that if $K$ is compact, $\mathcal{A} \subset \mathcal{C}(K)$,
+$\mathcal{A}$ separates points, vanishes at no point, self-adjoint;
+then $\overline{\mathcal{A}} = \mathcal{C}(K)$.
+We are going to heavily rely on the real Stone-Weierstrass.
+\begin{proof}
+	Let $\mathcal{A}_\R = $ (real) algebra of real-valued functions in $\mathcal{A}$,
+	i.e. $\{f \in \mathcal{A} \colon \mathrm{Im}(f) \equiv 0\}$.
+	
+	Step 1: Let $f = u + iv \in \mathcal{A}$, then
+	$u = \mathrm{Re}(f) = \frac12(f + \bar{f}) \in \mathcal{A}$,
+	hence $\mathrm{Re}(f) \in \mathcal{A}_\R$.
+	$v = \mathrm{Im}(f) = \frac{1}{2i}(f - \bar{f}) \in \mathcal{A}$,
+	hence $\mathrm{Im}(f) \in \mathcal{A}_\R$.
+	We are crucially using the fact here that the algebra is self-adjoint.
+	
+	Step 2: $\mathcal{A}_\R$ separates points: let $x,y \in K$, with $x \neq y$,
+	by Lemma 4, there exists $f \in \mathcal{A}$ such that $f(x) = 0$, $f(y) = 1$.
+	(Note that our proof for this does not rely on whether the functions are real or not.
+	There is a reason Rudin put this as a separate theorem 7.31 before either proof;
+	Zahl messed up making it seem like it relied on it being real functions
+	by putting it inside of the real Stone-Weierstrass proof.)
+	So $\mathrm{Re}(f)(x) = 0$, $\mathrm{Re}(f)(y) = 1$.
+	These are both in $\mathcal{A}_\R$, hence $\mathcal{A}_\R$ separates points.
+
+	Step 3: $\mathcal{A}_\R$ vanishes at no point:
+	Let $x \in K$. Since $\mathcal{A}$ vanishes at no point,
+	there exists $f \in \mathcal{A}$ such that $f(x) \neq 0$.
+	At least one of $\mathrm{Re}(f)(x)$ or $\mathrm{Im}(f)(x)$ is not $0$.
+	(Slightly different way that Rudin uses:
+	because $f(x) = re^{i\theta} \implies e^{-i\theta}f(x) = r \in \mathcal{A}$.
+	This is a useful argument to be aware of.)
+	(Essentially, $f\bar{f} = \lvert f \rvert^2$ also works too.
+	``Maybe this will make it into the next version of Rudin.")
+
+	Step 4: By Stone-Weierstrass (Theorem 7.32),
+	$\overline{\mathcal{A}_\R} = \mathcal{C}_\R(K) = $ the space of continuous,
+	bounded, real-valued functions $f \colon K \to \R$.
+
+	Step 5: Let $f = u + iv \in \mathcal{C}(K)$,
+	$u,v \in \mathcal{C}_\R(K)$
+	(function from $\R^n \to \R^n$ continuous only if functions continuous component-wise,
+	proof in Rudin but also easy to do).
+	$\exists g,h \in \mathcal{A}_\R$ such that
+	$\lVert u - g \rVert < \ep/2, \lVert v - h \rVert < \ep/2$.
+	We have then $g,ih \in \mathcal{A}$, so $g + ih \in \mathcal{A}$ and
+	$\lVert f - (g+ih)\rVert \leq \lVert u - g \rVert + \lVert iv - ih \rVert < \ep$.
+	Uniform limit of continuous functions is also continuous
+	gives set inclusion the other way.
+\end{proof}
+
+\subsection{Fourier Analysis}
+Fourier analysis is glorified linear algebra,
+but linear algebra in an infinite-dimensional vector space.
+But talking to some of you, he realized that not everyone
+was well-familiarized with linear algebra.
+
+\subsubsection{Linear Algebra Review}
+Let $F = \R$ or $\C$ (more generall,y $F$ a field).
+A vector space over $F$ (a.k.a. a $F$-vector space)
+is a set $V$ along with two operations, called vector addition,
+denoted by $u + v$, and scalar multiplication $av$
+($u,v \in V$, $a \in F$);
+these are maps $V \times V \to V$, $F \times V \to V$.
+These must satisfy the vector space axioms
+($u,v,w \in V, a,b \in F$):
+\begin{enumerate}
+	\item Addition is associative $u + (v + w) = (u + v) + w$.
+	\item Addition is commutative $u + v = v + u$.
+	\item There is an additive identity $0\in V$ such that $u + 0 = 0 + u = u$.
+	\item Every element has an additive inverse,
+		i.e. $\forall v \in V$, $\exists u \in V$ such that
+		$v + u = u + v = 0$. Call $u$ ``$-v$".
+	\item Scalar multiplication and field multiplication are compatible
+		$a(bv) = (ab)v$
+		(on the left, we have two scalar multiplication,
+		on the right, we have field multiplication then scalar multiplication).
+	\item Scalar multiplication respects the field identity
+		$1v = v$ where $1$ is the multiplicative identity of the field.
+	\item Distributivity: $a(u+v) = au + av$ and $(a + b)v = av + bv$.
+\end{enumerate}
+Say you have a floating point number in C++,
+it is storing it to some level of accuracy
+(``the only programming language I can speak to with any level of accuracy".)
+Here, depending on the size of $u,v,w$, associtivity could break.
+Also, octonions don't have associativity.
+We know that not all operations are commutative, e.g. matrix multiplication.
+
+Some examples of vector spaces:
+\begin{itemize}
+	\item $\R^d, \C^d$ are the $d$-tuuples of $\R$ or $\C$,
+		with operations $(x_1,\dots,x_n) + (y_1,\dots,y_n) = (x_1+y_1,\dots,x_n+y_n)$
+		and $a(x_1,\dots,x_n) = (ax_1,\dots,ax_n)$.
+		Can verify satisfies axioms.
+	\item Sequences $(x_n)_{n\in\N}$ (or $(x_n)_{n \in \Z}$)
+		where $x_i \in \R$ or $\in \C$ (four examples here).
+		Component-wise operations as before.
+		This is an infinite-dimensional version of the one we had before.
+	\item Sequences $(x_n)_{n\in\N}$ (or $n \in \Z$) where
+		$x_n = 0$ for all $n \geq N$.
+		``Sequences that are eventually null."
+	\item Sequences $(x_n)_{n\in \N,\Z}$ such that $\sum_{n \in \N,\Z} |x_n| < \infty$.
+		Or to generalize, when $1 \leq p < \infty$,
+		$\left(\sum |x_n|^p \right)^{1/p} < \infty$
+		(addition is fine, since $|x_n + y_n|^p \leq 2^{p-1}\left(|x_n|^p + |y_n|^p\right)$).
+	\item $V = \mathcal{C}_\R(\R), \mathcal{C}(\C)$ or $\mathcal{C}_\R(K),\mathcal{C}(K)$.
+	\item $\mathcal{R}([a,b])$.
+\end{itemize}
+Next class, we will add additional structure on to the vector spaces,
+and see how those structures interact.
 \end{document}

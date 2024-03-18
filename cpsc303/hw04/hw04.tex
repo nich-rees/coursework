@@ -1,0 +1,362 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 4}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+
+\subsection*{Problem 2}
+Recall the (forward) Euler's method (see class notes or [A\&G], page 485)
+and the (explicit) trapazoidal method (class notes or [A\&G], page 494),
+which solves $y' = f(t,y)$ subject to $y(t_0) = y_0$
+(1) choosing a small $h > 0$ and setting $t_i = t_0 + ih$ (as usual),
+and (2) takes $y_i$ (an approximation of $y(t_i)$) to produce $y_{i+1}$,
+for $i = 0, 1, 2, \dots$ via the two formulas:
+\[
+	Y_i = y_i + hf(t_i,y_i) \quad y_{i+1} = y_i + h\frac{f(t_i,y_i)+f(t_{i+1},Y_i)}{2}
+\]
+(hence $Y_i$ is what Euler's method gives for $y_{i+1}$).
+\begin{enumerate}
+	\item Consider the trapezoidal method for $y' = y$ with $y(t_0) = y_0$.
+		Write down a formula for $y_{i+1}$ of the trapezoidal method in terms of $y_i$.
+	\item Say that we want to approximate $y(1)$ given $y(0) = 1$
+		(i.e. $t_0 = 0$, $y_0 = 1$).
+		Choose a natural $N$ (which we think of as large), set $h = 1/N$;
+		show that $y_N$ in the trapezoidal method approximation of $y(1)$ equals
+		\[
+			y_{N,\text{trap}} = \left(1 + \frac{1}{N} + \frac{1}{2N^2}\right)^N.
+		\]
+	\item Show that Euler's method for the same ODE and intial condition
+		gives $y_{N,\text{Eul}} = (1+1/N)^N$.
+	\item Recall that actual solution to $y' = y$ with $y(0) = 1$ has $y(1) = e$.
+		Show that $\ln(y_{N,\text{trap}})$ is closer to the
+		actutal value of $\ln(y(1))$ (namely $\ln(e) = 1$)
+		than $\ln(y_{N,\text{Eul}})$, as $N \to \infty$
+		(i.e., for all $N$ sufficiently large).
+		[It may be helpful to recall that $\ln(1+\ep) = \ep - \ep^2/2 + O(\ep^3)$
+		for $|\ep|$ small.]
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		\[
+			y_{i+1} = y_i + h\frac{y_i + Y_i}{2} =
+			y_i + h\frac{y_i + y_i + hy_i}{2} =
+			\frac{2y_i + 2hy_i + h^2y_i}{2}
+			= y_i\left(1 + h + \frac{h^2}{2}\right)
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Fix some $N$ large and let our step size be $h = 1/N$.
+		We prove by induction that $y_i = y_0(1+\frac{1}{N} + \frac{1}{2N^2})^i$
+		for all $i \in \N$.
+		The base case when $i = 1$:
+		from part (a), we have
+		$y_1 = y_0(1 + h + \frac{h^2}{2}) = y_0(1 + \frac{1}{N} + \frac{1}{2N^2})^1$, as desired.
+		Now assume that $y_i = y_0(1+\frac{1}{N} + \frac{1}{2N^2})^i$,
+		we prove the formula for $y_{i+1}$.
+		From part (a), we have
+		\[
+			y_{i+1} = y_i(1 + h + \frac{h^2}{2}) =
+			y_i(1 + \frac{1}{N} + \frac{1}{2N^2}) =
+			y_0\left(1 + \frac{1}{N} + \frac{1}{2N^2}\right)^{i+1}
+		\]
+		as desired.
+
+		Hence, the trapezoidal method at the $N$th step, which is the approximation at $y(Nh) = y(1)$
+		gives $y_{N,\text{trap}} = (1 + \frac{1}{N} + \frac{1}{2N^2})^N$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Recall that $y_{i+1} = y_i(1+h)$ for Euler's method.
+		Denote this equation ($*$).
+		Fix some $N$ large and let our step size be $h = 1/N$.
+		We prove by induction that $y_i = y_0(1+\frac{1}{N})^i$
+		for all $i \in \N$.
+		The base case when $i = 1$:
+		from equation ($*$), we have
+		$y_1 = y_0(1 + h) = y_0(1 + \frac{1}{N})^1$, as desired.
+		Now assume that $y_i = y_0(1+\frac{1}{N})^i$,
+		we prove the formula for $y_{i+1}$.
+		From equation ($*$), we have
+		\[
+			y_{i+1} = y_i(1 + h) =
+			y_i(1 + \frac{1}{N}) =
+			y_0\left(1 + \frac{1}{N}\right)^{i+1}
+		\]
+		as desired.
+
+		Hence, Euler's method at the $N$th step, which is the approximation at $y(Nh) = y(1)$
+		gives $y_{N,\text{Eul}} = (1 + \frac{1}{N})^N$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can compute
+		\begin{align*}
+			\ln(y_{N,\text{trap}})
+			&= \ln\left(\left(1 + \frac{1}{N} + \frac{1}{2N^2}\right)^N\right)\\
+			&= N\ln\left(1 + \frac{1}{N} + \frac{1}{2N^2}\right)\\
+			&= N\left(\frac{1}{N}+\frac{1}{2N^2} -
+				\frac12\left(\frac{1}{N} + \frac{1}{2N^2}\right)^2
+			+ O\left(\left(\frac{1}{N}+\frac{1}{2N^2}\right)^3\right)\right)\\
+			&= 1 + \frac{1}{2N}
+			- \frac{1}{2N} - \frac{1}{2N^2} - \frac{1}{4N^2}
+			+ NO\left(\frac{1}{N^3}\right)\\
+			&= 1 + O\left(\frac{1}{N^2}\right)
+		\end{align*}
+		where we replaced $O\left(\left(\frac{1}{N}+\frac{1}{2N^2}\right)^3\right)$
+		with $O\left(\frac{1}{N^3}\right)$
+		since $(a + \frac{1}{2}a^2)^3 = O(a^3)$.
+		We also see
+		\begin{align*}
+			\ln(y_{N,\text{Eul}})
+			&= \ln\left(\left(1 + \frac{1}{N}\right)^N\right)\\
+			&= N\ln\left(1 + \frac{1}{N}\right)\\
+			&= N\left(\frac{1}{N} - \frac{1}{2N^2} + O\left(\frac{1}{N^3}\right)\right)\\
+			&= 1 - \frac{1}{2N} + O\left(\frac{1}{N^2}\right)
+		\end{align*}
+	\end{proof}
+	As $N \to \infty$, $\frac{1}{N^2}$ gets small (much faster than $1/N$),
+	and we can neglect it the most,
+	so we can see that while $\ln(y_{N,\text{trap}})$ only differs from
+	$\ln(y(1))$ on order of $\frac{1}{N^2}$,
+	$\ln(y_{N,\text{Eul}})$ differs on order of $\frac{1}{N}$,
+	which is a much larger error when $N$ large.
+\end{enumerate}
+
+
+\subsection*{Problem 3}
+In this exercise we will solve the ODE $y' - 2y = t^2$.
+\begin{enumerate}
+	\item Show that there are constants $a,b,c$ such that
+		$y(t) = at^2 + bt + c$ is a solution to $y' - 2y = t^2$.
+	\item Show that if $y' - 2y = t^2$ and $z' - 2z = 0$,
+		then $(y+z)' - 2(y+z) = t^2$.
+	\item Show that if $y' - 2y = t^2$ and $(y+z)' - 2(y+z) = t^2$, then $z' - 2z = 0$.
+	\item Solve for all $z' - 2z = 0$ (which is called the
+		``homogenous form of the equation $y' - 2y = t^2$),
+		and use this to write down the general solution to $y' - 2y = t^2$.
+	\item Show that for any $t_0,y_0$, your general solution in part (d)
+		has a unique $y$ such that $y(t_0) = y_0$.
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		If $a = -1/2$, $b = 1/2$, $c = -1/4$,
+		then $y(t) = -\frac12 t^2 + \frac12 t - \frac14$ and
+		$y'(t) = - t + \frac{1}{2}$.
+		Plugging it into the differential equation, we have
+		$y' - 2y = - t + \frac12 + t^2 + t - \frac12 = t^2$,
+		hence $y(t)$ is a solution to $y' - 2y = t^2$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Assume that $y' - 2y = t^2$ and $z' - 2z = 0$.
+		Then
+		\[
+			(y+z)' - 2(y+z)
+			= y' + z' - 2y - 2z
+			= y' - 2y + z' - 2z = t^2 + 0 = t^2
+		\]
+		where we have used the linearity of the derivative.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Assume that $y' - 2y = t^2$ and $(y+z)' - 2(y+z) = t^2$.
+		Then by the linearity of the derivative, we have
+		$y' + z' - 2y - 2z = t^2 \implies y' - 2y + z' - 2z = t^2
+		\implies t^2 + z' - 2z = t^2$,
+		and subtracting $t^2$ on both sides, we are left with
+		$z' = 2z = 0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can rewrite the differential equation as $z' = 2z$,
+		and this is now one of our classic solutions (derived on previous homeworks),
+		$z(t) = Ae^{2t}$, $A \in \R$ constant;
+		one can verify this by plugging it in (and unique from standard theorems).
+		
+		As we saw from parts (b) and (c),
+		any and all solutions to $y' - 2y = t^2$
+		is of the form $y_1 + z$ where $y_1$ is a particular solution to the ODE,
+		and $z$ is the general solution to the homogenous form of the ODE.
+		Hence, using part (a) and the earlier part of (d),
+		the general solution is of the form
+		\[
+			y(t) = -\frac12 t^2 + \frac12 t - \frac14 + Ae^{2t}
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $t_0,y_0$ be fixed. Then the solution from (d) gives
+		\[
+			y_0 = -\frac12 t_0^2 + \frac12 t_0 - \frac14 + Ae^{2t_0}
+		\]
+		Which implies
+		\[
+			A = \frac{y_0 + \frac12 t_0^2 - \frac12 t_0 + \frac14}{e^{2t_0}}
+		\]
+		(and we need not worry about dividing by zero,
+		since $e^x \neq 0$ for all $x \in \R$).
+		$A$ is determined uniquely be $y_0,t_0$, which gives us the unique solution
+		\[
+			y(t) = -\frac12 t^2 + \frac12 t - \frac14 +
+			\left(\frac{y_0 + \frac12 t_0^2 - \frac12 t_0 + \frac14}{e^{2t_0}}\right)e^{2t}
+		\]
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 4}
+In this exericise we will solve the recurrence relation
+$x_{n+1} - 2x_n = n^2$ for all $n \in \Z$.
+\begin{enumerate}
+	\item Show that there are constants $a,b,c$ such that $x_n = an^2 + bn + c$
+		is a solution to $x_{n+1} - 2x_n = n^2$.
+	\item What is the general solution to $x_{n+1} - 2x_n = 0$?
+	\item Use the above two parts to write a general solution to
+		the recurrence equation $x_{n+1} - 2x_n = n^2$,
+		and explain your reasoning in term of Problem (2)
+		above and the appropriate notation of the
+		``homogenous form of the recurrence $x_{n+1} - 2x_n = n^2$.
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		If $a = -1$, $b = -2$, $c = -3$,
+		then $x_n = -n^2 - 2n - 3$ and
+		$x_{n+1} = -1(n+1)^2 + -2(n+1) - 3 = -n^2 -4n - 6$.
+		Plugging these together into the recurrence relation, we have
+		\[
+			x_{n+1} - 2x_{n}
+			= -n^2 - 4n - 6 + 2n^2 + 4n + 6 = n^2
+		\]
+		Hence, $x_n$ is a solution to $x_{n+1} - 2x_n = n^2$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		This is equivalent to $x_{n+1} = 2x_n$.
+		As we discussed in class, this is a solution of the form $Ar^n$,
+		where $r \in \R$ is a constant, and $A$ is a constant determined by $x_0$.
+		For our specific case, $x_n = x_02^n$ works.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We can use the same logic from the previous problem,
+		and it would be simple to show as well,
+		that any solution to the recurrence relation
+		is the sum of a particular solution and the general solution
+		to the homogenous form of the recurrence relation.
+		Hence, using parts (a) and (b), we have the general solution
+		\[
+			x_n = -n^2 - 2n - 3 + A2^n
+		\]
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 5}
+\begin{enumerate}
+	\item At what value of $n$ does MATLAB declare $(1/2)^n$ to be $0$?
+		There are a number of ways of doing this,
+		but one way is to examine the values of $x$ generated by:
+		\begin{verbatim}
+		clear
+		for n=1:1100, x{n}=(1/2)^n; end
+
+		x
+		\end{verbatim}
+		(you may need the extra blank line above if you copy and paste).
+	\item Find the general solution to the recurrence $x_{n+2} = (3/2)x_{n+1}-(1/2)x_n$.
+	\item Find the special case of this recurrence subject to
+		the initial conditions $x_1 = 1$ and $x_2 = 1/2$.
+	\item Use MATLAB to compute the solution of this recurrence subject to
+		$x_1 = 1$ and $x_2 = 1/2$ for $x_1,x_2,\dots,x_{100}$ via:
+		\begin{verbatim}
+		clear
+		x{1} = 1;
+		x{2} = 1/2;
+		for n=1:98, x{n+2} = (3/2)*x{n+1}-(1/2)*x{n}; end
+
+		x
+		\end{verbatim}
+		What does MATLAB report for the values of
+		\begin{verbatim}
+		x{100} * 2^99
+		x{100} * 2^99 - 1
+		\end{verbatim}
+	\item Now run the same code to generate $x_1,x_2,\dots,x_{1200}$ using
+		\begin{verbatim}
+		clear
+		x{1} = 1;
+		x{2} = 1/2;
+		for n=1:1198, x{n+2} = (3/2)*x{n+1}-(1/2)*x{n}; end
+
+		x
+		\end{verbatim}
+		Anwser the following:
+		\begin{enumerate}
+			\item[(i)] Does MATLAB report $x_n = 0$ for some value of $n \leq 1200$?
+			\item[(ii)] What is the smallest value of $n_0$ such that
+				the values that MATLAB reports for $(1/2)^{n_0-1}$ and $x\{n_0\}$ are not equal?
+			\item[(iii)] For the value of $n_0$, by examining the values of
+				$(3/2)*x\{n_0-1\}$ and $(1/2)*x\{n_0-2\}$,
+				can you see where an error in precision occurs?
+			\item[(iv)] What repeating pattern do you see in the values
+				of $x\{n\}$ for $n \geq n_0$?
+				[Hint: It may be simpler to report this pattern
+				in multiples of $(1/2)^{1074}$.]
+				[Warning: if you type something like
+				\begin{verbatim}
+				for n=1070:1100, {n,x{n},x{n}*2^1074}, end
+				\end{verbatim}
+				then the last cell value will be \verb|Inf|,
+				since $2^{1074}$ will yield \verb|Inf|.
+				However, if you type:
+				\begin{verbatim}
+				for n=1070:1100, {n,x{n},(x{n}*2^900)*2^174}, end
+				\end{verbatim}
+				then you'll get the answers you want.
+		\end{enumerate}
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		For any $n \geq 1075$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Didn't do :)
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		It produces $1$ and $0$, respectively.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		\begin{enumerate}
+			\item[(i)] didn't do :0
+			\item[(ii)] didn't do :0
+			\item[(iii)] Didn't do :)
+			\item[(iv)] Didn't do :)
+		\end{enumerate}
+	\end{proof}
+\end{enumerate}
+\end{document}

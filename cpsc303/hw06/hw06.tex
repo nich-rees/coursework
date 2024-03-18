@@ -1,0 +1,427 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 6}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+
+\subsection*{Problem 2}
+Consider a monomial interpolation $p(x) = c_0 + c_1x + c_2x^2$ to data points
+$(x_0,y_0),(x_1,y_1),(x_2,y_2)$, where $x_0 = 2$, $x_1 = 2 + \ep$,
+and $x_2 = 2 - \ep$ (but $y_0,y_1,y_2$ are arbitrary).
+Hence we are solving the equations:
+\[
+	\begin{bmatrix}
+		1 & 2 & 4\\
+		1 & 2+\ep & 4+4\ep+\ep^2\\
+		1 & 2-\ep & 4-4\ep+\ep^2\\
+	\end{bmatrix}
+	\begin{bmatrix}
+		c_0 \\ c_1 \\ c_2
+	\end{bmatrix} =
+	\begin{bmatrix}
+		y_0 \\ y_1 \\ y_2
+	\end{bmatrix}
+\]
+\begin{enumerate}
+	\item Show that $c_2$, in terms of $y_0,y_1,y_2$, is given by
+		\begin{equation}\label{c2}
+			c_2(\ep) = \frac{y_1 + y_2 - 2y_0}{2\ep^2}
+		\end{equation}
+	\item Now assume that for some twice differentiable $f$
+		we have $y_i = f(x_i)$, hence
+		\[
+			y_0 = f(2), \, y_1 = f(2 + \ep), \, y_2 = f(2 - \ep)
+		\]
+		Use L'H\^{o}pital's Rule or Taylor's Theorem to show that
+		\[
+			\lim_{\ep \to 0} c_2(\ep) = f''(2)/2
+		\]
+		(if you use Taylor's Theorem, for simplicity assume that $f'''$ exists
+		and is bounded near $2$).
+		[Hint: See Section 1.4 of the handout for a similar example.]
+	\item How is your formula for $c_2$ related to the
+		\emph{centered formula for the second derivative},
+		page 412, Subsection 14.1.4, of [A\&G]?
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		One can find that the inverse of the matrix $A$ is
+		\[
+			A^{-1} = \frac{1}{2\ep^2}
+			\begin{bmatrix}
+				-2(4-\ep^2) & 2(2-\ep) & 2(\ep+2)\\
+				8 & \ep-4 & -\ep-4\\
+				-2 & 1 & 1
+			\end{bmatrix}
+		\]
+		We can confirm this by multiplying it by $A$: $AA^{-1} =$
+		\begin{align*}
+			&\frac{1}{2\ep^2}
+			\begin{bmatrix}
+				-2(4-\ep^2) + 16 - 8 & 2(2-\ep) + 2(\ep-4) + 4 & 2(\ep+2) - 2(\ep + 4) + 4\\
+				-2(4-\ep^2) + 8(2+\ep) - 2(2+\ep)^2 &
+				2(2-\ep) + (2+\ep)(\ep-4) + (2 + \ep)^2 &
+				2(\ep+2) - (2+\ep)(\ep + 4) + (2+\ep)^2\\
+				-2(4-\ep^2) + 8(2-\ep) - 2(2-\ep)^2 &
+				2(2-\ep) + (2-\ep)(\ep-4) + (2 - \ep)^2 &
+				2(\ep+2) - (2-\ep)(\ep + 4) + (2-\ep)^2\\
+			\end{bmatrix}\\
+			&= \frac{1}{2\ep^2}
+			\begin{bmatrix}
+				2\ep^2 & 0 & 0\\
+				0 & 2\ep^2 & 0\\
+				0 & 0 & 2\ep^2
+			\end{bmatrix}\\
+			&= I
+		\end{align*}
+		and inverses are unique for invertible matrices,
+		so we need not check $A^{-1}A$.
+		Hence, we can directly compute $c_2$ from
+		\[
+			\begin{bmatrix} c_0 \\ c_1 \\ c_2 \end{bmatrix}
+			= A^{-1} \begin{bmatrix} y_0 \\ y_1 \\ y_2 \end{bmatrix}
+		\]
+		Specifically, taking the bottom row of $A^{-1}$ gives
+		\[
+			c_2(\ep) = \frac{1}{2\ep^2}(-2y_0 + y_1 + y_2)
+		\]
+		as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\begin{align*}
+			\lim_{\ep \to 0} c_2(\ep)
+			&= \lim_{\ep\to0} \frac{y_1 + y_2 - 2y_0}{2\ep^2}\\
+			&= \lim_{\ep\to0} \frac{f(2+\ep) + f(2-\ep) -2f(2)}{2\ep^2}\\
+			&= \lim_{\ep \to 0} \frac{f'(2+\ep) - f'(2-\ep)}{4\ep}\\
+			&= \lim_{\ep \to 0} \frac{f''(2+\ep) + f''(2-\ep)}{4}\\
+			&= \frac12f''(2)
+		\end{align*}
+		where L'\^{o}pital's can be applied twice here,
+		since $f$ is twice differentiable,
+		and for the first use, $\lim_{\ep \to 0} f(2+\ep) + f(2-\ep) -2f(2) =
+		f(2) + f(2) - 2f(2)$
+		and $\lim_{\ep \to 0} 2\ep^2 = 0$,
+		and for the second use, $\lim_{\ep \to 0} f'(2+\ep) - f'(2-\ep)
+		= f'(2) - f'(2) = 0$ and $\lim_{\ep \to 0} 4\ep = 0$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		The centered formula for the second derivative via the textbook is
+		\[
+			f''(x_0) = \frac{1}{h^2}(f(x_0 - h) - 2f(x_0) + f(x_0 + h))
+			+ O(h^2)
+		\]
+		We have just shown
+		\[
+			f''(2) = 2\lim_{\ep \to 0} c_2(\ep)
+			= \lim_{\ep\to0}\frac{1}{\ep^2}(f(2-\ep) - 2f(2) + f(2+\ep))
+		\]
+		Hence, we have confirmed the centered formula at $x_0 = 2$ as $h$ gets large
+		and so the $O(h^2)$ term becomes negligible;
+		see this by making the substitutions $x_0 = 2$ and $h = \ep$.
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 3}
+Let
+\[
+	A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}
+\]
+The point of this exercise is to carefully prove that
+\[
+	\lVert A \rVert_\infty = \max(|a| + |b|,|c| + |d|)
+\]
+Notice that for any $\mathbf{x} = (x_1,x_2) \in \R^2$ we have
+\[
+	A\mathbf{x} = A\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+	= \begin{bmatrix} ax_1 + bx_2 \\ cx_1 + dx_2 \end{bmatrix}
+\]
+\begin{enumerate}
+	\item Show that if $m = \lVert \mathbf{x} \rVert_\infty
+		= \max(|x_1|,|x_2|)$, then
+		\[
+			|ax_1 + bx_2| \leq m(|a| + |b|)
+		\]
+	\item Using part (a), and the same with $a,b$ replaced with $c,d$ show that
+		\[
+			\lVert A\mathbf{x} \rVert_\infty
+			\leq \max(|a| + |b|,|c| + |d|)\lVert \mathbf{x}\rVert_\infty
+		\]
+	\item Show that there is an $\mathbf{x}$ with
+		$\lVert \mathbf{x} \rVert_\infty = 1$ such that
+		\[
+			\lVert A\mathbf{x} \rVert_\infty \geq |a| + |b|
+		\]
+		[Hint: take $\mathbf{x} = (\pm1,\pm1)$ with appropriately chosen signs.]
+	\item Conclude from all the above (and perhaps replacing $a,b$ with $c,d$ somewhere) that
+		\[
+			\lVert A \rVert_\infty = \max(|a| + |b|,|c| + |d|)
+		\]
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Using triangle inequality, we have
+		\[
+			\lvert ax_1 + bx_2 \rvert
+			\leq \lvert ax_1 \rvert + \lvert bx_2 \rvert
+			\leq |a||x_1| + |b||x_2|
+			\leq |a|m + |b|m \leq m(|a| + |b|)
+		\]
+		as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\[
+			\lVert A\mathbf{x} \rVert_\infty
+			= \max(|ax_1 + bx_2|, |cx_1 + dx_2|)
+			\leq \max(\lVert \mathbf{x} \rVert_\infty(|a| + |b|),
+			\lVert \mathbf{x} \rVert_\infty(|c| + |d|))
+			= \max(|a| + |b|, |c| + |d|) \lVert \mathbf{x} \rVert_\infty
+		\]
+		where the first inequality follows from using the fact
+		that $y \leq w \implies \max(y,z) \leq \max(w,z)$ twice,
+		since $|ax_1 + bx_2| \leq \lVert \mathbf{x} \rVert_\infty(|a|+|b|)$
+		and $|cx_1 + dx_2| \leq \lVert \mathbf{x} \rVert_\infty(|c|+|d|)$
+		by part (a);
+		and the last equality from using the fact
+		$\max(ky,kz) = k\max(y,z)$ where $k$ is some constant nonnegative constant,
+		since if $y \geq z$ then $ky \geq kz$ so $\max(ky,kz) = ky = k\max(y,z)$, and vice versa when $z \geq y$,
+		and $\lVert \mathbf{x} \rVert_\infty \geq 0$ by definition.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let $\mathbf{x} = \begin{bmatrix} |a|/a \\ |b|/b \end{bmatrix}$.
+		Clearly, $\lVert \mathbf{x} \rVert_\infty = \max(||a|/a|,||b|/b|)
+		= \max(1,1) = 1$. Furthermore,
+		\[
+			\lVert A\mathbf{x} \rVert_\infty
+			= \max(a\frac{|a|}{a} + b\frac{|b|}{b}, c\frac{|a|}{a} + d\frac{|b|}{b})
+			\geq a\frac{|a|}{a} + b\frac{|b|}{b}
+			= |a| + |b|
+		\]
+		as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Recall the definition of $\lVert A \rVert_\infty$:
+		it is the smallest real $C > 0$ such that
+		$\lVert A\mathbf{x} \rVert_\infty \leq C \lVert \mathbf{x} \rVert_\infty$
+		for all $\mathbf{x} \in \R^2$.
+
+		If $C = \max(|a|+|b|,|c|+|d|)$, we have already shown that
+		the inequality is true for arbitrary $\mathbf{x}$
+		in part (b) of this problem.
+		It remains to show that this is the smallest value.
+
+		Now, for the sake of contradiction, assume that there is some $C$ where
+		$0 < C < \max(|a| + |b|, |c| + |d|)$
+		and $\lVert A\mathbf{x} \rVert_\infty \leq C \lVert \mathbf{x} \rVert_\infty$
+		for all $\mathbf{x} \in \R^2$.
+		If $\max(|a| + |b|,|c| + |d|) = |a| + |b|$,
+		then we have that there exists some $\mathbf{x}$ where
+		$\lVert \mathbf{x} \rVert_\infty = 1$ and $\lVert A\mathbf{x} \rVert_\infty \geq |a| + |b|$
+		by part (c) of this problem, so
+		\[
+			C\lVert \mathbf{x} \rVert_\infty
+			= C \geq \lVert A\mathbf{x} \rVert_\infty \geq |a| + |b|
+			= \max(|a| + |b|, |c| + |d|) > C
+		\]
+		which is a contradiction, since $C < C$ is impossible.
+		If $\max(|a| + |b|, |c| + |d|) = |c| + |d|$,
+		using an identical proof that what was done in part (c)
+		(except with $\mathbf{x} = \begin{bmatrix} |c|/c \\ |d|/d \end{bmatrix}$)
+		we have that there is some $\mathbf{x}$ where $\lVert \mathbf{x} \rVert_\infty = 1$
+		and $\lVert A\mathbf{x} \rVert_\infty \geq |c| + |d|$, so
+		\[
+			C\lVert \mathbf{x} \rVert_\infty
+			= C \geq \lVert A\mathbf{x} \rVert_\infty \geq |c| + |d|
+			= \max(|a| + |b|, |c| + |d|) > C
+		\]
+		which is again a contradiction, since we cannot have $C > C$.
+		Hence, regardless of the matrix $A$, we get a contradiction.
+
+		Hence, we have proven that $C = \max(|a| + |b|, |c| + |d|)$ is minimal,
+		therefore $\lVert A\rVert_\infty = \max(|a| + |b|, |c| + |d|)$.
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 4}
+Let $1 \leq p,q \leq \infty$ satisfy $(1/p) + (1/q) = 1$
+(so $(p,q) = (2,2)$ is one possibility, but we also allow $(p,q)$
+equal to $(1,\infty)$ and $(\infty,1)$).
+Then it is known that for any $m \times n$ matrix $A$ (with real entries) we have
+\begin{equation}\label{matrix}
+	\lVert A^T \rVert_p = \lVert A \rVert_q
+\end{equation}
+where $A^T$ is the transpose of $A$.
+Using this fact, and the previous exercise, for
+\[
+	A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}
+\]
+find a formula for $\lVert A \rVert_1$.
+[Hint: it should match the formula in Section 6 of the handout.]
+[This formula for $\lVert A \rVert_1$ is not too hard to prove from scratch,
+but it is probably easier to use the previous exercise and (\ref{matrix}).]
+
+\begin{proof}[Solution]\let\qed\relax
+	Recall that $A^T = \begin{bmatrix} a & c \\ b & d \end{bmatrix}$.
+	Since we are allowing $p=\infty,q=1$ for equation (\ref{matrix}), we have
+	\[
+		\lVert A \rVert_1
+		= \lVert A^T \lVert_\infty
+		= \left\lVert \begin{bmatrix} a & c \\ b & d \end{bmatrix} \right\rVert_\infty
+		= \max(|a| + |c|, |b| + |d|)
+	\]
+	where the last equality was due to question 2.
+	Hence, we have proven the formula, $\lVert A \rVert_1 = \max(|a| + |c|, |b| + |d|)$,
+	which matches the formula from Section 6.
+\end{proof}
+
+
+\subsection*{Problem 5}
+There is a standard formula for the determinant of a Vandermonde matrix: namely, if
+\[
+	X =
+	\begin{bmatrix}
+		1 & x_0 & x_0^2 & \cdots & x_0^n\\
+		1 & x_1 & x_1^2 & \cdots & x_1^n\\
+		\vdots & \vdots & \vdots & \ddots & \vdots\\
+		1 & x_n & x_n^2 & \cdots & x_n^n
+	\end{bmatrix}
+\]
+then
+\[
+	\det(X) = \prod_{0 \leq i < j \leq n} (x_j - x_i)
+\]
+(This formula is not hard to prove by induction on $n$,
+if you note that replacing $x_n$ by a variable $x$,
+then the above determinant is a degree $n$ polynomial in $x$
+with roots $x_0,\dots,x_{n-1}$.)
+This implies that if $x_0,\dots,x_n$ are distinct, then $X$ is invertible,
+and a standard formula for $X^{-1}$
+(the formula is $X^{-1} = \det(X)\mathrm{adjugate}(X)$,
+where the adjugate matrix is formed by $X$'s \emph{cofactors},
+i.e., determinants of submatrices of $X$ where a single row
+and a single column are discarded)
+then implies that the bottom right entry of $X^{-1}$ is
+\begin{equation}\label{botright}
+	(X^{-1})_{n+1,n+1} = \prod_{0\leq i \leq n-1} \frac{1}{x_n - x_i}
+\end{equation}
+(and similarly, up to $\pm$, for all entries of the bottom row of $X^{-1}$).
+Consider the special case
+\[
+	A(\ep) =
+	\begin{bmatrix}
+		1 & 2 & 4\\
+		1 & 2+\ep & 4 + 4\ep + \ep^2\\
+		1 & 2-\ep & 4 - 4\ep + \ep^2
+	\end{bmatrix}
+\]
+\begin{enumerate}
+	\item Use (\ref{botright}) to show that for all $|\ep| < 1$,
+		\[
+			\lVert A^{-1}(\ep) \rVert_\infty \geq 1/(2\ep^2);
+		\]
+		you may use the analog of Problem 3 for $3\times 3$ matrices
+		and/or the fact from class and the handout (page 12) that if
+		$M$ is the maximum absolute value of an entry of an $n \times n$ matrix $B$,
+		then $M \leq \lVert B \rVert_p \leq nM$ for any $1 \leq p \leq \infty$.
+	\item Use the formula (\ref{c2}) to determine the entire bottom row
+		of $A^{-1}(\ep)$, and hence double check the formula (\ref{botright}) in this case.
+	\item Show that for some constant, $C > 0$, we have for all $|\ep| < 1$,
+		\[
+			\lVert A(\ep) \rVert_\infty \lVert A^{-1}(\ep)\rVert_\infty
+			\geq C/\ep^2
+		\]
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		The analog of Problem 3 for $3 \times 3$ gives
+		\begin{align*}
+			\lVert A^{-1}(\ep) \rVert_\infty
+			= \max(&|(A^{-1})_{1,1}| + |(A^{-1})_{1,2}| + |(A^{-1})_{1,3}|,\\
+				   &|(A^{-1})_{2,1}| + |(A^{-1})_{2,2}| + |(A^{-1})_{2,3}|,\\
+				   &|(A^{-1})_{3,1}| + |(A^{-1})_{3,2}| + |(A^{-1})_{3,3}|)
+		\end{align*}
+		And so $\lVert A^{-1}(\ep)\rVert_\infty \geq
+		|(A^{-1})_{3,1}| + |(A^{-1})_{3,2}| + |(A^{-1})_{3,3}|
+		\geq |(A^{-1})_{3,3}| \geq (A^{-1})_{3,3}$
+		since this is just the sum of positive elements.
+		Thus, assuming $|\ep| > 0$ (I don't see a way around this fact)
+		ensures that $x_0,x_1,x_2$ are distint
+		so we can use (\ref{botright}) to get
+		\[
+			\lVert A^{-1}(\ep)\rVert_\infty \geq
+			\prod_{0 \leq i \leq 1} \frac{1}{x_2 - x_i}
+			= \frac{1}{(x_2 - x_1)(x_2 - x_0)}
+			= ((2-\ep - 2 - \ep)(2 - \ep - 2))^{-1}
+			= ((-2\ep)(-\ep))^{-1}
+			= 1/(2\ep^2)
+		\]
+		as desired.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		From formula (\ref{c2}), since $\mathbf{c} = A^{-1}(\ep)\mathbf{y}$,
+		we have that
+		\[
+			c_2(\ep) = \frac{y_1 + y_2 - 2y_0}{2\ep^2} =
+			y_0(A^{-1})_{3,1} + y_1(A^{-1})_{3,2} + y_2(A^{-1})_{3,3}
+		\]
+		Hence, if the $y_0,y_1,y_2$ are nonzero
+		(if they are, we don't get any information for that entry of $A$), then
+		\begin{align*}
+			(A^{-1})_{3,1} &= -(1/\ep^2)\\
+			(A^{-1})_{3,2} &= 1/(2\ep^2)\\
+			(A^{-1})_{3,3} &= 1/(2\ep^2)
+		\end{align*}
+		Since $|\ep| < 1$ ensures that $(A^{-1})_{3,3} = 4 - 4\ep + \ep^2
+		= 4(1-\ep) + \ep^2 > 0$,
+		our derivation works, and so we confirm what
+		we found from formula (\ref{botright}), namely that
+		$(A^{-1})_{3,3} = 1/(2\ep^2)$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Note that $\lVert A(\ep) \rVert_\infty > 0$,
+		since $\lVert A(\ep) \rVert_\infty \geq |(A)_{1,1}| + |(A)_{1,1}| + |(A)_{1,1}|
+		= 1 + 2 + 4 = 7 > 0$
+		(using the Analog of Problem 3 again).
+		Hence, if we let $C = \lVert A(\ep) \rVert_\infty/2 > 0$,
+		since $0 < 1/(2\ep^2) \leq \lVert A^{-1}(\ep)\rVert_\infty$ when $|\ep| < 1$ from part (a),
+		we see
+		\[
+			\lVert A(\ep) \rVert_\infty \lVert A^{-1}(\ep)\rVert_\infty
+			\geq \lVert A(\ep) \rVert_\infty/(2\ep^2)
+			= C/\ep^2
+		\]
+	\end{proof}
+\end{enumerate}
+\end{document}

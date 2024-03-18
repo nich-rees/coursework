@@ -1425,4 +1425,712 @@ cannot be exact in any base.
 
 Moving on, 10.4 - 10.7 and beyond is a much bigger story
 of Newton's divided differences.
+
+
+\section{March 4}
+Last time: quadratic curve fitting
+\[
+	p(x) = c_0 + c_1(x-x_0) + c_1(x-x_0)(x-x_1)
+\]
+such that
+\begin{align*}
+	f(x_0) &= y_0 = p(x_0)\\
+	f(x_1) &= y_1 = p(x_1)\\
+	f(x_2) &= y_2 = p(x_2)
+\end{align*}
+
+Data $(x_0,y_0),(x_1,y_1),(x_2,y_2)$.
+Imagine fitting $p(x)$ to $f(x)$.
+Instead of a monomial $p(x) = \hat{c_0} + \hat{c_1}x + \hat{c_2}x^2$,
+rather use $1,x,x^2$, we use $1,x-x_0,(x-x_0)(x-x_1)$.
+
+Step 0: Adaptive: data $(x_0,y_0)$ fit $p_0(x)$ with $\deg\leq 0$,
+i.e. a constant.
+Hence, $p_0(x) = y_0$.
+
+Step 1: Use $(x_1,y_1)$ to get a new polynomial $p_1(x)$
+fit to the old points $(x_0,y_0)$ and the new points $(x_1,y_1)$.
+We want a constant $c_1$ for $p_1(x) = p_0(x) + c_1(x-x_0)$.
+At $x_0$, $p_1(x_0) = p_0(x_0)$.
+But at $x_1$, we require $y_1 = p_1(x_1) = p_0(x_1) + c_1(x_1 - x_0)$
+and so
+\[
+	c_1 = \frac{p_1(x_1) - p_0(x_1)}{x_1 - x_0} = \frac{y_1 - p_0(x_1)}{x_1-x_0}
+\]
+
+Claim: $y_0 = f(x_0)$, $y_1 = f(x_1)$,
+then $c_1 = f'(\xi)$, where $\xi$ is on the interval containing $x_0,x_1$.
+Well, our formula for $c_1$ gives
+\[
+	c_1 = \frac{y_1 - p_0(x_0)}{x_1-x_0} = \frac{f(x_1) - f(x_0)}{x_1-x_0}
+\]
+and hence by Mean Value Theorem (special case of Taylor's theorem),
+there's some $\xi$ in the interval between $x_0,x_1$ where $c_1 = f'(\xi)$.
+
+Recall??? (Newton divided difference), we have
+\[
+	\underbrace{f[x_0]}_{\hat{c}_0} + \underbrace{f[x_0,x_1]}_{\hat{c}_1}(x-x_0)
+\]
+Now embelish to go through $(x_2,f(x_2)) = (x_2,y_2)$.
+
+Next step: $p_1(x) = c_0 + c_1(x-x_0)$.
+Our $c_0$ depends only on $x_0,f$, we'll call it $f[x_0]$,
+and $c_1$ depends only on $x_0,x_1,f$, s call it $f[x_0,x_1]$.
+Now we want
+\[
+	p_2(x) = p_1(x) + c_2(x-x_0)(x-x_1)
+\]
+Since $c_2$ depends on $x_0,x_1,x_2,f$, we'll call it $f[x_0,x_1,x_2]$.
+\begin{theorem}
+	If $I$ is an interval containing $x_0,x_1,x_2$ and $f$ is twice differentiable on $I$,
+	then $\xi \in I$ such that
+	\[
+		f[x_0,x_1,x_2] = \frac12 f''(\xi)
+	\]
+\end{theorem}
+\begin{proof}
+	$g(x) = f(x) - p(x)$, which has zeeros at $x_0,x_1,x_2$.
+	Rolle's theorem says that there is some $\xi_1$ between $x_0,x_1$
+	where $g'(\xi_1) = 0$,
+	and some $\xi_2$ between $x_1,x_2$ where $g'(\xi_2) = 0$.
+	Then, there is a point $\eta$ between $\xi_1,\xi_2$ where $g''(\eta)= 0$.
+
+	$g(x) = f(x) + c_2x^2 + \text{lower order}$.
+	Then $\hat{c}_2x^2 = \hat{c}_1x + \hat{c}_0 = c_2x^2 + \text{lower}$,
+	i.e. $c_2(x-x_0)(x-x_1) + c_1(x-x_0) + c_0 = c_2x^2 + \text{lower}$.
+	And so $(c_2x^2 + \text{lower})'' = (c_22x + \text{lower}) + (2c_2 + \text{lower})'' = f''(x)$.
+
+	We have $g''(\eta) = 0$, and so $(f-p)''(\eta) = 0$,
+	hence $f''(\eta) = p''(\eta)$, but this is equivalent to $f''(\eta) = 2c_2$.
+\end{proof}
+This is really a theorem about the highest order coefficient
+in polynomial interpolation
+(regardless of monomial, divided differences, lagrange, etc.)...
+I think when he said this, he was refering the start of the second paragraph,
+saying we could represent as such???
+
+Hence, $p(x) = f[x_0] + f[x_0,x_1](x-x) + f[x_0,x_1,x_2](x-x_0)(x-x_1)$.
+We do have a slick trick to attain a formula for $f[x_0,x_1,x_2]$.
+The Lagrange formula: for $p(x)$, we have
+\[
+	y_0\frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}
+\]
+which is a degree 2 polynomial, where $x_0 \mapsto 1, x_1 \mapsto 0, x_2 \mapsto 0$.
+We do the same for $y_1,y_2$.
+(Somehow this is like an identity matrix.)
+So the $x^2$ coefficient in $L_0$ is $\frac{y_0}{(x_0-x_1)(x_0-x_2)}$.
+Collecting these for the $y_1,y_2$ terms,
+since $p(x) = c_2x^2 + \text{lower}$ that fits $(x_0,f(x_0)),(x_1,f(x_1)),(x_2,f(x_2))$,
+the highest coefficient is
+\[
+	c_2 = 
+	\frac{y_0}{(x_0-x_1)(x_0-x_2)} +
+	\frac{y_1}{(x_1-x_0)(x_1-x_2)} +
+	\frac{y_2}{(x_2-x_0)(x_2-x_1)}
+\]
+
+Recall that $f[x_0,x_1] = f[x_1,x_0]$.
+Claim: $f[x_0,x_1,x_2]$ also doesn't depend on the order.
+We could look directly at the formula:
+\[
+	c_2 = \sum_{i=0}^2 \frac{y_i}{(x_i-x_0)\dots(x_i-x_n)}
+\]
+(without $(x_i-x_i)$ in the denominator),
+and we can just rearrange the sum.
+But also, we are finding unique degree $2$ polynomials $p(x)$
+such that $p(x_0) = f(x_0)$, $p(x_1) = f(x_1)$, and $p(x_2) = f(x_2)$.
+This must be the same regardless of what order we choose.
+Since $p$ doesn't care about the order, the coefficients can't either.
+
+General remark:
+Monomial interpolation gave us $\hat{c}_0 + \hat{c}_1x + \hat{c}_2x^2$
+and divided difference gave us $c_0 + c_1(x-x_0) + c_2(x-x_0)(x-x_1)$.
+\begin{remark}
+	Look at $1,x,x^2$ or $1,x-x_0,(x-x_0)(x-x_1)$,
+	the span of either set of functions is the same.
+\end{remark}
+We will show this on Wednesday, maybe.
+
+
+\subsection{March 6}
+\begin{itemize}
+	\item Midterm: March 15, Location: TBA
+	\item No new homework, instead reivew/sample problems this week.
+	\item Next week: Part of Monday and Wednesday is fielding questions
+\end{itemize}
+Midterm will be 50 minutes.
+Similar to his 421:
+some true/false, based mainly on the homework;
+and then some short problems that are doable in 20-30 minutes,
+if you keeping really on top of the homework.
+So you should be able to do the midterm in 35 - 40 minutes,
+it should not be a speed test (that's his fault then).
+Only question 1-4 will be marked on the homework this week (out of 6),
+and maybe not all of 2-4: TAs will try to get feedback on this assignments
+up by Wednesday so can review before midterm.
+
+Today: $2$ stories about Ch. 10. The first is partially review...
+
+Divided differences: long story, we'll get to some of the story.
+The connecttion with polynomial interpolation is more recent.
+The classical story goes like this:
+say you are looking at the triangular numbers
+$1,3,6,10,\dots$ (think of a right triangle of dots,
+and adding a new diagonal of dots each time).
+We can find the pattern by looking at the difference:
+these are $2,3,4,5,\dots$.
+We can take the difference of the differences, which gives $1$ for all of the terms.
+Then, the difference of all of these terms is $0$.
+Hence, this must be a polynomial of degree $2$ or less: ``third derivative is $0$",
+or more accurately, $(\sigma - 1)(y_n) = \sigma(y_n) - (y_n) = y_{n+1} - y_n$.
+What we mean when we say ``difference" is applying $\sigma - 1$;
+taking the second difference is $(\sigma-1)^2$, etc.
+From what we know about finite recurrences, we know that
+when $(\sigma - 2)^3y_n = 0$ has the solution
+$y_n = 2^n p(n)$ where $\deg{p} \leq 2$.
+Similarly, $(\sigma-1)^3(y_n) = 0$ means that $y_n = a = bn + cn^2$
+(from ODE/recurrences).
+
+Say that we have $y_0 = 1$, $y_1 = 3$, $y_3 = 10$, $y_4 = 15$ etc.,
+but no $y_2$ (can also remove something like $y_6$ as well).
+Then we have some not equally spaced points:
+taking the differences gives $2,7,5,6,15$.
+We have
+$t_0 = 1, t_1 = t_2 = 4, t_3 = 5, t_4 = 6, t_5 = 8$
+with corresponding $y_0 = 1, y_1 = 3, y_2 = 10, y_3 = 15, y_4 = 21, y_5 = 36$.
+What do we do to fill in the missing data (the missing time steps).
+(One way is polynomial interpolation, but he didn't want this.)
+We could divide the $y$ value by the time steps:
+\[
+	f[t_i,t_{i+1}] = \frac{f(t_{i+1}) - f(t_i)}{t_{i+1} - t_i}
+\]
+Which gives us $2, 7/2, 5, 6, 15/2$ as our values of
+$f[t_0,t_1], f[t_1,t_2], f[t_2,t_3], f[t_3,t_4], f[t_4,t_5]$.
+What happens if we find the differences of these?
+We are looking for the constant function.
+Remember, in interpolation
+\[
+	c_2 = f[x_0,x_1,x_2] = \frac{f[x_1,x_2] - f[x_0,x_1]}{x_2 - x_0}
+\]
+For our purposes, we are computing $\frac{f[t_1,t_2] - f[t_0,t_1]}{t_2 - t_0}$, etc.
+This gets us $\frac12,\frac12,\frac12,\frac12$.
+And then regardless of the interval, the next divided difference is $0,0,0$.
+This is the story of Newton's divided difference.
+One could confirm that gravity is a quadratic.
+Whether you're computing the triangle numbers,
+or trying to find missing data, this works.
+\begin{theorem}
+	If given $(t_0,y_0),(t_1,y_1),\dots$
+	and $y_i = p(t_i)$, where $\deg{p} \leq d$,
+	then $(d+1)$st divided differences we are $0$,
+	when $f[t_i] = y_i, f[t_i,t_{i+1}] = \frac{f[t_{i+1}] - f[t_i]}{t_{i+1} - t_i}$ and
+	\[
+		f[t_i,t_{i+1},t_{i+2},\dots,t_j]
+		= \frac{f[t_{i+1},\dots,t_j] - f[t_i,\dots,t_{j-1}]}{t_j - t_i}
+	\]
+\end{theorem}
+
+The classical definition of divided differences (also in [A\&G]):
+Given $f \colon \R \to \R$, $t_0,\dots,t_n$ we define the Newton divided differences as above.
+
+The following theorem is in [A\&G], but not fully proven
+\begin{theorem}
+	If $p_{n-1}(x)$ with degree $n-1$ such that
+	$p(x_0) = f(x_0), p(x_1) = f(x_1), \dots, p(x_{n-1}) = f(x_{n-1})$
+	and you want $p_n(x)$ to fit $(x_0,f(x_0)),\dots,(x_{n-1},f(x_{n-1})),(x_n,f(x_n))$,
+	then $p_n(x) = p_{n-1}(x) + (x-x_0)(x-x_1)\cdots(x-x_{n-1})\cdot c_n$
+	and $c_n = f[x_0,x_1,\dots,x_n]$ from the classical definition. So
+	\[
+		p_n(x) = f[x_0] + (x-x_0)f[x_0,x_1] + \cdots
+		+ (x-x_0)(x-x_1)\cdots(x-x_{n-1})f[x_0,\dots,x_n]
+	\]
+\end{theorem}
+So can either define $f[x_0,\dots,x_n]$ to be the values such that it works,
+or show that the classical definition works here.
+
+We want all the points to be distinct, but if we bring all the points together,
+we actually recover Taylor's theorem.
+
+Something something, the second of these theorems can show the first:
+ff student remark in the notes.
+
+
+\section{March 8}
+\begin{itemize}
+	\item Remarks on exam
+	\item Divided differences:
+		\begin{enumerate}
+			\item Finish proof that $p(x) = f[x_0] + (x-x_0)f[x_0,x_1] + \cdots$
+				interpolates $(x_0,f(x_0)),\dots,(x_n,f(x_n))$
+			\item Upper triangular systems
+			\item Denegenerity
+		\end{enumerate}
+\end{itemize}
+
+On the exam: Feb. 15, here!
+Sample midterm problems are on course website.
+Joel will take questions the last half of class Monday and Wednesday.
+Can bring in 2-sides of one 8.5-11 sheet oof paper.
+
+Some tricks / alternative methods:
+say we have the system $m\ddot{x} = -Cmx$ where $x \colon \R \to \R$ a function of $t$.
+We can multiply by $\dot{x}$.
+We get $m \ddot{x}\dot{x} = - Cmx\dot{x}$.
+Can simplify $2\ddot{x}\dot{x} = \frac{d}{dt} (\dot{x})^2$.
+But note that $m\ddot{x}\dot{x} = \frac{d}{dt}\left(\frac12 m(\dot{x})^2\right) = $ kinetic energy,
+hence the other side must be the potential energy.
+If our right hand side had been $x^5$, now see that
+$\frac{d}{dt}\left(\frac12(\dot{x})^2\right) = \frac{d}{dt}\left(\frac16 x^6\right)
+= \frac16 (6x^5) \dot{x}$.
+Thus, $m\ddot{x} = x^5 \implies m\ddot{x}\dot{x} = x^5 \dot{x}
+\implies \frac{d}{dt}\left(\frac12 m(\dot{x})^2 \right) = \frac{d}{dt}\left(\frac16 x^6\right)
+\implies \frac12 m(\dot{x})^2 = \frac16 x^6 + C$.
+This gives us the equation for the system
+\[
+	\frac12 m(\dot{x})^2  - \frac16 x^6 = C
+\]
+Hence, $\frac16 x^6$ is the potential energy of the system,
+and constant total energy $C$.
+
+On the exam, probably just going to stick to matrix infinity norm
+($p$-norms for the vectors are fair game).
+Recall that
+\[
+	\mathrm{cond}_\infty(A) = \lVert A \rVert_\infty \lVert A^{-1} \rVert_\infty
+\]
+and
+\[
+	\left\lVert \begin{bmatrix} a & b \\ c & d \end{bmatrix} \right\rVert
+	= \max\left(|a| + |b|, |c| + |d| \right)
+\]
+So we know
+\[
+	\left\lVert \begin{bmatrix} 3 & 7 \\ -1 & 8 \end{bmatrix}
+	\begin{bmatrix} x_1 \\ x_2 \end{bmatrix} \right\rVert
+	\leq \underbrace{\left\lVert \begin{bmatrix} 3 & 7 \\
+	-1 & 8 \end{bmatrix} \right\rVert_\infty}_{10}
+	\left\lVert \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} \right\rVert_\infty
+\]
+But also, we know that we can get equality.
+Either $\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+= \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \begin{bmatrix} 1 \\ -1 \end{bmatrix},
+\begin{bmatrix} 1/3 \\ 1/3 \end{bmatrix}, \begin{bmatrix} 1/3 \\ -1/3 \end{bmatrix}$.
+This is the maximum amount that can be stretched.
+
+This review will be continued on Monday
+
+\subsection{Divided differences}
+The other story.
+$p_{n-1}(x)$ fits $(x_0,f(x_0)),\dots,(x_{n-1},f(x_{n-1}))$.
+We add $(x_n,f(x_n))$.
+See we need $p_n(x)$ with degree $\leq n$.
+We just make $p_n(x) = p_{n-1}(x) + c_n(x-x_0)\cdots(x-x_{n-1})$.
+Hence
+\[
+	c_n = \left(\frac{p_n(x) - p_{n-1}(x)}{(x-x_0)\cdots(x-x_{n-1})}\right) \bigg\vert_{x=x_n}
+	= \frac{f(x_n) - p_{n-1}(x_n)}{(x_n-x_0)\cdots(x_n-x_{n-1})}
+\]
+We can solve for $c_n$. It is very nontrivial.
+
+To fit $(x_0,y_0) = (x_0,f(x_0))$, $p_0(x) = \text{ const } = f(x_0)$.
+$p_0$ iss of degree $\leq 0$.
+We first $(x_1,f(x_1))$ with $p_1(x) = p_0(x) + c_1(x-x_0)$.
+When $x = x_1$, $p_1(x_1) = f(x_1) = f(x_0) + c_1(x_1-x_0)$.
+Then $c_1 = \frac{f(x_1) - f(x_0)}{x_1 - x_0}$.
+Then we call that this $f[x_0,x_1]$.
+
+The next step is $p_2(x) = p_1(x) + c_2(x-x_0)(x-x_1)$
+fit with $(x_2,f(x_2))$. Then
+\begin{align*}
+	c_2 &= \frac{p_2(x_2) - p_1(x_2)}{(x_2-x_0)(x_2-x_1)}\\
+		&= \frac{f(x_2) - p_1(x_2)}{(x_2-x_0)(x_1-x_0)}\\
+		&= \frac{f(x_2) - (f(x_0) + f[x_0,x_1](x_2-x_1))}{(x_2-x_0)(x_1-x_0)}\\
+		&= \frac{f(x_2) - \left(f(x_0) + \frac{f(x_1) - f(x_0)}{x_1 - x_0}(x_2-x_1)\right)}
+	{(x_2-x_0)(x_2-x_1)}
+\end{align*}
+Where are we going with this? Will it even be nice?
+
+We can try isolating $f(x_0) = y_0, f(x_1) = y_1, f(x_2) = y_2$.
+We have
+\[
+	= \frac{f(x_2)}{(x_2-x_0)(x_2-x_1)}
+	+ \frac{-f(x_1)}{(x_1-x_0)(x_2-x_1)}
+	+ f(x_0) \text{ term }
+	= \frac{f(x_2)}{(x_2-x_0)(x_2-x_0)} + \frac{f(x_1)}{(x_1-x_0)(x_1-x_2)} + f(x_0) \text{ term}
+\]
+There is a symmetry in our first two terms.
+It looks like we could write it as $\sum_{i=0,1,2} \frac{f(x_i)}
+{\prod_{j\neq i} (x_i - x_j)}$.
+This looks like it can be inferred from Lagrange interpolation.
+Here is the key insight, probably from Newton:
+\[
+	= \frac{f[x_1,x_2] - f[x_0,x_1]}{x_2-x_0} = f[x_0,x_1,x_2]
+\]
+This is a long calculation, and so won't prove the full formula.
+But this is our formula from Newton's divided differences.
+Will show a bit more in the notes.
+As mentioned before, we have as well
+\[
+	f[x_0,x_1,x_2,x_3] = \frac{f[x_1,x_2,x_3] - f[x_0,x_1,x_2]}{x_3-x_0}
+\]
+
+On Monday, we will assume that this is true,
+and use it to prove Taylor's theorem.
+Apparently, Taylor originally proved using Newton's formula.
+
+
+\section{March 11}
+Today: topics related to divided differences
+\begin{itemize}
+	\item $f[x_0,\dots,x_n] = \frac{f[x_1,\dots,x_{n-1}],f[x_2,\dots,x_n]}{x_n-x_0}$
+		proven in ``Remarks on Divided Differences (2024)"
+	\item Change of basis: $1,x,x^2 \leftrightarrow 1,x-1,(x-1)(x-2)$
+		and lower/upper triangular systems
+	\item Error in interpolation, Chebyshev Interpolation (10.6)
+	\item Degenerate Interpolation: Taylor interpolation, Hermite interpolation
+\end{itemize}
+Reminder; Midterm will be here, ESB 1012, on Friday
+
+Recall last time, we showed the nontrivial fact
+\[
+	f[x_0,x_1,x_2] = \frac{f[x_1,x_2] - f[x_0,x_1]}{x_2-x_0}
+\]
+We can do this using Lagrange interpolation formulas.
+To compute $f[x_i,x_{i+1},x_{i+2}]$, etc., for $x_0,\dots,x_n$,
+the total time is roughly $n^2$
+(can see: we are have a branching operation... isn't this log time???
+in the textbook).
+We have
+\[
+	\sum_i f(y_i)\left(\frac{(x-x_0)\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_n)}\right)
+\]
+where the $\frac{x-x_i}{x_i-x_i}$ term is omitted.
+We have $O(n^2)$ floating point operations (``flops").
+
+Using monomial, we use a matrix, and this is roughly $O(n^3)$ operations.
+Note that we get the exact same polynomial, but Lagrange is faster,
+and is also more accurate (as we saw directly on the homework).
+
+One point about upper/lower traingular matrices and change of bases:
+Polynomials of $\deg \leq 2$ is $\{\alpha_0 + \alpha_1x + \alpha_2 x^2\}$.
+Newton divided difference said: $x_0 = 1, x_1 = 3$,
+then the polynomials that satisfy this this with $\deg \leq 2$
+are those polynomials with $\deg \leq 2$ such that $\{c_0 + c_1(x-x_0) + c_2(x-x_0)(x-x_1)\}
+= \{c_0 + c_1(x-1) + c_2(x-1)(x-3)\}$.
+Note that
+\begin{align*}
+	1 &= 1\\
+	x-1 &= x(1) + (1)(-1)\\
+	(x-1)(x-3) &= x^2(1) + x(-4) + (1)(3)
+\end{align*}
+Hence
+\[
+	\begin{bmatrix} 1 \\ x-1 \\ (x-1)(x-3) \end{bmatrix}
+	= \begin{bmatrix} 1 & 0 & 0\\ -1 & 1 & 0 \\ 3 & -4 & 1 \end{bmatrix}
+	\begin{bmatrix} 1\\ x \\ x^2 \end{bmatrix}
+\]
+Since this is a lower triangular matrix, it is invertible.
+So we also can find
+\[
+	\begin{bmatrix} 1\\ x \\ x^2 \end{bmatrix} =
+	\begin{bmatrix} 1 & 0 & 0\\ -1 & 1 & 0 \\ 3 & -4 & 1 \end{bmatrix}^{-1}
+	\begin{bmatrix} 1\\ x-1 \\ (x-1)(x-3) \end{bmatrix}
+\]
+More generally,
+ff no he erased shit because people don't know matrices.
+Basically, the fact that the matrix is invertible means we can
+backwards solve our system to be in terms of the other basis.
+This helps us find
+\[
+	\begin{bmatrix} 1 & 0 & 0\\ -1 & 1 & 0 \\ 3 & -4 & 1 \end{bmatrix}^{-1}
+	= \begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 0 \\ 1 & 4 & 1 \end{bmatrix}
+\]
+We can multiply our matrices together to verify that they are inverses:
+\[
+	\begin{bmatrix} 1 & 0 & 0\\ -1 & 1 & 0 \\ 3 & -4 & 1 \end{bmatrix}
+	\begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 0 \\ 1 & 4 & 1 \end{bmatrix}
+	= \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}
+\]
+The Lagrange basis for $x_0 = 1, x_1 = 3, x_2 =5$
+are the polynomials
+\[
+	\frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}, \dots
+\]
+ff
+Note that we can convert between a space of functions
+to another space of functions using matrices, if we consider them as vector spaces.
+
+\subsection{Interpolation Error}
+The next topic he wants to talk about with divided differences is
+how to get Taylor's theorem from divided differences.
+This is apparently how he originally derived Taylor's theorem.
+Here is the cute idea: divided differences give you an error in approximating a function.
+
+Here is the idea:
+$f(x)$ agrees with polynomial $p_n(x)$ on data points $x_0,\dots,x_n$:
+\[
+	p_n(x) = c_0 + c_1(x-x_0) + \cdots + c_n(x-x_0)\cdots(x-x_n)
+\]
+and on $x_0,\dots,x_n,x_{n+1}$ for
+\[
+	p_{n+1}(x) = p_n(x) + c_{n+1}(x-x_0)\cdots(x-x_n)
+\]
+where $c_{n+1} = f[x_0,\dots,x_{n+1}]$.
+Now consider $x_{n+1}$ to be a variable.
+We claim that this leads to Taylor's.
+
+Newton's formula gives us that if $f(x_{n+1}) = p_{n+1}(x_{n+1})$,
+$f(x) = p(x)$,
+and ??? $f(x) = p_{n+1}(x) = c_0 + c_1(x-x_0) + \cdots = c_n(x-x_0)\cdots(x-x_{n-1})
++ f[x_0,\dots,x_n,x](x-x_0)\cdots(x_0 - x_n)$.
+We know
+\[
+	f[x_0,\dots,x_n,x] = \frac{f^{(n+1)}(\xi)}{(n+1)!}
+\]
+where $\xi$ is in the interval containing $x_0,\dots,x_n,x$.
+\begin{theorem}
+	$f(x) = c_0 + c_1(x-x_0) + \cdots + c_n(x-x_0)\cdots(x-x_{n-1})
+	+ \frac{f^{(n+1)}(\xi)}{n!}(x-x_0)\cdots(x-x_n)$
+\end{theorem}
+Tayor's theorem says that as $x_1,x_2,\dots,x_n \to x_0$,
+we have
+\[
+	f(x) = c_0 + c_1(x-x_0) + c_2(x-x_0)^2
+	+ \cdots + c_n(x-x_0)^n + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}
+\]
+where each $c_i = \frac{f^{(i)}(\text{point in interval with }x_0,x_1,\dots,x_i)}{(i+1)!}$
+and as $x_1,\dots,x_n \to x_0$, this givs $\frac{f^{(i)}(x_0)}{(i+1)!}$.
+
+Something about how we can use this interpolate, and get Hermite interpolation.
+This leads into Chapter 11 with splines.
+
+Then some stuff about practice question for exam on course website.
+Recall that for double precision,
+the smallest possible number is the subnormal number $2^{-1074}$.
+The next smallest would be $2 \cdot 2^{-1074}, 3\cdot2^{-1074}$.
+Recall in homework we could find some crazy behaviour that cycles.
+
+
+\section{March 13}
+Today:
+10.7 Hermite Interpolation.
+This will lead us to Ch. 11 on Splines (Piecewise Hermite Interpolation).
+
+\subsection{Hermite Interpolation}
+ff beginning
+
+Write $p(2) = f(2)$ and $p(2+\ep) = f(2 + \ep)$.
+Monomoial interpolation gives $p(x)$ of the form $p(x) = c_0 + c_1x$,
+where $c_0 + 2c_1 = f(2)$ and $c_0 + (2+\ep)c_1 = f(2+\ep)$,
+which is given by solving
+\[
+	\begin{bmatrix} 1 & 2 \\ 1 & 2 + \ep \end{bmatrix}
+	\begin{bmatrix} c_0 \\ c_1 \end{bmatrix} =
+	\begin{bmatrix} f(2) \\ f(2+\ep) \end{bmatrix}
+\]
+and the condition number of this matrix goes to $\infty$ as $\ep \to 0$.
+But the linear calculation is:
+$1 + 2c_0 = f(2)$ and $1 + (2+\ep)c_0 = f(2+\ep)$.
+Then $c_0 = \frac{f(2+\ep)-f(2)}{\ep}$.
+So as $\ep \to 0$, we actually get $c_0 \to f'(2)$.
+
+Now, what if we used Hermite interpolation at $2$ and $4$ for the system
+$x_0 = 2, x_1 = 2+ \ep, x_2 = 4, x_3 = 4 + \ep$.
+Monomial interpolation would give us
+$p(x) = c_0 + c_1x + c_2x^2 + c_3x^3$ by solving the system
+\[
+	\begin{bmatrix}
+		1 & 2 & 2^2 & 2^3\\
+		1 & 2 + \ep & (2+\ep)^2 & (2+\ep)^3\\
+		1 & 4 & 4^2 & 4^3\\
+		1 & 4 + \ep & (4+\ep)^2 & (4+\ep)^3
+	\end{bmatrix}
+	\vec{c} =
+	\begin{bmatrix} f(2) \\ f(2+\ep) \\ f(4) \\ f(4+\ep) \end{bmatrix}
+\]
+As $\ep \to 0$, not clear would happen.
+We can probably try to simplify this like before,
+but we're looking for a more general principal.
+
+Hermite interpolation is just regular interpolation,
+but we allow derivative agreement.
+In the case above, we would guess $p(2) = f(2), p'(2) = f'(2), p(4) = f(4), p'(4) = f(4)$.
+This gives us that
+\begin{align*}
+	f(2) &= c_0 + c_1(2) + c_2(2)^2 + c_3(2)^3\\
+	f'(2) &= c_1 + 2c_2(2) + 3c_3(2)^2\\
+	f(4) &= c_0 + c_1(4) + c_2(4)^2 + c_3(4)^3\\
+	f'(4) &= c_1 + 2c_2(4) + 3c_3(4)^2\\
+\end{align*}
+
+To show that we always get a unique solution,
+we could do the matrix algebra method
+(we subtract row $1$ to row $2$ and divide by $\ep$, etc.).
+But we can do our ``linear algebra without doing linear algebra".
+Let's look at the homogeneous form of the linear system of the matrix:
+\begin{align*}
+	0 &= c_0 + c_1(2) + c_2(2)^2 + c_3(2)^2\\
+	0 &= c_1 + 2c_2(2) + 3c_3(2)^2\\
+	0 &= c_0 + c_1(4) + c_2(4)^2 + c_3(4)^2\\
+	0 &= c_1 + 2c_2(4) + 3c_3(4)^2
+\end{align*}
+What would this mean for $p(x) = c_0 + c_1x + c_2x^2 + c_3x^3$?
+This would mean that $p(2)=p'(2)=p(4)=p'(4) = 0$.
+And so we get to use Rolle's theorem.
+\begin{theorem}
+	If $p(x)$ is a polynomial of degree $\leq 3$,
+	and $p(2) = p'(2) = p(4) = p'(4)=0$, then $p$ is the zero polynomial.
+\end{theorem}
+\begin{proof}
+	Rolle's gives us some $\xi$ such that $2 < \xi < 4$ and $p'(\xi) = 0$.
+	But Rolle's again gives us that $p''$ has zeros between $2,\xi$ and $\xi,4$.
+	Similarly for $p'''$.
+
+	Note that $p'''(x) = 6c_3$.
+	But $p'''(x)$ has a zero, hence, $c_3 = 0$.
+	But $p''(x) = 2c_2$ has a zero, so $c_2 = 0$.
+	Similarly, $c_1 = c_0 = 0$.
+\end{proof}
+So without doing any linear algebra at all,
+we know that our system will have a unique solution
+(just assume two distinct solutions, subtract to get the homogenous case).
+
+We could also show this with divided differences:
+$f[2,2+\ep] = f'(\xi)$ where $2 \leq \xi \leq 2 + \ep$.
+Then $f[2,2] = \lim_{\ep\to0} f[2,2+\ep] = \lim_{\ep\to0}f'(\xi)
+= f'(2)$.
+Likewise, $f[4,4] = \lim_{\substack{x_0 \to 4\\x_1\to4}}f[x_0,x_1] = f'(4)$.
+So $p(x) = f[2] + f[2,2+\ep](x-2) + f[2,2+\ep,4](x-2)(x-(2+\ep))
++ f[2,2+\ep,4,4+\ep](x-2)(x-2-\ep)(x-4)$.
+As $\ep \to 0$, if $f'$ exists and is continuous, have the limit
+\[
+	p(x) = f[2] + f[2,2](x-2) + f[2,2,4](x-2)^2 + f[2,2,4,4](x-2)^2(x-4)
+\]
+where
+\[
+	f[2,2+\ep,4] = \frac{f[2+\ep,4] - f[2,2+\ep]}{4-2}
+	\to \frac{f[2,4] - f[2,2]}{2}
+\]
+as $\ep \to 0$.
+And that's it for chapter 10.
+
+\subsection{Extraneous comments because of midterm}
+Chen made a comment that Lagrange interpolation is like the identity matrix.
+For monomial interpolation, given $\begin{bmatrix} 1 & 2 \\ 1 & 2 + \ep \end{bmatrix}$
+the condition number is about $\frac{1}{\ep}\cdot c$,
+since the determinant has an $\ep$.
+And so the condition number is not good with close points.
+Lagrange interpolation is as good as it gets.
+We have $y_0\frac{x-x_1}{x_0-x_1} + y_1 \frac{x-x_0}{x_1-x_0}$.
+Waving some hands, this is like
+$\alpha_0\frac{x-x_1}{x_0-x_1} + \alpha_1 \frac{x-x_0}{x_1-x_0}$,
+which kinda gives
+\[
+	\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+	\begin{bmatrix} \alpha_0 \\ \alpha_1 \end{bmatrix}
+	= \begin{bmatrix} \alpha_0 \\ \alpha_1 \end{bmatrix}
+\]
+But... when $x_1 \to x_0$, this starts being weird, like... idk ff.
+We won't rigourosly prove sad.
+
+
+\section{March 18}
+Homework $8$ to be assigned by Thursday, due Thursday March 28.
+
+\subsection{Chapter 11: Splines (Cubic and related)}
+Say we have $(x_i,f_i(x))$, we want $v(x)$ near $f(x)$.
+Say we are modelling the side profile of a car with with points in a plane.
+Note that the two parts at the hood and at the trunk have almost nothing to do with each other.
+We have an outline $(x_0,y_0),(x_1,y_1),\dots,(x_n,y_n)$ for $n$ quite large,
+then $(x_0,y_0),(x_1,y_1)$ has little to do with $(x_n,y_n)$.
+We observe: interpolation is a bad idea globally.
+Instead, we take cubic splines, $C^2$, bounded variation, etc.
+all these other ways to do it.
+
+\subsubsection{Approach}
+Have $f = f(x)$, and at points $x_0,\dots,x_n$,
+$y_i = f(x_i)$, $f$ pretty smooth,
+designed ``locally", and you want $v = v(x)$ that ``looks like" what
+$f$ should look like.
+
+Assume that $f$ is measured exactly.
+We want $v = v(x)$ such that
+\begin{enumerate}
+	\item $v(x_i) = y_i$ for all $i = 0,1,\dots,n$ (why we don't use least-squares,
+		we can't gaurantee it will go through all the points)
+	\item $v$ is as smooth as is reasonable
+\end{enumerate}
+Answer (cubic spline): choose $v$ so that
+\[
+	\mathcal{U} = \{u \in C^{k}(A,B) \colon
+	u(x_i) = y_i, i = 0,\dots,n\}
+\]
+where $k$ is some number of derivatives,
+and the energy for the second derivative
+\[
+	E_2(u) = \int_{A = x_0}^{B = x_n} (u''(x))^2 dx
+\]
+is minimized at $v \in \mathcal{U}$ over all functions in $\mathcal{U}$.
+
+There are some other ways to require the function be smooth
+(that's what minimizing energy is really doing):
+\[
+	E_1(u) = \int_{x_0}^{x_n} (u'(x))^2dx
+\]
+(this is called the Dirichlet integral) and also
+\[
+	\text{Length}(u) = \int_{x_0}^{x_n} \sqrt{1 + (u'(x))^2}dx
+\]
+There are other measures that we don't mention.
+So why did we choose $E_2$?
+We'll do this trying not to go into calculus of variations.
+If we had chosen our length as the thing to minimize,
+we get something that looks like just connecting the dots
+(we do have restrictions that $u$ is differentiable,
+but there is a way to smooth it at the points so infinitely differentiable
+in some limit, and looks similar to connecting the dots... this is what would be in
+a more thorough course in things like PDEs).
+
+If we had chosen the Dirichlet integral as the thing to minimize,
+we claim we get $u = $ piecewise linear, which is not good
+(again, locally smooth it so infinitely differentiable).
+This follows from the Calculus of Variations:
+say $v \in \mathcal{U}$ such that $v$ goes through
+$(x_i,y_i), i = 0,\dots,n$ and $E_1(u)$ is minimal.
+(We need to show that this exists...)
+take any $g \in C^\infty [x_0,x_1]$ such that $g(x_0) = 0, g(x_1) = 0$.
+Then $v + g$ also goes through $(x_0,y_0),(x_1,y_1),\dots$.
+Now look at $v_\ep(x) = v(x) + \ep g(x)$.
+If $v$ really minimizes the energy, this pertubation $v_\ep$ has a larger energy.
+So $E_1 \colon \mathcal{U} \to \R$ has $E_1(v) \leq E_1(v_\ep)$.
+Perhaps we can get $E_1(v+\ep g) \leq E_1(v) + \ep$,
+then we get that our energy is going to be $0$. Expanding:
+\begin{align*}
+	E_1(v + \ep g)
+	&= \int_{x_0}^{x_1} (v'(x) + \ep g'(x))^2 dx\\
+	&= \int_{x_0}^{x_1} \left[ (v')^2 + 2\ep(v')(g') + \ep^2 (g')^2 \right]dx\\
+	&= E_1(v) + \ep \int_{x_0}^{x_1} 2(v')(g')dx + \ep^2\int_{x_0}^{x_1} (g'(x))^2dx\\
+	&= E_1(v) + \ep \int_{x_0}^{x_1} 2(v')(g')dx
+\end{align*}
+(the integral on the right evaluates to $0$).
+So for the ``best lowest energy" $v$,
+$\int_{x_0}^{x_1} 2(v')(g')dx = 0$.
+And this is true for any $g$ such that $g(x_0) = g(x_1) = 0$.
+We can integrate this by parts to get
+\[
+	0 = \int_{x_0}^{x_1} 2(v')(g')dx = v'(x)g(x) \big\vert_{x_0}^{x_1}
+	- \int_{x_0}^{x_1} v''(x)g(x)dx
+	= \int_{x_0}^{x_1} v''(x)g(x)dx
+\]
+And hence, $v''(x) = 0$ for all $x_0 < x < x_1$
+(otherwise, we have some $g$ bump function at a point
+but this integral is still $0$, contradiction).
+And so this means that $v$ is linear from $x_0$ to $x_1$.
+Existence is fine now: we just plug in the linear.
+
+Next time: we will see that if $E_2(u)$ is minimized at $u = v$,
+then we will see that $\int v'' g'' = 0$, and integration by parts gives
+$\int v^{(4)}g = 0$, which implies that $v$ is a cubic polynomial.
+If you don't want to read [A\&G] why cubic splines are what we are looking for,
+this is a classical motivation for it.
 \end{document}

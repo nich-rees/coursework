@@ -1,0 +1,218 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 9}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 9}\\
+\end{center}
+
+For the next problems, recall that if $(X,d)$ is a metric space
+then $\mathcal{C}_\R(X)$ is the algebra of bounded continuous functions $f \colon X \to \R$.
+
+\subsection*{Problem 1}
+\problem{
+	Let $K$ be a compact metric space and let $x_0 \in K$.
+	Let $\mathcal{A} \subset \mathcal{C}_\R(K)$ be an algebra that
+	separates points, and vanishes only at the point $x_0$, i.e.
+	$f(x_0) = 0$ for all $f \in \mathcal{A}$, and for each $x \in K$ with $x \neq x_0$,
+	there exists $g \in \mathcal{A}$ so that $g(x) \neq 0$.
+	\begin{enumerate}
+		\item Let $\mathcal{A}'$ be the set of functions of the form $f + c$,
+			where $f \in \mathcal{A}$ and $c \in \R$.
+			Prove that $\mathcal{A}'$ is an algebra, $\mathcal{A}'$ separates points,
+			and $\mathcal{A}'$ vanishes at no point of $K$.
+		\item Prove that
+			\[
+				\overline{\mathcal{A}} = \{f \in \mathcal{C}_\R(K) \colon f(x_0) = 0\}
+			\]
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]
+		We show that $\mathcal{A}'$ is an algebra. Let $f,g \in \mathcal{A}$ and $a,b \in \R$.
+		Note $f + a, g + b$ are arbitrary elements of $\mathcal{A}'$.
+		\begin{enumerate}
+			\item $(f + a) + (g + b) = (f + g) + (a + b)$.
+				Note that $f + g \in \mathcal{A}$ and $a + b \in \R$,
+				hence the sum is also in $\mathcal{A}'$.
+			\item $(f+a)(g+b) = fg + ag + bf + ab$.
+				Note that $fg, ag, bf \in \mathcal{A}$, hence $fg + ag + bf \in \mathcal{A}$,
+				and $ab \in \R$, hence the product is also in $\mathcal{A}'$.
+			\item $c(f+a) = cf + ca$.
+				Note that $cf \in \mathcal{A}$ and $ca \in \R$,
+				hence the scalar product is also in $\mathcal{A}'$.
+				This confirms that $\mathcal{A}'$ is an algebra.
+		\end{enumerate}
+
+		To see that $\mathcal{A}'$ separates points, let $x,y \in X$
+		such that $x \neq y$.
+		Then there exists $f \in \mathcal{A}$ where $f(x) \neq f(y)$.
+		Furthermore, $f = f + 0 \in \mathcal{A}'$,
+		so $\mathcal{A}'$ separates the points $x,y$ as well,
+		and these were arbitrary, so $\mathcal{A}'$ separates all points.
+
+		Finally, we show that $\mathcal{A}'$ vanishes at no point.
+		If $x \neq x_0$, then there exists $f \in \mathcal{A}$ such that $f(x) \neq 0$.
+		Hence $f = f + 0 \in \mathcal{A}'$, and so $\mathcal{A}'$ does not
+		vanish at $x$ as well.
+		Now, if $x = x_0$, then for any $f \in \mathcal{A}$,
+		we have $f + 1 \in \mathcal{A}'$ and $(f+1)(x_0) = f(x_0) + 1 = 1 \neq 0$,
+		hence there is a function that doesn't vanish at $x_0$.
+		This covers all possibilities for $x \in K$,
+		hence $\mathcal{A}'$ vanishes at no point of $K$.
+	\end{proof}
+	\item \begin{proof}[Solution]
+		ff I will come back to this when I am less hungry,
+		but basically we are just copying the proof.
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 2}
+\problem{
+	Let $K$ be a compact metric space.
+	Let $\mathcal{A} \subset \mathcal{C}_\R(K)$ be an algebra that separates points.
+	Prove that the closure $\overline{\mathcal{A}}$ consists of either:
+	(i) $\mathcal{C}_\R(K)$, or
+	(ii) all continuous functions $f$ on $K$ such that $f(x_0) = 0$
+	for some fixed $x_0 \in K$.
+}
+\begin{proof}[Solution]
+	We will show that if (i) is not true, then (ii) must be true,
+	assuming that $\mathcal{A} \subset \mathcal{C}_\R(K)$ is an algebra
+	that separates points.
+	This follows from the contrapositive of Stone-Weierstrass.
+	Assume that $\overline{\mathcal{A}} \neq \mathcal{C}_\R(K)$.
+	Hence, $\mathcal{A}$ either fails to separate points or it vanishes at a point.
+	We assume that it separates points,
+	hence it vanishes at some point.
+	This means that there is some $x_0 \in K$ where $f(x_0) = 0$ for all $f \in \mathcal{A}$.
+	However, since it separates points, we cannot have some other $x_1 \in K$
+	where $f(x_1) = 0$ for all $f \in \mathcal{A}$, otherwise it does not separat $x_0$ and $x_1$.
+	This satisfies the hypothesis for Problem 1 above,
+	and so by 1b, we have $\overline{\mathcal{A}} =
+	\{f \in \mathcal{C}_\R(K) \colon f(x_0) = 0\}$, as desired.
+\end{proof}
+
+
+\subsection*{Problem 3}
+\problem{
+	Let $f \colon [0,1]^2 \to \R$ be continuous, let $\ep > 0$.
+	Prove that there exists $n \in \N$ and continuous functions
+	$g_1,\dots,g_n,h_1,\dots,h_n \colon [0,1] \to \R$ so that
+	\begin{equation}
+		\sup_{(x,y)\in[0,1]^2} \left\lvert f(x,y) - \sum_{i=1}^n g_i(x)h_i(y) \right\rvert < \ep
+	\end{equation}
+}
+\begin{proof}[Solution]
+	We claim that the set defined by
+	\[
+		\mathcal{A} = \{f(x,y) \in \mathcal{C}_\R([0,1]^2) \colon
+		f(x,y) = \sum_{i=1}^n g_i(x)h_i(y), n \in \N, g_i,h_i \in \mathcal{C}([0,1])\} \subset \mathcal{C}_\R([0,1]^2)
+	\]
+	is an algebra. See if $g_i,h_i,g'_j,h'_j \in \mathcal{C}_\R([0,1])$
+	for $1 \leq i \leq n$ and $1 \leq j \leq m$ for some $n,m \in N$,
+	\begin{enumerate}
+		\item To see closure under addition, we have
+			\[
+				\sum_{i=1}^n g_i(x)h_i(y) + \sum_{j=1}^m g'_j(x)h'_j(y)
+				= \sum_{k=1}^{n+m}g''_k(x)h''_k(y)
+			\]
+			where $g''_k = g_k$ when $1 \leq k \leq n$ and $g''_k = g'_{k-n}$
+			when $n + 1 \leq k \leq m$, and similarly for $h''_k$.
+			Clearly, since $g''_k,h''_k \in \mathcal{C}_\R([0,1])$ as well,
+			we have that the sum is in $\mathcal{A}$ as well.
+		\item To see closure under multiplication, we have
+			\[
+				\left(\sum_{i=1}^n g_i(x)h_i(y)\right)\left(\sum_{j=1}^m g'_j(x)h'_j(y)\right)
+				= \sum_{\substack{1 \leq i \leq n \\ 1 \leq j \leq m}}
+				g_i(x)g'_j(x)h_i(y)h'_j(y)
+			\]
+			But note that the product of continuous functions is also continuous,
+			and so $g_i(x)g'_j(x), h_i(y)h'_j(y) \in \mathcal{C}_\R([0,1])$ still,
+			and we get a finite sum of $nm$ these elements.
+			Hence, the product is in $\mathcal{A}$.
+		\item Finally, we have for $c \in \R$,
+			$c\sum_{i=1}^n g_i(x)h_i(y) = \sum_{i=1}^n cg_i(x)h_i(y)$
+			and $cg_i(x) \in \mathcal{C}_\R([0,1])$ since a continuous function
+			multiplied by a scalar is still continuous,
+			hence any sclar multiple is in $\mathcal{A}$.
+	\end{enumerate}
+	Hence, we have that $\mathcal{A}$ is an algebra.
+
+	To see that $\mathcal{A}$ separates points, consider $(x_1,y_1),(x_2,y_2) \in [0,1]^2$
+	such that $(x_1,y_1) \neq (x_2,y_2)$.
+	ff
+
+
+	So Stone-Weierstrass gives us that there an algebra converges uniformly.
+	This requirement is converging uniformly:
+	$f_n = \sum_{i=1}^n g_i(x)h_i(y)$.
+	We have to show that this is an algebra.
+	I want to prove that functions of the form $\sum_{i=1}^n g_i(x)h_i(y)$
+	where $g,h$ are continuous, form an algebra.
+	Then we get a uniformly convergent sequence, eventually works.
+	ff
+\end{proof}
+
+
+\subsection*{Problem 4}
+\problem{
+	Let $\alpha$ and $\beta$ be monotone non-decreasing continuous
+	real-valued functions on $[0,1]$, with $\alpha(0) = \beta(0) = 0$.
+	Suppose that, for all $n = 0,1,2,3,\dots$,
+	\[
+		\int_0^1 e^{-nx}d\alpha(x) = \int_0^1 e^{-nx}d\beta(x)
+	\]
+	\begin{enumerate}
+		\item Prove that if $f \colon [0,1] \to \R$ is continuous
+			then $\int_0^1 f(x)d\alpha(x) = \int_0^1 f(x)d\beta(x)$
+		\item Does it follow that $\alpha(x) = \beta(x)$ for all $x \in [0,1]$?
+			Prove it or give a counterexample.
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]
+		ff
+		Something about how the finite sum is an algebra,
+		and then theorem 6.12 and 7.16 for the win.
+	\end{proof}
+	\item \begin{proof}[Solution]
+		Something that equals on the continuous, but not on the not continuous
+		(implication doesn't go this way, but it is a necessary condition).
+		Hmm... we require that $\alpha,\beta$ continuous.
+		ff
+	\end{proof}
+\end{enumerate}
+\end{document}

@@ -1,0 +1,632 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{CPSC 303}
+\chead{Homework 5}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newtheorem{lemma}{Lemma}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\subsection*{Problem 1}
+Who are your group members?
+\begin{proof}[Solution]\let\qed\relax
+	Nicholas Rees
+\end{proof}
+
+
+\subsection*{Problem 2}
+The point of this exercise is to define a type of ODE known as \emph{central force problem},
+and to show that such ODE's satisfy a \emph{conservation of energy}.
+In thie exercise $\lVert \quad \rVert$ refers to the $L^2$ norm $\lVert \quad \rVert$.
+Let $\mathbf{X} \colon \R \to \R^2$, i.e. $\mathbf{x} = \mathbf{x}(t) = (x_1(t),x_2(t))$,
+where $x_1,x_2$ are functions $\R \to \R$, and similarly for
+$\mathbf{z} = \mathbf{z}(t) = (z_1(t),z_2(t))$.
+\begin{enumerate}
+	\item With the usual dot product:
+		\[
+			\mathbf{x} \bullet \mathbf{z} = x_1z_1 = x_2z_2
+		\]
+		(hence all the above depend on $t$), show that
+		\[
+			\frac{d}{dt}(\mathbf{x}\bullet\mathbf{z}) =
+			\mathbf{x} \bullet \dot{\mathbf{z}} + \dot{\mathbf{x}}\bullet\mathbf{z}
+		\]
+		where $\dot{\,}$ denote $d/dt$ (as usual in celestial mechanics).
+	\item Show that
+		\[
+			\frac{d}{dt}(\lVert \mathbf{x}\rVert^2)
+			= \frac{d}{dt}(\mathbf{x} \bullet \mathbf{x}) = 2\mathbf{x}\bullet\dot{\mathbf{x}}
+		\]
+	\item Show that if $m$ is a constant, then
+		\[
+			\frac{d}{dt}(m\lVert \dot{\mathbf{x}}\rVert^2) =
+			2m \dot{\mathbf{x}} \bullet \ddot{\mathbf{x}}
+		\]
+	\item Show that
+		\[
+			\frac{d}{dt}\lVert \mathbf{x} \rVert =
+			\frac{d}{dt}\sqrt{x_1^2 + x_2^2} =
+			\frac{1}{\lVert \mathbf{x}\rVert} \mathbf{x} \bullet \dot{\mathbf{x}}
+		\]
+	\item Show that if $U \colon (0,\infty) \to \R$ is a differentiable function,
+		whose derivative is $u$, then
+		\[
+			\frac{d}{dt}U(\lVert \mathbf{z} \rVert)
+			= u(\lVert \mathbf{z} \rVert)\frac{1}{\lVert \mathbf{z} \rVert}
+			\mathbf{z}\bullet\dot{\mathbf{z}}
+		\]
+	\item We say that a function $\mathbf{x} \colon \R \to \R^2$
+		satisfies a \emph{central force law} if for some real $m > 0$
+		and $u \colon (0, \infty) \to \R$ we have
+		\begin{equation}\label{central force}
+			m\ddot{\mathbf{x}} = -mu(\lVert \mathbf{x} \rVert)
+			\frac{\mathbf{x}}{\lVert \mathbf{x} \rVert}
+		\end{equation}
+		(at times $u$ may extend to a function $[0,\infty) \to \R$,
+		but for Newton's Law of Gravitation, $u(0) = + \infty$).
+		Show that in this case
+		\begin{equation}\label{conservation}
+			\text{Energy } = \text{ Energy}(t)
+			:= \frac{1}{2} m\lVert \dot{\mathbf{x}}\rVert^2 
+			+ mU(\lVert \mathbf{x} \rVert)
+		\end{equation}
+		is independent of $t$ (where, as in part (e), $U' = u$).
+		[Hint: show that $d/dt$ applied to Energy$(t)$ is zero.]
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\begin{align*}
+			\frac{d}{dt}(\mathbf{x}\bullet\mathbf{z})
+			&= \frac{d}{dt}(x_1z_1 + x_2z_2)\\
+			&= \frac{d}{dt}x_1z_1 + \frac{d}{dt}x_2z_2\\
+			&= \dot{x_1}z_1 + x_1\dot{z_1} + \dot{x_2}z_2 + x_2\dot{z_2}\\
+			&= (\dot{x_1}z_1 + \dot{x_2}z_2) + (x_1\dot{z_1} + x_2\dot{z_2})\\
+			&= \dot{\mathbf{x}}\bullet\mathbf{z} + \mathbf{x}\bullet\dot{\mathbf{z}}
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Recall $\lVert \mathbf{x} \rVert^2 = \mathbf{x} \bullet \mathbf{x}$.
+		We have
+		\begin{align*}
+			\frac{d}{dt}(\lVert\mathbf{x}\rVert^2)
+			&= \frac{d}{dt}(\mathbf{x} \bullet \mathbf{x})\\
+			&= \frac{d}{dt}(x_1^2 + x_2^2)\\
+			&= 2x_1\dot{x_1} + 2x_2\dot{x_2}\\
+			&= 2\mathbf{x}\bullet \dot{\mathbf{x}}
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\begin{align*}
+			\frac{d}{dt}(m\lVert\dot{\mathbf{x}}\rVert^2)
+			&= m\frac{d}{dt}(\dot{\mathbf{x}} \bullet \dot{\mathbf{x}})\\
+			&= m\frac{d}{dt}(\dot{x_1}^2 + \dot{x_2}^2)\\
+			&= m(2\dot{x_1}\ddot{x_1} + 2\dot{x_2}\ddot{x_2})\\
+			&= 2m\dot{\mathbf{x}}\bullet \ddot{\mathbf{x}}
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\begin{align*}
+			\frac{d}{dt}\lVert\mathbf{x}\rVert
+			&= \frac{d}{dt}\sqrt{x_1^2 + x_2^2}\\
+			&= \frac{1}{2}(x_1^2 + x_2^2)^{-1/2}\frac{d}{dt}(x_1^2 + x_2^2)\\
+			&= \frac{1}{2}(x_1^2 + x_2^2)^{-1/2}(2x_1\dot{x_1} + 2x_2\dot{x_2})\\
+			&= \frac{1}{\sqrt{x_1^2 + x_2^2}}(x_1\dot{x_1} + x_2\dot{x_2})\\
+			&= \frac{1}{\lVert \mathbf{x} \rVert} \mathbf{x} \bullet \dot{\mathbf{x}}
+		\end{align*}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\begin{align*}
+			\frac{d}{dt}U(\lVert\mathbf{z}\rVert)
+			&= u(\lVert \mathbf{z} \rVert) \frac{d}{dt}\lVert \mathbf{z} \rVert\\
+			&= u(\lVert \mathbf{z} \rVert)\frac{1}{\lVert \mathbf{z}
+			\rVert} \mathbf{z} \bullet \dot{\mathbf{z}}
+		\end{align*}
+	\end{proof}
+	where we get the last step from part (d).
+	\item \begin{proof}[Solution]\let\qed\relax
+		We take the derivative of the energy, see
+		\begin{align*}
+			\frac{d}{dt} \text{Energy}(t)
+			&= \frac{d}{dt}\left(\frac{1}{2} m\lVert \dot{\mathbf{x}}\rVert^2 
+			+ mU(\lVert \mathbf{x} \rVert)\right)\\
+			&= \frac12 \frac{d}{dt}(m\lVert \dot{\mathbf{x}}\rVert^2)
+			+ m\frac{d}{dt} U(\lVert \mathbf{x} \rVert)\\
+			&= \frac{1}{2}(2m\dot{\mathbf{x}}\bullet\ddot{\mathbf{x}})
+			+ mu(\lVert \mathbf{x} \rVert)
+			\frac{\mathbf{x}}{\lVert \mathbf{x}\rVert}\bullet\dot{\mathbf{x}}\\
+			&= m\dot{\mathbf{x}}\bullet\ddot{\mathbf{x}}
+			- m \ddot{\mathbf{x}}\bullet \dot{\mathbf{x}}\\
+			&= 0
+		\end{align*}
+		where we applied parts (c) and (e) in the third line,
+		the fact that $\mathbf{x}$ satisifes the central force law in the fourth line,
+		and the commutativity of the dot product in the last line
+		(since $\mathbf{x}\bullet \mathbf{y} = x_1y_1 + x_2y_2 = y_1x_1 + y_2x_2
+		= \mathbf{y}\bullet\mathbf{x}$).
+		Hence, energy does not change with time,
+		and so energy is conserved since it is independent of $t$.
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 3}
+Consider the central force problem (\ref{central force}),
+where $\mathbf{x} \colon \R \to \R^2$, for fixed $u,U$ as in Problem (2).
+We may write (\ref{central force}) as a 4-dimensional ODE by setting
+$\mathbf{y} = (y_1,y_2,y_3,y_4) = (\dot{x_1},\dot{x_2},x_1,x_2)$ and letting
+\[
+	r = \lVert \mathbf{x} \rVert = \sqrt{y_3^2 + y_4^2}
+\]
+and hence
+\begin{equation}\label{ODE}
+	\frac{d}{dt} \begin{bmatrix} y_1 \\ y_2 \\ y_3 \\ y_4 \end{bmatrix} = \mathbf{f}(\mathbf{y}),
+	\quad \text{ where } \quad
+	\mathbf{f}(\mathbf{y}) =
+	\begin{bmatrix} -u(r)y_3/(mr) \\ -u(r)y_4/(mr) \\ y_1 \\ y_2 \end{bmatrix},
+	\quad r = \sqrt{y_3^2 + y_4^2}
+\end{equation}
+Notice that the energy of the system Energy$(t)$ can therefore be written as
+\[
+	E(\mathbf{y}) = \frac12 m\lVert(y_1,y_2)\rVert^2
+	+ mU(\lVert (y_3,y_4)\rVert)
+\]
+and hence $E(\mathbf{y}(t))$ is independent of $t$.
+One way to test the accuracy of numerical (i.e., approximate)
+solutions to (\ref{ODE}) is to see if the approximation to $E(\mathbf{y}(t))$ changes in time.
+Newton's Law of Gravitation (to predict how planets move around the sun)
+fixes a real constant $g > 0$, and takes $U(r) = -g/r$
+and so $u(r) = g/r^2$.
+\begin{enumerate}
+	\item Consider the case where $m = g = 1$, and we solve (\ref{ODE}) subject to
+		\begin{equation}
+			\mathbf{y}(0) = [0,0.8,1,0]
+		\end{equation}
+		Use MATLAB to generate points $\mathbf{y}_0,\mathbf{y}_1,\dots,\mathbf{y}_N$
+		using Euler's method
+		\[
+			\mathbf{y}_{i+1} = \mathbf{y}_i + h\mathbf{f}(\mathbf{y}_i),
+			\quad i =0,1,\dots,N-1
+		\]
+		with the following values of $h,N$:
+		\begin{enumerate}
+			\item[(i)] First take $h = 0.1$ and $N = 600$.
+				(Hence you are approximating $y(t)$ for $0 \leq t \leq iN = 60$.)
+				What is $E(\mathbf{y}_0)$, and $E(\mathbf{y}_N)$?
+				Does $E(\mathbf{y}_i)$ always increase, always decrease,
+				or does it fluctuate in both directions?
+				Does the approximate ellipse that $\mathbf{y}_i$ traces out
+				(in its 3rd and 4th components, which approximates $\mathbf{x}(t)$)
+				seem to get larger in time or get smaller (or is it roughly the same)?
+			\item[(ii)] Next take $h = 0.01$ and $N = 6000$.
+				(Hence you are still approximating $y(t)$ for $0 \leq t \leq 60$,
+				but presumebly the approximation is better.) Same questions.
+			\item[(iii)] Same questions with $h = 0.001$ and $N = 60000$.
+		\end{enumerate}
+	\item Same questions with $h = 0.1$ and $N = 600$,
+		but this time use the (explicit) trapezoidal method.
+\end{enumerate}
+[Hint: you are welcome to use the program \verb|Euler_Central_Force.m|
+that I'm supplying; and can observe Euler's method in the above three cases
+by typing each of the three lines:
+\begin{verbatim}
+	Euler_Central_Force(1,1,[0,.8,1,0],0.1,600,.05,1)
+	Euler_Central_Force(1,1,[0,.8,1,0],0.01,6000,.05,10)
+	Euler_Central_Force(1,1,[0,.8,1,0],0.0001,600000,.05,1000)
+\end{verbatim}
+For the trapezoid rule, you'll probably want to modify
+\verb|Euler_Central_Force.m| by replacing the line:
+\begin{verbatim}
+	for i=1:N
+	    yvals(i+1,:) = yvals(i,:) + h * f( yvals(i,:) );
+	end
+\end{verbatim}
+with something like:
+\begin{verbatim}
+	for i=1:N
+	    Y = yvals(i,:) + h * f( yvals(i,:) );
+	    yvals(i+1,:) = yvals(i,:) + (h/2) * ( f( yvals(i,:) ) + f( Y ));
+	end
+\end{verbatim}
+However, you may likely be able to do a better job by writing your own code.
+Also, you can likely answer these questions without plotting anything;
+plotting just makes the answers easier to see.]
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We first use Euler's method.
+		\begin{enumerate}
+			\item[(i)] $E(\mathbf{y}_0) = -0.68$ and
+				$E(\mathbf{y}_N) = -0.0175$.
+				The magnitude of the energy almost always decreases
+				for the time period,
+				but very marginally increases at the very end.
+				The ellipse it traces out gets bigger.
+			\item[(ii)] $E(\mathbf{y}_0) = -0.68$ and
+				$E(\mathbf{y}_N) = -0.2137$.
+				The magnitude of the energy always decreased
+				during the time period.
+				The ellipse it traces out gets bigger, but slower than before.
+			\item[(iii)] $E(\mathbf{y}_0) = -0.68$ and
+				$E(\mathbf{y}_N) = -0.4980$.
+				The magnitude of the energy always decreased
+				during the time period.
+				The ellipse it traces stays roughly the same,
+				but it does grow slightly in the time.
+		\end{enumerate}
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We now use the trapezoidal method.
+		\begin{enumerate}
+			\item[(i)] $E(\mathbf{y}_0) = -0.68$ and
+				$E(\mathbf{y}_N) = -0.4071$.
+				The magnitude of the energy fluctuated,
+				but did decrease overall during the time period.
+				The ellipse it traces stays roughly the same,
+				but it does grow slightly in the time.
+			\item[(ii)] $E(\mathbf{y}_0) = -0.68$ and
+				$E(\mathbf{y}_N) = -0.6794$.
+				The magnitude of the energy fluctuated, staying relatively the same.
+				The ellipse it traces stays roughly the same.
+			\item[(iii)] $E(\mathbf{y}_0) = -0.68$ and
+				$E(\mathbf{y}_N) = -0.6800$.
+				The magnitude of the energy stayed relatively the same.
+				The ellipse it traces stays roughly the same.
+		\end{enumerate}
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 4}
+Consider the recurrence $x_{n+2} - x_n = 0$.
+\begin{enumerate}
+	\item Write the general solution as $x_n = c_1r_1^n + c_2r_2^n$ for some values of $r_1,r_2$.
+	\item Given the initial conditions $x_0 = 5$ and $x_1 = 7$,
+		solve for $c_1,c_2$, and use these values to get a formula for $x_n$ for any $n$.
+	\item Given the initial conditions $x_0 = 5$ and $x_1 = 7$,
+		what are the values of $x_9,x_{10},x_{11},x_{12}$?
+		Was the above method of solving for $c_1,c_2$
+		the quickest way to determine these values?
+	\item Write the recurrence as $\mathbf{y}_{n+1} = A\mathbf{y}_n$, where
+		\[
+			\mathbf{y}_n = \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}
+		\]
+		what is A? What are the values of $A^9, A^{10}, A^{11}, A^{12}$?
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Let us assume there is an $r \in \R$ such that $x_n = r^n$,
+		and assume $r \neq 0$ since we are looking for nontrivial solutions.
+		Then our recurrence becomes $r^{n+2} - r^n = 0$.
+		We can divide out by $r^n$ to get $r^2 - 1 = 0$.
+		By inspection, $r_1 = 1$, $r_2 = -1$ both solve this equation.
+		Now, by the linearity of the recurrence relation, if $c_1,c_2 \in \R$,
+		we get the general solution
+		\[
+			x_n = c_1(1)^n + c_2(-1)^n
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		If $x_0 = 5$ and $x_1 = 7$, then we get the system
+		\[
+			\begin{cases}
+				5 = c_1(1)^0 + c_2(-1)^0 = c_1 + c_2\\
+				7 = c_1(1)^1 + c_2(-1)^1 = c_1 - c_2
+			\end{cases}
+		\]
+		Adding the two equations together gives us $12 = 2c_1$ or $c_1 = 6$,
+		and so $c_2 = -1$.
+		Then, we get the formula
+		\[
+			x_n = 6(1)^n - (-1)^n = 6 - (-1)^n
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\begin{align*}
+			x_9 &= 7\\
+			x_{10} &= 5\\
+			x_{11} &= 7\\
+			x_{12} &= 5
+		\end{align*}
+		The fastest way was not through solving for $c_1,c_2$.
+		Notice that $x_{n+2} = x_n$, and so every even $x_n$
+		will be the same value, and every odd $x_n$ will be of the same value.
+		Hence, $x_0$ determines $x_{10}$ and $x_{12}$,
+		and $x_1$ determines $x_9$ and $x_{11}$.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\[
+			\mathbf{y}_{n+1} = \begin{bmatrix} x_{n+2} \\ x_{n+1} \end{bmatrix}
+			= \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}
+			= A\mathbf{y}_n
+		\]
+		So $A = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$.
+		Note that $A^2 =
+		\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}
+		= \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} = I$.
+		And so if $n\in\N$ is even, i.e. $n = 2k$ for some $k \in \N$, then
+		\[
+			A^n = A^{2k} = (A^2)^k = I^k = I
+		\]
+		and if $n$ is odd, i.e. $n = 2k+1$, then
+		\[
+			A^n = A^{2k+1} = A(A^2)^k = AI^k = A
+		\]
+		Hence,
+		\[
+			A^9 = A^{11} = A = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}
+		\]
+		\[
+			A^{10} = A^{12} = I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+		\]
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 5}
+Consider the recurrence $x_{n+2} - 4x_{n+1} + 4x_n = 0$ for all $n \in \Z$,
+with $x_0,x_1$ given (but arbitrary).
+\begin{enumerate}
+	\item Since the general solution of this recurrence (seen in class)
+		is $x_n = c_12^n + c_2n2^n$, solve for $c_0,c_1$ in terms of $x_0,x_1$.
+		Use this to get a formula for $x_n$ for given $x_0,x_1$.
+	\item Write the recurrence as $\mathbf{y}_{n+1} = A\mathbf{y}_n$, where
+		\[
+			\mathbf{y}_n = \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}
+		\]
+		what is $A$?
+		Using the fact that $2I - A = N$ where $N^2 = 0$ (the zero matrix),
+		derive a formula for $A^n$ for any $n = 0,1,2,\dots$.
+		Use this to derive a formula for $x_n$ in terms of $x_0,x_1$.
+	\item For a small but nonzero $\ep$, consider the recurrence
+		\[
+			(\sigma - 2)(\sigma - 2 - \ep)(x_n) = 0
+		\]
+		i.e.,
+		\[
+			x_{n+2} - (4 + \ep)x_{n+1} + (4+2\ep)x_n = 0
+		\]
+		We can write this as a recurrence $\mathbf{y}_{n+1} = A(\ep)\mathbf{y}_n$, where
+		\[
+			\mathbf{y}_n = \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}
+		\]
+		and
+		\[
+			A = \begin{bmatrix} 4 + \ep & -4-2\ep \\ 1 & 0 \end{bmatrix}
+		\]
+		From the general theory of recurrences, we know that $A$
+		has an eigenvalue $2$ with eigenvector $[2;1]$,
+		and an eigenvalue $2 + \ep$ with eigenvector $[2+\ep;1]$, and hence
+		\begin{equation}\label{diagonal}
+			A(\ep) = S(\ep)\begin{bmatrix} 2 & 0 \\ 0 & 2 + \ep \end{bmatrix}
+			(S(\ep))^{-1},
+			\quad \text{ where }\quad S(\ep) = \begin{bmatrix} 2 & 2+\ep \\ 1 & 1 \end{bmatrix}
+		\end{equation}
+		For any $n$, find
+		\[
+			\lim_{\ep \to 0} (A(\ep))^n
+		\]
+		using (\ref{diagonal}).
+		Show that it agrees with the matrix in part (b). [Hint: the formula
+		\[
+			\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1}
+			= \frac{1}{ad-bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
+		\]
+		shows that
+		\[
+			(S(\ep))^{-1} = \frac{1}{-\ep}\begin{bmatrix} 1 & -2-\ep \\ -1 & 2 \end{bmatrix}
+		\]
+		it suffices to write
+		\[
+			S(\ep) = M_1 + \ep M_2, \quad
+			\begin{bmatrix} 2 & 0 \\ 0 & 2 + \ep\end{bmatrix}^n =
+			M_3 + \ep M_4 + O(\ep^2),\quad
+			\begin{bmatrix} 1 & -2-\ep \\ -1 & 2 \end{bmatrix} = M_5 + \ep M_6
+		\]
+		and to consider the constant and order $\ep$ terms of
+		\[
+			(M_1 + \ep M_2)(M_3 + \ep M_4)(M_5 + \ep M_6)
+		\]
+		]
+\end{enumerate}
+
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have the system
+		\[
+			\begin{cases}
+				x_0 = c_12^0 + c_2(0)2^0\\
+				x_1 = c_12^1 + c_2(1)2^1
+			\end{cases}
+		\]
+		The first equation just gives us $c_1 = x_0$.
+		Plugging this into the second equation, we have
+		$x_1 = 2x_0 + 2c_2$, and so $c_2 = (x_1 - 2x_0)/2$.
+		Plugging this into the formula for $x_n$, we have
+		\[
+			x_n = x_02^n + \frac{x_1 - 2x_0}{2}n2^n
+		\]
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		We have
+		\[
+			\mathbf{y}_{n+1} = \begin{bmatrix} x_{n+2} \\ x_{n+1} \end{bmatrix}
+			= \begin{bmatrix} 4 & -4 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix}
+			= A\mathbf{y}_n
+		\]
+		So $A = \begin{bmatrix} 4 & -4 \\ 1 & 0 \end{bmatrix}$.
+		Note that $2I - A = \begin{bmatrix} -2 & 4\\ -1 & 2 \end{bmatrix} =: N$.
+		See that $N^2 = \begin{bmatrix} -2 & 4\\ -1 & 2 \end{bmatrix}
+		\begin{bmatrix} -2 & 4\\ -1 & 2 \end{bmatrix}
+		= \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} = 0$.
+
+		We claim that $A^n = 2^nI - n\cdot 2^{n-1}N$.
+		We prove this with induction.
+		For the base case $n = 0$, see that
+		$A^0 = I$, and $2^0I - 0\cdot 2^{0-1}N = I$ so they agree.
+		Now, assume that $A^n = 2^nI - n\cdot 2^{n-1}N$.
+		We prove that $A^{n+1} = 2^{n+1}I - (n+1)\cdot 2^nN$. See
+		\begin{align*}
+			A^{n+1} &= A^nA\\
+					&= (2^nI - n\cdot 2^{n-1}N)(2I - N)\\
+					&= 2^{n+1}I^2 - 2n\cdot2^{n-1}NI - 2^nIN
+					+ n\cdot 2^{n-1}N^2\\
+					&= 2^{n+1}I - n\cdot 2^nN - 2^nN + 0\\
+					&= 2^{n+1} - (n+1)\cdot2^nN
+		\end{align*}
+		Hence, we have proven the formula for all $n \in \N_0$, $A^n = 2^nI - n\cdot 2^{n-1}N$.
+		We can write this explicitly:
+		\[
+			A^n = 2^nI - n\cdot 2^{n-1}N =
+			\begin{bmatrix} 2^n + n2^n & -n2^{n+1} \\ n2^{n-1} & 2^n - n2^n\end{bmatrix}
+			= \begin{bmatrix} (1+n)2^n & -n\cdot 2^{n+1} \\ n \cdot 2^{n-1} & (1-n)2^n \end{bmatrix}
+		\]
+		
+		We now derive a formula for $x_n$ in terms of $x_0,x_1$.
+		Note that $\mathbf{y}_0 = \begin{bmatrix} x_1 \\ x_0 \end{bmatrix}$.
+		It is clear that $\mathbf{y}_n = A^n\mathbf{y}_0$ for all $n \in \N_0$:
+		$\mathbf{y}_0 = A^0\mathbf{y}_0 = I\mathbf{y}_0$,
+		and if we assume $\mathbf{y}_n = A^n\mathbf{y}_0$,
+		then $\mathbf{y}_{n+1} = A\mathbf{y}_n = A^{n+1}\mathbf{y}_0$
+		by the definition of $A$,
+		closing the induction.
+		Thus, we have
+		\[
+			\begin{bmatrix} x_{n+1} \\ x_n \end{bmatrix} = \mathbf{y}_n
+			= A^n\mathbf{y}_0
+			= \begin{bmatrix} (1+n)2^n & -n\cdot 2^{n+1} \\ n \cdot 2^{n-1} & (1-n)2^n \end{bmatrix}
+			\begin{bmatrix} x_1 \\ x_0 \end{bmatrix}
+		\]
+		Looking only at the bottom row, we get the explicit formula
+		\[
+			x_n = (n\cdot 2^{n-1})x_1 + ((1-n)2^n)x_0
+		\]
+		One can actually check that this matches the formula from part (a),
+		but this is not required of me.
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		According to the hint, we can rewrite our matrices:
+		\[
+			S(\ep) = \begin{bmatrix} 2 & 2+ \ep \\ 1 & 1 \end{bmatrix}
+			= \begin{bmatrix} 2 & 2 \\ 1 & 1 \end{bmatrix}
+			+ \ep \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}
+		\]
+		\[
+			(S(\ep))^{-1} = \frac{1}{-\ep}
+			\left(\begin{bmatrix} 1 & -2-\ep \\ -1 & 2 \end{bmatrix}\right)
+			= \frac{1}{-\ep}\left(\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}
+			+ \ep \begin{bmatrix} 0 & -1 \\ 0 & 0 \end{bmatrix}\right)
+		\]
+		Now recall that powers of diagonal matrices are just the diagonal
+		matrix with the entries raised to the same power,
+		or see one can simply iterate like below:
+		\[
+			\begin{bmatrix} a & 0 \\ 0 & d \end{bmatrix}^n = 
+			\underbrace{\begin{bmatrix} a & 0 \\ 0 & d \end{bmatrix}
+			\begin{bmatrix} a & 0 \\ 0 & d \end{bmatrix}
+		\cdots \begin{bmatrix} a & 0 \\ 0 & d \end{bmatrix}}_{n\text{ times}}
+			= \begin{bmatrix} a^2 & 0 \\ 0 & d^2 \end{bmatrix} \underbrace{\cdots 
+			\begin{bmatrix} a & 0 \\ 0 & d \end{bmatrix}}_{n-2\text{ times}}
+			= \begin{bmatrix} a^n & 0 \\ 0 & d^n \end{bmatrix}
+		\]
+		Hence
+		\[
+			\begin{bmatrix} 2 & 0 \\ 0 & 2 + \ep \end{bmatrix}^n
+			= \begin{bmatrix} 2^n & 0 \\ 0 & (2+\ep)^n \end{bmatrix}
+			= \begin{bmatrix} 2^n & 0 \\ 0 & 2^n+n2^{n-1}\ep + O(\ep^2)\end{bmatrix}
+			= \begin{bmatrix}2^n & 0 \\ 0 & 2^n \end{bmatrix}
+			+ \ep\begin{bmatrix} 0 & 0 \\ 0 & n2^{n-1}\end{bmatrix} + O(\ep^2)
+		\]
+		where we have used the binomial theorem.
+		Now we assign
+		\begin{align*}
+			M_1 = \begin{bmatrix} 2 & 2 \\ 1 & 1 \end{bmatrix},\quad
+			M_2 &= \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix},\quad
+			M_3 = \begin{bmatrix}2^n & 0 \\ 0 & 2^n \end{bmatrix}\\
+			M_4 = \begin{bmatrix} 0 & 0 \\ 0 & n2^{n-1}\end{bmatrix},\quad
+			M_5 &= \begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix},\quad
+			M_6 = \begin{bmatrix} 0 & -1 \\ 0 & 0 \end{bmatrix}
+		\end{align*}
+		We note that
+		\[
+			(M_1 + \ep M_2)(M_3 + \ep M_4)(M_5 + \ep M_6)
+			= M_1M_3M_5 + \ep(M_1M_3M_6 + M_1M_4M_5 + M_2M_3M_5) + O(\ep^2)
+		\]
+		We can compute
+		\[
+			M_1M_3M_5 = \begin{bmatrix} 2 & 2 \\ 1 & 1 \end{bmatrix}
+			\begin{bmatrix}2^n & 0 \\ 0 & 2^n \end{bmatrix}
+			\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}
+			= \begin{bmatrix} 2^{n+1} & 2^{n+1} \\ 2^n & 2^n \end{bmatrix}
+			\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}
+			= \begin{bmatrix} 2^{n+1} - 2^{n+1} & -2^{n+2} + 2^{n+2}\\
+			2^n - 2^n & -2^{n+1} + 2^{n+1} \end{bmatrix}
+			= 0
+		\]
+		\begin{align*}
+			M_1M_3M_6 + M_1M_4M_5 + M_2M_3M_5
+			&= \begin{bmatrix} 2 & 2 \\ 1 & 1 \end{bmatrix}
+			\begin{bmatrix}2^n & 0 \\ 0 & 2^n \end{bmatrix}
+			\begin{bmatrix} 0 & -1 \\ 0 & 0 \end{bmatrix}\\
+			&+ \begin{bmatrix} 2 & 2 \\ 1 & 1 \end{bmatrix}
+			\begin{bmatrix} 0 & 0 \\ 0 & n2^{n-1}\end{bmatrix}
+			\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}\\
+			&+ \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}
+			\begin{bmatrix}2^n & 0 \\ 0 & 2^n \end{bmatrix}
+			\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}\\
+			&= \begin{bmatrix} 2 & 2 \\ 1 & 1 \end{bmatrix}
+			\begin{bmatrix}0 & -2^n \\ 0 & 0 \end{bmatrix}
+			+ \begin{bmatrix} 0 & n2^n \\ 0 & n2^{n-1}\end{bmatrix}
+			\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}
+			+ \begin{bmatrix}0 & 2^n \\ 0 & 0 \end{bmatrix}
+			\begin{bmatrix} 1 & -2 \\ -1 & 2 \end{bmatrix}\\
+			&= \begin{bmatrix} 0 & -2^{n+1} \\ 0 & -2^n \end{bmatrix}
+			+ \begin{bmatrix} -n2^n & n2^{n+1} \\ -n2^{n-1} & n2^n \end{bmatrix}
+			+ \begin{bmatrix} -2^n & 2^{n+1} \\ 0 & 0 \end{bmatrix}\\
+			&= \begin{bmatrix} -2^n-n2^n & n2^{n+1} \\ -n2^{n-1} & -2^n + n2^n \end{bmatrix}
+		\end{align*}
+		Hence we can finally compute
+		\begin{align*}
+			(A(\ep))^n
+			&= \left(S(\ep)\begin{bmatrix} 2 & 0 \\ 0 & 2 + \ep \end{bmatrix}
+			(S(\ep))^{-1}\right)^n\\
+			&= S(\ep)\begin{bmatrix} 2 & 0 \\ 0 & 2 + \ep \end{bmatrix}^n
+			(S(\ep))^{-1}\\
+			&= \frac{1}{-\ep}\left((M_1 + \ep M_2)(M_3 + \ep M_4)(M_5 + \ep M_6) + O(\ep^2\right))\\
+			&= \frac{1}{-\ep}\left(0 +
+			\ep\begin{bmatrix} -2^n-n2^n & n2^{n+1} \\ -n2^{n-1} & -2^n + n2^n\end{bmatrix}
+			+ O(\ep^2)\right)\\
+			&= \begin{bmatrix} 2^n+n2^n & -n2^{n+1} \\ n2^{n-1} & 2^n - n2^n\end{bmatrix} + O(\ep)
+		\end{align*}
+		So if we take the limit, we get
+		\[
+			\lim_{\ep \to 0}(A(\ep))^n
+			= \begin{bmatrix} (1+n)2^n & -n\cdot 2^{n+1} \\ n\cdot2^{n-1} & (1 - n)2^n\end{bmatrix}
+		\]
+		which is in fact the same matrix we got in part (b).
+	\end{proof}
+\end{enumerate}
+\end{document}

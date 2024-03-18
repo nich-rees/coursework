@@ -1,0 +1,180 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 5}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 5}
+\end{center}
+
+The purpose of this homework is to prove the monotone convergence theorem
+for Riemann integrable functions,
+i.e. if $\{f_n\}$ is a monotone sequence of Riemann integrable functions
+that converge pointwise to an integrable function $f$,
+then $\int_a^b f_n \to \int_a^b fdx$.
+Equivalently, if $\{f_n\}$ is a monotone sequence of integrable functions
+that converge pointwise to $0$, then $\int_a^b fdx \to 0$.
+First we will need a few definitions.
+\begin{definition}
+	A \emph{step function} is a function $f \colon \R \to \R$ or $[a,b] \to \R$
+	that can be written in the form $\sum_{i=1}^n b_i \chi_{A_i}$
+	(here $\chi_{A_i}$ denotes the indicator function of the set $A_i$), where
+	\begin{itemize}
+		\item $b_i \in \R$ for each $i$.
+		\item The sets $\{A_1,\dots,A_n\}$ are disjoint,
+			and $\bigcup_{i=1}^n A_i= \R$
+			(or $\bigcup A_i = [a,b]$, if the domain of $f$ is $[a,b]$).
+		\item Each set $A_i$ is either a point, a (possibly infinite) open interval,
+			a closed interval, or a (possibly infinite) half-open interval.
+	\end{itemize}
+\end{definition}
+Note that step functions on $[a,b]$ are always Riemann integrable,
+since they are bounded and have finitely many points of discontinuity.
+\begin{definition}
+	We say a step function is \emph{equally spaced} if
+	$f$ is of the form $\sum_{i=1}^n b_i \chi_{A_i}$,
+	where each $A_i$ is an interval (open, closed, or half-open),
+	and each interval has the same length.
+\end{definition}
+
+\subsection*{Problem 1}
+\problem{
+	Let $f \colon [a,b] \to \R$ be Riemann integrable.
+	Let $m = \inf_{x \in [a,b]} f(x)$ and $M = \sup_{x \in [a,b]} f(x)$.
+	Let $\ep > 0$. Prove that there are equally spaced step functions
+	$g,h \colon [a,b] \to \R$ so that $m \leq g(x) \leq f(x) \leq h(x) \leq M$
+	for all $x \in [a,b]$, and
+	\[
+		\int_a^b h(x)dx - \ep \leq \int_a^b f(x) dx \int_a^b g(x)dx + \ep
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 2}
+\problem{
+	Let $f \colon [a,b] \to \R$ be an equally-spaced step function.
+	Let $m = \inf_{x \in [a,b]}f(x)$ and $M = \sup_{x \in [a,b]}f(x)$.
+	Let $\ep > 0$. Prove that there are continuous functions
+	$g,h \colon [a,b] \to \R$ so that $m \leq g(x) \leq f(x) \leq h(x) \leq M$
+	for all $x \in [a,b]$, and
+	\[
+		\int_a^b h(x)dx - \ep \leq \int_a^b f(x)dx \leq \int_a^b g(x)dx + \ep
+	\]
+	\begin{remark}
+		The above statement is true for arbitrary step functions
+		(i.e. not necessarily equally spaced), but takes more effort to prove.
+	\end{remark}
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 3}
+\problem{
+	Let $\{f_n\}$ be a sequence of functions from $[a,b] \to [0,\infty)$.
+	Suppose that each $f_n$ is Riemann integrable on $[a,b]$, and $f_n \to 0$ pointwise.
+	For each $n$, let $g_n \colon [a,b] \to \R$ be
+	a continuous function with $0 \leq g_n(x) \leq f_n(x)$
+	(the existence of such a $g_n$ is gauranteed by problems 1 \& 2).
+	For each $k \geq 1$, let $h_k(x) = \min\{g_1(x),\dots,g_k(x)\}$.
+	Prove that $h_k \to 0$ uniformly.
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 4}
+\problem{
+	Let $x_1,\dots,x_n$ be non-negative real numbers, and let
+	$y = \min\{x_1,\dots,x_n\}$. Prove that
+	\[
+		x_n \leq y + \sum_{i=1}^{n-1}(\max\{x_i,\dots,x_n\} - x_i)
+	\]
+	\emph{Hint:} Note that $y = x_j$ for some index $j$, and $x_n = x_j + (x_n - x_j)$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 5}
+\problem{
+	Let $\{f_n\}$ be a sequence of Riemann integrable functions from $[a,b] \to [0,\infty)$
+	and suppose that $\{f_n(x)\}$ is monotone decreasing for each $x \in [a,b]$.
+	For each index $n$, let $g_n \colon [a,b] \to \R$ with $0 \leq g_n(x) \leq f_n(x)$.
+	Prove that for each $i \leq n$ we have
+	\[
+		\int_a^b (\max\{g_i(x),\dots,g_n(x)\} - g_i(x))dx
+		\leq \int_a^b f_i(x)dx - \int_a^b g_i(x)dx
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 6}
+\problem{
+	Let $\{f_n\}$ be a sequence of Riemann integrable functions from $[a,b] \to [0,\infty)$
+	and suppose that $\{f_n(x)\}$ is monotone decreasing for each $x \in [a,b]$.
+	Let $\ep > 0$. For each index $n$,
+	let $g_n \colon [a,b] \to \R$ be a continuous function with $0 \leq g_n(x) \leq f_n(x)$
+	and $\int_a^b f_n(x) \leq \int_a^b g_n(x) + \ep/2^n$.
+	Define $h_k(x) = \min\{g_1(x),\dots,g_k(x)\}$. Prove that for each $n$,
+	\[
+		\int_a^b g_n(x)dx \leq \int_a^b h_n(x)dx + \ep
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+
+
+\subsection*{Problem 7}
+\problem{
+	Let $\{f_n\}$ be a sequence of Riemann integrable functions from $[a,b] \to [0,\infty)$
+	andsuppose that $\{f_n(x)\}$ is monotone decreasing for each $x \in [a,b]$. Prove that
+	\[
+		\lim_{n \to \infty} \int_a^b f_n(x)dx = 0
+	\]
+}
+\begin{proof}[Solution]\let\qed\relax
+	ff
+\end{proof}
+\end{document}

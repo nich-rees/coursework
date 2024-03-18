@@ -1,0 +1,288 @@
+\documentclass{article}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.0cm, includefoot, footskip=30pt}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Math 321}
+\chead{Homework 7}
+\rhead{Nicholas Rees, 11848363}
+\cfoot{Page \thepage}
+
+\newcommand{\N}{{\mathbb N}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\ep}{{\varepsilon}}
+
+\newcommand{\problem}[1]{
+	\begin{center}\fbox{
+		\begin{minipage}{17.0 cm}
+			\setlength{\parindent}{1.5em}
+			{\it \noindent#1}
+		\end{minipage}}
+	\end{center}}
+
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\renewcommand{\theenumi}{(\alph{enumi})}
+
+\begin{document}
+\begin{center}
+	{\bf Math 321 Homework 7}\\
+	(Including work made in collaboration with Matthew Bull-Weizel)
+\end{center}
+
+\subsection*{Problem 1}
+\problem{
+	Let $\mathcal{F}$ be a family of equicontinuous functions,
+	$f \colon [a,b] \to \R$ that is pointwise bounded.
+	Prove that the function $g(x) = \sup_{f \in \mathcal{F}}f(x)$ is continuous on $[a,b]$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	Consider a point $x \in [a,b]$.
+	Let $\ep > 0$.
+	Since $g(x)$ is the supremum of $\{f(x)\}_{f \in \mathcal{F}}$,
+	there exists a $f_1 \in \mathcal{F}$ such that
+	$g(x) < \frac{\ep}{2} + f_1(x)$.
+	Furthermore, since $f_1 \in \mathcal{F}$ is in an equicontinuous set,
+	there is a $\delta > 0$ such that $|x-y| < \delta$ implies $|f(x) - f(y)| < \frac{\ep}{2}$
+	for all $f \in \mathcal{F}$, and so certainly this inequality holds for $f_1$.
+	This gives $-\frac{\ep}{2} < f_1(x) - f_1(y) < \frac{\ep}{2}$.
+	Then $g(x) < \frac{\ep}{2} + \frac{\ep}{2} + f_1(y) \leq \ep + g(y)$,
+	so $g(x) - g(y) < \ep$.
+	For that same $y$, we get some $f_2 \in \mathcal{F}$ such that
+	$g(y) < \frac{\ep}{2} + f_2(y)$.
+	Since $f_2 \in \mathcal{F}$, we get that $f_2(y) - f_2(x) < \frac{\ep}{2}$
+	since $|x-y| < \delta$, thus
+	$g(y) < \frac{\ep}{2} + \frac{\ep}{2} + f_2(x) \leq \ep + g(x)$.
+	Therefore, we have $g(y) - g(x) < \ep$.
+	Hence, we have shown that when $|x-y| < \delta$, we have
+	$|g(x) - g(y)| < \ep$.
+\end{proof}
+
+
+\subsection*{Problem 2}
+\problem{
+	For each $n \in \N$, let $f_n \colon \R \to \R$ be continuous.
+	Suppose that the family $\{f_n\}_{n\in\N}$ is pointwise bounded and equicontinuous.
+	Prove that $\{f_n\}_{n\in\N}$ has a subsequence that converges uniformly
+	on every compact set $K \subset \R$ and converges on all of $\R$.
+}
+\begin{proof}[Solution]\let\qed\relax
+	Define $K_m = [-m,m]$, for $m \in \N$.
+	The $K_m$ are closed and bounded, and are subsets of $\R$,
+	so the Heine Borel property gives us that these are compact.
+	Identify $K_m$ with the metric space with the metric from $\R$ on the compact set $K_m$.
+	Hence, $K_m$ is a compact metric space.
+
+	Note that $\{f_n\} \subset \mathcal{C}(K_m)$ since $f_n \colon \R \to \R$,
+	so surely $f_n\vert_{K_m}$ must be continuous as well.
+	Furthermore, $\{f_n\}$ are equicontinuous and pointwise bounded on $K_m$,
+	since if $\phi(x) > |f_n(x)|$ for all $x \in \R$,
+	surely $\phi(x) > |f_n(x)|$ for all $x \in K_m \subset \R$;
+	and if $\ep > 0$, there is a $\delta > 0$ such that
+	$d(x,y) < \delta \implies |f_n(x) - f_n(y)| < \ep$ for all $x,y \in \R$ and $f_n \in \{f_n\}$,
+	and so $d(x,y) < \delta \implies |f_n(x) - f_n(y)| < \ep$ for all $x,y \in K_m \subset \R$.
+	Furthermore, note that all of these properties still hold if $\{f_n\}$
+	is replaced by a subsequence of itself above.
+
+	We can conlude by Arzel\`{a}-Ascoli (Rudin Theorem 7.25 (b)) that
+	there is a uniformly convergent subsequence of $\{f_n\}$ on the compact set $K_1$.
+	Let us denote the uniformly convergent subsequence on $K_1$
+	by $\{f_n^{(1)}\}_{n\in\N}$.
+	We can iterate this process:
+	if $\{f_n^{(m)}\}_{n \in \N}$ is a uniformly convergent subsequence on $K_m$,
+	and furthermore, $\{f_n^{(m)}\}$ satisfies the hypotheses of
+	Arzel\'{a}-Ascoli as mentioned above, the theorem gives us
+	a uniformly convergent subsequence of $\{f_n^{(m)}\}_{n\in\N}$ on $K_{m+1}$,
+	which is our $\{f_n^{(m+1)}\}_{n\in\N}$.
+
+	We now take the diagonal of all of these subsequences,
+	i.e. $f_1^{(1)}, f_2^{(2)}, f_3^{(3)}, \dots$.
+	Call this sequence $S$.
+	By construction, after at most $n-1$ terms, $S$ is uniformly convergent on $K_n$,
+	and so is uniformly convergent on $K_n$.
+	Note that since every compact set $K\subset \R$ is bounded (Heine-Borel),
+	there is some $K_n$ such that $K \subset K_n$.
+	Hence, the sequence $S$ converges uniformly on every compact $K \subset \R$ as well,
+	since it converges on a superset of $K$.
+
+	Now we will show that $S$ converges on all of $\R$.
+	Consider arbitrary $x \in \R$. Note that $\{x\}$ is compact,
+	since it is closed and bounded (Heine-Borel)
+	(closure is obvious vacuously, since there are no limit points,
+	boundedness follows from the choice of any $M > 0$ and $d(x,x) < M$).
+	Thus, as we mentioned previously,
+	$S$ converges on $\{x\}$.
+\end{proof}
+
+
+\subsection*{Problem 3}
+For the next problem, recall that a set $K$ in a metric space is compact
+if and only if every infinite set $S \subset K$ has a limit point in $K$.
+You may use this fact for the next problem.
+\problem{
+	Let $K$ be a compact metric space.
+	Using Theorems 7.24 and 7.25, prove that a set $\mathcal{F} \subset \mathcal{C}(K)$
+	(with the metric on $\mathcal{C}(K)$ determined by the supremum norm)
+	is compact if and only if $\mathcal{F}$ is closed, bounded, and equicontinuous.
+}
+\begin{proof}[Solution]\let\qed\relax
+	Assume that $\mathcal{F}$ is closed, bounded, and equicontinuous.
+	If $\mathcal{F}$ is finite, then it is compact vacuously
+	(there are no infinite sets $S$).
+	Now assume that $\mathcal{F}$ is infinite.
+	Since $\{f_n\}$ is bounded in $\mathcal{C}(K)$,
+	we have that there exists some $f \in \{f_n\}$ are $M \in \R$
+	such that $d(f,f_n) = \sup_x |f(x) - f_n(x)| < M$ for all $f_n \in \{f_n\}$.
+	Then $\phi(x) = |f(x)| + M$ pointwise bounds $\{f_n\}$,
+	since $|f_n(x)| < |f(x) + M| \leq |f(x)| + M$.
+	Now let $S \subset K$ be an infinite subset.
+	There must exist a countable subset of $S$, which we'll call $\{f_n\}$.
+	Clearly, we must have that $\{f_n\} \subset \mathcal{C}(K)$ still,
+	$\{f_n\}$ is pointwise bounded by the same $\phi(x)$ that pointwise bounds $\mathcal{F}$,
+	and $\{f_n\}$ is equicontinuous since $\forall \ep > 0$, $\exists \delta$
+	such that $d(x,y) < \delta \implies |f(x) - f(y)| < \ep$ for $x,y \in K$ and all
+	$f \in \mathcal{F}$ and so must hold for all $f \in \{f_n\} \subset \mathcal{F}$.
+	Then, by Theorem 7.25, we get that $\{f_n\}$ contains a uniformly convergent subsequence.
+	Hence, $S$ contains a limit point,
+	specifically the limit of the convergent subsequence of $\{f_n\}$.
+	Finally, since $\mathcal{F}$ is closed, it contains all of its limit points,
+	hence $S$ has a limit point in $\mathcal{F}$.
+	Therefore, $\mathcal{F}$ is compact.
+
+	Assume that $\mathcal{F} \subset \mathcal{C}(K)$ is compact.
+	Then Rudin Theorem 2.34 says compact subsets of metric spaces are closed,
+	hence $\mathcal{F}$ is closed.
+	Furthermore, $\mathcal{F}$ is bounded:
+	for the sake of contradiction, assume that $\mathcal{F}$ is unbounded.
+	We must have that $\mathcal{F}$ is an infinite set, otherwise
+	just take the distance set of all the possible distances between the elements of $\mathcal{F}$,
+	and since this is finite, we can get a maximum distance; boundedness follows.
+	Pick an element $s_0 \in \mathcal{F}$.
+	Then, let $s_1$ be some elemenet in $\mathcal{F}$ such that $d_1 := d(s_0,s_1) \geq 1$,
+	the existence of such is due to the unboudedness of $\mathcal{F}$,
+	and $\mathcal{F}$ being infinite.
+	Now choose $s_2$ such that $s_2 \in \mathcal{F}$ and $d_2 = d(s_0,s_1) \geq 2d_1$,
+	again chosen because $\mathcal{F}$ is unbounded.
+	Note that $s_2 \neq s_1$, since we require $s_2$ be further from
+	$s_0$ than $s_1$ is.
+	Generally, we choose $s_i \in \mathcal{F}$ and $d_i = d(s_0,s_i) \geq 2d_{i-1}$.
+	But then $\bigcup_i s_i$ is an infinite set,
+	but all points are at least distance $1$ apart
+	(let $i > j$ then $d(s_0,s_j) + d(s_i,s_j) \geq d(s_0,s_i)
+	\implies d(s_i,s_j) \geq d_i - d_j \geq 2d_{i-1} - d_{i-1} = d_{i-1} \geq 1$)
+	and so all the points are isolated point, so $\bigcup_i s_i$ contains no limit points.
+	But this means that $\mathcal{F}$ is not compact, a contradiction.
+	
+	It remains to show that $\mathcal{F}$ being compact implies that $\mathcal{F}$ is equicontinuous.
+	We do so with the contrapositive,
+	so assume that $\mathcal{F}$ is not equicontinuous.
+	Let $\{f_n\}$ be an countably infinite subset of $\mathcal{F}$,
+	that is not equictonintuous:
+	we can find such a sequence, since we have that $\exists \ep$
+	such that for all $\delta_n = \frac{1}{n} > 0$, there are $x,y \in K$
+	and $f_n \in \mathcal{F}$ such that $|f_n(x) - f_n(y)| \geq \ep$.
+	Note that $\{f_n\}$ cannot contain any convergent sequences of functions,
+	since for every subsequence $\{f_{n_k}\}$ of $\{f_n\}$,
+	since $\{f_{n_k}\}$ are not equicontinuous by construction,
+	the contrapositive of Theoreem 2.24
+	gives us that $\{f_{n_k}\}$ does not converge uniformly on $K$,
+	but this is what it means to converge with the supremum norm metric,
+	hence, $\{f_{n_k}\}$ does not converge.
+	But this means that $\{f_n\} \subset \mathcal{F}$ is an infinite set
+	which does not have a limit point in $\mathcal{F}$.
+	Hence, $\mathcal{F}$ is not compact.
+\end{proof}
+
+
+\subsection*{Problem 4}
+In the next problem, you will prove the converse to Theorem 7.25
+\problem{
+	Let $K$ be a compact metric space and let $\mathcal{F} \subset \mathcal{C}(K)$.
+	Suppose that every sequence in $\mathcal{F}$ has a subsequence that
+	converges uniformly on $K$.
+	\begin{enumerate}
+		\item Prove that $\mathcal{F}$ is uniformly bounded.
+		\item Prove that $\mathcal{F}$ is equicontinuous.
+	\end{enumerate}
+}
+\begin{enumerate}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Hmm show closure is compact (sequential compactness).
+		Out of time :(
+	\end{proof}
+	\item \begin{proof}[Solution]\let\qed\relax
+		Out of time :/
+	\end{proof}
+\end{enumerate}
+
+
+\subsection*{Problem 5}
+\problem{
+	For each $n \in \N$, let $f_n \colon \R \to \R$, and suppose that
+	$\{f_n\}$ is an approximate identity.
+	Prove that $\{f_n\}$ is not equicontinuous.
+}
+\begin{proof}[Solution]\let\qed\relax
+	We prove the contrapositive.
+	Assume that $\{f_n\}$ is equicontinuous.
+	Then there is some $\delta'$ such that when $|x-y| < \delta'$,
+	we have $|f_n(x) - f_n(y)| < \ep$ for all $n \in \N$.
+	We can find some $N_1 \in \N$ such that for all $n \geq N_1$,
+	$\int_{-\infty}^{-\delta'} |f_n(x)|dx < \ep'$.
+	Similarly, we get an $N_2 \in \N$ such that for all $n \geq N_2$,
+	$\int_{-\infty}^{\delta'} |f_n(x)|dx < \ep'$.
+	Let $N = \max\{N_1,N_2\}$.
+	Surely $|f_n(x)| < \ep'$ on $(-\infty,-\delta'] \cup [\delta',\infty)$.
+	Rudin Theorem 6.13 also gives
+	\[
+		\int_{-\infty}^{-\delta'}f_n(x)dx \leq
+		\left\lvert\int_{-\infty}^{-\delta'}f_n(x)dx\right\rvert < \ep'
+	\]
+	and
+	\[
+		\int_{\delta'}^\infty f_n(x)dx \leq
+		\left\lvert\int_{\delta'}^{\infty}f_n(x)dx\right\rvert < \ep'
+	\]
+	(the fact that this is an indefinite integral does not ruin the theorem,
+	since we know the integral exists, and the inequality holds for
+	arbitrarily large values of the bounds of integration;
+	I will use a similar generalization of 6.12 later as well).
+	We can then conclude
+	\[
+		1 = \int_{-\infty}^{-\delta'}f_n(x)dx + \int_{-\delta'}^{\delta'} f_n(x) dx
+		+ \int_{\delta'}^\infty f_n(x)dx < \int_{-\delta'}^{\delta'} f_n(x)dx + 2\ep'
+	\]
+	Therefore
+	\[
+		1 - 2\ep' < \int_{-\delta'}^{\delta'} f_n(x)dx
+	\]
+	This implies that for all $f_n \in \mathcal{F}$
+	where $n \geq N$, there is some $x \in [-\delta',\delta']$ such that
+	$f_n(x) > \frac{1}{2\delta'}(1-2\ep')$.
+	Otherwise, Rudin Theorem 6.12(d) says the integral is less than or equal to $1-2\ep'$.
+	Then, if $y \not\in [-\delta',\delta']$, since $|f(y)| < \ep'$,
+	we have $|f_n(x) - f_n(y)| = f_n(x) - f_n(y) = \frac{1}{2\delta'}(1-2\ep') - \ep'$
+	when $\ep' < \frac13$ and $\delta' < \frac12$ so that
+	we get the equality of the absolute value
+	(since $\frac{1}{2\delta'}(1-2\ep') > \ep'$).
+
+	Now fix $\ep = 1$.
+	For all $\delta > 0$, let $\delta' = \min\{\frac13\delta,\frac13\}$, and find $\ep' > 0$ such that
+	$0 < \ep' < (\frac{1}{2\delta'} - 1)/(\frac{1}{\delta'} + 1)$
+	and $\ep' < \frac13$.
+	We have shown that there exists some $\ep$ such that for all $\delta > 0$,
+	there are $x,y \in \R$ where $d(x,y) < \delta$ (namely, the $x \in [-\delta',\delta']$ from above
+	and $y \not\in[-\delta',\delta']$, which we can choose
+	because there are always points within $3\delta'$ of $x$ outside $[-\delta',\delta]$) and $f_n \in \{f_n\}$ where $n \geq N$ such that
+	$|f_n(x) - f_n(y)| = \frac{1}{2\delta'}(1-2\ep') - \ep' \geq 1$.
+	Hence, $\{f_n\}$ cannot be equicontinuous.
+\end{proof}
+\end{document}
