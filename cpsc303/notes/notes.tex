@@ -2133,4 +2133,134 @@ then we will see that $\int v'' g'' = 0$, and integration by parts gives
 $\int v^{(4)}g = 0$, which implies that $v$ is a cubic polynomial.
 If you don't want to read [A\&G] why cubic splines are what we are looking for,
 this is a classical motivation for it.
+
+
+\section{March 20}
+Today:
+\begin{itemize}
+	\item Cubic splines, minimize $E_2(u) = \int_A^B (u''(x))^2dx$ over
+		$\mathcal{U} = \left\{u = \mathcal{C}^2[A,B] \colon u(x_i) = y_i, i =0,\dots,n\right\}$.
+	\item Boundary conditions: $\mathcal{U}^{\text{free}}, \mathcal{U}^{\text{clamped}}$, etc.
+\end{itemize}
+
+How is this different from interpolation from chapter 10?
+ff
+
+Last time: $u \colon [A,B] \to \R$, $E_1(u) = \int_A^B (u'(x))^2dx$ and
+fix $(x_0,y_0),\dots,(x_n,y_n)$.
+$\mathcal{U}^1_{A,B} = \{u \in \mathcal{C}^1[A,B] \colon u(x_i)=y_i, i=0,\dots,n\}$.
+We essentially proved there is no $v \in \mathcal{U}_{A,B}^1$ such that
+$E_1(v) \leq E_1(u)$ for all $u \in \mathcal{U}^1_{A,B}$
+(what??? I thought we proved piecewise linear... unless this is a remark
+about how these functions are not in $\mathcal{C}^1$).
+
+What we did was that if $u \colon [x_0,x_1] \to \R$ continuous differentiable,
+$u \in \mathcal{C}^1[x_0,x_1]$ and $u(x_0),u(x_1)$ given,
+and $u$ minimizes $E_1(u)$ or $\text{Length}(u) = \int_{x_0}^{x_1} \sqrt{1+(u'(x))^2}dx$,
+then $u''(x) = 0$ for all $x \in (x_0,x_1)$.
+So we have piecewise linear functions, and in general, it is not
+differentiable at each $x_i$.
+
+The advantage with splines is that we get the desired property.
+
+Beyond this course: consider the functions where the following integral exists
+\[
+	\int_A^B (u'(x))^2 dx
+\]
+We need our function to be square integrable.
+This goes into Lebesgue theory.
+There is truly a space of functions $w^{1,2}[A,B]$ ``Sobolev space"
+of the functions where $\text{Energy}_{1,A,B}, \text{Length}_{A,B}, \dots$
+makes sense.
+We call $w^{k,p}[A,B] = \left\{u \in L^p[A,B] \colon u
+\text{ is weakly }k\text{-times differentiable}\right\}$.
+This is just a digression, this course isn't about functional analysis and measure theory,
+but might put some extra credit problems on the homework that hint towards this.
+For now, just forget this.
+
+\begin{definition}
+	Let $(x_0,y_0),\dots,(x_n,y_n)$ be fixed, $A = x_0 < x_1 < \cdots < x_n = B$.
+	Let
+	\[
+		\mathcal{U} = \left\{u \in \mathcal{C}^2[A,B] \colon
+		u(x_i) = y_i, i = 0,\dots,n\right\}
+	\]
+	Let $E_2(u) = \int_A^B (u''(x))^2 dx$.
+\end{definition}
+Then
+\begin{enumerate}
+	\item There is a $v \in \mathcal{U}$ on which $E_2 \colon \mathcal{U} \to \R$ is minimized
+	\item For this $v$, $v^{(4)}(x) = 0$ for $x_i < x < x_{i+1}$
+	\item Also (not in [A\&G]),
+		$v''(A) = 0, v''(B) = 0$
+\end{enumerate}
+In other words, $v^{(4)}(x)$, $x_i < x < x_{i+1}$ means $v$ is piecewise
+a cubic polynomial, i.e.
+\[
+	s_i(x) = a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3
+\]
+where $a_i,b_i,c_i,d_i \in \R$ for $i = 0,\dots,n$, and
+\[
+	v(x) = \begin{cases} s_i(x) & \text{if }x_i \leq x \leq x_{i+1} \end{cases}
+\]
+Let's believe the theorem,
+i.e. that twice differentiable functions are the biggest space we want to look at
+(ignoring the Sobolev space),
+then we can do linear algebra without linear algebra:
+We have $\{a_i,b_i,c_i,d_i\}$ for each of the $n$ patches from $A$ to $B$,
+and so there are $4n$ variables (parameters).
+To solve for $v(x)$, how many equations do we get such that
+\[
+	s_0(x_1) = y_1 = s_1(x_1)
+\]
+and $s_0'(x_1) = s_1'(x_1)$ and $s_0''(x_1) = s_1''(x_1)$.
+To have the values of $s_i$ match, i.e. $s_i(x_i) = y_i$ and $s_i(x_{i+1}) = y_{i+1}$,
+this imposes $2(n+1)$ conditions.
+Matching derivatives gives $2(n-1)$ conditions.
+The total number of linear conditions is then
+$2n + 2(n-1) = 4n-2$ ??? what happened to second derivative condition
+
+\begin{theorem}
+	$E_2$ minimized when $v''(x_0) = 0$, $v''(x_n) = 0$.
+	ff
+\end{theorem}
+ff
+
+\begin{theorem}
+	If you fix $v'(x_0) = y_0'$, $v'(x_n) = y'_n$, you also look at
+	\[
+		\mathcal{U}_{2,A,B,y'_0,y'_n}
+		= \left\{u \in \mathcal{C}^2[A,B] \colon
+		U(x_i) = y_i, i = 0,\dots,n, u'(x_0) = y'_0, u'(x_n) = y'_n\right\}
+	\]
+	Then there exists a unique $v \in \mathcal{U}_{2,A,B,y_0', y_n'}$
+	that minimizes $E_2$.
+\end{theorem}
+There are $4n$ variables $a_i,b_i,c_i,d_i$, $i = 0,\dots,n-1$,
+and so there are $4n$ equations, so we get a unique solution.
+
+\subsection{Questions after class}
+So the idea behind the Sobolev space stuff is that
+even though we can't ask for a $C^\infty[A,B]$ to minimize $E_2$,
+we can get a sequence of functions in $C^\infty[A,B]$ that converge
+weakly (weaker than pointwise, like equal almost everywhere?
+I think he said the integral of their difference is $0$)
+to something that minimizes $E_2$...
+I should have asked, does this converge to something in $C^\infty$?
+Probably not, right?
+
+Also, we were talking about what conditions we place on $u$ depending on our energy function.
+Apparently, the conditions only depend on what highest derivative order we have,
+so something like $\in e^{(f')^9}|f'|dx$ would still minimize to piecewise linear
+(do calculus of variations or something, $a + b \ep + c \ep^2$),
+because the conditions it places is not enough to ensure
+that we get derivatives at the points equal each other.
+But when $f''$ is involved, this gives us enough conditions
+to require some things out of $u$ to get a nice solution that's continuous and differentiable.
+
+Also lol, he was thinkking of making a bonus question on homework
+about taking a spline, and convolving it with something like
+an approximate identity (not his words) that is inn $C^ \infty$,
+and the convolution would be in $C^\infty$ as well.
+And I think this would be done at each point?
 \end{document}

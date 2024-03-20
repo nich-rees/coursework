@@ -2759,4 +2759,101 @@ Some examples of vector spaces:
 \end{itemize}
 Next class, we will add additional structure on to the vector spaces,
 and see how those structures interact.
+
+
+\section{March 20}
+\subsection{More linear algebra}
+$F = \R$ or $\C$, $V$ is a vector space over $F$.
+\begin{definition}[Norm]
+	A \emph{norm} is a function $\lVert \cdot \rVert \colon V \to \R$
+	that satisfies the following properties:
+	\begin{enumerate}
+		\item Triangle inequality: $\lVert x + y \rVert \leq \lVert x \rVert + \lVert y \rVert$,
+			$\forall x,y \in V$
+		\item $\lVert ax \rVert = |a|\lVert x \rVert$, $a \in F, x \in V$
+		\item Positive definiteness: $\lVert x \rVert \geq 0$
+			and $\lVert x \rVert = 0$ iff $x = 0$
+			(this last one can be sneaky when showing something is a norm)
+	\end{enumerate}
+\end{definition}
+Examples:
+\begin{itemize}
+	\item $V = \R^d$ or $\C^d$ where $\lVert x \rVert_2 = \left(\sum_{j=1}^n |x_j|^2\right)^{1/2}$
+		or more generally, when $1 \leq p < \infty$,
+		$\lVert x \rVert_p = \left(\sum_{j=1}^n |x_j|^p\right)^{1/p}$
+		(the $1/p$ power important not just for getting scalar right,
+		but also triangle inequality)
+	\item When $1 \leq p < \infty$,
+		$V = \left\{a = (a_n)_{n\in\N} \colon
+		\left( \sum_{n \in \N} |a_n|^p\right)^{1/p} < \infty\right\}
+		=: \ell^p(\N)$ (or swap the $\N$s with $\Z$) where the norm is
+		$\lVert a \rVert_p = \left(\sum_{n\in\N} |a_n|^p\right)^{1/p}$,
+		or if $f$ is the step function of $a_n$, we have $\left(\int_\R |f|^pd\alpha\right)^{1/p}$
+	\item $V = \mathcal{C}([0,1])$, $\lVert f \rVert = \int_0^1 |f(t)|dt$
+	\item $V = \mathcal{C}([0,1])$, $1 \leq p < \infty$,
+		$\lVert f \rVert_{L^p} = \left(\int_0^1 |f(t)|^pdt \right)^{1/p}$,
+		and also have $\lVert f \rVert_{L^\infty} = \sup_{x \in [0,1]}|f(x)|$
+		(definition can be weird for $L^\infty$, but for continuous functions,
+		this is consistent with all the ones out there)
+	\item $V = \mathcal{R}([0,1])$, $1 \leq p < \infty$,
+		and the same $\lVert \cdot \rVert_{L^p}$ as before.
+		But there is a problem with positive definiteness:
+		consider the function that is equal to $0$ except for one point.
+		Hence, we get what we call positive semi-definiteness
+		(we don't get the $\lVert x \rVert = 0$ iff $x = 0$).
+		We could retreat back to continuous function, this is what Rudin does,
+		but it is actually common in the theory of Lebesgue integration to go another way:
+		we mod out by an equivalence relation.
+	\item Define $\sim$ on $\mathcal{R}([0,1])$ with $f \sim g$ if
+		$\int_0^1 | f(t) - g(t)|dt - 0$.
+		We can verify that this is an equivalence relation as an exercise.
+		Now let $V = \mathcal{R}([0,1])/\sim$
+		(if $\sim$ is an equivalence relation on $S$, $x \in S$,
+		$[x] = \{y \in S \colon y \sim x\}$,
+		then $V = \{[f] \colon f \in \mathcal{R}([0,1])\}$,
+		ex. $[0] = \left\{f \in \mathcal{R}([0,1]) \colon \int_0^1 |f(t)|dt = 0\right\}$).
+		Now we can define $\lVert [f] \rVert_p = \left(\int_0^1 |f(t)|^pdt\right)^{1/p}$.
+		Is this well-defined?
+		We need to veriy that if $[f] = [g]$, then
+		$\left(\int_0^1 |f(t)|^p dt\right)^{1/p} = \left(\int_0^1 |f(t)|^p dt\right)^{1/p}$.
+		This is an upcoming homework problem when $p = 2$ (proof for other $p$ is the same).
+		(Note $[f] = f + [0]$; also not every function has a continuous representative.)
+\end{itemize}
+
+\begin{definition}[Normed Vector Space]
+	A pair $(V,\lVert \cdot \rVert)$ is called a \emph{normed vector space}.
+	This induces a metric $d(x,y) = \lVert x - y \rVert$.
+	If $(V,d)$ is complete, then we call $(V,\lVert \cdot \rVert)$ a \emph{Banach space}.
+\end{definition}
+There is an entire field of math that studies normed vector spaces,
+particularly Banach spaces, called functional analysis.
+There are a lot of theorems that only apply to Banach spaces.
+
+E.g. $(\R^d,\lVert \cdot \rVert_p)$ is a Banach space.
+However, $\mathcal{C}([0,1]), \lVert \cdot \rVert_{L^p}$, $p < \infty$,
+is \emph{not} a Banach space
+(say we have a sequence that tends towards the step function,
+there is no continuous function that can be the limit).
+Whether $\mathcal{R}([0,1])/\sim, \lVert \cdot \rVert_{L^p}$ is a Banach space
+is in the next homework.
+
+\subsubsection{Inner product}
+\begin{definition}[Inner product space]
+	If $V$ is a vector space, and $\langle \cdot, \cdot \rangle$ is an inner product.
+	Then $(V,\langle \cdot, \cdot \rangle)$ is called an \emph{inner product space}.
+	An inner product induces a norm $\lVert x \rVert = \left( \langle x,x \rangle\right)^{1/2}$.
+	If this is a Banach space, then $(V,\langle \cdot, \cdot \rangle)$ is
+	called a \emph{Hilbert space}.
+\end{definition}
+Examples:
+\begin{itemize}
+	\item $V = \ell^2(\N)$ or $\ell^2(\Z)$, $a = (a_n)_{n \in \N}$,
+		$b = (b_n)_{n \in \N}$,
+		then $\langle a ,b \rangle = \sum_{n \in \N} a_n \overline{b_n}$,
+		see $\langle a,b \rangle = \overline{\langle a, b \rangle}$.
+	\item $V = \mathcal{C}([0,1])$ and $\langle f,g \rangle =
+		\int_0^1 f(t)\overline{g(t)}dt$
+		(can also do $[-\pi,\pi]$).
+\end{itemize}
+Next time, we will see how we can split up spaces into orthonormal functions.
 \end{document}
