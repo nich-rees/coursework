@@ -2856,4 +2856,235 @@ Examples:
 		(can also do $[-\pi,\pi]$).
 \end{itemize}
 Next time, we will see how we can split up spaces into orthonormal functions.
+
+
+\section{March 22}
+The main vector space we're interested in is $V = \mathcal{R}([0,1])$,
+but we want to put a norm, even better an inner product on this space.
+But we've already discussed how a norm can't be defined here, so we actually use
+$V = \mathcal{R}([0,1])/\sim$ (or $\mathcal{R}([a,b])/\sim$).
+We will define the inner product:
+\[
+	\langle [f],[g] \rangle = \int_a^b f(x) \overline{g(x)}dx
+\]
+The whole point, which you'll see on homework,
+is that we are taking the inner product of equivalence classes,
+but the definition uses a representative.
+We have to make sure that it is independent of the choice of representative.
+Instead of writing that, we write
+\[
+	\langle f ,g \rangle = \int_a^b f(x) \overline{g(x)}dx
+\]
+(but this is abuse of notation, otherwise only positive semi-definite).
+
+In measure theory, $L^p$ functions are actually equivalence classes of functions,
+but we almost never write it as such.
+
+Rudin discusses some Fourier analysis with mostly the same notation
+Zahl would like to use, but not all of them.
+\begin{definition}[Rudin 8.10]
+	If $\{\phi_n\}$ is a sequence of Riemann integrable functions
+	on $[a,b]$ that are orthonormal, i.e.
+	\[
+		\langle \phi_n , \phi_m \rangle =
+		\int_a^b \phi_n(x) \overline{\phi_m(x)}dx
+		= \begin{cases} 1, & \text{if }n = m\\
+		0, & \text{if }n \neq m \end{cases}
+	\]
+	then we call $\{\phi_n\}$ a
+	``system of orthonormal functions" or ``an orthonormal system" on $[a,b]$.
+\end{definition}
+(For us, orthonormal systems of functions will always be infinite,
+but similar stuff hold for finite orthonormal systems.)
+This probably predates modern linear algebra (and that it would be relevant here).
+Fourier was looking to solutions to the heat equation,
+realized we could take linear combinations to get solutions (hint hint),
+but used orthonormal systems to construct solutions.
+Because of this difference in history, some notation might differ
+than what you would expect in linear algebra.
+
+Examples of orthonormal systems:
+\begin{itemize}
+	\item $\{ e^{2 \pi i n x}\}_{n \in \Z}$.
+		You can check
+		\[
+			\langle e^{2 \pi i nx}, e^{2\pi i m x} \rangle
+			= \int_0^1 e^{2\pi i n x} \overline{e^{2\pi i m x}}dx
+			= \int_0^1 e^{2\pi i(n - m)x}dx
+		\]
+		Sometimes you might see as $x$ goes from $0$ to $2\pi$,
+		might alter the exponent, or need to put a constant out front
+		to make sure that it is orthonormal (regardless, going to be orthogonal).
+	\item $\{\sin(n\pi x)\}_{n \in \N} \cup \{ \cos(n \pi x)\}_{n \in \N}$
+	\item Wavelet basis.
+		We start with the mother wavelet:
+		$f = \begin{cases} 1 & x \in [0,1/2]\\ -1 & x \in (1/2,1] \end{cases}$.
+		Then we iterate: $f_{1,0}$ is supported on the first half,
+		$f_{0,1}$ is supported on the second half
+		(and we keep the total area under the curve $1$)
+		\[
+			f_{1,0} =
+			\begin{cases}
+				2 & x \in [0,1/4]\\ -2 & x \in (1/4,1/2]\\ 0 & x \in (1/2,1]
+			\end{cases}, \quad
+			f_{0,1} =
+			\begin{cases}
+				0 & x \in [0,1/2]\\
+				2 & x \in (1/2,3/4]\\
+				-2 & x \in (3/4,1]
+			\end{cases}
+		\]
+		And next iteration: we get functions from $f_{1,0}$
+		who's support is only $[0,1/4]$ (and $1,-1$ again),
+		and functions who's is only $(1/4,1/2]$,
+		and repeat for $f_{0,1}$.
+		This is actually how image resolution (used to???) work.
+\end{itemize}
+
+\begin{definition}[Fourier coefficient]
+	If $\{\phi_n\}$ is an orthonormal system on $[a,b]$,
+	and if $c_n = \langle f, \phi_n \rangle$, then we call $c_n$
+	the $n$-th Fourier coefficient of $f$ relative to $\{\phi_n\}$.
+	If $[a,b] = [0,1]$ and $\phi_n = e^{2\pi i nx}$,
+	we write $c_n = \hat{f}(n)$.
+\end{definition}
+What is the gemoetric interpretation of $c_n \phi_n(x)$,
+i.e. $\langle f, \phi_n \rangle\phi_n$.
+Let's understand $\{ \phi_n \}$ orthonormal, $v \in V$,
+$\langle v , \phi_n \rangle \phi_n$.
+Ex. $V = \R^2$.
+$\phi_1$ is a unit vector in $\R^2$.
+$\langle v, \phi_n \rangle \phi_n$ is the projection of $v$
+on $\mathrm{span}\{\phi_1\}$.
+This is because the inner product captures how orthogonal the $v$ is,
+and it is a scalar multiple of $\phi_n$.
+
+How about $V = \R^3$.
+For simplicity, let $\phi_1 = (1,0,0)$ and $\phi_2 = (0,1,0)$.
+Then $\mathrm{span}\{\phi_1,\phi_2\} = $ the $xy$ plane.
+We then have $\langle v, \phi_1 \rangle\phi_1 + \langle v, \phi_2 \rangle \phi_2$
+is the orthogonal projection of $v$ onto the $xy$ plane.
+Because of our choice of basis, if $v = (v_1,v_2,v_3)$, we have
+$\langle v, \phi_1 \rangle = v_1, \langle v, \phi_2 \rangle = v_2$,
+and so its projection is $(v_1,v_2,0)$.
+We might ask what is the point in the plane that is closest to $v$.
+It is precisely and uniquely the projected point in the plane.
+This makes sense, since distance comes from the norm, which comes from the inner product,
+so it all makes sense.
+
+The next theorem will be this geometric observation in the context of
+orthonormal systems, which are infinite dimensional.
+
+Tangent (in regards to a question whether there are other types of projections):
+well, there are other coefficients we can have in front of $\phi_1, \phi_2$.
+Could be some other ``product".
+We can think of the fiber (inverse image) of a point in the plane
+as a straight line up, orthogonal to the plane.
+We could imagine that instead of straight line, it is a specific curve.
+This is relevant to some math problems, but no longer in the area of linear algebra.
+
+\begin{definition}[Fourier series]
+	If $\{c_n\}_{n=1}^\infty$ are the Fourier coefficients of $f$ relative
+	to some orthonormal system $\{\phi_n\}_{n=1}^\infty$, then
+	$\sum_{n=1}^\infty c_n \phi_n$ is called
+	the \emph{Fourier series} of $f$ (relative to $\{\phi_n\}$)
+	and we write $f \sim \sum_{n=1}^\infty c_n \phi_n$
+	(not an equivalence, just overloading $\sim$).
+	Note that this is just some formal series, regardless of convergence.
+\end{definition}
+\begin{theorem}[Rudin 8.11]
+	Let $\{\phi_n\}_{n=1}^\infty$ be an orthonormal sysmte on $[a,b]$.
+	Let $f \in \mathcal{R}([a,b])$ with Fourier coefficients $\{c_n\}_{n=1}^\infty$.
+	Let $s_n(x) = \sum_{j=1}^n c_j \phi_j(x)$, this is called the
+	$n$-th partial Fourier sum of $f$.
+	
+	Let $d_1,\dots,d_n \in \C$ and $t_n = \sum_{j=1}^n d_j \phi_j(x)$. Then
+	\[
+		\lVert f- s_n \rVert \leq \lVert f - t_n \rVert
+	\]
+	with equality iff $s_n = t_n$,
+	i.e. $d_j = c_j$ for all $j = 1,\dots,n$
+	(the norm is $L^2$).
+\end{theorem}
+This might seem specific to functions, but
+for any inner product space, the projection of a vector on some subspace,
+that projection is the unique point that minimizes the distance to the vector
+on the subspace.
+
+
+\section{March 25}
+ff missed like the first half hour of class
+
+Theorem 8.11
+ff
+
+Let's compute:
+\[
+	\lVert t_n \rVert^2 = \int_a^b \left(\sum_{j=1}^n d_j \phi_j\right)
+	\left(\sum_{k=1}^n \overline{d_k \phi_k}\right)dx
+	= \sum_{j=1}^n \lvert d_j \rvert^2
+\]
+Now we can compute:
+\begin{align*}
+	\lVert f - t_n \rVert^2
+	&= \int_a^b \lvert f - t_n \rvert^2\\
+	&= \int_a^b (f-t_n) \overline{(f-t_n)}\\
+	&= \int |f|^2 - \sum_{j=1}^n c_j \overline{d_j} - \sum_{j=1}^n \overline{c_j}d_j
+	+ \sum_{j=1}^n d_j \overline{d_j}\\
+	&= \int|f|^2 - \sum_{j=1}n |c_j|^2 + \underbrace{\sum_{j=1}^n |d_j - c_j|^2}_{\geq 0}\\
+	&\geq \int|f|^2 - \underbrace{\sum_{j=1}^n |c_j|^2}_{\lVert s_n \rVert^2},
+	\text{ with equality iff } d_j=c_j \forall j
+\end{align*}
+(fourth line had the computation:
+$-c_j^2 + (d_j - c_j)^2 = -c_j^2 + d_j^2 - d_j\overline{c_j} - \overline{d_j}c_j + c_j^2$).
+So when $d_j = c_j$ for all $j$, then
+\begin{equation}\label{fsn}
+	\lVert f - s_n \rVert^2 = \lVert f \rVert^2 - \lVert s_n \rVert^2
+\end{equation}
+(something like Pythagorean). So
+\[
+	\lVert f - t_n \rVert^2 = \int |f-t_n|^2 \geq
+	\lVert f \rVert^2 - \lVert s_n \rVert^2 = \lVert f - s_n \rVert^2
+\]
+with equality iff $d_j = c_j$, $\forall j$.
+
+As a consequence of (\ref{fsn}):
+ff Bessel's inequality.
+
+From now on, $[a,b] = [0,1]$, $\{ \phi_n \}_{n \in \Z}$,
+$\phi_n(x) = e^{2 \pi i n x} = e_n9x)$.
+\begin{definition}[L-periodic]
+	$L > -0$, We say $f \colon \R \to \C$ is \emph{$L$-periodic} if
+	$f(x + L) = f(x)$ for all $x \in \R$.
+\end{definition}
+Ex. $e_n(x)$ is $1$ periodic for all $n \in \Z$.
+
+Let $V = \{ f \colon \R \to \C, f \text{ is }1-\text{periodic
+and integrable on }[0,1]\}/\sim$.
+On $V$, we define $\langle f, g \rangle = \int_0^1 f(x) \overline{g(x)}dx$.
+Something ff about functions being in the same equivalence class as $[0]$
+when $1$-periodic.
+
+Interesting setting to look at Fourier transform,
+connections with group theory (not within scope of this course).
+So we originally saw these functions as eigenfunctions for our system
+from the heat equation, etc.
+But there was a different way to get to Fourier analysis.
+$f \colon \R \to \C$ that is $1$ periodic has a one to one correspondance
+with functions in $f \colon \R/ \Z \to \C$
+(these are the set of equivalence classes $\R/\Z - 0$,
+i.e. $x \sim y$ if $x - y \in \Z$).
+This is an abelian group, and $e_n \colon G \to \C$,
+or $e_n \colon G \to \{\text{complex number of magnitude }1\}$.
+Group operation: $e_ne_m = e_{n+m}(x)^{e^{iy}}$.
+
+Many of the things we are doing can be written in this more abstact setting.
+We have a function that maps from groups to the complex numbers,
+and instead of a basis, we have characters,
+which map from $G$ to complex number of magnitude $1$.
+These characters from what is called the ``dual group".
+
+Examples: we had $\R/\Z \leftrightarrow \Z$ ($\Z$ is the dual group),
+but also $\Z_p \leftrightarrow \hat{\Z}_p$ and $\R \leftrightarrow \R$.
+Finally, $f \colon \R \to \C$, $\hat{f} = \int e^{2 \pi i x}$.
 \end{document}

@@ -2249,6 +2249,10 @@ to something that minimizes $E_2$...
 I should have asked, does this converge to something in $C^\infty$?
 Probably not, right?
 
+He went on to talk about how it should be standard that we should
+do something similar to show that there exists a unique solution
+to continuous ODEs... uses something like Euler's method.
+
 Also, we were talking about what conditions we place on $u$ depending on our energy function.
 Apparently, the conditions only depend on what highest derivative order we have,
 so something like $\in e^{(f')^9}|f'|dx$ would still minimize to piecewise linear
@@ -2263,4 +2267,324 @@ about taking a spline, and convolving it with something like
 an approximate identity (not his words) that is inn $C^ \infty$,
 and the convolution would be in $C^\infty$ as well.
 And I think this would be done at each point?
+
+
+\section{March 21}
+Today remarks on HW8 and the following theorem (probably the longest calculation
+in this class).
+\begin{theorem}
+	Assume $v(x)$ is a cubic spline with abscissae
+	$A = x_0 < \cdots < x_n = B$,
+	$v(x) = a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3$
+	such that $v \in \mathcal{C}^2[A,B]$ and
+	$v''(A) = v''(B) = 0$.
+	Say $v(x_i) = f(x_i)$. Then
+	\begin{enumerate}
+		\item $c_0 = 0$
+		\item $a_i,b_i,d_i$ are functions of $c_1,\dots,c_{n-1}$ and
+			the divided differences of $f$:
+			\[
+				a_i = f(x_i), \quad
+				d_i = \frac{c_{i+1} - c_i}{3h_i}, h_i = x_{i+1} - x_i,\quad
+				b_i = f[x_i,x_{i+1}] - \frac{h_i}{3}f[x_{i-1},x_i]
+			\]
+		\item $h_{i-1}c_{i-1} + 2(h_{i-1} + h_i)c_i + h_ic_{i+1}
+			= 3(f[x_i,x_{i+1}] - f[x_{i-1},x_i])$ ???
+	\end{enumerate}
+\end{theorem}
+Lol he said he could write a letter of recommendation to me in front of the class
+if I do bonus problem.
+Also, there is an annoying calculation in homework,
+he'll make clear what we have to do right now (the big matrix question).
+
+We want $v(x)$ to be determined ``locally" by values of $f$ near $x$.
+The point of the homework problem is that you can exactly see this,
+using infinite norms and matrix formulas.
+``Locally" will be a suprise today, plus homework 8 problem 4
+with the matrices that look like
+\[
+	\begin{bmatrix}
+		0 & 1 & 0 & 0 & \cdots & 0\\
+		1 & 0 & 1 & 0 & \cdots & 0\\
+		0 & 1 & 0 & 1 & \cdots & 0\\
+		\vdots & \vdots & \vdots & \vdots & \ddots & \vdots\\
+		0 & 0 & 0 & 0 & \cdots & 1\\
+		0 & 0 & 0 & 0 & \cdots & 0
+	\end{bmatrix}
+\]
+Will encounter a similar matrix with heat equation.
+
+Remeber: homework $8$ and Monday's class:
+\[
+	\int ff
+\]
+ff
+
+Recall on Monday:
+Say $E_1(u) = \int_A^B (u'(x))^2dx$, and say $E_1(v) \leq E_1(v + \ep g)$
+for some $g$.
+We found $E_1(v + \ep g) = \alpha + \beta \ep + \gamma \ep^2$,
+where $\alpha = E_1(v)$ and $\gamma = E_1(g)$.
+$B$ is the cross term, and equal to:
+\[
+	= 2\int_A^B v'(x) g'(x) dx
+	= 2\left(v'(x)g(x) \bigg\vert_A^B - \int_A^B v''(x)g(x)dx\right)
+\]
+We have $g(x) = 0$ as $x = A,B$, so
+\[
+	\int_A^B v''(x) g(x)dx = 0
+\]
+for any $g$.
+On the homework problem, not only assume $g(A) = g(B) = 0$,
+but also $g'(A) = g'(B) = 0$.
+Our integral becomes
+\[
+	\int_A^B \text{something}(x)g(x)dx = 0
+\]
+for all $g\dots$ nice
+(our something is $v''(x)$ right now, but $v^{(4)}(x)$ on homework 8).
+Recall that if $\text{something} \colon [A,B] \to \R$ continuous,
+then $g = 0$ near $x = A, B$.
+This implies that $\text{something}(x) = 0$ on $A,B$ ($x_0,x_1$).
+We have $\text{something}(x) \neq 0$ in some neighbourhood around a point.
+Then we pick $g(x)$ that is only supported (like Dirac delta),
+which gives a contradiction.
+
+This is like homework, can just say ``like what was done in class".
+
+Now we do the calculation mentioned before in the theorem.
+Basically linear algebra.
+We have $s_i(x)$ cubic polynomial $a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3$
+on $x_i \leq x \leq x_{i+1}$,
+and then $v(x) = s_i(x)$ when $x_i \leq x \leq x_{i+1}$.
+Assume $f \colon \R \to \R$,
+$f(x_i) = v(x_i)$ for all $i = 0, \dots, n$,
+so $s_i(x_i) = a_i$.
+This was our first condition.
+The next easiest thing to do is to take second derivatives,
+and match them up across the abscissae.
+$s_i'(x) = b_i + 2c_i(x-x_i) + 3(x-x_i)^2$,
+and $s_i''(x) = 2c_i = 6d_i(x-x_i)$.
+We have $s_i''(x_{i+1}) = s''_{i+1}(x_i)$, which is equivalent to
+\[
+	2c_i + 6d_i(x_{i+1} - x_i) = 2c_{i+1}
+\]
+We can rearrange this to get
+\[
+	d_i = \frac{2c_{i+1} - c_i}{6(x_{i+1} - x_i)}
+	= \frac{1}{3} \frac{c_{i+1} - c_i}{h_i}
+\]
+where $h_i = x_{i+1} - x_i$.
+Intuition behind this can be something like, $d_i$ is related to third derivative
+and $c_i$ is related to second derivative.
+
+ff
+
+Bottom line (because we don't want to do more calculation):
+We'll get the $b_i$s in terms of the $c_i$s and $f[x_i,x_{i+1}] = \frac{f(x_{i+1}) - f(x_i)}{h_i}$.
+Eventually, we'll get to the formula from the theorem above:
+\[
+	h_{i-1} c_{i-1} + 2(h_{i-1} + h_i)c_i + h_ic_{i+1} = 3
+	(f[x_i,x_{i+1}] - f[x_{i-1},x_i])
+\]
+which holds for $i = 1,\dots,n-1$.
+
+Let's simplify... write it more intuitively.
+This is a homework problem (like number 2???).
+Divide by $h_{i-1} + h_i = (x_i - x_{i-1}) + (x_{i+1} - x_i) = x_{i+1} - x_{i-1}$.
+There is a divided difference here:
+\[
+	\frac{h_{i-1}}{h_{i-1} - h_i}c_{i-1} + 2c_i + \frac{h_i}{h_{i-1} + h_i}
+	= 3\frac{f[x_i,x_{i+1}] - f[x_{i-1},x_i]}{x_{i+1} - x_{i-1}}
+	= 3f[x_{i-1},x_i,x_{i+1}]
+\]
+We know this is equal to some $f''(\xi)/2$ where $x_{i-1} < \xi < x_{i+1}$.
+
+If all the $h_i$ are the same ([A\&G] does for general $h$),
+call them $h$, we have
+\[
+	\frac{h}{2h}c_{i-1} + 2c_i + \frac{h}{2h}c_{i+1}
+	= 3f[x_{i-1},x_i,x_{i+1}]
+\]
+\[
+	\frac{1}{4}c_{i-1} + c_i + \frac{1}{4} c_{i+1} = \frac32 f[x_{i-1},x_i,x_{i+1}]
+\]
+We get the following system
+\[
+	\begin{bmatrix}
+		1 & 1/4 & 0 & 0 & \cdots & 0\\
+		1/4 & 1 & 1/4 & 0 & \cdots & 0\\
+		0 & 1/4 & 1 & 1/4 & \cdots & 0\\
+		\vdots & \vdots & \vdots & \vdots & \ddots & \vdots\\
+		0 & 0 & 0 & 0 & \cdots & 1/4\\
+		0 & 0 & 0 & 0 & \cdots & 1
+	\end{bmatrix}
+	\begin{bmatrix} c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix}
+	= \frac{3}{2}\begin{bmatrix} \text{sliding} \\ \text{divided} \\ \text{diff.}\end{bmatrix}
+\]
+Remember that $v''(A) = 0$, and $v(A) = s_0(A) = 2c_0 \implies c_0 = 0$.
+
+Are we going to prove that this is local, i.e. that
+it only depends on $x_i$ closeby? We'll see on monday
+
+
+\section{March 25}
+Last time: for natural splines, we saw that
+$a_i,b_i,d_i$ are functions of $f[x_i], f[x_i,x_{i+1}], c_i, c_{i+1}$,
+and
+\[
+	\underbrace{\left(2 + \frac12 N_{\text{rod},n}\right)}
+	_{\text{equally spaced }x_0,\dots,x_n}
+	\begin{bmatrix} c_1 \\ \vdots \\ c_{n-1} \end{bmatrix}
+	= 3 \begin{bmatrix} f[x_0,x_1,x_2] \\ \vdots \\ f[x_{n-2},x_{n-1},x_n]\end{bmatrix}
+\]
+Today, we will continue looking at $N_{\text{rod},n}$,
+the ``adjancy matrix of the rod graph."
+(Did I get this wrong... ff).
+
+When $h = x_1 - x_0 = x_2 - x_1 = \cdots$, the system for $c_0 = 0$ is
+\[
+	\left(I + \frac14 N_{\text{rod},n}\right)
+	\begin{bmatrix} c_1 \\ \vdots \\ c_{n-1} \end{bmatrix}
+	= \frac32 \begin{bmatrix} f[x_0,x_1,x_2] \\ f[x_1,x_2,x_3] \\ \vdots\end{bmatrix}
+\]
+where $N_{\text{rod},n}$ is the $n \times n$ matrix with $0$s everywhere,
+except $1$ in the two diagonals beside the main diagonal.
+We then have
+\[
+	N_{\text{rod},n} \begin{bmatrix} y_1 \\ \vdots \\ y_{n-1} \end{bmatrix}
+	= \begin{bmatrix} y_2 \\ y_1 + y_3 \\ y_2 + y_4 \\ \vdots\\ y_{n-1} \end{bmatrix}
+\]
+So we have $(I + \frac14 N_{\text{rod},n})$ is essentially
+$\Psi$ in [A\&G].
+We have $\lVert N_{\text{rod},n} \rVert_\infty = 2$
+(maybe $=1$ when $n = 2$).
+Then we have the system
+\[
+	\begin{bmatrix} c_1 \\ \vdots \\ c_{n-1} \end{bmatrix}
+	= \left(I + \frac14 N_{\text{rod},n} \right)^{-1}
+	\begin{bmatrix} \phi_1 \\ \vdots \\ \phi_{n-1} \end{bmatrix}
+\]
+Something something ff, this is like how the points
+really only care about those points that are nearby.
+
+Recall that $(1+x)^{-1} = 1 - x + x^2 - x^3 + x^4 -+ \cdots$, $|x| < 1$.
+Similarly, $(1-y)^{-1} = 1 + y + y^2 + \cdots$ when $|y| < 1$.
+If $\lVert A \rVert_\infty < 1$ (really, $\lVert A \rVert_p < 1$ for any $p$),
+we claim that
+\[
+	(I - A)^{-1} = I + A + A^2 + A^4 + \cdots
+\]
+Why? Well, we can fist consider, does each entry of $I + A + A^2 + \cdots$ converge?
+Example: $A = \begin{bmatrix} 3/4 \end{bmatrix}$.
+Then $(I - A)^{-1} = \begin{bmatrix} 1 \end{bmatrix}
+- \begin{bmatrix} 3/4 \end{bmatrix} = \begin{bmatrix} 1/4 \end{bmatrix}$.
+Next, $I + A + A^2 = \begin{bmatrix} 1 \end{bmatrix} + \begin{bmatrix} 3/4 \end{bmatrix} +
+\begin{bmatrix} (3/4)^2 \end{bmatrix}$
+Bigger example: $A = \begin{bmatrix} 3/4 & 0 \\ 0 & 3/4 \end{bmatrix}$.
+\[
+	I + A + A^2 + \cdots =
+	\begin{bmatrix} 1 + \frac34 + (\frac34)^2 + \cdots & 0\\
+	0 & 1 + \frac34 + (\frac34)^2 + \cdots \end{bmatrix}
+\]
+We will see that this holds for diagonal amtrices as well.
+For $A = \begin{bmatrix} d_1 & 0 \\ 0 & d_2 \end{bmatrix}$, $|d_1|,|d_2| < 1$.
+But recall that we had invertible matrices were similar to a diagonal matrix.
+And so if $A = SDS^{-1}$, we have
+\[
+	I + A + A^2 + A^3 + \cdots
+	= S\left(I + \begin{bmatrix} d_1 & 0 \\ 0 & d_2 \end{bmatrix}
+	+ \begin{bmatrix} d_1^2 & 0 \\ 0 & d_2^2 \end{bmatrix}\right)S^{-1}
+\]
+Additionally,
+\[
+	(I-A)^{-1}
+	= \left(SIS^{-1} - S\begin{bmatrix} d_1 & 0 \\ 0 & d_2 \end{bmatrix}S^{-1}\right)^{-1}
+	= \left(S\left(I - D\right)S^{-1}\right)^{-1}
+	= (S^{-1})^{-1}(I - D)^{-1}S^{-1}
+\]
+And we already saw that for diagonal matrices,
+$(I-D)^{-1} = I + D + D^2 + D^m + $ leftovers,
+where the leftovers are $D^{m+1} + D^{m+2} + \cdots$,
+which is just $\begin{bmatrix} d_1^{m+1}(1 + d_1 + d_1^2 + \cdots) & 0\\
+0 & d_2^{m+1}(1 + d_2 + d_2^2 + \cdots) \end{bmatrix}$.
+For each entry, we have $\max_{d = d_1,d_2} |d|^{m+1}(1 + |d| + \cdots)$.
+So this converges when we have $|d| < 1$.
+So, intuitively (without going into the full details of convergence), we have
+\[
+	I + \begin{bmatrix} 1/2 & 0 \\ 0 & 1/2 \end{bmatrix}
+	+\begin{bmatrix} 1/2 & 0 \\ 0 & 1/2 \end{bmatrix}^2 + \cdots
+\]
+\begin{remark}
+	The most important property of the matrix norm
+	(or really, the matrix norm condition):
+	$\lVert AB \vec{v} \rVert_\infty \leq \lVert A(B\vec{v})\rVert_\infty
+	\leq \lVert A \rVert_\infty \lVert B\vec{v}\rVert_\infty
+	\leq \lVert A \rVert_\infty \lVert B \rVert_\infty \lvert \vec{v}\rVert_\infty$.
+	And so $\lVert AB \rVert_\infty \leq \lVert A \rVert \lVert B \rVert_\infty$
+	(or more generally, can replace $\infty$ with $p$).
+	And do $\lVert A^2 \rVert_\infty \leq \lVert A \rVert_\infty^2$,
+	or for any power, we have $\lVert A^m \rVert_\infty \leq \lVert A \rVert_\infty^m$.
+\end{remark}
+Are there matrices for which equality doesn't hold?
+We do have equality for diagonal matrices (in the $\infty$ case).
+Well, consider the shift matrices, which are nilpotent
+(raise to a high enough power, they are zero):
+\[
+	\mathrm{Shift}_{n,1}
+	= \begin{bmatrix} 0 & 1 & 0 & 0 & \cdots & 0\\
+		0 & 0 & 1 & 0 & \cdots & 0\\
+		0 & 0 & 0 & 1 & \cdots & 0\\
+		\vdots & \vdots & \vdots & \vdots & \ddots & \vdots\\
+		0 & 0 & 0 & 0 & \cdots & 1\\
+		0 & 0 & 0 & 0 & \cdots & 0
+	\end{bmatrix}
+	,\quad
+	\mathrm{Shift}_{n,-1}
+	= \begin{bmatrix} 0 & 0 & 0 & 0 & \cdots & 0\\
+		1 & 0 & 0 & 0 & \cdots & 0\\
+		0 & 1 & 0 & 0 & \cdots & 0\\
+		\vdots & \vdots & \ddots & \vdots & \ddots & \vdots\\
+		0 & 0 & 0 & 1 & \cdots & 0
+	\end{bmatrix}
+\]
+And remark that $N_{\text{rod},n} = \mathrm{Shift}_{n,1} + \mathrm{Shift}_{n,-1}$.
+For $n \geq 2$, we have that eventually these are the $0$ matrix.
+However, $\lVert \mathrm{Shift}_{n,1} \rVert_\infty = 1$.
+And so clearly, equality won't hold.
+
+Looking at $(I + \frac14 N_{\text{rod},n})^{-1}
+= I - \frac14 N + \frac{1}{16} N^2 - \frac{1}{64}N^3 + \cdots$.
+Then
+\[
+	\vec{c} = \left(I - \frac14 N + \frac{1}{16} N^2 - \frac{1}{64}N^3 + \cdots\right)
+	\begin{bmatrix} \phi_1 \\ \vdots \\ \phi_{n-1} \end{bmatrix}
+\]
+So see how this is largely localized
+($\vec{c}$ only really care about the $\phi$ that are nearby).
+To be more explicit, we can compute $N^2, N^3$ etc.
+But this is homework, you'll see how it works.
+
+The point is that $N$ is tri-diagonal:
+only the main diagonal and two neighbouring diagonals have non-zero values.
+When we multiply from tri-diagonal matrix, what do we get?
+Mostly $0$s, except close to the diagonal. How close? Consider
+\[
+	\begin{bmatrix} \text{tri-diagonal}\end{bmatrix}
+	\begin{bmatrix} x_1 \\ \vdots \\ x_n \end{bmatrix}
+	= \begin{bmatrix} \text{depends on }x_1,x_2 \\
+		\text{depends on }x_1,x_2,x_3 \\
+		\text{depends on }x_2,x_3,x_4 \\
+		\vdots
+	\end{bmatrix}
+\]
+So we can draw a graph of $A\vec{x}$ dependency on $\vec{x}$,
+where $x_i$ is influenced by $x_{i-1},x_i,x_{i+1}$.
+If we do this twice, it is clear then that $x_i$ is influenced by
+all the things that influence $x_{i-1},x_i,x_{i+1}$,
+i.e. $x_{i-2}, x_{i-1}, x_i, x_{i+1},x_{i+2}$.
+
+And so, we see that our sum $(I - \frac{1}{4}N)^{-1}$
+from above cares a lot more about the $\phi_i$ nearby,
+and it does take into account those far away, but much less weighted.
 \end{document}
