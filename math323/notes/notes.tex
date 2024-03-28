@@ -6,7 +6,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-\lhead{Math 321}
+\lhead{Math 323}
 \chead{Notes}
 \rhead{Nicholas Rees}
 \cfoot{Page \thepage}
@@ -1459,4 +1459,840 @@ but will see can be described by the same structure theory.
 Particularly, we will be able to describe the matrix $A$,
 and will get a lot of things falling out from linear algebra
 (don't need to go to $\C$ just to get eigenvalues).
+
+
+\section{February 29!}
+\subsection{Modules}
+Recall the definition:
+$R$ is a commutative ring, $M$ an abelian group,
+then $M$ is an $R$-module if $\exists$ a scalar multiplication
+$R \times M \to M$ where we write $(r,m) = rm \in M$ that satisfies
+\begin{enumerate}
+	\item $(r+s)m = rm + sm$
+	\item $r(m_1 + m_2) = rm_1 + rm_2$
+	\item $(rs)m = r(sm)$
+	\item $1m = m, \forall m$
+\end{enumerate}
+(these are only for left modules??? Or does commutativity fix).
+In particular, ideals $\subseteq R$ are modules.
+
+If $R$ is not commutative, we have left/right modules, just like ideals,
+$r \cdot m$ (left multiplication) and $m \cdot r$ (right multiplication).
+We won't see much of these after today, but important to know what they are.
+
+Example: $R = \Z$, $M =$ any abelian group.
+Then can define the obvious multiplication: $n\cdot m = (m + m +\cdots + m)$ $n$ times.
+So any abelian gruop is naturall a $\Z$-module.
+
+Let us define $\phi(r) \colon M \to M$ by $m \mapsto rm$ (any $R$),
+and so $\phi(r)(m_1 + m_2) = \phi(r)(m_1) + \phi(r)(m_2)$,
+thus $\phi(r)$ is an abelian gruop hoomormophism $M \to M$.
+We can see that property (a) says $\phi(r) + \phi(s) = \phi(r+s)$,
+property (b) says $\phi(r)(m_1) + \phi(r)(m_2) = \phi(r)(m_1+m_2)$,
+and property (c) says $\phi(r)\circ\phi(s) = \phi(rs)$.
+So to say $M$ is a (left) $R$-module is equivalent to
+$r \mapsto \phi(r)$ be a homomorphism of rings
+$R \to \mathrm{Hom}(M,M)$ (abelian group homomorphisms under function composition).
+($R$ is not necessarily a commutative ring.)
+
+Example: $M = \R^n$, $R$ are the $n \times n$ matrices,
+and $v \in \R^n$ (column vector).
+Multiplication is $(r)v$.
+Note that the group abelian group homomorphisms from $\R^n$ to itself huge.
+We could also see a similar right module $v(r)$ ($v$ is a row vector now).
+
+Example: $F$ a field, $M = F^n$, and $A = $ fixed $n \times n$ matrix.
+$M$ is a module over $F[X]$ by $p(X) \cdot r = p(A) \cdot r$
+(the polynomial is like $1 + X + X^2 \mapsto 1 + A + A^2$).
+The module structure depends on the choice of $A$;
+as sets, $R$ and $M$ don't change though.
+The module structure of $F^n$ gives a way of analysing $A$.
+This and $\Z$ are going to be the main modules we look at.
+In some sense, modules over p.i.d.s are much easier to work with.
+
+$M$ is called finitely generated over $R$ if there exists
+$m_1,\dots,m_s \in M$ such that any $m \in M$ is of the form
+$m = \sum_i r_i m_i$ for some $r_i \in R$
+(this should remind you of finite dimensional vector spaces:
+``finite spanning set" $m_1,\dots,m_s$).
+
+For us, $M$ is a finite generated module over a PID (a very special case).
+
+Fact (Cayley's theorem for rings) $R$ acts on itself by multiplication $M = (R,+)$,
+so $r\cdot s = rs$ where $s \in (R,+)$, $r \in R$.
+This gives a map $R \to \mathrm{Hom}(R,R)$ (under $+$).
+This is injective, since $r \cdot 1 = r$ so $\phi(r) \neq 0$ if $R \neq 0$.
+Cayley's says any group is a subgroup of the permutations to itself.
+This is saying that any ring is a subgring of the homomorphisms
+to itself under addition.
+(Of theoretical interest.)
+
+We now look at a so-called \emph{free module}.
+Let $R$ be a ring, $R^n$ be $n$ tuples of elements of $R$.
+We define $(r_1,\dots,r_n) + (s_1,\dots,s_n) = (r_1 + s_1,\dots,r_n+s_n)$
+and $r(r_1,\dots,r_n) = (rr_1,\dots,rr_n)$.
+This is the free module of rank $n$.
+Note that any $(r_1,\dots,r_n) = r_1e_1 + r_2e_2 + \cdots r_ne_n$
+where $e_i = (0,\dots,1,\dots,0)$ at the $i$th spot.
+This expression is unique by definition (not a basis ???).
+
+If $n =1 $, then $R$ is a module over itself.
+Any element $r = r \cdot 1$, $1$ is a generator.
+Same holds for a unit $\ep$, $r = (r\ep^{-1})\ep$.
+If $\ep$ is not a unit, then $R\ep \subsetneq R$.
+If $\exists s$ such that $s\ep = 0$.
+$R \to R$, $x \mapsto x\ep$ is not injective,
+so $R\ep$ may not be free.
+I.e. it may not be isomorphic to $R$ (see below).
+
+$N,M,$ are $R$ modules.
+$\psi \colon N \to M$ is an $R$-module homomoprhism
+means that $\psi$is a homomorphism of abelian gruops,
+and $\psi(rn) = r\psi(n)$ ($R$-linear).
+It is isomorphic if injective and surjective.
+$M$ is called free with rank $n$ if $M \cong R^n$.
+
+Pathology: if $R$ is not commutative, it is possible that
+$R^n \cong R^m$, $n \neq m$.
+
+
+\section{March 5}
+\subsection{Free modules (cont.)}
+Recall, if $R$ is a ring,
+the free module of rank $n$ is the set of $n$-tuples
+$R \times \cdots \times R$ with component wise operations.
+We have $e_i = (0,\dots,0,1,0,\dots,0)$ in the $i$th slot.
+Any $m = (m_1,\dots,m_n) = \sum_i m_i e_i$ uniquely.
+The $e_i$ form a basis.
+
+We also talked about homomorphism of modules:
+$\phi \colon M \to N$, $M,N$ are $R$-modules, is a homomorphism
+if $\phi(rm) = r\phi(m)$ for all $r \in R, m \in M$,
+and $\phi$ is an abelian group homomorphism,
+so $\phi(r_1m_1 + r_2m_2) = r_1\phi(m_1) + r_2\phi(m_2)$.
+$\phi$ is an isomorphism if bijective.
+Notice how similar it looks to linear maps.
+
+$M$ is called \emph{free} if $M \cong R^n$ for some $n$
+(in the category of $R$-modules: all the modules are in some fixed ring $R$).
+$\phi \colon M \to R^n$ is an isomorphism if $\phi(f_i) = e_i$, $f_i$ basis for $m$.
+Any $m \in M$ is uniquely written as coordinates with respect to the basis $f_1,\dots,f_n$,
+i.e. $m = \sum_ir_if_i$, the $r_i \in R$ are unique.
+So $m \mapsto (r_1,r_2,\dots,r_n)$ from $\phi$.
+
+\begin{theorem}
+	If $R$ is commutative, then $R^m \cong R^n \iff m = n$.
+\end{theorem}
+(The backwards direction is trivial though.)
+Proof will be postponed for now.
+What this theorem means is that if $M$ is free, it has a well-defined rank
+($M \cong R^n$ for a unique $n$).
+This also tells us the dimension of a finite-dimensional vector space
+is well-defined (not something usually proven in linear algebra class).
+
+\subsection{Building up to structure theorem}
+We provide a bunch of definitions.
+Here, we are largely working in commutative rings,
+but if you weren't, this is just for left modules.
+\begin{definition}[Submodule]
+	$N$ is a \emph{submodule} of $M$ if $N$ is an abelian subgruop of $M$
+	and	$rN \subseteq N$ $\forall r \in R$.
+\end{definition}
+\begin{definition}[Quotient module]
+	Let $M$ a module, $N \subseteq M$ a submodule.
+	$M/N$ exists as an abliean group quotient.
+	It is also a module, via $r(x + N) = (rx + N)$,
+	$r(x + n) = rx + rn \in rx + N$.
+\end{definition}
+
+Kinda on the opposite end of free modules, we have torsion modules.
+\begin{definition}[Torsion module]
+	$M$ is called a \emph{torsion module} if for any $m \in M$,
+	$\exists r \in R$, $r \neq 0$, such that $rm = 0$.
+\end{definition}
+Example: if $R = \Z$, $M$ is a finite abliean group,
+and $nx = 0, \forall x \in M$, $n = \# M$.
+\begin{definition}[Annihalotor]
+	If we fix $m \in M$, then $\mathrm{ann}_R(m) = \{r \in R \mid rm = 0\}$.
+\end{definition}
+For torsion modules, $\mathrm{ann}_R(m) \neq 0$ for all $m$.
+We call $m \in M$ a torsion element if $\mathrm{ann}_R(m) \neq 0$
+and $\mathrm{ann}_R(m)$ is an ideal in $R$ (an order ideal???).
+
+In a free module, the basis elements have no annihaltor.
+(Why???) This is a sense that these are quite different.
+Torsion modules are usually smaller.
+
+Example: $M = \R^2$, $R = \R[X]$, and $P(X) = \sum a_i X^i$.
+We can evaluate the polynomial with the matrix
+$X \mapsto \begin{pmatrix} 2 & 0 \\ 0 & 3 \end{pmatrix}$,
+$P(X) \mapsto P(A)$.
+If $\begin{pmatrix} \alpha \\ \beta \end{pmatrix} \in M$,
+then $X\begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+= A\begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+= \begin{pmatrix} 2\alpha \\ 3\beta \end{pmatrix}$,
+and
+\[
+	P(X)\begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+	= P(A) \begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+	= \sum \begin{pmatrix} a_i2^i 2^i & 0 \\ 0 a^i3^i\end{pmatrix}
+	\begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+	= \begin{pmatrix} \alpha P(2) & 0 \\ 0 & \beta P(3) \end{pmatrix}
+\]
+We then have $\left\{\begin{pmatrix} \alpha \\ 0 \end{pmatrix}\right\}$ is a submodule,
+annihalated by $(X-2)$, and 
+$\left\{\begin{pmatrix} 0 \\ \beta \end{pmatrix}\right\}$ is a submodule, annihalated by $(X-3)$.
+Any time you have an eigenvector, you have a submodule.
+$M$ is a torsion module annihilated by $(X-2)(X-3)$.
+A case of the Cayley-Hamilton theorem, since this is the characteristic polynomial
+$P_A(X)$ of the matrix, i.e. $P_A(A) = 0$ (the zero transform).
+
+Suppose we try this with the matrix $\begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$ instead.
+What are the possible submodules?
+$M = \R^2$ again.
+So if $N \subsetneq M$ has to be a vector subspace of $\R^2$
+(since we require that it is closed under multiplication by all of $R = \R[x]$,
+and so obviously closed under multiplication by $\R$).
+The only interesting case is when the dimension is $1$
+($\dim = 0$ is trivial, $\dim = 2$ is just $M$).
+So we have $N = \mathrm{span}\{v\} = rv, r\in R$.
+Since it is a submodule, $rv \in \mathrm\{v\}$, $r \in R[x]$,
+hence $Xv = \lambda v$ for some $\lambda$,
+which is true if and only if $v$ is an eigenvector,
+so $N = \begin{pmatrix} \alpha \\ 0 \end{pmatrix}$, $\alpha \in \R$.
+So $M$ has a unique submodule
+$N = \left\{\begin{pmatrix} \alpha \\ 0 \end{pmatrix} \mid \alpha \in \R\right\}$.
+Only one eigenvector is a result of the matrix being non-diagonalizable.
+So $\mathrm{ann}_R(N) = (X-2)$.
+Note that $(X-2)$ does \emph{not} annihilate $M$,
+e.g.
+\[
+	(X-2)\begin{pmatrix}0\\1\end{pmatrix} = (A-2)\begin{pmatrix}0\\1\end{pmatrix}
+	= \begin{pmatrix}0 & 1 \\ 0 & 0\end{pmatrix}\begin{pmatrix}0 \\ 1 \end{pmatrix}
+	= \begin{pmatrix} 1 \\ 0 \end{pmatrix} \neq 0
+\]
+But $(X-2)^2$ does kill it,
+since we just saw that one $(X-2)^2$ puts it into $N$,
+and the another $(X-2)$ kills it.
+So $\mathrm{ann}_R(N) = (X-2)$ and $\mathrm{ann}_R(M) = \left((X-2)^2\right)$.
+Again, this is the characteristic polynomial.
+
+If $R = \Z$, $M = \Z/p\Z \oplus \Z/p\Z$.
+Then $\mathrm{ann}_R(M) = (p)$.
+Here, $M$ is splitting up into two submodules.
+The analog of our diagonalizable case.
+If we had had $M = \Z/p^2\Z \supseteq p\Z \supseteq p^2\Z$,
+let $N = p\Z$,
+so $\mathrm{ann}_R(N) = (p)$, and $\mathrm{ann}_R(M) = (p^2)$.
+This is the analog of our non-diagonalizable case.
+All this is very similar to what we just did with matrices.
+
+Also, just a note, Cayley-Hamilton:
+given a matrix, take its characteristic polynomial,
+then $P_A(A) = 0$ for all $A$.
+
+This is the point of the whole section:
+modules over a p.i.d. all have very similar structure.
+We can describe the structure purely in terms of the annihilator ideals.
+
+Some more words on the structure theorem.
+Let $R$ be a commutative ring; $I$ and ideal, a submodule of $R$.
+Consider the quotient module $R/I$.
+The direct sums of modules:
+given $M,N$ are $R$-modules,
+$M \oplus N =$ tuples $(m,n) \in M \times N$ with component wise operations
+(similarly for $M_1,\times,M_r$).
+\begin{theorem}[Structure Theorem]
+	Let $R$ be a PID,
+	and $M$ are finite generated $R$-module. Then
+	\[
+		M \cong R^n \bigoplus_{i=1}^t R/p_i^{e_i}R
+	\]
+	for primes $p_i$, and $e_i \geq 1$ (maybe repeated),
+	and this is unique up to the order of the direct sum.
+\end{theorem}
+Similar to what we stated last term, but that was only for finite abelian groups.
+Since $R$ is a PID, all ideals are free modules with rank $1$.
+Not true, even if Noetherian: $R = \Z[X]$, then $I = (2,X)$ is not free, not torsion.
+Something like this does not fit into this structure.
+
+For any $R$, $M$ is called cyclic if $\exists m \in M$ such that
+$M = \{rm \mid r \in R\}$, $R \to M$, $r \mapsto rm$ is onto.
+
+\subsection{Back to proving the theorem}
+Now lets go back to proving that $R$ commutative means
+$R^m \cong R^n \implies m = n$.
+Consider $\phi \colon R^m \to R^n$.
+Step 1: represent this as a matrix,
+$e_1,\dots,e_m = $ the standard basis for $R^m$,
+and $f_1,\dots,f_n$ the standard basis for $R^n$.
+Then $\phi(e_i) = (r_{1,i},\dots,r_{n,i}) \in R^n$.
+If $m \in R^n$, so $m = \sum_i \alpha_i e_i$,
+then linearity gives us $\phi(m) = \sum \alpha_i \phi(e_i)$,
+so $m = \begin{pmatrix} \alpha_1 \\ \vdots \\ \alpha_m \end{pmatrix}$,
+and so we can represent $\phi$ as a matrix,
+since $\phi(m) = (r_{i,j})$, that is $n \times m$.
+We have
+\[
+	\phi\begin{pmatrix} \alpha_1 \\ \vdots \\ \alpha_m\end{pmatrix}
+	= \begin{pmatrix} \beta_1 \\ \vdots \\ \beta_n \end{pmatrix}
+\]
+If $\phi = A$ and $\phi^{-1} = B$, we have $BA = I_{m \times m}$
+and $AB = I_{n \times n}$.
+We'll try to show that if $n \neq m$, one is bigger,
+and so there is a nontrivial kernel in one direction, can't be injective.
+This a little sus: $n,m$ different, not square and not necessarily inverse,
+but we can add stuff in the matrices to force them to be inverses.
+We'll continue this next time, but
+maybe read proof in the book, but be warned that since it is a book
+and they're trying to save space, they write vectors as rows since columns take more space.
+
+
+\section{March 7}
+Last time, we were talking about isomorphisms between free modules
+$R^m \cong R^n$ when $R$ is commutative,
+and that whether it implies $m = n$.
+We have $\phi \colon R^m \to R^n$ and $\psi \colon R^n \to R^m$.
+Last time, we expressed $\phi,\psi$ as matrices $A,B$,
+where $A$ is a $n \times m$ matrix and $B$ is a $m \times n$ matrix:
+\[
+	A \begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix}
+	= \begin{pmatrix} y_1 \\ \vdots \\ y_n \end{pmatrix}, \quad
+	B \begin{pmatrix} y_1 \\ \vdots \\ y_n \end{pmatrix}
+	= \begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix}, \quad
+\]
+We want to have that $\psi \circ \phi = 1$,
+i.e. $BA = I_m$ (WLOG, assume $m \geq n$).
+But $BA$ is not a square matrix, so we will adjust these.
+Since $A$ has more columns than rows, we add rows with all zeros at the bottom,
+call this $A'$.
+Likewise, we put columns full of zeros at the right of $B$, call it $B'$.
+Then, $A',B'$ are both $m \times m$.
+We want, $BA = I_m$ so $\psi \circ \phi$ is the identity on $R^m$,
+and $AB = I_n$ so $\phi \circ \psi$ is the identity on $R^n$.
+Let's compute: $A'B'$ is $I_n$ with zeros in the last $m-n$ columns and rows.
+$B'A'$ is $I_m$.
+
+When we are dealing with commutative $R$ (and only place we've used commutativty so far),
+we have that $B'A' = I_m \implies A'B' = I_m$
+(homework problem, p. 97).
+But this is obviously a contradiction, so we are done.
+(How did we prove this fact: uses some facts about determinants
+that you only get with commutative $R$...
+I just symbol pushed on the HW).
+
+Nike was thinking of another way to prove this on his bike ride.
+We have $B'A' = I$.
+Then $B'A'\begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix} =
+\begin{pmatrix} x_1 \\ \vdots \\ x_m \end{pmatrix}$.
+Consider $(x_1 \, \cdots \, x_m) B'A'$.
+Note that in a commutative ring, tranposes work the way they think they should
+(reverses the multiplication):
+if $v = (\alpha_1 \, \cdots \, \alpha_m)$ and
+$w^T = \begin{pmatrix} \beta_1 \\ \vdots \\ \beta_m \end{pmatrix}$.
+Then $wv^T = \sum \alpha_i \beta_i$ and $vw^T = \sum \beta_i \alpha_i$,
+which are equal in a commutative ring.
+Then $(A')^T(B')^Tx^T = x^T$, but $(A')^T(B')^T = B'A' = I$.
+He couldn't figure it out...
+
+Point: if $M \cong R^n$ then $n$ is uniquely determined, called $\mathrm{rank}(M)$.
+\begin{theorem}[Goal]
+	If $M$ is finintely generated module over a PID $R$, then
+	\[
+		M \cong R^n \bigoplus_{i=1}^t R/p_i^{e_i}R
+	\]
+	where $p_i$ is prime, $e_i \geq 1$, $n,p_i,e_i$ are unique up to reordering.
+\end{theorem}
+
+\subsection{Direct sums}
+Let $M$ be an $R$ module, $R$ commutative.
+$N_1,\dots,N_s \subseteq M$ be submodules.
+Say that $M \cong \bigoplus N_i$ if each $m$ in $M$
+is \emph{uniquely} a sum $m = \sum n_i$, $n_i \in N_i$.
+Means that $M$ is identified with tuples $(n_1,\dots,n_s) \in N_1 \times \cdots \times N_s$.
+This is like the basis of a vector space.
+These $N_i$ have to span and be linearly independent from each other.
+
+Note that there is no requirement that the $N_i$ be nice.
+Also not gauranteed we can always decompose $M$ into finitely many $N_i$.
+Also, the fact that submodules exist does not mean that we can split it up.
+
+Equivalently, we can make our conditions explicit:
+\[
+	M = \left\{ \sum_{i=1}^s n_i \colon n_i \in N_i\right\}
+\]
+\[
+	N_i \cap \left\{\sum_{\substack{j=1\\j\neq i}}^s n_j\right\} = \{0\}
+\]
+i.e. $\mathrm{span}\{N_j\}_{j\neq i} \cap N_i = \{0\}$.
+
+Example: $R = \Z$, $M = \Z/p^2\Z$, $p$ prime.
+Note that $M \supseteq N = p\Z/p^2\Z$.
+$\#M = p^2$ and $\#N = p$.
+We cannot write $M \cong N \oplus \text{ something}$ ff.
+Just because $N$ is a submodule, doesn't mean there is a complement.
+This is getting to the fact that modules are not ``semisimple":
+when there is a subobject, there is a complement to that subobject.
+Most algebraic objects are not semisimple.
+
+\subsection{Starting the Structure Theorem}
+\begin{proposition}
+	Let $R$ be a PID and $M = R^n$.
+	Suppose $N \subseteq M$, then $N$ is free of rank $\leq n$.
+\end{proposition}
+This is what we would expect from vector spaces.
+But this is false for general $R$.
+Take $R = \Z[X]$ and $I \subseteq R$, $I = (2,X)$ is not free of any rank (saw last time).
+
+\begin{proof}
+	When $n = 1$, this proposition holds by the definition of a PID:
+	since we are saying that the ideals of $R$ ($N \subseteq R$)
+	are free (a domain) of rank $1$ (principal ideals).
+
+	General case by induction:
+	Assume the statement holds for $n \leq m$, prove for $m + 1$.
+	Consider $N \subseteq M = R^{m+1} = \{(x_,\dots,x_{m+1}) \in R \times \cdots \times R\}$.
+	Consider the projection $N \to R$ induced by $(x_1,\dots,x_{m+1}) \mapsto x_{m+1}$.
+	This is a $R$-module homomorphism.
+	If $\phi(N) = 0$, which implies $N \subseteq (x_1,\dots,x_m,0) \cong R^m$,
+	so we are done by induction.
+
+	If $\phi(N) \neq 0$, then $\phi(N) \subseteq R$ has to be an ideal (a submodule).
+	Hence $\phi(N) = \{rt \colon r \in R, t \text{ fixed}\}$.
+	Pick $s \in N$ such that $\phi(s) = t$.
+	Define $N_1 \subseteq N = Rs$.
+	Define $N_2 \subseteq N = \{n \in N \colon \phi(n) = 0\} = \ker(\phi)$.
+	Claim: $N \cong N_1 \oplus N)2$, where $N_1,N_2$ free and $N_2$ has
+	rank $k \leq m$.
+	ff
+
+	Remains to check that $N \cong N_1 \oplus N_2$.
+	(i) span given $n \in N$, want $n_1 \in N_1$, $n_2 \in N_2$
+	such that $n = n_1 + n_2$.
+	$\phi(n) \in \phi(N) = Rt \implies \phi(n) = rt$ for some
+	$\phi(s) = t \implies \phi(rs) = r\phi(t) = rs = \phi(n)$.
+	Then $n = (n - rs) + rs$.
+	But $rs \in N_1$, and $\phi(n-rs) = \phi(n) - \phi(rs) = 0 \implies n_2 \in N_2$.
+	(ii) Need to now show that $N_1 \cap N_2 = \{0\}$.
+	If $x \in N_1 \cap N_2$, then $\phi(x) = 0$ (since $x \in N_2$)
+	so the last component of $x$ is zero.
+	But $x \in N_1$, so $\phi(x) = rt$ for some $r \in R$,
+	and so $r = 0$ since we are in a PID ($x = rs$),
+	so $x = 0$.
+\end{proof}
+
+So how are we going to approach the main theorem?
+Here's the starting point:
+If $m_1,\dots,m_r$ are generators of $M$, then
+there's $\phi \colon R^r \twoheadrightarrow M$
+where $e_i \mapsto m_i$.
+We have $K = \ker(\phi) \subseteq R^r$,
+so $M = \cong R^r/K$.
+Idea: there is a basis of $R^r$ that is adapated to $M$ and $K$
+in the sense that $K$ is identified with vectors $(\alpha_1,\dots,\alpha_r)$
+such that $\alpha \in K \iff r_i \mid \alpha_i$ for $r_i \in R$.
+Then $R^r/K = \bigoplus R/r_iR$.
+If $r_i = 0$, get a copy of $R$.
+If $r_i \neq 0$, get $R/r_iR$.
+
+The best way to understand it is through an example,
+which we'll do next time.
+Getting these nice bases: this should remind you of echelon forms of matrices.
+The reason this works in a field is that everything is a unit,
+so we can always get to $1$.
+We can't divide, but we'll get some sort of row reduction.
+
+For the quiz next week, we'll go until the end of 3.6.
+
+
+\section{March 12}
+Missed class, apparently talked about Smith Normal form.
+
+
+\section{March 14}
+I think he's addressing the last problem from the previous homework,
+I came in a little late.
+
+Let $R$ commutative, $M = R^n$.
+Consider $A =$ an $n \times n$ matrxi $(a_{ij}) = A$.
+Let $f_i = Ae_i$ be the $i$th column of $A$.
+Claim: $f_1,\dots,f_n \in R^n$ span a free module of rank $n$
+if and only if $\det(A)$ is not a zero divisor.
+
+If $\det(A)$ is a zero divisor, then $\mathrm{span}\{f_1,\dots,f_n\}$
+iis not free on $f_i$s.
+Assume that $\det(A)$ is a zero divisor.
+Produce a non-trivial linear relation between the $f_i$ (the $f_i$ are not independent).
+Want some $r = (r_1,\dots,r_n) \neq 0$ such that $Ar = 0$.
+Key fact: $AA^* = A^*A = \det(A)I$,
+where $A^* = \mathrm{adj}(A) = (b_{ij})$ such that $b_{ij} = (-1)^{i+j}\det(A_{ij})$
+where $A_{ij}$ is the $n-1 \times n-1$ matrix obtained by deleting
+the $j$th row and $i$th column (??? should be other way around).
+So we are saying
+\[
+	A \begin{pmatrix} b_{1j} \\ b_{2j} \\ \vdots \\ b_{nj} \end{pmatrix}
+	= \det(A) e_j
+\]
+If there is some $s$ such that $s\det(A) = 0$, then
+$A\left(s\begin{pmatrix} b_{1j} \\ \vdots \\ b_{nj} \end{pmatrix} \right) = 0$.
+This vector of $b$'s is a cnadiate for $r$, but is it nonzero?
+We are done if $\exists ij$ such that $s\det(A_{ij}) \neq 0$.
+If not, then $s\det(A_{ij}) = 0$ for all $ij$.
+Suppose that $s\det(A_{ij}) = 0$.
+$\det(A_{11})$ has an expansion in rows/columns as well,
+and is equal to a linear combination of elements of $A$ and $n-2 \times n-2$ minors.
+The point: this can also be written as $A\vec{r}$ for some $r$
+if one of these terms is nonzero done.
+If not $s$ has to annihilate $n-2$ minors as well.
+Eventually $s$ has to annihilate elements of $A$,
+$A \begin{pmatrix} s \\ \vdots \\ s \end{pmatrix} = 0, s\neq0$.
+
+Some general principal (localization):
+if $R$ is a domain, we can do something like go to the field of fraction,
+do regular linear algebra, and then try to get answer back in terms of our original ring.
+
+
+\section{March 21}
+\subsection{Structure theorem}
+Let $R$ be a PID (like $\Z$), $M$ a finitely generated module.
+Then we saw
+\[
+	M \cong R^n \bigoplus_{i=1}^t R/d_iR, \quad d_1\mid d_1 \mid \cdots \mid d_r
+\]
+We have that $R$ is broken up into cyclic modules.
+We can also break up each of these $R/d_i R$ to get prime power order:
+\begin{equation}\label{structure1}
+	M \cong R^n \bigoplus_{i=1}^t \left(\bigoplus_{j=1}^{k_i} R/p_j^{f_j}R\right)
+	\cong R^n \bigoplus_{p_i \text{ prime (maybe repeats)}} \bigoplus_{j=1}^{n_i}
+	R/p_i^{e_j}R
+\end{equation}
+where we have used Chinese Remainder theorem.
+So when $R = \Z$, we get
+\begin{equation}\label{structure2}
+	M = \Z^n \bigoplus_{p \text{ primes}} \bigoplus_i \left(\Z/p^{e_i}\Z\right)
+\end{equation}
+
+So what we're doing is break down the torsion part into $p$-Sylow subgroups,
+and these are isomorphic to a sum of cyclic groups with $p$-power order.
+
+Uniqueness in form (\ref{structure1}):
+integer $n$ is unique and so is the list of $d_i$.
+Uniqueness in form (\ref{structure2}):
+the list of primes $p$ that show up is unique;
+for each primes, the exponents list is unique.
+
+Since forms (\ref{structure1}) and (\ref{structure2}) determine each other,
+we need only check uniqueness of one of the forms.
+It is easier to show uniqueness for form (\ref{structure1}).
+
+Let $M$ be a finite abelian group of order $m$.
+Then the structure theorem tells us
+\[
+	M \cong \bigoplus_{p_i} \bigoplus_{j = 1}^{n_i} \Z/p_i^{e_j}\Z
+\]
+For each $p_i$, $\bigoplus_{j=1}^{n_i} \Z/p_i^{e_j}\Z$ is a $p_i$ Sylow subgroup.
+It is clear that the list of primes is unique:
+the $p_i$ are the primes in the unique factorization of $m = \# G$.
+In a general PID, $M$ torsion,
+what is the analogue of order?
+Since $M$ is torsion and finitely generated (???), there is an element $r \in R$ such that
+$rm = 0$ for all $m \in M$.
+The annihalotor is an ideal in a PID, so generated by a single element,
+say $(s)$.
+So $sm = 0$ for all $m \in M$.
+$M \cong \bigoplus R/p_i^{e_i} R$, $p_i$ shows up $\iff p_i \mid s$
+($\Z$ is a UFD).
+Thus, the list of primes is determinedy by $M$.
+
+Back when $M$ is a finite abelian gruop, order $m$, so $\Z$-module:
+\[
+	M \cong \bigoplus_{p_i} \Z/p_i^{e_i} \Z
+\]
+And in a general PID with $M$ torsion:
+\[
+	M \cong \bigoplus_{p_i} R/p_i^{e_i}R
+\]
+where the $p_i$ are prime elements of $R$.
+In the $\Z$ case, what happens if $M \cong \bigoplus$ to a different decomposition
+in terms of prime power cyclics?
+The $p$-Sylow subgroup in the first decomposition
+must match with the $p$-Sylow subgroup in the second,
+since they are unique.
+Hence, for each prime $p$ fixed,
+there is an isomorphism $\bigoplus \Z/p_i^{e_i}\Z \cong \Z/p_i^{f_i}\Z$.
+And then we get uniqueness, since $e_i = f_i$ for all $i$.
+
+Students need to be able to see the more general structure in these algebraic objects.
+Not enough to just know the definitions, can't peel back every time to the definitions.
+Need to be able to see the bigger picture of the structure.
+
+What is the equivalent of a $p$-Sylow subgroup in the general case?
+It is $R[p^s] = \{m \in M \colon p^s m = 0\}$:
+the elements with order $s$???
+then $\bigcup R[p^s]$ are the elements annihalated by some power of $p$,
+this is the ``$p$-Sylow submodule".
+Some other decomposition has to match $p$-Sylow pieces.
+For a general ring, we don't call these $p$-Sylow, we call them $p$-primary.
+So decompositions match $p$-primary pieces.
+
+How do we prove uniqueness? Similar set up to $\Z$.
+For uniqueness for $\Z$, we reduce to the case where $\# M = p^n$ for some $t$.
+Then $M \cong \bigoplus_{i=1}^t \Z/p^{e_i}\Z \cong \bigoplus_{i=1}^s \Z/p^{f_i}\Z$,
+and we want this to imply that $s = t$, $e_i = f_i$ for all $i$.
+In our general case, we have $M$ $p$-power order and
+$M \cong \bigoplus_{i=1}^t R/p^{e_i}R \cong \bigoplus_{i=1}^s R/p^{f_i}R$,
+and want to say $s = t$, $e_i = f_i$.
+
+Looking at $\Z$ first.
+Count elements of order $p,p^2,\dots,$ and these have to match.
+In our first decomposition, $p^t$ elements of order $\leq p$
+(since $p$ divides the order of the cyclic group,
+and we know there exists a unique subgroup of order $p$ for each cyclic group);
+this is to the power, since we get to choose one of these elements in each cyclic group.
+In our second decomposition, $p^s$ elements of order $\leq p$.
+Hence, $t = s$.
+The equivalent for $R$ a PID is $M[p] = \{m \in M \colon pm = 0\}$.
+Same argument works for the PID case.
+We ``count" elements in $M[p]$.
+The problem: there is no particular reason for $M[p]$ to be finite.
+But $M[p]$ is a module over $R/pR$, which is a field
+since we're in a PID and $pR$ is maximal,
+hence it is finitely generated since $M$ is finitely generated (check).
+But a finitely generated module over a field is a vector space,
+so $M[p]$ is a finite dimensional vector space.
+$s,t$ is the dimension, so they have to be the same.
+
+Recall that for abelian groups, we had that there was a unique subgroup of each order.
+What is the analogue in the ring case?
+In $R/p^eR$, the elements annihalated by $p$ are $p^{e-1}R/p^eR$,
+which are the elements divisible by $p$ but not by $p^e$.
+This has dimension $1$ over $R/pR$: it is generated by $p^{e-1}$.
+These cyclic submodules have something inside them 
+For each thing dividing the order, $p^e$, there is ff.
+That's how you get $s = t$ in general.
+
+It remains to deal with the exponents.
+Idea: look at $M[p^2], M[p^3]$.
+In our $\Z$ case, the trick is to consider $M/M[p]$.
+$M[p]$ matches up in 1 and 2, as we saw before,
+so we are able to mod it out (other things, like $p$, we are not sure is shared by both).
+In form (\ref{structure1}), $M/M[p] \cong \bigoplus_{e_i \geq 2} \Z/p^{e_i-1}\Z$
+and form (\ref{structure2}) gives $M/M[p] \cong \bigoplus_{f_i \geq 2} \Z/p^{f_i-1}\Z$.
+The number of $e_i$ where $i \mid e_i = 1$ is equal to the number of $f_i$
+where $i \mid f_i = 1$.
+Then the number of $e_i = 1$ is equal to the number of $f_i = 1$.
+We repeat this until we're done.
+Therefore, we get uniqueness for torsion modules.
+
+Example: say we have $\Z/p\Z \oplus \Z/p^2\Z$.
+If we factor out by the elements of order $p$, our first summand gets modded out,
+and the second one becomes $\Z/p\Z$.
+Something something quotients commute with direct sums???
+Would have to check that $M[p]$ is the direct sum of its pieces
+of $\Z/p\Z$ and $\Z/p^2\Z$.
+
+How do we get this for general modules (not torsion)?
+We have $M \cong R^n \oplus R/p_i^{e_i}R$. Say this is decomposition $1$.
+\[
+	M^{\text{tor}} = \{m \in M \colon \exists r \neq 0, mr = 0\}
+	= (\underbrace{0,\dots,0}_{n\text{ slots}}, \dots)
+\]
+Say we have another decomposition $2$.
+$M \cong R^s \oplus \text{torsion}$.
+Torsion matches in both decompositions
+(where we proved uniqueness, but not needed here),
+since isomorphisms must map torsion to torsion.
+Now $M/M^{\text{tor}} \cong R^n \cong R^s$, and so $n = s$.
+Thus, we have proven uniquness of decompositions.
+Note: there is not a unique choice, no canonical choice of our free part.
+This could be infinite order,
+or just choose a different basis, etc.
+But the point is that $n = s$.
+
+The set of things with infinite order is not a group.
+With $\Z \oplus \Z/3\Z$, we have $m_1 = (1,1)$ and $m_2 = (1,2)$
+both have infinite order, but $m_1 - m_2$ has order $3$.
+
+Will see some applications of the theorem starting next week.
+The midterm will be up to 3.9.
+Won't have to compute Smith normal form by hand.
+
+
+\section{March 26}
+\subsection{Applications of the structure theorem}
+There's only one thing left to do, and that is the applications of the structure theorem,
+specifically to linear algebra.
+
+Let $R = \Z, k[X]$ where $k$ a field.
+Suppose $M$ is a finitely generated abelian group,
+or $M = k^n$ with mutliplication $X \mapsto A= n \times n$ matrix.
+
+In the case of $\Z$, we have $M \cong \Z^n \oplus M_{\text{tor}}$,
+where $M_{\text{tor}}$ are the elements of finite order
+$\cong $ direct sum of cyclics of prime power order (unique).
+This allows us to classify all finite abelian groups of given order.
+
+In the case of $k[X]$, our answer depends on $A$.
+Structure theorem says $k^n \cong k[X]^m \oplus M_{\text{tor}}$.
+But recall that the left has dimension $n$, and $k[X]$ is infinite dimensional,
+hence $m = 0$.
+So what is $M_{\text{tor}}$?
+It is the direct sum of $k[X]$ mod prime powers.
+What are primes in $k[X]$? They are irreducible polynomials.
+So we get that $k^n$ with action of $A$ corresponding to multiplication by $X$ is
+\[
+	k^n \cong \bigoplus k[X]/p_i(X)^{e_i}
+\]
+where $p_i$ are irreducible
+(the isomorphism is as a $k[X]$ module).
+Note that the polynomials $p_i$ and exponents $e_i$ depend on what $A$.
+
+Let's forget about $A$ for now, and look at the right hand side.
+Let $V_i = k[X]/p_i(X)^{e_i}$.
+Let $f(X) = p_i(X)^{e_i} = a_0 + a_1X + \cdots + a_rX^r$.
+Then $V_i$ is the span of $\{1,X,X^2,\dots,X^{r-1}\}$ (long division).
+Call $v_i$ the coset of $X^i$.
+The $v_i$ are a basis for $V_i$.
+Multiplication by $X$ has a simple expression in this basis.
+$1 \mapsto X$, $X \mapsto X^2$, $X^{r-1} \mapsto X^r = -a_{r-1}X^{r-1} + \cdots + a_0 + (f(X))$
+(have to do the long division)...
+wait apparently this is $X^r = -a_{r-1}X^{r-1} - \cdots - a_0$,
+so $v_{r-1} \mapsto -a_{r-1}v_{r-1} - \cdots - v_0$.
+So multiplication by $X$ on $v_i$ is represented by the matrix
+\[
+	\begin{pmatrix}
+		0 & 0 & 0 & \cdots & 0 & -a_0\\
+		1 & 0 & 0 & \cdots & 0 & -a_1\\
+		0 & 1 & 0 & \cdots & 0 & -a_2\\
+		0 & 0 & 1 & \cdots & 0 & -a_3\\
+		\vdots & \vdots & \vdots & \ddots & \vdots & \vdots\\
+		0 & 0 & 0 & \cdots & 1 & -a_{r-1}
+	\end{pmatrix}
+\]
+For something more concrete, consider $\Q[X]/(X^3+2X+3)$.
+This is spanned by cosets of $1,X,X^2$.
+Then $v_0 = 1 \mapsto X = v_1$, $v_1 = X \mapsto X^2 = v_2$,
+and $v_2 = X^2 \mapsto X^3 = -2X - 3 = -2v_1 - 3v_0$.
+This looks like the matrix (with respect to the basis $1,X,X^2$):
+\[
+	\begin{pmatrix}
+		0 & 0 & -3\\
+		1 & 0 & -2\\
+		0 & 1 & 0
+	\end{pmatrix}
+\]
+We call these matrices companion matrices of $f_i$:
+$1$s on the off diagonal below and the negative coefficients of $f_i$ in the last row.
+
+Now returning back to the structure theorem.
+Each term on the right hand side (in the direct sum) is understood
+via matrix action whose entries come from coefficiens of $f_i(X)$.
+So we have some unknown matrix $A$ on the left for $k^n$,
+and we are modelling it as matrices of the form that we just described above.
+\textbf{There exists a basis for $k^n$ such that $A$ decomposes
+as blocks, each block is a companion matrix with entries coming from $f_i(X)$}.
+The structure theorem doesn't tell you what these ``companion matrices" are,
+which polynomials they are, but we will figure out how to get that from $A$ now.
+The key thing is to analyze these blocks.
+
+Spoiler: the $p_i$ come from Smith form of $A - XI$. We'll prove this later.
+
+\subsubsection{Decomposing $A$}
+Consider $f(X) \in k[X]$, arbitrary, degree $r$.
+$k[X]/f(X)$ is a vector space of dimension $r$.
+The standard basis is $1,X,X^2,\dots,X^{r-1}$,
+for which multiplication by $X$ is the companion matrix of $f$.
+
+Let $f(X) = X - \alpha$. $k[X]/(X-\alpha)$ has dimension $1$.
+Let $e_0$ be the coset of $1$, forms a basis.
+Multiplication by $X$ gives $1 \mapsto X = \alpha$.
+So we get the $1 \time 1$ block $\begin{pmatrix} \alpha \end{pmatrix}$.
+Then $Xe_0 = \alpha e_0$ ($X$ to be interpreted as a matrix here???).
+$e_0$ is an eigenvector and $\alpha$ an eigenvalue...
+$X - \alpha$ correspond to eigenvectors
+(I think he means for any polynomial, we can decompose into a factor here,
+we get an eigenvector).
+
+In general fields, $p_i(X)$ has degree $> 1$, don't get eigenvector in the usual sense.
+
+Next case: $(X - \alpha)^e = f(X)$.
+$V = k[X]/f(X)$ has dimension $e$.
+We got the power of an irreducible.
+We have $f(X)$ is a prime power.
+Last class, we saw that we had a cyclic group of prime power order.
+In this, we had $p$ elements of order $p$
+(generally, $p$ elements of order $p,p^2,\dots,p^{n-1}$???).
+What is the equivalent here?
+$(X-\alpha)v = 0 \iff v$ is annihilated by $X- \alpha$.
+But this is just the eigenvector condition: $Xv - \alpha v = 0$.
+The elements annihilated by $X - \alpha$ are precisely the multiples
+of $(X-\alpha)^{e-1}$ modulo $(X-\alpha)^e$.
+But this space is $1$ dimensional.
+So we have a unique eigenvector (up to scalar multiples).
+So even though we have dimension $e$, we have a unique eigenvector.
+This is similar to the case when we have repeated eigenvectors in a vector space.
+
+The standard basis for such $V$ (the companion basis) is messy,
+it depends on the coefficients of $(X-\alpha)^e$, which is a mess.
+But there is a simpler basis, $1, (X-\alpha), (X-\alpha)^2,
+\dots,(X-\alpha)^{e-1}$.
+Call these $w_0,w_1,\dots,w_{e-1}$.
+Multiplication by $(X-\alpha)$ gives
+$w_0 \mapsto w_1$, $w_1 \mapsto w_2$, etc. $w_e \mapsto 0$.
+This corresponds to the matrix
+\[
+	\begin{pmatrix}
+		0 & 0 & \cdots & 0 & 0\\
+		1 & 0 & \cdots & 0 & 0\\
+		0 & 1 & \cdots & 0 & 0\\
+		\vdots & \vdots & \ddots & \vdots & \vdots\\
+		0 & 0 & \cdots & 1 & 0
+	\end{pmatrix}
+	\leftrightarrow X - \alpha I
+\]
+And so if this matrix is $M$,
+\[
+	X = \alpha I + M
+\]
+Which is a matrix in Jordan block form.
+We only get that this is diagonalizable when $p_i$ is linear (e.g. over $\C$).
+So diagonlizable over $\C \iff $ no factors $(X-\alpha)^e$, $e > 1$.
+This explains the thing in linear algebra where some matrices are not diagonalizable.
+$\alpha$ comes from the characteristic polynomial???
+
+Recap:
+start wth $A$, an $n \times n$ matrix over $k$.
+$k^n$ as $k[X]$-module $\cong \bigoplus k[X]/p_i(X)^{e_i}$
+where $p_i$ is irreducible $e_i \geq 1$
+(some unkown $p_i,e_i$).
+For any $K$, $A$ breaks up (after some change of basis)
+to blocks of companion form for these $f_i = p_i^{e_i}$.
+This is called rational canonical form.
+Linear irreudicibles correspond to eigenvectors.
+Each factor $f(X) = (X-\alpha)^e$ gives a $1$-dimensional eigenspace,
+which are multiples of $(X-\alpha)^{e-1}$.
+This is true over any field (don't always have linear things though),
+but over $\C$, all $p_i$ are linear,
+so $A$ diagionalizable $\iff \forall e_i = 1$.
+And if $e_i > 1$, we get a Jordan block form.
+(We can't get Jordan block if we can't decompose into linear factors,
+which could happen if $k$ is not $\C$.)
+
+This should convince you that the structure theorem completely controls
+the structure of these matrices, provided you know what the $p_i,e_i$ are.
+
+\subsubsection{Finding the polynomials}
+Unknown: how to find $p_i,e_i$ from $A$.
+This is a Smith normal form problem.
+The analogy to keep in mind is abelian groups:
+if I give you a number, like $50$, and ask for all abelian groups of that order,
+there are going to be a lot that correspond to that same order.
+
+We have $\mathrm{Ann}(k^n) = \prod p_i^{\max(e_i)} = $ ``order" of $A$,
+where max is taken for fixed irreducible polynomial $p_i$.
+
+Fact: $\prod p_i^{e_i} = $ the characteristic polynomial of $A$.
+We will do this next time.
+It will be cool how characteristic polynomial shows up,
+because it's not obvious.
 \end{document}
